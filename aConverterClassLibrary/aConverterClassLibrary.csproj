@@ -59,7 +59,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DbfClassLibrary">
-      <HintPath>..\..\Абонент+, текущий проект\Платежная система\Abonent_Pay_System2\Sources\Project\DbfClassLibrary\bin\Debug\DbfClassLibrary.dll</HintPath>
+      <HintPath>..\lib\DbfClassLibrary.dll</HintPath>
     </Reference>
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=3.0.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
