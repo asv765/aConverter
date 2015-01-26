@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4E2D1A8E-E351-4F1A-A8DC-85FAD77B5216}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>aConverter</RootNamespace>
+    <AssemblyName>aConverter</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.38\lib\net40\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="DbfClassLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Абонент+, текущий проект\Платежная система\Abonent_Pay_System2\Sources\Project\DbfClassLibrary\bin\Debug\DbfClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=3.0.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\OpenAccess ORM\bin\FirebirdSql.Data.FirebirdClient_4_0_0_0\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.4.0.2.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class\ShowStatisticClass.cs" />
+    <Compile Include="Forms\FormCheckCasesList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCheckCasesList.Designer.cs">
+      <DependentUpon>FormCheckCasesList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormConvert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormConvert.Designer.cs">
+      <DependentUpon>FormConvert.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormCorrectionCasesList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCorrectionCasesList.Designer.cs">
+      <DependentUpon>FormCorrectionCasesList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDescriptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDescriptions.Designer.cs">
+      <DependentUpon>FormDescriptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEditSettingsCase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEditSettingsCase.Designer.cs">
+      <DependentUpon>FormEditSettingsCase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormErrorDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormErrorDetail.Designer.cs">
+      <DependentUpon>FormErrorDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormErrorParams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormErrorParams.Designer.cs">
+      <DependentUpon>FormErrorParams.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormErrorsList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormErrorsList.Designer.cs">
+      <DependentUpon>FormErrorsList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormManualAnalize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormManualAnalize.Designer.cs">
+      <DependentUpon>FormManualAnalize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPatterns.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPatterns.Designer.cs">
+      <DependentUpon>FormPatterns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSettings.Designer.cs">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSourceAnalize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSourceAnalize.Designer.cs">
+      <DependentUpon>FormSourceAnalize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormStatistic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormStatistic.Designer.cs">
+      <DependentUpon>FormStatistic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormStatisticResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormStatisticResult.Designer.cs">
+      <DependentUpon>FormStatisticResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormStatistics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormStatistics.Designer.cs">
+      <DependentUpon>FormStatistics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormText.Designer.cs">
+      <DependentUpon>FormText.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\DateGridViewPrinter.cs" />
+    <EmbeddedResource Include="Forms\FormCheckCasesList.resx">
+      <DependentUpon>FormCheckCasesList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormConvert.resx">
+      <DependentUpon>FormConvert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCorrectionCasesList.resx">
+      <DependentUpon>FormCorrectionCasesList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDescriptions.resx">
+      <DependentUpon>FormDescriptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEditSettingsCase.resx">
+      <DependentUpon>FormEditSettingsCase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormErrorDetail.resx">
+      <DependentUpon>FormErrorDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormErrorParams.resx">
+      <DependentUpon>FormErrorParams.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormErrorsList.resx">
+      <DependentUpon>FormErrorsList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormManualAnalize.resx">
+      <DependentUpon>FormManualAnalize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPatterns.resx">
+      <DependentUpon>FormPatterns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSettings.resx">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSourceAnalize.resx">
+      <DependentUpon>FormSourceAnalize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormStatistic.resx">
+      <DependentUpon>FormStatistic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormStatisticResult.resx">
+      <DependentUpon>FormStatisticResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormStatistics.resx">
+      <DependentUpon>FormStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormText.resx">
+      <DependentUpon>FormText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\aConverter.Class.CheckCaseClass.datasource" />
+    <None Include="Properties\DataSources\aConverter.Class.CorrectionCaseClass.datasource" />
+    <None Include="Properties\DataSources\aConverter.Class.ErrorClass.datasource" />
+    <None Include="Properties\DataSources\aConverter.Class.Statistic.datasource" />
+    <None Include="Properties\DataSources\aConverter.Class.StatisticSet.datasource" />
+    <None Include="Properties\DataSources\aConverter.Forms.stringWrapper.datasource" />
+    <None Include="Properties\DataSources\aConverterClassLibrary.ConvertCase.datasource" />
+    <None Include="Properties\DataSources\aConverterClassLibrary.FieldStatistic.datasource" />
+    <None Include="Properties\DataSources\aConverterClassLibrary.FieldValue.datasource" />
+    <None Include="Properties\DataSources\aConverterClassLibrary.FileStatisticBuilder.datasource" />
+    <None Include="Properties\DataSources\aConverterClassLibrary.Pattern.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\aConverterClassLibrary\aConverterClassLibrary.csproj">
+      <Project>{4DD34293-327E-4229-99BB-4952206592EC}</Project>
+      <Name>aConverterClassLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_go.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\accept.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\building_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\printer.png" />
+    <None Include="Resources\report.png" />
+    <None Include="Resources\arrow_out.png" />
+    <None Include="Resources\application_edit.png" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\application_go.png" />
+    <None Include="Resources\application_error.png" />
+    <None Include="Resources\brick_error.png" />
+    <None Include="Resources\application_view_detail.png" />
+    <Content Include="Resources\table_save.png" />
+    <None Include="Resources\table_save1.png" />
+    <Content Include="Resources\tick.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
