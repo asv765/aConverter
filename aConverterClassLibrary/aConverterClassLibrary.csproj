@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4DD34293-327E-4229-99BB-4952206592EC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>aConverterClassLibrary</RootNamespace>
+    <AssemblyName>aConverterClassLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DbfClassLibrary">
+      <HintPath>..\..\Абонент+, текущий проект\Платежная система\Abonent_Pay_System2\Sources\Project\DbfClassLibrary\bin\Debug\DbfClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=3.0.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\OpenAccess ORM\bin\FirebirdSql.Data.FirebirdClient_4_0_0_0\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class\AbonentCover\AbonentCover.cs" />
+    <Compile Include="Class\AbonentCover\CitizenScriptGenerator.cs" />
+    <Compile Include="Class\AbonentCover\Document.cs" />
+    <Compile Include="Class\aConverter_Settings.cs" />
+    <Compile Include="Class\AbonentCover\Citizen.cs" />
+    <Compile Include="Class\CheckCases\CapCheckCase.cs" />
+    <Compile Include="Class\CheckCases\CheckCaseClass.cs" />
+    <Compile Include="Class\CheckCases\CheckCaseFactory.cs" />
+    <Compile Include="Class\CheckCases\CheckLshetCorrespondenceCheckCase.cs" />
+    <Compile Include="Class\CheckCases\CheckLshetFormatCheckCase.cs" />
+    <Compile Include="Class\CheckCases\CodePageCheckCase.cs" />
+    <Compile Include="Class\CheckCases\DistrictCheckCase.cs" />
+    <Compile Include="Class\CheckCases\ExternalForeighnKeyCheckCase.cs" />
+    <Compile Include="Class\CheckCases\FioCheckCase.cs" />
+    <Compile Include="Class\CheckCases\HouseCDCheckCase.cs" />
+    <Compile Include="Class\CheckCases\InternalForeighnKeyCheckCase.cs" />
+    <Compile Include="Class\CheckCases\MainOrganizationCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NachoplCalculationCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NachoplNachCheckCase1.cs" />
+    <Compile Include="Class\CheckCases\NachoplNachCheckCase2.cs" />
+    <Compile Include="Class\CheckCases\NachoplOplataCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NachoplSaldoCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NachoplYearMonthCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NotUniqueCharsValuesCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NotUniqueLcharsValuesCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NotUniqueLshetCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NotUniqueNachoplSaldoCheckCase.cs" />
+    <Compile Include="Class\CheckCases\NotUniqueSerialnumCheckCase.cs" />
+    <Compile Include="Class\CheckCases\OplataYearMonthCheckCase.cs" />
+    <Compile Include="Class\CheckCases\PunktCheckCase.cs" />
+    <Compile Include="Class\CheckCases\RegionDistrictCheckCase.cs" />
+    <Compile Include="Class\CheckCases\SourceDocCheckCase.cs" />
+    <Compile Include="Class\CheckCases\StreetCheckCase.cs" />
+    <Compile Include="Class\CheckCases\StructureCheckCase.cs" />
+    <Compile Include="Class\CheckCases\TablePresentCheckCase.cs" />
+    <Compile Include="Class\CheckCases\UncertaintyCheckCase.cs" />
+    <Compile Include="Class\CheckCases\UnknownEmployeePresentCheckCase.cs" />
+    <Compile Include="Class\CheckCases\UnknownRegimPresentCheckCase.cs" />
+    <Compile Include="Class\ClassFileStatisticBuilder.cs" />
+    <Compile Include="Class\ConvertCases\ConvertCase.cs" />
+    <Compile Include="Class\CorrectionCases\AddFirstSaldoRowCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\AddMainOrganizationCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\AddRowToNachoplCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\AddUnknownEmployeeCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\AddUnknownRegimCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\CapMissingCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\CapWrongCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\CodePageCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\CorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\CorrectStructureCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\CreateTableCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\DeleteNachoplRepeatedRowsCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\DeleteOplataExcessRowCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\DeleteUnexpectedForeighnKeysCorrectionClass.cs" />
+    <Compile Include="Class\CorrectionCases\DistrictCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\FixUncertaintyCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\LshetLengthMismatchCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\LshetPrefixCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\MakeHouseCDUniqueCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\NachoplCalculationCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\NachoplNachSetNullCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\NachoplOplataCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\NachoplOplataSetNullCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\NachoplSaldoCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\PunktCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\RegionDistrictCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\SourceDocCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\SplitFIOCorrectionCase.cs" />
+    <Compile Include="Class\CorrectionCases\StreetCorrectionCase.cs" />
+    <Compile Include="Class\Enums.cs" />
+    <Compile Include="Class\Errors\CapMissingError.cs" />
+    <Compile Include="Class\Errors\CapWrongError.cs" />
+    <Compile Include="Class\Errors\DbfStructureError.cs" />
+    <Compile Include="Class\Errors\DistrictError.cs" />
+    <Compile Include="Class\Errors\ErrorClass.cs" />
+    <Compile Include="Class\Errors\ErrorParam.cs" />
+    <Compile Include="Class\Errors\ExternalIntegrityErrorClass.cs" />
+    <Compile Include="Class\Errors\FioErrorClass.cs" />
+    <Compile Include="Class\Errors\FirstSaldoIsNotNullError.cs" />
+    <Compile Include="Class\Errors\HouseCDError.cs" />
+    <Compile Include="Class\Errors\InternalIntegrityErrorClass.cs" />
+    <Compile Include="Class\Errors\LshetLengthError.cs" />
+    <Compile Include="Class\Errors\LshetLengthMismatchError.cs" />
+    <Compile Include="Class\Errors\LshetPrefixMismatchError.cs" />
+    <Compile Include="Class\Errors\MainOrganizationNotPresentError.cs" />
+    <Compile Include="Class\Errors\NachoplCalculationErrorClass.cs" />
+    <Compile Include="Class\Errors\NachoplOplataSummaMismatchError.cs" />
+    <Compile Include="Class\Errors\NachoplRowMissingError.cs" />
+    <Compile Include="Class\Errors\NachoplYearMonthErrorClass.cs" />
+    <Compile Include="Class\Errors\NachRowMissingError.cs" />
+    <Compile Include="Class\Errors\NotUniqueCharsValuesError.cs" />
+    <Compile Include="Class\Errors\NotUniqueLcharsValuesError.cs" />
+    <Compile Include="Class\Errors\NotUniqueLshetError.cs" />
+    <Compile Include="Class\Errors\NotUniqueNachoplSaldoError.cs" />
+    <Compile Include="Class\Errors\NotUniqueSerialnumError.cs" />
+    <Compile Include="Class\Errors\OldNewSaldoMismatchError.cs" />
+    <Compile Include="Class\Errors\OplataExcessRowError.cs" />
+    <Compile Include="Class\Errors\OplataRowMissingError.cs" />
+    <Compile Include="Class\Errors\OplataYearMonthErrorClass.cs" />
+    <Compile Include="Class\Errors\PunktError.cs" />
+    <Compile Include="Class\Errors\RegionDistrictError.cs" />
+    <Compile Include="Class\Errors\SourceDocError.cs" />
+    <Compile Include="Class\Errors\StreetError.cs" />
+    <Compile Include="Class\Errors\TableNotFoundError.cs" />
+    <Compile Include="Class\Errors\UncertaintyError.cs" />
+    <Compile Include="Class\Errors\UnknownEmployeeNotPresentError.cs" />
+    <Compile Include="Class\Errors\UnknownRegimNotPresentError.cs" />
+    <Compile Include="Class\Errors\WrongCodePageError.cs" />
+    <Compile Include="Class\Errors\WrongFileError.cs" />
+    <Compile Include="Class\FactoryRecord.cs" />
+    <Compile Include="Class\Patterns\Pattern.cs" />
+    <Compile Include="Class\Patterns\PatternDictionary.cs" />
+    <Compile Include="Class\Patterns\PatternUtils.cs" />
+    <Compile Include="Class\QualityParamsParser.cs" />
+    <Compile Include="Class\Statistic\DbfStatistic.cs" />
+    <Compile Include="Class\Statistic\FdbStatistic.cs" />
+    <Compile Include="Class\Statistic\Statistic.cs" />
+    <Compile Include="Class\Utils\aConverter_Utils.cs" />
+    <Compile Include="Records\AAddcharRecord.cs" />
+    <Compile Include="Records\CharlstRecord.cs" />
+    <Compile Include="Records\CharsRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\CharValsRecord.cs" />
+    <Compile Include="Records\CntrsindRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\CountersRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\DogovorRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\EquipmntRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\GcounterRecord.cs" />
+    <Compile Include="Records\HAddCharRecord.cs" />
+    <Compile Include="Records\LcharsRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\LgotaRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\NachoplRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\NachRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Records\OplataRecord.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Records\AbonentRecord.cs" />
+    <Compile Include="Records\PartialNachoplRecord.cs" />
+    <Compile Include="Records\SupplnetRecord.cs" />
+    <Compile Include="Records\Utils\AbonentRecordUtils.cs" />
+    <Compile Include="Records\Utils\CharsRecordUtils.cs" />
+    <Compile Include="Records\Utils\CntrsindRecordUtils.cs" />
+    <Compile Include="Records\Utils\CountersRecordUtils.cs" />
+    <Compile Include="Records\Utils\LcharsRecordUtils.cs" />
+    <Compile Include="Records\Utils\NachoplRecordUtils.cs" />
+    <Compile Include="Records\Utils\SupplnetRecordUtils.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

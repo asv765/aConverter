@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.OleDb;
+using System.Data;
+
+namespace aConverterClassLibrary
+{
+    public class NachoplNachCheckCase2 : CheckCase
+    {
+        public NachoplNachCheckCase2()
+        {
+            this.CheckCaseName = "В NACHOPL.DBF значение в поле FNATH не совпадает с суммой полученной по файлу NACH.DBF";
+            this.CheckCaseClass = CheckCaseClass.Целостность_конвертируемых_данных;
+        }
+
+        public override void Analize()
+        {
+            this.Result = CheckCaseStatus.Ошибок_не_выявлено;
+            this.ErrorList.Clear();
+            using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            {
+                dbConn.Open();
+                using (OleDbCommand command = dbConn.CreateCommand())
+                {
+                    command.CommandText = "select count(*) " +
+                        "from nachopl n inner join nach nc on " +
+                        "    n.lshet+STR(n.year,4)+STR(n.month,2) =  " +
+                        "    nc.lshet+STR(YEAR(nc.date_vv),4)+STR(MONTH(nc.date_vv),2)  " +
+                        "group BY n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata " +
+                        "HAVING n.oplata <> SUM(nc.FNATH)";
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    if (count > 0)
+                    {
+                        NachRowMissingError er = new NachRowMissingError();
+                        er.ParentCheckCase = this;
+                        this.ErrorList.Add(er);
+                        this.Result = CheckCaseStatus.Выявлена_ошибка;
+                    }
+                }
+            }
+        }
+    }
+}

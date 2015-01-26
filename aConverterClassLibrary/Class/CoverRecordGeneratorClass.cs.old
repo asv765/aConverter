@@ -1,0 +1,323 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Data.OleDb;
+using System.Data;
+
+namespace aConverterClassLibrary
+{
+    /// <summary>
+    /// Класс для генерации файла-обертки для работы с DBF
+    /// </summary>
+    public class CoverRecordGeneratorClass
+    {
+        private string connectionString;
+        private string coverFileBodyPattern;
+
+        public CoverRecordGeneratorClass(string AConnectionString, string ACoverFileBodyPattern)
+        {
+            connectionString = AConnectionString;
+            coverFileBodyPattern = ACoverFileBodyPattern;
+        }
+
+        public string Generate(string ASourceTableName)
+        {
+            string shortFileName = Path.GetFileNameWithoutExtension(ASourceTableName);
+            try
+            {
+                // Здесь будет список полей файла
+                string propertyBlock = "";
+
+                // Здесь сформируем метод ReadDataRow
+                string readDataRowBlock = "";
+
+                #region Для каждого файла через драйвер VFPOLEDB получаем его структуру
+                // Initialize database connection.
+                using (OleDbConnection dbConn = new OleDbConnection(connectionString))
+                {
+                    try
+                    {
+                        // Open connection.
+                        dbConn.Open();
+                        DataTable tbl1 = dbConn.GetSchema("Columns");
+                        foreach (DataRow dr in tbl1.Rows)
+                        {
+                            #region Для каждого поля в DBF-файле генерируем кусок кода. Учитываем тип и размер поля
+                            string tableName = dr["TABLE_NAME"].ToString();
+                            if (tableName.ToUpper() == shortFileName.ToUpper())
+                            {
+                                char externalFieldType = ' ';
+                                string externalFieldLength = "skip";
+                                string externalFieldDec = "skip";
+                                string internalFieldType = "";
+                                string externalFieldName = dr["COLUMN_NAME"].ToString();
+                                string internalFieldName = externalFieldName;
+                                if (externalFieldName == "value") internalFieldName = externalFieldName + "_";
+
+                                #region Определяем тип поля в DBF
+                                getExternalType(dr["DATA_TYPE"].ToString(),
+                                    dr["CHARACTER_MAXIMUM_LENGTH"].ToString(),
+                                    dr["NUMERIC_SCALE"].ToString(),
+                                    dr["NUMERIC_PRECISION"].ToString(),
+                                    out externalFieldType,
+                                    out externalFieldLength,
+                                    out externalFieldDec);
+                                #endregion
+
+                                #region Определяет тип поля в обертке по типу в DBF-файле
+                                internalFieldType = getInternalType(externalFieldType, externalFieldDec);
+                                #endregion
+
+                                #region Формируем блок для поля
+                                propertyBlock += getPropertyBlock(internalFieldName, internalFieldType, externalFieldName, externalFieldType,
+                                    externalFieldLength, externalFieldDec, 8) + "\r\n";
+                                #endregion
+
+                                #region Формируем очередную строку для ReadDataRow
+                                readDataRowBlock += getReadFromDataRowString(internalFieldName, internalFieldType, externalFieldName, 12) + "\r\n";
+                                #endregion
+                            }
+                            #endregion
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Проблемы с получением списка столбцов таблиц для соединения " + connectionString + ":\n" + ex.Message);
+                    }
+                }
+                #endregion
+
+                #region Генерируем обертку
+                string coverClass = getCover(shortFileName, propertyBlock, readDataRowBlock);
+                string fileBody = coverFileBodyPattern.Replace("%s", coverClass);
+                #endregion
+
+                return fileBody;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ошибка при генерации обертки для таблицы " + ASourceTableName + ":\n" + ex.Message);
+            }
+        }
+
+        public static List<DbfField> GetFieldList(string ASourceTableName)
+        {
+            List<DbfField> ldf = new List<DbfField>();
+
+            using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.VFPOLEDBConnectionString))
+            {
+                try
+                {
+                    // Open connection.
+                    dbConn.Open();
+                    DataTable tbl1 = dbConn.GetSchema("Columns");
+                    foreach (DataRow dr in tbl1.Rows)
+                    {
+                        string tableName = dr["TABLE_NAME"].ToString();
+                        if (tableName.ToUpper() == ASourceTableName.ToUpper())
+                        {
+                            char fieldType = ' ';
+                            string fieldLength = "skip";
+                            string fieldDec = "skip";
+                            string fieldName = dr["COLUMN_NAME"].ToString();
+
+                            getExternalType(dr["DATA_TYPE"].ToString(),
+                                dr["CHARACTER_MAXIMUM_LENGTH"].ToString(),
+                                dr["NUMERIC_SCALE"].ToString(),
+                                dr["NUMERIC_PRECISION"].ToString(),
+                                out fieldType,
+                                out fieldLength,
+                                out fieldDec);
+
+                            DbfField df = new DbfField(fieldName, 
+                                fieldType, 
+                                fieldLength == "skip" ? 0 : Convert.ToInt32(fieldLength), 
+                                fieldDec == "skip" ? 0 : Convert.ToInt32(fieldDec));
+                            ldf.Add(df);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Проблемы с получением списка столбцов таблиц для соединения " + aConverter_RootSettings.VFPOLEDBConnectionString + ":\n" + ex.Message);
+                }
+            }
+            return ldf;
+        }
+
+        /// <summary>
+        /// Определяет тип поля в обертке по типу в DBF-файле
+        /// </summary>
+        /// <param name="AExternalType"></param>
+        /// <returns></returns>
+        private string getInternalType(char externalFieldType, string externalFieldDec)
+        {
+            string internalFieldType;
+            if (externalFieldType == 'N' && externalFieldDec != "skip")
+                internalFieldType = "decimal";
+            else if (externalFieldType == 'N' && externalFieldDec == "skip")
+                internalFieldType = "Int64";
+            else if (externalFieldType == 'D')
+                internalFieldType = "DateTime";
+            else if (externalFieldType == 'L')
+                internalFieldType = "bool";
+            else // (externalFieldType == 'C' || externalFieldType == 'M')
+                internalFieldType = "string";
+            return internalFieldType;
+        }
+
+        /// <summary>
+        /// Определяем тип поля в DBF-файле
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="maximumLength"></param>
+        /// <param name="numericScale"></param>
+        /// <param name="numericPrecision"></param>
+        /// <param name="fieldType"></param>
+        /// <param name="fieldLength"></param>
+        /// <param name="fieldDec"></param>
+        private static void getExternalType(string dataType, string maximumLength, string numericScale, string numericPrecision,
+            out char fieldType, out string fieldLength, out string fieldDec)
+        {
+            fieldType = ' ';
+            fieldLength = fieldDec = "skip";
+            if (dataType.ToString() == "129")
+            {
+                if (maximumLength.Length > 5)
+                    fieldType = 'M';
+                else
+                {
+                    fieldType = 'C';
+                    fieldLength = maximumLength;
+                }
+            }
+            else if (dataType.ToString() == "131")
+            {
+                fieldType = 'N';
+                if (!String.IsNullOrWhiteSpace(maximumLength))
+                    fieldLength = maximumLength;
+                else
+                {
+                    fieldLength = (Convert.ToInt32(numericPrecision) + 1).ToString();
+                    if (!String.IsNullOrWhiteSpace(numericScale))
+                    {
+                        if (Convert.ToInt32(numericScale) > 0)
+                        {
+                            fieldDec = numericScale;
+                        }
+                    }
+                }
+
+            }
+            else if (dataType.ToString() == "133")
+                fieldType = 'D';
+            else if (dataType.ToString() == "11")
+                fieldType = 'L';
+        }
+
+        /// <summary>
+        /// Формирует блок Property
+        /// </summary>
+        /// <param name="internalFieldName"></param>
+        /// <param name="internalFieldType"></param>
+        /// <param name="externalFieldName"></param>
+        /// <param name="externalFieldType"></param>
+        /// <param name="externalFieldLength"></param>
+        /// <param name="externalFieldDec"></param>
+        /// <param name="indent">Отступ слева, задается количество пробелов</param>
+        /// <returns></returns>
+        private string getPropertyBlock(string internalFieldName, string internalFieldType, 
+            string externalFieldName, char externalFieldType, string externalFieldLength, string externalFieldDec,
+            int indent)
+        {
+            string sindent = "".PadRight(indent);
+            string fieldBlock = "";
+            string propertyName = internalFieldName.Substring(0, 1).ToUpper() +
+                internalFieldName.Substring(1, internalFieldName.Length - 1).ToLower();
+
+            fieldBlock += String.Format(sindent + "private {0} {1};\r\n", internalFieldType, internalFieldName.ToLower());
+            fieldBlock += sindent + "// <summary>\r\n";
+            fieldBlock += String.Format(sindent + "// {0} {1}", externalFieldName.ToUpper(), externalFieldType);
+            if (externalFieldLength != "skip")
+            {
+                fieldBlock += "(" + externalFieldLength;
+                if (externalFieldDec != "skip")
+                {
+                    fieldBlock += "," + externalFieldDec;
+                }
+                fieldBlock += ")";
+            }
+            fieldBlock += "\r\n";
+            fieldBlock += sindent + "// </summary>\r\n";
+            fieldBlock += String.Format(sindent + "[FieldName(\"{0}\"), FieldType('{1}')", externalFieldName.ToUpper(), externalFieldType);
+            if (externalFieldLength != "skip") fieldBlock += String.Format(", FieldWidth({0})", externalFieldLength);
+            if (externalFieldDec != "skip") fieldBlock += String.Format(", FieldDec({0})", externalFieldDec);
+            fieldBlock += "]\r\n";
+            fieldBlock += String.Format(sindent + "public {0} {1}\r\n", internalFieldType, propertyName);
+            fieldBlock += sindent + "{\r\n";
+            fieldBlock += sindent + "    get { return " + internalFieldName.ToLower() + "; }\r\n";
+
+            string checkDataBlock = "";
+            if (internalFieldType == "string")
+                checkDataBlock = String.Format("CheckStringData(\"{0}\", value, {1});", propertyName, externalFieldLength);
+            else if (internalFieldType == "Int64")
+                checkDataBlock = String.Format("CheckIntegerData(\"{0}\", value, {1});", propertyName, externalFieldLength);
+            else if (internalFieldType == "decimal")
+                checkDataBlock = String.Format("CheckDecimalData(\"{0}\", value, {1}, {2});", propertyName, externalFieldLength, externalFieldDec);
+            else if (internalFieldType == "DateTime" || internalFieldType == "bool")
+                checkDataBlock = "";
+            else
+                checkDataBlock = String.Format("CheckData(\"{0}\", value);", propertyName);
+
+            fieldBlock += sindent + "    set { " + checkDataBlock + " " + internalFieldName.ToLower() + " = value; }\r\n";
+
+            fieldBlock += sindent + "}\r\n";
+
+            return fieldBlock;
+        }
+
+        /// <summary>
+        /// Формируем блок для метода readDataRow
+        /// </summary>
+        /// <param name="internalFieldName"></param>
+        /// <param name="internalFieldType"></param>
+        /// <param name="externalFieldName"></param>
+        /// <param name="indent"></param>
+        /// <returns></returns>
+        private string getReadFromDataRowString(string internalFieldName, string internalFieldType, string externalFieldName, int indent)
+        {
+            string rdrm = "".PadRight(indent);
+            string ifn = internalFieldName.Substring(0, 1).ToUpper() + internalFieldName.Substring(1, internalFieldName.Length - 1).ToLower();
+            string efn = externalFieldName.ToUpper();
+            if (internalFieldType == "string")
+                rdrm += String.Format("{0} = ADataRow[\"{1}\"].ToString();", ifn, efn);
+            else if (internalFieldType == "decimal")
+                rdrm += String.Format("{0} = Convert.ToDecimal(ADataRow[\"{1}\"]);", ifn, efn);
+            else if (internalFieldType == "Int64")
+                rdrm += String.Format("{0} = Convert.ToInt64(ADataRow[\"{1}\"]);", ifn, efn);
+            else if (internalFieldType == "DateTime")
+                rdrm += String.Format("{0} = Convert.ToDateTime(ADataRow[\"{1}\"]);", ifn, efn);
+            else if (internalFieldType == "bool")
+                rdrm += String.Format("{0} = ADataRow[\"{1}\"].ToString() == \"True\" ? true : false;", ifn, efn);
+            return rdrm;
+        }
+
+        private string getCover(string shortFileName, string propertyBlock, string readDataRowBlock)
+        {
+            string coverClass = String.Format("    [TableName(\"{0}.DBF\")]\r\n", shortFileName) +
+                    String.Format("    public class {0}Record: AbstractRecord\r\n",
+                        shortFileName.Substring(0, 1).ToUpper() +
+                        shortFileName.Substring(1, shortFileName.Length - 1).ToLower()) +
+                    "    {\r\n" +
+                    propertyBlock +
+                    "        public override void ReadDataRow(System.Data.DataRow ADataRow)\r\n" +
+                    "        {\r\n" +
+                    readDataRowBlock +
+                    "        }\r\n" +
+                    "    }";
+            return coverClass;
+        }
+    }
+}
