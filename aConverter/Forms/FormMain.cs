@@ -10,11 +10,10 @@ using aConverterClassLibrary;
 using aConverterClassLibrary.Records;
 using System.IO;
 using aConverter.Forms;
-using FirebirdSql.Data.FirebirdClient;
 using System.Data.OleDb;
-// using System.Xml.Serialization;
 using aConverterClassLibrary.Class;
 using DbfClassLibrary;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace aConverter
 {

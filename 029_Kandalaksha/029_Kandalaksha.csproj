@@ -30,8 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DbfClassLibrary">
-      <HintPath>..\..\Абонент+, текущий проект\Платежная система\Abonent_Pay_System2\Sources\Project\DbfClassLibrary\bin\Debug\DbfClassLibrary.dll</HintPath>
+    <Reference Include="DbfClassLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\DbfClassLibrary.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

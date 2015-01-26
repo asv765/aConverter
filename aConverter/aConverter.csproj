@@ -63,13 +63,12 @@
     <Reference Include="Dapper">
       <HintPath>..\packages\Dapper.1.38\lib\net40\Dapper.dll</HintPath>
     </Reference>
-    <Reference Include="DbfClassLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Абонент+, текущий проект\Платежная система\Abonent_Pay_System2\Sources\Project\DbfClassLibrary\bin\Debug\DbfClassLibrary.dll</HintPath>
+    <Reference Include="DbfClassLibrary">
+      <HintPath>..\lib\DbfClassLibrary.dll</HintPath>
     </Reference>
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=3.0.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Telerik\OpenAccess ORM\bin\FirebirdSql.Data.FirebirdClient_4_0_0_0\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+      <HintPath>..\lib\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
