@@ -14,7 +14,7 @@ namespace aConverterClassLibrary
     {
         public static int SettingsCaseId
         {
-            get { return getValue<int>(aConverter_RootSettings.SettingsFileName, "SettingsCaseId", -1); }
+            get { return getValue<int>(aConverter_RootSettings.SettingsFileName, "SettingsCaseId", -1); }// ??????????????????????????
             set { setValue(aConverter_RootSettings.SettingsFileName, "SettingsCaseId", value); }
         }
 
@@ -61,7 +61,7 @@ namespace aConverterClassLibrary
         }
 
         /// <summary>
-        /// Путь к DBF-файлам для импорта
+        /// Путь к DBF-файлам для импорта ?????????????????????????????????????????
         /// </summary>
         public static string DestDBFFilePath
         {
@@ -110,7 +110,7 @@ namespace aConverterClassLibrary
         {
             get
             {
-                if (SettingsCaseId == -1) return "";
+                if (SettingsCaseId == -1) return @"D:\GitDiplom\aConverter\029_Kandalaksha\bin\Debug\";
                 List<SettingsCase> lsc = ReadSettingsCase();
                 string rv = lsc[SettingsCaseId].ConvertPath;
                 return rv;
@@ -470,7 +470,7 @@ namespace aConverterClassLibrary
 
         private string sourceDBFFilePath;
         /// <summary>
-        /// Исходные файлы
+        /// Исходные файлы ?????????????????????????????
         /// </summary>
         public string SourceDBFFilePath
         {
@@ -480,7 +480,7 @@ namespace aConverterClassLibrary
 
         private string destDBFFilePath;
         /// <summary>
-        /// Путь к DBF-файлам, для которых будет генерироваться обертка
+        /// Путь к DBF-файлам, для которых будет генерироваться обертка ????????????????????????????????????????
         /// </summary>
         public string DestDBFFilePath
         {

@@ -259,7 +259,7 @@ namespace aConverter.Forms
                     try
                     {
                         cc.SetStepsCount(1);
-                        cc.InitializeManager(aConverter_RootSettings.SourceDBFFilePath, aConverter_RootSettings.DestDBFFilePath);
+                        cc.InitializeManager(aConverter_RootSettings.SourceDBFFilePath, aConverter_RootSettings.DestDBFFilePath);//////////
                         if (checkBoxToFile.Checked)
                         {
 
