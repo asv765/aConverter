@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Data.OleDb;
 using DbfClassLibrary;
+using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace aConverterClassLibrary
 {
@@ -19,25 +21,49 @@ namespace aConverterClassLibrary
         {
             this.Result = CheckCaseStatus.Ошибок_не_выявлено;
             this.ErrorList.Clear();
-            TableManager tm = new TableManager(aConverter_RootSettings.DestDBFFilePath);
-            tm.Init();
-            try
+            //TableManager tm = new TableManager(aConverter_RootSettings.DestDBFFilePath);
+            using (MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'"))
             {
-                int fcount = Convert.ToInt32(tm.ExecuteScalar("SELECT COUNT(*) FROM abonent WHERE !EMPTY(F)"));
-                int icount = Convert.ToInt32(tm.ExecuteScalar("SELECT COUNT(*) FROM abonent WHERE !EMPTY(I)"));
-                int ocount = Convert.ToInt32(tm.ExecuteScalar("SELECT COUNT(*) FROM abonent WHERE !EMPTY(O)"));
+                dbConn.Open();
 
-                if (fcount != 0 && icount == 0 && ocount == 0)
+                using (MySqlCommand command = dbConn.CreateCommand())
                 {
-                    FioErrorClass ec = new FioErrorClass(fcount);
-                    ec.ParentCheckCase = this;
-                    this.ErrorList.Add(ec);
-                    this.Result = CheckCaseStatus.Выявлена_ошибка;
+                    //tm.Init();
+                    //try
+                    //{
+                        //int fcount = Convert.ToInt32(tm.ExecuteScalar("SELECT COUNT(*) FROM abonent WHERE !EMPTY(F)"));
+                        //int icount = Convert.ToInt32(tm.ExecuteScalar("SELECT COUNT(*) FROM abonent WHERE !EMPTY(I)"));
+                        //int ocount = Convert.ToInt32(tm.ExecuteScalar("SELECT COUNT(*) FROM abonent WHERE !EMPTY(O)"));
+                        command.CommandText = "SELECT COUNT(*) FROM abonent WHERE COALESCE(F,0)";
+
+                        //DataTable dt = new DataTable();
+                        //MySqlDataAdapter da = new MySqlDataAdapter(command);
+                        //da.Fill(dt);
+
+                       // int fcount = dt.Rows.Count;
+                        int fcount = Convert.ToInt32(command.ExecuteScalar());
+                    
+                        command.CommandText = "SELECT COUNT(*) FROM abonent WHERE COALESCE(I,0)";
+                        int icount = Convert.ToInt32(command.ExecuteScalar());
+                        command.CommandText = "SELECT COUNT(*) FROM abonent WHERE COALESCE(O,0)";
+                        int ocount = Convert.ToInt32(command.ExecuteScalar());
+
+
+                        if (fcount != 0 && icount == 0 && ocount == 0)
+                        //if (fcount != 0)
+                        {
+                            FioErrorClass ec = new FioErrorClass(fcount);
+                            ec.ParentCheckCase = this;
+                            this.ErrorList.Add(ec);
+                            this.Result = CheckCaseStatus.Выявлена_ошибка;
+                        }
+                    //}
+                    //finally
+                    //{
+                    //    command.Dispose();
+                    //}
+
                 }
-            }
-            finally
-            {
-                tm.Dispose();
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FirebirdSql.Data.FirebirdClient;
 using aConverterClassLibrary.Class.Errors;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {

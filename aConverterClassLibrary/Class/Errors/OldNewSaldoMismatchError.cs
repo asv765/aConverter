@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.OleDb;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -18,7 +19,7 @@ namespace aConverterClassLibrary
         int newMonth;
         int newYear;
         // string dbfConnectionString;
-        OleDbCommand command;
+        MySqlCommand command;
         Dictionary<string, object> nachoplOptimization;
 
         public OldNewSaldoMismatchError(decimal AOldSaldo,
@@ -27,7 +28,7 @@ namespace aConverterClassLibrary
             string AServiceName,
             decimal ANewSaldo,
             int ANewMonth, int ANewYear,
-            OleDbCommand Acommand,
+            MySqlCommand Acommand,
             Dictionary<string, object> AnachoplOptimization)
         {
             oldSaldo = AOldSaldo;

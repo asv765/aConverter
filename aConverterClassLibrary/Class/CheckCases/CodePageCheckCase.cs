@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using aConverterClassLibrary.Class;
 using DbfClassLibrary;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -14,7 +15,9 @@ namespace aConverterClassLibrary
         {
             get
             {
+                //string str = "server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'";
                 if (!String.IsNullOrEmpty(aConverter_RootSettings.DBFConnectionString))
+                //if (!String.IsNullOrEmpty(str))
                 {
                     // @"Provider=vfpoledb.1;Data Source={0};Collating Sequence=Russian"
                     string[] csa = aConverter_RootSettings.DBFConnectionString.Split(';');

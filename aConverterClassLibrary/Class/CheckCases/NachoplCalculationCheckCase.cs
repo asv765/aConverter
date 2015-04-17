@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.OleDb;
 using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -11,7 +12,7 @@ namespace aConverterClassLibrary
     {
         public NachoplCalculationCheckCase()
         {
-            this.CheckCaseName = "Проверяется арифметика в каждой строке таблицы NACHOPL.DBF";
+            this.CheckCaseName = "Проверяется арифметика в каждой строке таблицы NACHOPL";
             this.CheckCaseClass = CheckCaseClass.Целостность_конвертируемых_данных;
         }
 
@@ -19,13 +20,15 @@ namespace aConverterClassLibrary
         {
             this.Result = CheckCaseStatus.Ошибок_не_выявлено;
             this.ErrorList.Clear();
-            using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            using (MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'"))
+
             {
-                using (OleDbCommand command = dbConn.CreateCommand())
+                using (MySqlCommand command = dbConn.CreateCommand())
                 {
                     command.CommandText = "SELECT * FROM NACHOPL WHERE EDEBET <> (BDEBET + FNATH + PROCHL - OPLATA)";
                     DataTable dt = new DataTable();
-                    OleDbDataAdapter da = new OleDbDataAdapter(command);
+                    MySqlDataAdapter da = new MySqlDataAdapter(command);
                     da.Fill(dt);
 
                     if (dt.Rows.Count == 0)

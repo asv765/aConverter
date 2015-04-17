@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.OleDb;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -15,10 +16,10 @@ namespace aConverterClassLibrary
         int servicecd;
         string servicename;
         // string dbfConnectionString;
-        OleDbCommand command;
+        MySqlCommand command;
 
         public FirstSaldoIsNotNullError(string ALshet, int AMonth, int AYear, int AServiceCD, string AServiceName, decimal ADebet,
-            OleDbCommand Acommand)
+            MySqlCommand Acommand)
         {
             lshet = ALshet;
             month = AMonth;

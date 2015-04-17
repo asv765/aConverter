@@ -62,7 +62,9 @@ namespace aConverterClassLibrary
         {
             foreach (FieldStatistic fs in this.FieldList)
             {
-                fs.CalcStatistic();
+                //fs.CalcStatistic();
+                if (fs.Field.FieldType != 'M')
+                    fs.CalcStatistic();
 
             }
         }
@@ -155,34 +157,63 @@ namespace aConverterClassLibrary
         /// </summary>
         public void CalcStatistic()
         {
-            string query = String.Format("SELECT {0} AS FIELDVALUE, COUNT(*) AS CNT FROM {1} GROUP BY {0} ORDER BY CNT DESCENDING, FIELDVALUE", Field.FieldName, parentFSB.ShortFileName);
-            DataTable dt = parentFSB.TableManager.ExecuteQuery(query);
+            //string query = String.Format("SELECT {0} AS FIELDVALUE, COUNT(*) AS CNT FROM {1} GROUP BY {0} ORDER BY CNT DESCENDING, FIELDVALUE", Field.FieldName, parentFSB.ShortFileName);
+            //DataTable dt = parentFSB.TableManager.ExecuteQuery(query);
 
-            CountUniqueValues = dt.Rows.Count;
+            //CountUniqueValues = dt.Rows.Count;
+
+            string query = String.Format("SELECT {0} AS FIELDVALUE, COUNT(*) AS CNT FROM {1} GROUP BY 1 ORDER BY 2 DESCENDING, 1", Field.FieldName, parentFSB.ShortFileName);
+            CountStatistic.Clear();
+            
+            try
+            {
+                DataTable dt = parentFSB.TableManager.ExecuteQuery(query);
+                CountUniqueValues = dt.Rows.Count;
+
 
             OnlyTheSameValues = false;
             OnlyUniqueValues = false;
             NoValues = true;
 
-            if (dt.Rows.Count > 0) NoValues = false;
-            if (dt.Rows.Count == 1) OnlyTheSameValues = true;
-            if (dt.Rows.Count == parentFSB.RowCount) OnlyUniqueValues = true;
-            if (dt.Rows.Count > 0)
-            {
-                CountStatistic.Clear();
-                foreach (DataRow dr in dt.Rows)
+            //if (dt.Rows.Count > 0) NoValues = false;
+            //if (dt.Rows.Count == 1) OnlyTheSameValues = true;
+            //if (dt.Rows.Count == parentFSB.RowCount) OnlyUniqueValues = true;
+            //if (dt.Rows.Count > 0)
+            //{
+            //    CountStatistic.Clear();
+            //    foreach (DataRow dr in dt.Rows)
+                if (dt.Rows.Count > 0) NoValues = false;
+                if (dt.Rows.Count == 1) OnlyTheSameValues = true;
+                if (dt.Rows.Count == parentFSB.RowCount) OnlyUniqueValues = true;
+                if (dt.Rows.Count > 0)
                 {
-                    CountStatistic.Add(new FieldValue() 
-                                    { 
-                                        Value = dr["FIELDVALUE"].ToString(), 
-                                        Count = Convert.ToInt32(dr["CNT"]) 
-                                    });
+                    //CountStatistic.Add(new FieldValue() 
+                    //                { 
+                    //                    Value = dr["FIELDVALUE"].ToString(), 
+                    //                    Count = Convert.ToInt32(dr["CNT"]) 
+                    //                });
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        CountStatistic.Add(new FieldValue()
+                        {
+                            Value = dr["FIELDVALUE"].ToString(),
+                            Count = Convert.ToInt32(dr["CNT"])
+                        });
+                    }
                 }
-            }
-            else
-                CountStatistic.Clear();
+            
+            //else
+            //    CountStatistic.Clear();
 
-            HasStatistic = true;
+            //HasStatistic = true;
+            else
+                    CountStatistic.Clear();
+                HasStatistic = true;
+            }
+            catch (Exception)
+            {
+                HasStatistic = false;
+             }
         }
     }
 

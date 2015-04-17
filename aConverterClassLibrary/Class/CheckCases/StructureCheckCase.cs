@@ -8,6 +8,7 @@ using System.Data.OleDb;
 using System.Data;
 using aConverterClassLibrary.Class;
 using DbfClassLibrary;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {

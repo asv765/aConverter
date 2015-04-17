@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.OleDb;
 using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -11,7 +12,7 @@ namespace aConverterClassLibrary
     {
         public NachoplSaldoCheckCase()
         {
-            this.CheckCaseName = "Проверка целостности истории сальдо в файле NACHOPL.DBF";
+            this.CheckCaseName = "Проверка целостности истории сальдо в файле NACHOPL";
             this.CheckCaseClass = CheckCaseClass.Целостность_конвертируемых_данных;
         }
 
@@ -19,21 +20,23 @@ namespace aConverterClassLibrary
         {
             this.Result = CheckCaseStatus.Ошибок_не_выявлено;
             this.ErrorList.Clear();
-            OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString);
+            //OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString);
+            MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'");
             dbConn.Open();
-            OleDbCommand command = dbConn.CreateCommand();
+            MySqlCommand command = dbConn.CreateCommand();
             command.CommandText = "SELECT LSHET, Year, Month, ServiceCD, ServiceNam, BDEBET, EDEBET "+
                                     "FROM NACHOPL " +
                                     "ORDER BY Lshet, ServiceCD, Year, Month";
             // DataTable dt = new DataTable();
             // OleDbDataAdapter da = new OleDbDataAdapter(command);
             // da.Fill(dt);
-            OleDbDataReader dr = command.ExecuteReader();
+            MySqlDataReader dr = command.ExecuteReader();
             decimal oldEndDebet = 0;
             string oldLshet = "-1";
             int oldServiceCD = -1;
             int currMonth = -1; int currYear = -1;
-            string dbfConnectionString = aConverter_RootSettings.DBFConnectionString;
+            //string dbfConnectionString = aConverter_RootSettings.DBFConnectionString;
+            string dbfConnectionString = "server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'";
 
             // Список нужен для оптимизации при генерации вариантов исправления.
             // По нему проверяется, сформирован ли вариант пересчета сальдо для данного абонента по данной услуге

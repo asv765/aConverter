@@ -13,7 +13,7 @@ namespace aConverterClassLibrary.Records
         /// Прореживает список качественных характеристик
         /// </summary>
         /// <param name="lrl"></param>
-        public static List<LcharsRecord> ThinOutList(List<LcharsRecord> lrl)
+        public static List<LcharsRecord> ThinOutList(List<LcharsRecord> lrl)// -----------------------------неведомая вещь 3
         {
             // Сортируем список
             List<LcharsRecord> rlrl = new List<LcharsRecord>();
@@ -34,7 +34,7 @@ namespace aConverterClassLibrary.Records
         }
 
         /// <summary>
-        /// Метод-делегат для сравнения двух характеристи LcharsRecord
+        /// Метод-делегат для сравнения двух характеристи LcharsRecord----------------------------------------------- н в 4
         /// </summary>
         /// <param name="lr1"></param>
         /// <param name="lr2"></param>

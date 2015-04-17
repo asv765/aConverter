@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FirebirdSql.Data.FirebirdClient;
 using System.Data.OleDb;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -21,13 +22,15 @@ namespace aConverterClassLibrary
             this.ErrorList.Clear();
             int lshetLength = 0;
 
-            using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            using (MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'"))
             {
-                using (OleDbCommand command = dbConn.CreateCommand())
+                using (MySqlCommand command = dbConn.CreateCommand())
                 {
                     dbConn.Open();
 
-                    command.CommandText = "SELECT MAX(LEN(ALLT(LSHET))) as MAX FROM ABONENT";
+                    //command.CommandText = "SELECT MAX(LEN(ALLT(LSHET))) as MAX FROM ABONENT";
+                    command.CommandText = "SELECT MAX(CHAR_LENGTH(LSHET)) as MAX FROM ABONENT";
                     object result = command.ExecuteScalar();
                     if (!(result is DBNull)) lshetLength = Convert.ToInt32(result);
                 }
@@ -65,12 +68,14 @@ namespace aConverterClassLibrary
                 }
             }
             int mismatchedLshets = 0;
-            using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            using (MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'"))
             {
-                using (OleDbCommand command = dbConn.CreateCommand())
+                using (MySqlCommand command = dbConn.CreateCommand())
                 {
                     dbConn.Open();
-                    command.CommandText = String.Format("select COUNT(*) FROM ABONENT WHERE SUBST(LSHET, 1, {0}) <> '{1}'", lshet_prefix.Length, lshet_prefix);
+                    //command.CommandText = String.Format("select COUNT(*) FROM ABONENT WHERE SUBST(LSHET, 1, {0}) <> '{1}'", lshet_prefix.Length, lshet_prefix);
+                    command.CommandText = String.Format("select COUNT(*) FROM ABONENT WHERE SUBSTR(LSHET, 1, {0}) <> '{1}'", lshet_prefix.Length, lshet_prefix);
                     mismatchedLshets = Convert.ToInt32(command.ExecuteScalar());
                 }
             }

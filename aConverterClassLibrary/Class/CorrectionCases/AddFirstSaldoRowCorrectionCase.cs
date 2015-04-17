@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.OleDb;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -14,10 +15,10 @@ namespace aConverterClassLibrary
         decimal debet;
         int servicecd;
         string servicename;
-        OleDbCommand command;
+        MySqlCommand command;
 
         public AddFirstSaldoRowCorrectionCase(string ALshet, int AMonth, int AYear, int AServiceCD, string AServiceName, 
-            decimal ADebet, OleDbCommand Acommand)
+            decimal ADebet, MySqlCommand Acommand)
         {
             this.CorrectionCaseName = String.Format("Добавить строку в историю оплат/начислений для абонента {0} за {1}.{2} по услуге с кодом {3} ({4}). Долг на конец месяца и сумма изменений - {5}",
                 ALshet, AMonth, AYear, AServiceCD, AServiceName.Trim(), ADebet);

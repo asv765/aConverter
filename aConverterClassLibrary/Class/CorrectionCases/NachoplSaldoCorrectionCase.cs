@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.OleDb;
 using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -21,7 +22,7 @@ namespace aConverterClassLibrary
         int newMonth;
         int newYear;
         // string dbfConnectionString;
-        OleDbCommand command;
+        MySqlCommand command;
 
         public NachoplSaldoCorrectionCase(NachoplSaldoCorrectionType ANachoplSaldoCorrectionType,
             decimal AOldSaldo,
@@ -30,7 +31,7 @@ namespace aConverterClassLibrary
             string AServiceName,
             decimal ANewSaldo,
             int ANewMonth, int ANewYear,
-            OleDbCommand Acommand)
+            MySqlCommand Acommand)
         {
             nachoplSaldoCorrectionType = ANachoplSaldoCorrectionType;
 
@@ -126,7 +127,7 @@ namespace aConverterClassLibrary
                                             "ORDER BY Lshet, ServiceCD, Year DESCENDING, Month DESCENDING",
                                             lshet, servicecd);
                     DataTable dt = new DataTable();
-                    OleDbDataAdapter da = new OleDbDataAdapter(command);
+                    MySqlDataAdapter da = new MySqlDataAdapter(command);
                     da.Fill(dt);
                     decimal lastSaldo = 0;
                     if (dt.Rows.Count > 0)

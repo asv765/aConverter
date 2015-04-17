@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище converterdbModel" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="Хранилище converterdbModelContainer" />
+        <!--Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.aaddchar" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="aaddchar">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="ADDCHARCD" Type="decimal" Precision="8" />
+        <Property Name="VALUE" Type="varchar" MaxLength="30" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.abonent" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="abonent">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="HOUSECD" Type="decimal" Precision="9" />
+        <Property Name="DISTKOD" Type="decimal" Precision="6" />
+        <Property Name="DISTNAME" Type="varchar" MaxLength="40" />
+        <Property Name="RAYONKOD" Type="decimal" Precision="6" />
+        <Property Name="RAYONNAME" Type="varchar" MaxLength="40" />
+        <Property Name="TOWNSKOD" Type="decimal" Precision="6" />
+        <Property Name="TOWNSNAME" Type="varchar" MaxLength="40" />
+        <Property Name="ULICAKOD" Type="decimal" Precision="6" />
+        <Property Name="ULICANAME" Type="varchar" MaxLength="40" />
+        <Property Name="NDOMA" Type="varchar" MaxLength="20" />
+        <Property Name="KORPUS" Type="decimal" Precision="5" />
+        <Property Name="KVARTIRA" Type="varchar" MaxLength="10" />
+        <Property Name="KOMNATA" Type="decimal" Precision="3" />
+        <Property Name="F" Type="varchar" MaxLength="50" />
+        <Property Name="I" Type="varchar" MaxLength="50" />
+        <Property Name="O" Type="varchar" MaxLength="50" />
+        <Property Name="PRIM_" Type="varchar" MaxLength="250" />
+        <Property Name="EXTLSHET" Type="varchar" MaxLength="20" />
+        <Property Name="EXTLSHET2" Type="varchar" MaxLength="20" />
+        <Property Name="PHONENUM" Type="varchar" MaxLength="100" />
+        <Property Name="POSTINDEX" Type="varchar" MaxLength="6" />
+        <Property Name="DUCD" Type="decimal" Precision="7" />
+        <Property Name="DUNAME" Type="varchar" MaxLength="50" />
+        <Property Name="ISDELETED" Type="decimal" Precision="2" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.charlst" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="charlst">
+        <Property Name="ADDCHARCD" Type="decimal" />
+        <Property Name="ADDCHARNAM" Type="varchar" MaxLength="50" />
+        <Property Name="ADDCHTYPE" Type="decimal" Precision="2" />
+        <Property Name="ADDCHARMOD" Type="decimal" Precision="2" />
+        <Property Name="SHORTNAME" Type="varchar" MaxLength="50" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.chars" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="chars">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="CHARCD" Type="decimal" Precision="6" />
+        <Property Name="CHARNAME" Type="varchar" MaxLength="50" />
+        <Property Name="VALUE" Type="decimal" Precision="11" Scale="4" />
+        <Property Name="DATE" Type="date" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.charvals" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="charvals">
+        <Property Name="ADDCHARCD" Type="decimal" Precision="6" />
+        <Property Name="ADDCVALUE" Type="decimal" Precision="12" />
+        <Property Name="ADDCNAME" Type="varchar" MaxLength="50" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.cntrsind" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="cntrsind">
+        <Property Name="COUNTERID" Type="varchar" MaxLength="20" />
+        <Property Name="DOCUMENTCD" Type="varchar" MaxLength="20" />
+        <Property Name="OLDIND" Type="decimal" Precision="16" Scale="4" />
+        <Property Name="OB_EM" Type="decimal" Precision="16" Scale="4" />
+        <Property Name="INDICATION" Type="decimal" Precision="16" Scale="4" />
+        <Property Name="INDDATE" Type="date" />
+        <Property Name="INDTYPE" Type="decimal" Precision="3" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.counters" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="counters">
+        <Property Name="COUNTERID" Type="varchar" MaxLength="20" />
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="CNTTYPE" Type="decimal" Precision="9" />
+        <Property Name="CNTNAME" Type="varchar" MaxLength="50" />
+        <Property Name="SETUPDATE" Type="date" />
+        <Property Name="SERIALNUM" Type="varchar" MaxLength="30" />
+        <Property Name="SETUPPLACE" Type="decimal" Precision="5" />
+        <Property Name="PLACE" Type="varchar" MaxLength="20" />
+        <Property Name="PLOMBDATE" Type="date" />
+        <Property Name="PLOMBNAME" Type="varchar" MaxLength="40" />
+        <Property Name="LASTPOV" Type="date" />
+        <Property Name="NEXTPOV" Type="date" />
+        <Property Name="PRIM_" Type="varchar" MaxLength="100" />
+        <Property Name="DEACTDATE" Type="date" />
+        <Property Name="TAG" Type="varchar" MaxLength="30" />
+        <Property Name="NAME" Type="varchar" MaxLength="30" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.dogovor" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="dogovor">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="DOGTYPEKOD" Type="decimal" Precision="8" />
+        <Property Name="DOGTYPENAM" Type="varchar" MaxLength="50" />
+        <Property Name="DESCRIPTIO" Type="varchar" MaxLength="100" />
+        <Property Name="STARTDATE" Type="date" />
+        <Property Name="ENDDATE" Type="date" />
+        <Property Name="SERIA" Type="varchar" MaxLength="12" />
+        <Property Name="NOMER" Type="varchar" MaxLength="12" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.equipmnt" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="equipmnt">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="GROUPKOD" Type="decimal" Precision="6" />
+        <Property Name="GROUPNAME" Type="varchar" MaxLength="50" />
+        <Property Name="MARKKOD" Type="decimal" Precision="7" />
+        <Property Name="MARKNAME" Type="varchar" MaxLength="50" />
+        <Property Name="SETUPDATE" Type="date" />
+        <Property Name="SERIALNUM" Type="varchar" MaxLength="30" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.gcounter" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="gcounter">
+        <Property Name="COUNTERID" Type="varchar" MaxLength="20" />
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.haddchar" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="haddchar">
+        <Property Name="HOUSECD" Type="decimal" Precision="8" />
+        <Property Name="ADDCHARCD" Type="decimal" Precision="8" />
+        <Property Name="VALUE" Type="varchar" MaxLength="30" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.lchars" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="lchars">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="LCHARCD" Type="decimal" Precision="6" />
+        <Property Name="LCHARNAME" Type="varchar" MaxLength="100" />
+        <Property Name="VALUE" Type="decimal" Precision="5" />
+        <Property Name="VALUEDESC" Type="varchar" MaxLength="100" />
+        <Property Name="DATE" Type="date" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.lgota" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="lgota">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="CITIZENID" Type="decimal" Precision="11" />
+        <Property Name="F" Type="varchar" MaxLength="50" />
+        <Property Name="I" Type="varchar" MaxLength="50" />
+        <Property Name="O" Type="varchar" MaxLength="50" />
+        <Property Name="BIRTHDATE" Type="date" />
+        <Property Name="STARTDATE" Type="date" />
+        <Property Name="ENDDATE" Type="date" />
+        <Property Name="LGOTA" Type="decimal" Precision="8" />
+        <Property Name="LGOTANAME" Type="varchar" MaxLength="100" />
+        <Property Name="DATWP" Type="date" />
+        <Property Name="DATUP" Type="date" />
+        <Property Name="NAIM1" Type="varchar" MaxLength="50" />
+        <Property Name="SERIA1" Type="varchar" MaxLength="20" />
+        <Property Name="NOMER1" Type="varchar" MaxLength="50" />
+        <Property Name="DATDN1" Type="date" />
+        <Property Name="DORGNAME1" Type="varchar" MaxLength="50" />
+        <Property Name="NAIM2" Type="varchar" MaxLength="50" />
+        <Property Name="SERIA2" Type="varchar" MaxLength="20" />
+        <Property Name="NOMER2" Type="varchar" MaxLength="50" />
+        <Property Name="DATDN2" Type="date" />
+        <Property Name="DORGNAME2" Type="varchar" MaxLength="50" />
+        <Property Name="NAIM3" Type="varchar" MaxLength="50" />
+        <Property Name="SERIA3" Type="varchar" MaxLength="20" />
+        <Property Name="NOMER3" Type="varchar" MaxLength="50" />
+        <Property Name="DATDN3" Type="date" />
+        <Property Name="DORGNAME3" Type="varchar" MaxLength="50" />
+        <Property Name="KOLLG" Type="decimal" Precision="5" />
+        <Property Name="HOZ" Type="decimal" Precision="4" />
+        <Property Name="BIRTHPLACE" Type="varchar" MaxLength="50" />
+        <Property Name="SOB" Type="decimal" Precision="4" />
+        <Property Name="DOLYA" Type="decimal" Precision="9" Scale="2" />
+        <Property Name="COMMENT" Type="varchar" MaxLength="100" />
+        <Property Name="PRIBYT" Type="varchar" MaxLength="100" />
+        <Property Name="VREMREG" Type="varchar" MaxLength="100" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.nach" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="nach">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="DOCUMENTCD" Type="varchar" MaxLength="20" />
+        <Property Name="MONTH" Type="decimal" Precision="5" />
+        <Property Name="YEAR" Type="decimal" Precision="7" />
+        <Property Name="MONTH2" Type="decimal" Precision="5" />
+        <Property Name="YEAR2" Type="decimal" Precision="7" />
+        <Property Name="FNATH" Type="decimal" Precision="20" Scale="4" />
+        <Property Name="PROCHL" Type="decimal" Precision="20" Scale="4" />
+        <Property Name="VOLUME" Type="decimal" Precision="20" Scale="4" />
+        <Property Name="REGIMCD" Type="decimal" Precision="7" />
+        <Property Name="REGIMNAME" Type="varchar" MaxLength="50" />
+        <Property Name="SERVICECD" Type="decimal" Precision="6" />
+        <Property Name="SERVICENAM" Type="varchar" MaxLength="50" />
+        <Property Name="DATE_VV" Type="date" />
+        <Property Name="TYPE" Type="decimal" Precision="3" />
+        <Property Name="DOCNAME" Type="varchar" MaxLength="150" />
+        <Property Name="DOCNUMBER" Type="varchar" MaxLength="10" />
+        <Property Name="DOCDATE" Type="date" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.nachopl" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="nachopl">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="MONTH" Type="decimal" Precision="3" />
+        <Property Name="YEAR" Type="decimal" Precision="5" />
+        <Property Name="MONTH2" Type="decimal" Precision="3" />
+        <Property Name="YEAR2" Type="decimal" Precision="5" />
+        <Property Name="BDEBET" Type="decimal" Precision="20" Scale="4" />
+        <Property Name="FNATH" Type="decimal" Precision="20" Scale="4" />
+        <Property Name="PROCHL" Type="decimal" Precision="20" Scale="4" />
+        <Property Name="OPLATA" Type="decimal" Precision="20" Scale="2" />
+        <Property Name="EDEBET" Type="decimal" Precision="20" Scale="4" />
+        <Property Name="SERVICECD" Type="decimal" Precision="6" />
+        <Property Name="SERVICENAM" Type="varchar" MaxLength="50" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.oplata" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="oplata">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="DOCUMENTCD" Type="varchar" MaxLength="20" />
+        <Property Name="MONTH" Type="decimal" Precision="3" />
+        <Property Name="YEAR" Type="decimal" Precision="5" />
+        <Property Name="SUMMA" Type="decimal" Precision="20" Scale="2" />
+        <Property Name="DATE" Type="date" />
+        <Property Name="DATE_VV" Type="date" />
+        <Property Name="DATETIND" Type="date" />
+        <Property Name="SOURCECD" Type="decimal" Precision="7" />
+        <Property Name="SOURCENAME" Type="decimal" Precision="50" />
+        <Property Name="SERVICECD" Type="decimal" Precision="6" />
+        <Property Name="SERVICENAM" Type="varchar" MaxLength="50" />
+        <Property Name="PRIM_" Type="varchar" MaxLength="100" />
+      </EntityType>
+      Ошибки, обнаруженные при создании:
+      предупреждение 6013: Первичный ключ в таблице или представлении "def.converterdb.supplnet" не определен, его не удалось вывести. Эта таблица или представление исключена. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+      
+      <EntityType Name="supplnet">
+        <Property Name="LSHET" Type="varchar" MaxLength="10" />
+        <Property Name="SERVICECD" Type="decimal" Precision="6" />
+        <Property Name="KNOTL1CD" Type="decimal" Precision="6" />
+        <Property Name="KNOTL1NAME" Type="varchar" MaxLength="100" />
+        <Property Name="KNOTL2CD" Type="decimal" Precision="6" />
+        <Property Name="KNOTL2NAME" Type="varchar" MaxLength="100" />
+        <Property Name="SUPPDATE" Type="date" />
+        <Property Name="CONNECTED" Type="bool" />
+      </EntityType>-->
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="converterdbModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="converterdbEntities" p1:LazyLoadingEnabled="true" />
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище converterdbModelContainer" CdmEntityContainer="converterdbEntities" />
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
