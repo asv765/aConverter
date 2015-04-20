@@ -45,6 +45,7 @@ namespace aConverter.Forms
             aConverter_RootSettings.DestDBFFilePath = textBoxDestDBFFilePath.Text;
             aConverter_RootSettings.PatternsPath = textBoxPatternsPath.Text;
             aConverter_RootSettings.ConvertPath = textBoxConvertPath.Text;
+            //aConverter_RootSettings.ConvertPath = @"d:\GitDiplom\aConverter\aConverterClassLibrary\bin\Debug\";
             aConverter_RootSettings.CoverFileBodyPattern = textBoxCoverFileBodyPattern.Text;
             aConverter_RootSettings.GeneratedFilePath = textBoxGeneratedFilePath.Text;
         }
@@ -59,20 +60,20 @@ namespace aConverter.Forms
             }
             comboBoxSettingsCase.SelectedIndex = aConverter_RootSettings.SettingsCaseId;
 
-            textBoxFirebirdConnectionString.Text = aConverter_RootSettings.FirebirdStringConnection;
-            textBoxGeneratedFilePath.Text = aConverter_RootSettings.GeneratedFilePath;
+            textBoxFirebirdConnectionString.Text = aConverter_RootSettings.FirebirdStringConnection; // Строка подключения к базе данных Firebird
+            textBoxGeneratedFilePath.Text = aConverter_RootSettings.GeneratedFilePath; // Путь для генерируемых файлов
             // textBoxCoverFilenamePattern.Text = aConverter_RootSettings.CoverFileNamePattern;
-            textBoxSourceDBFFilePath.Text = aConverter_RootSettings.SourceDBFFilePath;
-            textBoxCoverFileBodyPattern.Text = aConverter_RootSettings.CoverFileBodyPattern;
-            textBoxDestDBFFilePath.Text = aConverter_RootSettings.DestDBFFilePath;
-            textBoxPatternsPath.Text = aConverter_RootSettings.PatternsPath;
-            textBoxConvertPath.Text = aConverter_RootSettings.ConvertPath;
+            textBoxSourceDBFFilePath.Text = aConverter_RootSettings.SourceDBFFilePath; // Путь к DBF файлам заказчика
+            textBoxCoverFileBodyPattern.Text = aConverter_RootSettings.CoverFileBodyPattern; 
+            textBoxDestDBFFilePath.Text = aConverter_RootSettings.DestDBFFilePath; // Путь к промежуточным типовым файлам для конвертации
+            textBoxPatternsPath.Text = aConverter_RootSettings.PatternsPath; // Путь к шаблонам
+            textBoxConvertPath.Text = aConverter_RootSettings.ConvertPath; // Путь к модулям импорта
         }
 
         private void buttonCheckConnection_Click(object sender, EventArgs e)
         {
             // string connectionString = textBoxFirebirdConnectionString.Text;
-            FbConnectionStringBuilder fcsb = new FbConnectionStringBuilder(textBoxFirebirdConnectionString.Text);
+            FbConnectionStringBuilder fcsb = new FbConnectionStringBuilder(textBoxFirebirdConnectionString.Text); //////????????
             fcsb.Charset = "NONE";
             string connectionString = fcsb.ToString();
             using (FbConnection connection = new FbConnection(connectionString))

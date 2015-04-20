@@ -4,14 +4,22 @@ using System.Data.OleDb;
 using System.Globalization;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
-using aConverterClassLibrary.Records;
+//using aConverterClassLibrary.Records;//----------------------------------------------------------------------
+using aConverterClassLibrary.RecordsEDM;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using aConverterClassLibrary.Records.Utils;
+//using aConverterClassLibrary.Records.Utils;//----------------------------------------------------------------
+using aConverterClassLibrary.RecordsEDM.Utils;
+using aConverterClassMariaDB;
+using System.Windows.Forms;
+
+
 
 namespace _029_Kandalaksha
 {
+    
+    
     public static class Consts
     {
         /// <summary>
@@ -42,21 +50,22 @@ namespace _029_Kandalaksha
 
         public static int LastMonth = CurrentMonth == 1 ? 12 : CurrentMonth - 1;
 
-        public const string SourceDir = @"C:\Work\aConverter_Data\029_Kandalaksha\Source";
+        //public const string SourceDir = @"C:\Work\aConverter_Data\029_Kandalaksha\Source";
+        public const string SourceDir = @"D:\GitDiplom1\aConverter\029_Kandalaksha\Source\";
 
         public static string GetLs(int intls)
         {
             return String.Format("{0:D5}", intls);
         }
 
-        public static DataTable GetTable(string tableName, OleDbConnection connection)
+        public static DataTable GetTable(string tableName, OleDbConnection connection)//--------------наверно менять
         {
             return ExecuteQuery("select * from " + tableName, connection);
         }
 
         public static DataTable ExecuteQuery(string query, OleDbConnection connection)
         {
-            var adapter = new OleDbDataAdapter(query, connection);
+            var adapter = new OleDbDataAdapter(query, connection);//------------------менять
             var table = new DataTable();
             adapter.Fill(table);
             return table;
@@ -74,7 +83,7 @@ namespace _029_Kandalaksha
         {
             ConvertCaseName = "Удалить все файлы в целевой директории";
             Position = 10;
-            IsChecked = false;
+            IsChecked = true;
         }
 
         public override void DoConvert()
@@ -101,14 +110,17 @@ namespace _029_Kandalaksha
         {
             ConvertCaseName = "Создать файлы для конвертации в целевой директории";
             Position = 20;
-            IsChecked = false;
+            IsChecked = true;
         }
 
         public override void DoConvert()
         {
             SetStepsCount(1);
             StepStart(1);
-            FactoryRecord.CreateAllTables(tmdest);
+            //
+            ExecuteScript.CreateDatabaseMariaDB();
+            //
+            //FactoryRecord.CreateAllTables(tmdest); //--------------создались все таблици 
             Result = ConvertCaseStatus.Шаг_выполнен_успешно;
             Iterate();
         }
@@ -124,51 +136,61 @@ namespace _029_Kandalaksha
         {
             ConvertCaseName = "ABONENT.DBF - данные об абонентах";
             Position = 30;
-            IsChecked = true;
+            IsChecked = false;
         }
 
         public uint CurrentLshet;
 
         public override void DoConvert()
         {
-            tmdest.CleanTable(typeof(AbonentRecord));
-            tmdest.CleanTable(typeof(LgotaRecord));
-            tmdest.CleanTable(typeof(CountersRecord));
-            tmdest.CleanTable(typeof(CntrsindRecord));
-            tmdest.CleanTable(typeof(CharsRecord));
-            tmdest.CleanTable(typeof(LcharsRecord));
-            tmdest.CleanTable(typeof(NachoplRecord));
-            tmdest.CleanTable(typeof(NachRecord));
-            tmdest.CleanTable(typeof(OplataRecord));
+            //tmdest.CleanTable(typeof(AbonentRecord));
+            //tmdest.CleanTable(typeof(LgotaRecord));
+            //tmdest.CleanTable(typeof(CountersRecord));
+            //tmdest.CleanTable(typeof(CntrsindRecord));
+            //tmdest.CleanTable(typeof(CharsRecord));
+            //tmdest.CleanTable(typeof(LcharsRecord));
+            //tmdest.CleanTable(typeof(NachoplRecord));
+            //tmdest.CleanTable(typeof(NachRecord));//------------------------------------------------------------------------------
+            //tmdest.CleanTable(typeof(nach));
+            //tmdest.CleanTable(typeof(OplataRecord));
 
-            var odcsb = new OleDbConnectionStringBuilder
+            var odcsb = new OleDbConnectionStringBuilder// менять на edm
             {
                 DataSource = Consts.SourceDir + "\\abonent.mdb",
                 Provider = "Microsoft.Jet.OLEDB.4.0"
             };
 
-            AbonentRecord ar;
-            var arlist = new List<AbonentRecord>();
+            //AbonentRecord ar;
+            abonent ar;
+            //var arlist = new List<AbonentRecord>();
+            var arlist = new List<abonent>();
             // Словарь - список абонентов с ключом "ID лицевого счета"
-            var ardic = new Dictionary<int, AbonentRecord>();
+            //var ardic = new Dictionary<int, AbonentRecord>();
+            var ardic = new Dictionary<int, abonent>();
             // Словарь - список абонентов с ключом "лицевой счет"
-            var ardic2 = new Dictionary<string, AbonentRecord>();
+            //var ardic2 = new Dictionary<string, AbonentRecord>();
+            var ardic2 = new Dictionary<string, abonent>();
             // Список жителей
-            var ctlist = new List<LgotaRecord>();
+            var ctlist = new List<lgota>();
 
             // Словарь со счетчиками
-            Dictionary<int,CountersRecord> dcounters = new Dictionary<int, CountersRecord>();
+            //Dictionary<int,CountersRecord> dcounters = new Dictionary<int, CountersRecord>();
+            Dictionary<int, counter> dcounters = new Dictionary<int, counter>();
+
             // Список показаний счетчиков
-            List<CntrsindRecord> lcntrsind = new List<CntrsindRecord>();
+            //List<CntrsindRecord> lcntrsind = new List<CntrsindRecord>();
+            List<cntrsind> lcntrsind = new List<cntrsind>();//----------------------------------------------
 
             // Качественные характеристики
-            List<LcharsRecord> listLcharRecord = new List<LcharsRecord>();
+            //List<LcharsRecord> listLcharRecord = new List<LcharsRecord>();
+            List<lchar> listLcharRecord = new List<lchar>();
             // Количественные характеристики
-            List<CharsRecord> listCharsRecord = new List<CharsRecord>();
+            //List<CharsRecord> listCharsRecord = new List<CharsRecord>();//------------------
+            List<@char> listCharsRecord = new List<@char>();
 
             SetStepsCount(1 +               // Список абонентов
                 1 +                         // Список граждан
-                (Consts.CurrentMonth-1) +     // Квитки
+                (Consts.CurrentMonth - 1) +     // Квитки
                 1 +                         // Оплата
                 1 +                         // Сохранения начислений
                 1 +                         // Сохранения оплат
@@ -194,27 +216,27 @@ namespace _029_Kandalaksha
                 StepStart(abonents.Rows.Count);
                 foreach (DataRow dataRow in abonents.Rows)
                 {
-                    ar = new AbonentRecord();
-                    ar.Lshet = Consts.GetLs(Consts.StartLshet + Convert.ToInt32(dataRow["ID"]));
-                    ar.Extlshet = dataRow["ЛС"].ToString();
+                    ar = new abonent(); //-------------------------------------------------------------------------------------------
+                    ar.LSHET = Consts.GetLs(Consts.StartLshet + Convert.ToInt32(dataRow["ID"]));//------------------------------------------------
+                    ar.EXTLSHET = dataRow["ЛС"].ToString();//-------------------------------------------------------------------------------------
 
-                    ar.Townskod = 7;
-                    ar.Townsname = "Кандалакша";
+                    ar.TOWNSKOD = 7;//------------------------------------------------------------------------------------------
+                    ar.TOWNSNAME= "Кандалакша";//-------------------------------------------------------------------------------
 
-                    ar.Distkod = 7;
-                    ar.Distname = "Кандалакша";
+                    ar.DISTKOD = 7;//-------------------------------------------------------------------------------------
+                    ar.DISTNAME = "Кандалакша";//----------------------------------------------------------------------------
 
-                    ar.Rayonkod = 2;
-                    ar.Rayonname = "Кандалакша";
+                    ar.RAYONKOD = 2;//----------------------------------------------------------------------------------------
+                    ar.RAYONNAME = "Кандалакша";//----------------------------------------------------------------------------
 
-                    ar.Ducd = 1;
-                    ar.Duname = "Кандалакша";
+                    ar.DUCD = 1;//----------------------------------
+                    ar.DUNAME = "Кандалакша";//---------------------------------------------------
 
                     int ulicaId = Convert.ToInt32(dataRow["УлицаID"]);
-                    ar.Ulicakod = Consts.StartStreetId + ulicaId;
-                    ar.Ulicaname = streets[ulicaId]["Street"].ToString();
-                    ar.Ndoma = dataRow["Дом"].ToString();
-                    ar.Kvartira = dataRow["Кв"].ToString();
+                    ar.ULICAKOD = Consts.StartStreetId + ulicaId;//---------------------------------------------
+                    ar.ULICANAME = streets[ulicaId]["Street"].ToString();
+                    ar.NDOMA = dataRow["Дом"].ToString();
+                    ar.KVARTIRA = dataRow["Кв"].ToString();//-----------------------------------------------------
 
                     arlist.Add(ar);
                     ardic.Add(Convert.ToInt32(dataRow["ID"]), ar);
@@ -223,14 +245,14 @@ namespace _029_Kandalaksha
 
                     if (dataRow["Заглушка"].ToString() != "Нет")
                     {
-                        LcharsRecord lcr = new LcharsRecord()
+                        lchar lcr = new lchar()//------------------------------------------------------
                         {
-                            Lshet = ar.Lshet,
-                            Date = new DateTime(Consts.CurrentYear, Consts.CurrentMonth, 1),
-                            Lcharcd = 1,
-                            Lcharname = "Тип газа",
-                            Value_ = 8,
-                            Valuedesc = "Газ отключен"
+                            LSHET = ar.LSHET,//-------------------------------------------------------------------------------
+                            DATE = new DateTime(Consts.CurrentYear, Consts.CurrentMonth, 1),
+                            LCHARCD = 1,
+                            LCHARNAME = "Тип газа",
+                            VALUE = 8,
+                            VALUEDESC = "Газ отключен"
                         };
                         listLcharRecord.Add(lcr);
                     }
@@ -245,11 +267,11 @@ namespace _029_Kandalaksha
                 // var citizens = new List<LgotaRecord>();
                 foreach (DataRow dr in citizenTable.Rows)
                 {
-                    var lr = new LgotaRecord();
-                    lr.Citizenid = Consts.StartCitizenId + Convert.ToInt32(dr["ID"]);
+                    var lr = new lgota();
+                    lr.CITIZENID = Consts.StartCitizenId + Convert.ToInt32(dr["ID"]);//------------------------------------------
                     int lsid = Convert.ToInt32(dr["ЛСID"]);
 
-                    lr.Lshet = ardic[lsid].Lshet;
+                    lr.LSHET = ardic[lsid].LSHET;//-------------------------------------------------------------------------------
                     string f = dr["Фамилия"].ToString().Trim();
                     string i = dr["Имя"].ToString().Trim();
                     string o = dr["Отчество"].ToString().Trim();
@@ -259,11 +281,11 @@ namespace _029_Kandalaksha
                     lr.F = f.Length > 30 ? f.Substring(0, 30) : f;
                     lr.I = i.Length > 20 ? i.Substring(0, 20) : i;
                     lr.O = o.Length > 20 ? o.Substring(0, 20) : o;
-                    lr.Comment = dr["Льгота"].ToString();
+                    lr.COMMENT = dr["Льгота"].ToString();//------------------------------------------------
                     if (!(dr["Год"] is DBNull))
                     {
                         int year = Convert.ToInt32(dr["Год"]);
-                        if (year > 1900) lr.Birthdate = new DateTime(year, 1, 1);
+                        if (year > 1900) lr.BIRTHDATE = new DateTime(year, 1, 1);//------------------------------------------
                     }
 
                     if (!(dr["Номер"] is DBNull))
@@ -275,13 +297,13 @@ namespace _029_Kandalaksha
                             ardic[lsid].I = i;
                             ardic[lsid].O = o;
 
-                            lr.Hoz = 1;
+                            lr.HOZ = 1;//-------------------------------------------------------------------
                         }
                     }
 
                     int isactive = 0;
                     if (!(dr["Байт"] is DBNull)) isactive  = Convert.ToInt32(dr["Байт"]);
-                    if (isactive != 1) lr.Enddate = new DateTime(2000, 1, 1);
+                    if (isactive != 1) lr.ENDDATE = new DateTime(2000, 1, 1);//---------------------------------------------------
 
                     ctlist.Add(lr);
                     Iterate();
@@ -303,24 +325,31 @@ namespace _029_Kandalaksha
                 //nr.Year = nr.Year2 = year;
                 //nr.Date_vv = dateVv;
                 //nr.Documentcd = documentcd;
-                var defaultNachRecord = new NachRecord()
+
+                //var defaultNachRecord = new NachRecord()//----------------------------------------------------------------------------------
+                var defaultNachRecord = new nach()
                 {
-                    Regimcd = 10,
-                    Regimname = "Неизвестен",
-                    Servicecd = 1,
-                    Servicenam = "Сжиженный газ"
+                    //Regimcd = 10,
+                    //Regimname = "Неизвестен",
+                    //Servicecd = 1,
+                    //Servicenam = "Сжиженный газ"
+
+                    REGIMCD = 10,
+                    REGIMNAME = "Неизвестен",
+                    SERVICECD = 1,
+                    SERVICENAM = "Сжиженный газ"
                 };
 
                 var prevpeni = new Dictionary<string, decimal>();
                 
-                for (int i = 1; i < Consts.CurrentMonth; i++)
+                for (int i = 1; i < Consts.CurrentMonth; i++) //---------------------------------------------5,6,7,8,9,10,11,12,13
                 {
                     DataTable kvit = Consts.GetTable("dbKvitki" + i.ToString(CultureInfo.InvariantCulture), connection);
                     StepStart(kvit.Rows.Count);
                     foreach (DataRow dr in kvit.Rows)
                     {
                         if (!ardic2.ContainsKey(dr["ЛС"].ToString())) continue;
-                        string lshet = ardic2[dr["ЛС"].ToString()].Lshet;
+                        string lshet = ardic2[dr["ЛС"].ToString()].LSHET;//-----------------------------------------------------------------
 
                         if (lshet == "30005" && (i == 9 || i == 10))
                             lshet = lshet.Trim();
@@ -344,26 +373,26 @@ namespace _029_Kandalaksha
                         if (!(dr["СчетчикID"] is DBNull))
                             if (Convert.ToInt32(dr["СчетчикID"]) > 0) 
                                 counterPresent = true;
-                        LcharsRecord lcr = new LcharsRecord()
+                        lchar lcr = new lchar()//-------------------------------------------------------------
                         {
-                            Lshet = lshet,
-                            Date = new DateTime(Consts.CurrentYear, i, 1),
-                            Lcharcd = 10,
-                            Lcharname = "Тип учета"
+                            LSHET = lshet,
+                            DATE = new DateTime(Consts.CurrentYear, i, 1),
+                            LCHARCD = 10,
+                            LCHARNAME = "Тип учета"
                         };
                         if (counterPresent)
                         {
-                            defaultNachRecord.Type = 1;
-                            defaultNachRecord.Volume = volume;
-                            lcr.Value_ = 1;
-                            lcr.Valuedesc = "Со счетчиком";
+                            defaultNachRecord.TYPE = 1;//----------------------------------------------------------------------------
+                            defaultNachRecord.VOLUME = volume;
+                            lcr.VALUE = 1;
+                            lcr.VALUEDESC = "Со счетчиком";
                         }
                         else
                         {
-                            defaultNachRecord.Type = 0;
-                            defaultNachRecord.Volume = 0;
-                            lcr.Value_ = 0;
-                            lcr.Valuedesc = "Без счетчика";
+                            defaultNachRecord.TYPE = 0;//--------------------------------------------------------------------------------
+                            defaultNachRecord.VOLUME = 0;
+                            lcr.VALUE = 0;
+                            lcr.VALUEDESC = "Без счетчика";
                         }
                         var dateVv = endMonthDate;
                         if (nath > 0 || (prochl+prevpenid) > 0 || volume > 0)
@@ -374,24 +403,24 @@ namespace _029_Kandalaksha
                             prevpeni.Add(lshet, peni);
                         listLcharRecord.Add(lcr);
 
-                        lcr = new LcharsRecord()
+                        lcr = new lchar()
                         {
-                            Lshet = lshet,
-                            Date = new DateTime(Consts.CurrentYear, i, 1),
-                            Lcharcd = 1,
-                            Lcharname = "Тип газа",
-                            Value_ = 1,
-                            Valuedesc = "Сжиженный"
+                            LSHET = lshet,
+                            DATE = new DateTime(Consts.CurrentYear, i, 1),
+                            LCHARCD = 1,
+                            LCHARNAME = "Тип газа",
+                            VALUE = 1,
+                            VALUEDESC = "Сжиженный"
                         };
                         listLcharRecord.Add(lcr);
 
-                        CharsRecord cr = new CharsRecord()
+                        @char cr = new @char()//--------------------------------------------------------------------
                         {
-                            Lshet = lshet,
-                            Date = new DateTime(Consts.CurrentYear, i, 1),
-                            Charcd = 1,
-                            Charname = "Число проживающих",
-                            Value_ = Convert.ToInt32(dr["КО"])
+                            LSHET = lshet,
+                            DATE = new DateTime(Consts.CurrentYear, i, 1),
+                            CHARCD = 1,
+                            CHARNAME = "Число проживающих",
+                            VALUE = Convert.ToInt32(dr["КО"])
                         };
                         listCharsRecord.Add(cr);
 
@@ -418,10 +447,12 @@ namespace _029_Kandalaksha
                 }
 
                 // string lshet, int month, int year, decimal summa, DateTime date, DateTime dateVv, string documentcd
-                OplataRecord defaultOplataRecord = new OplataRecord()
+                oplata defaultOplataRecord = new oplata()//----------------------------------------------------------------------------------------------------
                 {
-                    Servicecd = 1,
-                    Servicenam = "Сжиженный газ"
+                    //Servicecd = 1,
+                    //Servicenam = "Сжиженный газ"
+                    SERVICECD = 1,//-----------------------------------------------------------------------------------------------------------------
+                    SERVICENAM = "Сжиженный газ"
                 };
 
                 DataTable oplata = Consts.ExecuteQuery("select * from dbOplata where YEAR(`Дата1`) = 2014", connection);
@@ -430,7 +461,7 @@ namespace _029_Kandalaksha
                 {
                     Iterate();
                     if (!ardic2.ContainsKey(dr["ЛС"].ToString())) continue;
-                    string lshet = ardic2[dr["ЛС"].ToString()].Lshet;
+                    string lshet = ardic2[dr["ЛС"].ToString()].LSHET;//--------------------------------------------------------------------------------
 
                     int sourceDocCd = 200;
                     string sourceDocName = "Кандалакша, прочее";
@@ -442,8 +473,10 @@ namespace _029_Kandalaksha
                     {
                         sourceDocCd = 200;
                     }
-                    defaultOplataRecord.Sourcecd = sourceDocCd;
-                    defaultOplataRecord.Sourcename = sourceDocName;
+                    //defaultOplataRecord.Sourcecd = sourceDocCd;
+                    //defaultOplataRecord.Sourcename = sourceDocName;
+                    defaultOplataRecord.SOURCECD = sourceDocCd;//------------------------------------------------------------------------------
+                    defaultOplataRecord.SOURCENAME = sourceDocName;//--------------------------------------------------------------------------
 
                     decimal summa = Convert.ToDecimal(dr["Оплата"]);
                     DateTime date = Convert.ToDateTime(dr["Дата"]);
@@ -471,13 +504,13 @@ namespace _029_Kandalaksha
                     {
                         if (!dcounters.ContainsKey(counterid))
                         {
-                            CountersRecord cr = new CountersRecord()
+                            counter cr = new counter()
                             {
-                                Cnttype = 112,
-                                Cntname = "Марка не указана",
-                                Counterid = counterid.ToString(CultureInfo.InvariantCulture),
-                                Lshet = lshet,
-                                Setupdate = new DateTime(2000, 1, 1)
+                                CNTTYPE = 112,//-----------------------------------------------------------------
+                                CNTNAME = "Марка не указана",
+                                COUNTERID = counterid.ToString(CultureInfo.InvariantCulture),
+                                LSHET = lshet,
+                                SETUPDATE = new DateTime(2000, 1, 1)
                             };
                             dcounters.Add(counterid, cr);
                         }
@@ -487,15 +520,15 @@ namespace _029_Kandalaksha
                         int obEm = indication - oldind;
                         if (obEm != 0 || indication !=0 || oldind != 0)
                         {
-                            CntrsindRecord cir = new CntrsindRecord()
+                            cntrsind cir = new cntrsind()
                             {
-                                Counterid = counterid.ToString(CultureInfo.InvariantCulture),
-                                Inddate = Convert.ToDateTime(dr["Дата1"]),
-                                Documentcd = documentcd,
-                                Indication = indication,
-                                Indtype = 0,
-                                Ob_em = obEm,
-                                Oldind = oldind
+                                COUNTERID = counterid.ToString(CultureInfo.InvariantCulture),
+                                INDDATE = Convert.ToDateTime(dr["Дата1"]),
+                                DOCUMENTCD = documentcd,
+                                INDICATION = indication,
+                                INDTYPE = 0,
+                                OB_EM = obEm,
+                                OLDIND = oldind
                             };
                             lcntrsind.Add(cir);
                         };
@@ -507,79 +540,269 @@ namespace _029_Kandalaksha
                 #endregion
 
                 StepStart(1);
-                manager.SaveNachRecords(tmdest);
+                manager.SaveNachRecords(tmdest);//---------------------------------15 цикла
                 Iterate();
                 StepFinish();
 
                 StepStart(1);
-                manager.SaveNachoplRecords(tmdest);
+                manager.SaveNachoplRecords(tmdest);//------------------------------16 после цикла началось отсюда
                 Iterate();
                 StepFinish();
 
                 StepStart(1);
-                manager.SaveOplataRecords(tmdest);
+                manager.SaveOplataRecords(tmdest);//-----------------------------17 после цикла
                 Iterate();
                 StepFinish();
 
             }
 
-            AbonentRecordUtils.SetUniqueHouseCd(ref arlist, Consts.StartHouseCd);
+            AbonentRecordUtils.SetUniqueHouseCd(ref arlist, Consts.StartHouseCd);//-----------------------17
 
-            // Сбрасываем список абонентов в файл
+            // Сбрасываем список абонентов в файл ??????????????????????????????????????????------------------------------18
             StepStart(arlist.Count);
-            foreach (var abonentRecord in arlist)
+            using (ConverterdbEntities testcontext = new ConverterdbEntities())
             {
-                tmdest.InsertRecord(abonentRecord.GetInsertScript());
-                Iterate();
-            }
-            StepFinish();
+                foreach (var abonentRecord in arlist)
+                {
+                    //tmdest.InsertRecord(abonentRecord.GetInsertScript());
+                    try
+                    {
+                        abonent abon = new abonent
+                        {
+                            LSHET = String.IsNullOrEmpty(abonentRecord.LSHET) ? "" : abonentRecord.LSHET.Trim(),
+                            HOUSECD = abonentRecord.HOUSECD,
+                            DISTKOD = abonentRecord.DISTKOD,
+                            DISTNAME = String.IsNullOrEmpty(abonentRecord.DISTNAME) ? "" : abonentRecord.DISTNAME.Trim(),
+                            RAYONKOD = abonentRecord.RAYONKOD,
+                            RAYONNAME = String.IsNullOrEmpty(abonentRecord.RAYONNAME) ? "" : abonentRecord.RAYONNAME.Trim(),
+                            TOWNSKOD = abonentRecord.TOWNSKOD,
+                            TOWNSNAME = String.IsNullOrEmpty(abonentRecord.TOWNSNAME) ? "" : abonentRecord.TOWNSNAME.Trim(),
+                            ULICAKOD = abonentRecord.ULICAKOD,
+                            ULICANAME = String.IsNullOrEmpty(abonentRecord.ULICANAME) ? "" : abonentRecord.ULICANAME.Trim(),
+                            NDOMA = String.IsNullOrEmpty(abonentRecord.NDOMA) ? "" : abonentRecord.NDOMA.Trim(),
+                            KORPUS = abonentRecord.KORPUS,
+                            KVARTIRA = String.IsNullOrEmpty(abonentRecord.KVARTIRA) ? "" : abonentRecord.KVARTIRA.Trim(),
+                            KOMNATA = abonentRecord.KOMNATA,
+                            F = String.IsNullOrEmpty(abonentRecord.F) ? "" : abonentRecord.F.Trim(),
+                            I = String.IsNullOrEmpty(abonentRecord.I) ? "" : abonentRecord.I.Trim(),
+                            O = String.IsNullOrEmpty(abonentRecord.O) ? "" : abonentRecord.O.Trim(),
+                            PRIM_ = String.IsNullOrEmpty(abonentRecord.PRIM_) ? "" : abonentRecord.PRIM_.Trim(),
+                            EXTLSHET = String.IsNullOrEmpty(abonentRecord.EXTLSHET) ? "" : abonentRecord.EXTLSHET.Trim(),
+                            EXTLSHET2 = String.IsNullOrEmpty(abonentRecord.EXTLSHET2) ? "" : abonentRecord.EXTLSHET2.Trim(),
+                            PHONENUM = String.IsNullOrEmpty(abonentRecord.PHONENUM) ? "" : abonentRecord.PHONENUM.Trim(),
+                            POSTINDEX = String.IsNullOrEmpty(abonentRecord.POSTINDEX) ? "" : abonentRecord.POSTINDEX.Trim(),
+                            DUCD = abonentRecord.DUCD,
+                            DUNAME = String.IsNullOrEmpty(abonentRecord.DUNAME) ? "" : abonentRecord.DUNAME.Trim(),
+                            ISDELETED = abonentRecord.ISDELETED
 
-            // Сбрасываем список граждан в файл
+                        };
+                        testcontext.abonents.AddObject(abon);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.InnerException.ToString());
+                    }
+                    Iterate();
+                }
+                testcontext.SaveChanges();
+
+                StepFinish();
+            }
+
+            // Сбрасываем список граждан в файл--------------------------------------------------19
             StepStart(ctlist.Count);
-            foreach (var ctr in ctlist)
+            using (ConverterdbEntities testcontext = new ConverterdbEntities())
             {
-                tmdest.InsertRecord(ctr.GetInsertScript());
-                Iterate();
-            }
-            StepFinish();
+                foreach (var ctr in ctlist)
+                {
+                    //tmdest.InsertRecord(ctr.GetInsertScript());
+                    try
+                    {
+                        lgota lgot = new lgota
+                        {
+                            LSHET = String.IsNullOrEmpty(ctr.LSHET) ? "" : ctr.LSHET.Trim(),
+                            CITIZENID = ctr.CITIZENID,
+                            F = String.IsNullOrEmpty(ctr.F) ? "" : ctr.F.Trim(),
+                            I = String.IsNullOrEmpty(ctr.I) ? "" : ctr.I.Trim(),
+                            O = String.IsNullOrEmpty(ctr.O) ? "" : ctr.O.Trim(),
+                            BIRTHDATE = ctr.BIRTHDATE,
+                            STARTDATE = ctr.STARTDATE,
+                            ENDDATE = ctr.ENDDATE,
+                            LGOTA1 = ctr.LGOTA1,
+                            LGOTANAME = String.IsNullOrEmpty(ctr.LGOTANAME) ? "" : ctr.LGOTANAME.Trim(),
+                            DATWP = ctr.DATWP,
+                            DATUP = ctr.DATUP,
+                            NAIM1 = String.IsNullOrEmpty(ctr.NAIM1) ? "" : ctr.NAIM1.Trim(),
+                            SERIA1 = String.IsNullOrEmpty(ctr.SERIA1) ? "" : ctr.SERIA1.Trim(),
+                            NOMER1 = String.IsNullOrEmpty(ctr.NOMER1) ? "" : ctr.NOMER1.Trim(),
+                            DATDN1 = ctr.DATDN1,
+                            DORGNAME1 = String.IsNullOrEmpty(ctr.DORGNAME1) ? "" : ctr.DORGNAME1.Trim(),
+                            NAIM2 = String.IsNullOrEmpty(ctr.NAIM1) ? "" : ctr.NAIM1.Trim(),
+                            SERIA2 = String.IsNullOrEmpty(ctr.SERIA2) ? "" : ctr.SERIA2.Trim(),
+                            NOMER2 = String.IsNullOrEmpty(ctr.NOMER2) ? "" : ctr.NOMER2.Trim(),
+                            DATDN2 = ctr.DATDN2,
+                            DORGNAME2 = String.IsNullOrEmpty(ctr.DORGNAME2) ? "" : ctr.DORGNAME2.Trim(),
+                            NAIM3 = String.IsNullOrEmpty(ctr.NAIM3) ? "" : ctr.NAIM3.Trim(),
+                            SERIA3 = String.IsNullOrEmpty(ctr.SERIA3) ? "" : ctr.SERIA3.Trim(),
+                            NOMER3 = String.IsNullOrEmpty(ctr.NOMER3) ? "" : ctr.NOMER3.Trim(),
+                            DATDN3 = ctr.DATDN3,
+                            DORGNAME3 = String.IsNullOrEmpty(ctr.DORGNAME3) ? "" : ctr.DORGNAME3.Trim(),
+                            KOLLG = ctr.KOLLG,
+                            HOZ = ctr.HOZ,
+                            BIRTHPLACE = String.IsNullOrEmpty(ctr.BIRTHPLACE) ? "" : ctr.BIRTHPLACE.Trim(),
+                            SOB = ctr.SOB,
+                            DOLYA = ctr.DOLYA,
+                            COMMENT = String.IsNullOrEmpty(ctr.COMMENT) ? "" : ctr.COMMENT.Trim(),
+                            PRIBYT = String.IsNullOrEmpty(ctr.PRIBYT) ? "" : ctr.PRIBYT.Trim(),
+                            VREMREG = String.IsNullOrEmpty(ctr.VREMREG) ? "" : ctr.VREMREG.Trim()
 
-            // Сбрасываем список счетчиков в файл
+                        };
+                        testcontext.lgotas.AddObject(lgot);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.InnerException.ToString());
+                    }
+                    Iterate();
+                }
+                testcontext.SaveChanges();
+                StepFinish();
+            }
+
+            // Сбрасываем список счетчиков в файл--------------------------------------------------20
             StepStart(dcounters.Count);
-            foreach (CountersRecord cr in dcounters.Values)
+            using (ConverterdbEntities testcontext = new ConverterdbEntities())
             {
-                tmdest.InsertRecord(cr.GetInsertScript());
-                Iterate();
-            }
-            StepFinish();
+                foreach (counter cr in dcounters.Values)
+                {
+                    //tmdest.InsertRecord(cr.GetInsertScript());               
+                    try
+                    {
+                        counter count = new counter
+                        {
+                            COUNTERID = String.IsNullOrEmpty(cr.COUNTERID) ? "" : cr.COUNTERID.Trim(),
+                            LSHET = String.IsNullOrEmpty(cr.LSHET) ? "" : cr.LSHET.Trim(),
+                            CNTTYPE = cr.CNTTYPE,
+                            CNTNAME = String.IsNullOrEmpty(cr.CNTNAME) ? "" : cr.CNTNAME.Trim(),
+                            SETUPDATE = cr.SETUPDATE,
+                            SERIALNUM = String.IsNullOrEmpty(cr.SERIALNUM) ? "" : cr.SERIALNUM.Trim(),
+                            SETUPPLACE = Convert.ToInt32(cr.SETUPPLACE),
+                            PLACE = String.IsNullOrEmpty(cr.PLACE) ? "" : cr.PLACE.Trim(),
+                            PLOMBDATE = cr.PLOMBDATE,
+                            PLOMBNAME = String.IsNullOrEmpty(cr.PLOMBNAME) ? "" : cr.PLOMBNAME.Trim(),
+                            LASTPOV = cr.LASTPOV,
+                            NEXTPOV = cr.NEXTPOV,
+                            PRIM_ = String.IsNullOrEmpty(cr.PRIM_) ? "" : cr.PRIM_.Trim(),
+                            DEACTDATE = cr.DEACTDATE,
+                            TAG = String.IsNullOrEmpty(cr.TAG) ? "" : cr.TAG.Trim(),
+                            NAME = String.IsNullOrEmpty(cr.NAME) ? "" : cr.NAME.Trim()
 
-            // Сбрасываем показания счетчиков в файл
+                        };
+                        testcontext.counters.AddObject(count);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.InnerException.ToString());
+                    }
+                    Iterate();
+                }
+                testcontext.SaveChanges();
+                StepFinish();
+            }
+
+            // Сбрасываем показания счетчиков в файл---------------------------------------------------------------------------21
             StepStart(lcntrsind.Count);
-            foreach (CntrsindRecord cir in lcntrsind)
+            using (ConverterdbEntities testcontext = new ConverterdbEntities())
             {
-                tmdest.InsertRecord(cir.GetInsertScript());
-                Iterate();
-            }
-            StepFinish();
+                foreach (cntrsind cir in lcntrsind)
+                {
+                    //tmdest.InsertRecord(cir.GetInsertScript());                
+                    try
+                    {
+                        cntrsind cntrs = new cntrsind
+                        {
+                            COUNTERID = String.IsNullOrEmpty(cir.COUNTERID) ? "" : cir.COUNTERID.Trim(),
+                            DOCUMENTCD = String.IsNullOrEmpty(cir.DOCUMENTCD) ? "" : cir.DOCUMENTCD.Trim(),
+                            OLDIND = cir.OLDIND,
+                            OB_EM = cir.OB_EM,
+                            INDICATION = cir.INDICATION,
+                            INDDATE = cir.INDDATE,
+                            INDTYPE = cir.INDTYPE
 
-            // Сбрасываем качественные характеристики в файл
-            var thinedOutLcharsRecordList = LcharsRecordUtils.ThinOutList(listLcharRecord);
-            StepStart(thinedOutLcharsRecordList.Count);
-            foreach (LcharsRecord lcr in thinedOutLcharsRecordList)
-            {
-                tmdest.InsertRecord(lcr.GetInsertScript());
-                Iterate();
+                        };
+                        testcontext.cntrsinds.AddObject(cntrs);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.InnerException.ToString());
+                    }
+                    Iterate();
+                }
+                testcontext.SaveChanges();
+                StepFinish();
             }
-            StepFinish();
 
-            // Сбрасываем количественные характеристики в файл
-            var thinedOutCharsRecordList = CharsRecordUtils.ThinOutList(listCharsRecord);
-            StepStart(thinedOutCharsRecordList.Count);
-            foreach (CharsRecord cr in thinedOutCharsRecordList)
+            // Сбрасываем качественные характеристики в файл -------------------------------------------------------------22
+            using (ConverterdbEntities testcontext = new ConverterdbEntities())
             {
-                tmdest.InsertRecord(cr.GetInsertScript());
-                Iterate();
+                var thinedOutLcharsRecordList = LcharsRecordUtils.ThinOutList(listLcharRecord);
+                StepStart(thinedOutLcharsRecordList.Count);
+                foreach (lchar lcr in thinedOutLcharsRecordList)
+                {
+                    //tmdest.InsertRecord(lcr.GetInsertScript());                
+                    try
+                    {
+                        lchar lch = new lchar
+                        {
+                            LSHET = String.IsNullOrEmpty(lcr.LSHET) ? "" : lcr.LSHET.Trim(),
+                            LCHARCD = lcr.LCHARCD,
+                            LCHARNAME = String.IsNullOrEmpty(lcr.LCHARNAME) ? "" : lcr.LCHARNAME.Trim(),
+                            VALUE = lcr.VALUE,
+                            VALUEDESC = String.IsNullOrEmpty(lcr.VALUEDESC) ? "" : lcr.VALUEDESC.Trim(),
+                            DATE = lcr.DATE
+                        };
+                        testcontext.lchars.AddObject(lch);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.InnerException.ToString());
+                    }
+                    Iterate();
+                }
+                testcontext.SaveChanges();
+                StepFinish();
             }
-            StepFinish();
+
+            // Сбрасываем количественные характеристики в файл -----------------------------------------------------------23
+            using (ConverterdbEntities testcontext = new ConverterdbEntities())
+            {
+                var thinedOutCharsRecordList = CharsRecordUtils.ThinOutList(listCharsRecord);
+                StepStart(thinedOutCharsRecordList.Count);
+                foreach (@char cr in thinedOutCharsRecordList)
+                {
+                    //tmdest.InsertRecord(cr.GetInsertScript());
+                    try
+                    {
+                        @char ch = new @char
+                        {
+                            LSHET = String.IsNullOrEmpty(cr.LSHET) ? "" : cr.LSHET.Trim(),
+                            CHARCD = cr.CHARCD,
+                            CHARNAME = String.IsNullOrEmpty(cr.CHARNAME) ? "" : cr.CHARNAME.Trim(),
+                            VALUE = cr.VALUE,
+                            DATE = cr.DATE
+                        };
+                        testcontext.chars.AddObject(ch);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.InnerException.ToString());
+                    }
+                    Iterate();
+                }
+                testcontext.SaveChanges();
+                StepFinish();
+            }
+            
 
         }
     }

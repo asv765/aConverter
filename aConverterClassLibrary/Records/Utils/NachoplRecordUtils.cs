@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using DbfClassLibrary;
+using System.Windows.Forms;
+
+
+
 
 namespace aConverterClassLibrary.Records
 {
+    
     public class NachoplRecordUtils
     {
         public static NachoplRecord UpdateOrInsertNachoplRecord(NachoplRecord nr, ref Dictionary<NachoplKeySet, NachoplRecord> dnr)
@@ -145,7 +150,7 @@ namespace aConverterClassLibrary.Records
         /// <summary>
         /// Зарегистрировать новый факт начисления
         /// </summary>
-        public void RegisterNach(NachRecord defaultNachRecord, string lshet, int month, int year, decimal fnath, decimal prochl, 
+        public void RegisterNach(NachRecord defaultNachRecord, string lshet, int month, int year, decimal fnath, decimal prochl,
             DateTime dateVv, string documentcd)
         {
             var nr = (NachRecord)defaultNachRecord.Clone();
@@ -195,8 +200,8 @@ namespace aConverterClassLibrary.Records
         private void UpdateNachoplDicByOplataRecord(OplataRecord oplataRecord)
         {
             var nr = GetActiveNachoplRecord(oplataRecord.Lshet,
-                oplataRecord.Date_vv.Month, 
-                oplataRecord.Date_vv.Year, 
+                oplataRecord.Date_vv.Month,
+                oplataRecord.Date_vv.Year,
                 oplataRecord.Servicecd);
 
             nr.Oplata += oplataRecord.Summa;
@@ -229,37 +234,121 @@ namespace aConverterClassLibrary.Records
         }
 
         /// <summary>
-        /// Сохранить данные из NachoplRecords
+        /// Сохранить данные из NachoplRecords----------------------------------------------------------16
         /// </summary>
         /// <param name="tableManager"></param>
         public void SaveNachoplRecords(TableManager tableManager)
         {
+            //ConverterdbEntities testcontext = new ConverterdbEntities();
             foreach (NachoplRecord nor in NachoplRecords.Values)
             {
                 tableManager.InsertRecord(nor.GetInsertScript());
-            }            
+                //try
+                //{
+                //    nachopl nachislopl = new nachopl
+                //    {
+                //        LSHET = String.IsNullOrEmpty(nor.Lshet) ? "" : nor.Lshet.Trim(),
+                //        MONTH = nor.Month,
+                //        YEAR = nor.Year,
+                //        MONTH2 = nor.Month2,
+                //        YEAR2 = nor.Year2,
+                //        BDEBET = nor.Bdebet,
+                //        FNATH = nor.Fnath,
+                //        PROCHL = nor.Prochl,
+                //        OPLATA = nor.Oplata,
+                //        EDEBET = nor.Edebet,
+                //        SERVICECD = nor.Servicecd,
+                //        SERVICENAM = String.IsNullOrEmpty(nor.Servicenam) ? "" : nor.Servicenam.Trim()
+                //    };
+                //    testcontext.nachopls.AddObject(nachislopl);
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.InnerException.ToString());
+                //}
+            }
+            //testcontext.SaveChanges();
         }
 
         /// <summary>
-        /// Сохранить данные из NachRecords
+        /// Сохранить данные из NachRecords-------------------------------------------------------------15
         /// </summary>
         public void SaveNachRecords(TableManager tableManager)
         {
+            //ConverterdbEntities testcontext = new ConverterdbEntities();
             foreach (NachRecord or in NachRecords)
             {
                 tableManager.InsertRecord(or.GetInsertScript());
+                //try
+                //{
+                //    nach nachisl = new nach
+                //    {
+                //        LSHET = String.IsNullOrEmpty(or.Lshet) ? "" : or.Lshet.Trim(),
+                //        DOCUMENTCD = String.IsNullOrEmpty(or.Documentcd) ? "" : or.Documentcd.Trim(),
+                //        MONTH = or.Month,
+                //        YEAR = or.Year,
+                //        MONTH2 = or.Month2,
+                //        YEAR2 = or.Year2,
+                //        FNATH = or.Fnath,
+                //        PROCHL = or.Prochl,
+                //        VOLUME = or.Volume,
+                //        REGIMCD = or.Regimcd,
+                //        REGIMNAME = String.IsNullOrEmpty(or.Regimname) ? "" : or.Regimname.Trim(),
+                //        SERVICECD = or.Servicecd,
+                //        SERVICENAM = String.IsNullOrEmpty(or.Servicenam) ? "" : or.Servicenam.Trim(),                        
+                //        DATE_VV = or.Date_vv,
+                //        TYPE = or.Type,
+                //        DOCNAME = String.IsNullOrEmpty(or.Docname) ? "" : or.Docname.Trim(),
+                //        DOCNUMBER = String.IsNullOrEmpty(or.Docnumber) ? "" : or.Docnumber.Trim(),
+                //        DOCDATE = or.Docdate
+                //    };
+                //    testcontext.naches.AddObject(nachisl);
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.InnerException.ToString());                    
+                //}
             }
+            //testcontext.SaveChanges();
         }
 
+
         /// <summary>
-        /// Сохранить данные из OplataRecords
+        /// Сохранить данные из OplataRecords--------------------------------------------------------17
         /// </summary>
         public void SaveOplataRecords(TableManager tableManager)
         {
+            //ConverterdbEntities testcontext = new ConverterdbEntities();
             foreach (OplataRecord or in OplataRecords)
             {
                 tableManager.InsertRecord(or.GetInsertScript());
-            }
-        }
+                    //try
+                    //{
+                    //    oplata oplat = new oplata
+                    //    {
+                    //        LSHET = String.IsNullOrEmpty(or.Lshet) ? "" : or.Lshet.Trim(),
+                    //        DOCUMENTCD = String.IsNullOrEmpty(or.Documentcd) ? "" : or.Documentcd.Trim(),
+                    //        MONTH = or.Month,
+                    //        YEAR = or.Year,
+                    //        SUMMA = or.Summa,
+                    //        DATE = or.Date,
+                    //        DATE_VV = or.Date_vv,
+                    //        DATETIND = or.Datetind,
+                    //        SOURCECD = or.Sourcecd,
+                    //        SOURCENAME = String.IsNullOrEmpty(or.Sourcename) ? "" : or.Sourcename.Trim(),
+                    //        SERVICECD = or.Servicecd,
+                    //        SERVICENAM = String.IsNullOrEmpty(or.Servicenam) ? "" : or.Servicenam.Trim(),
+                    //        PRIM_ = String.IsNullOrEmpty(or.Prim_) ? "" : or.Prim_.Trim()
+                    //    };
+                    //    testcontext.oplatas.AddObject(oplat);
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    MessageBox.Show(ex.InnerException.ToString());
+                    //}
+                }
+                //testcontext.SaveChanges();
+        }        
     }
 }
+

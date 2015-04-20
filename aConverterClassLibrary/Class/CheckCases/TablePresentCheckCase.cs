@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using aConverterClassLibrary.Class;
 using DbfClassLibrary;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {

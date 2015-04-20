@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.OleDb;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -19,10 +20,10 @@ namespace aConverterClassLibrary
         string servicename;
         // string dbfConnectionString;
         // OleDbConnection dbConn;
-        OleDbCommand dbCommand;
+        MySqlCommand dbCommand;
 
         public NachoplRowMissingError(string ALshet, int AMonth, int AYear, int AServiceCD, string AServiceName,
-            decimal ADebet, OleDbCommand AdbCommand)
+            decimal ADebet, MySqlCommand AdbCommand)
         {
             lshet = ALshet;
             month = AMonth;

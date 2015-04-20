@@ -11,14 +11,14 @@ namespace aConverterClassLibrary
         {
             List<CheckCase> checkCaseList = new List<CheckCase>();
 
-            TablePresentCheckCase tpcc = new TablePresentCheckCase();
-            checkCaseList.Add(tpcc);
+            //TablePresentCheckCase tpcc = new TablePresentCheckCase();
+            //checkCaseList.Add(tpcc);
 
-            CodePageCheckCase cpcc = new CodePageCheckCase();
-            checkCaseList.Add(cpcc);
+            //CodePageCheckCase cpcc = new CodePageCheckCase();
+            //checkCaseList.Add(cpcc);
 
-            StructureCheckCase scc1 = new StructureCheckCase();
-            checkCaseList.Add(scc1);
+            //StructureCheckCase scc1 = new StructureCheckCase();
+            //checkCaseList.Add(scc1);
 
             CheckLshetFormatCheckCase clfcc = new CheckLshetFormatCheckCase();
             checkCaseList.Add(clfcc);
@@ -32,8 +32,8 @@ namespace aConverterClassLibrary
             NotUniqueNachoplSaldoCheckCase nunscc = new NotUniqueNachoplSaldoCheckCase();
             checkCaseList.Add(nunscc);
 
-            NachoplSaldoCheckCase nscc = new NachoplSaldoCheckCase();
-            checkCaseList.Add(nscc);
+            //NachoplSaldoCheckCase nscc = new NachoplSaldoCheckCase();
+            //checkCaseList.Add(nscc);
 
             NachoplOplataCheckCase nocc = new NachoplOplataCheckCase();
             checkCaseList.Add(nocc);
@@ -128,7 +128,8 @@ namespace aConverterClassLibrary
             ucc = new UncertaintyCheckCase("LCHARS", "LCharCD", "LCharName", UncertaintyCDType.Число);
             checkCaseList.Add(ucc);
 
-            ucc = new UncertaintyCheckCase("LCHARS", "Str(LCharCD,5) + Str(Value,5)", "ValueDesc", UncertaintyCDType.Строка);
+            //ucc = new UncertaintyCheckCase("LCHARS", "Str(LCharCD,5) + Str(Value,5)", "ValueDesc", UncertaintyCDType.Строка);
+            ucc = new UncertaintyCheckCase("LCHARS", "Convert(LCharCD,char) + Convert(Value,char)", "ValueDesc", UncertaintyCDType.Строка);
             checkCaseList.Add(ucc);
 
             ucc = new UncertaintyCheckCase("LGOTA", "Lgota", "LgotaName", UncertaintyCDType.Число);

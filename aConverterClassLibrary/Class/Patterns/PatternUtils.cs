@@ -25,11 +25,17 @@ namespace aConverterClassLibrary
                     if (m.Success)
                     {
                         string fieldName = Regex.Match(m.Value, @"(?<={\$c\s*)\w+(?=\s*})").Value;
-                        bool checkcondition = Convert.ToBoolean(dr[fieldName]);
-                        if (!checkcondition)
-                            continue;
-                        else
-                            lbody = lbody.Replace(m.Value, "");
+                        int result;
+                        if (Int32.TryParse(dr[fieldName].ToString(), out result) == true)
+                        {
+                            bool checkcondition = Convert.ToBoolean(result);
+                            if (!checkcondition)
+                                continue;
+                            else
+                                lbody = lbody.Replace(m.Value, "");
+
+                        }                        
+
                     }
                 }
 

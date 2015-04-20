@@ -6,6 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Data.OleDb;
 using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -330,10 +331,10 @@ namespace aConverterClassLibrary
             {
                 foreach (PatternDictionary pd in this.DictionaryCollection.Values) pd.ExecuteDictionary();
 
-                using (OleDbConnection dbConn = new OleDbConnection(this.ConnectionString))
+                using (MySqlConnection dbConn = new MySqlConnection(this.ConnectionString))
                 {
                     dbConn.Open();
-                    using (OleDbCommand oledbCommand = dbConn.CreateCommand())
+                    using (MySqlCommand oledbCommand = dbConn.CreateCommand())
                     {
                         // Считаем количество строк
                         string query = this.Query.Replace('\r', ' ').Replace('\n', ' ').Trim();
@@ -359,7 +360,7 @@ namespace aConverterClassLibrary
                         }
 
                         oledbCommand.CommandText = this.Query;
-                        OleDbDataReader dr = oledbCommand.ExecuteReader();
+                        MySqlDataReader dr = oledbCommand.ExecuteReader();
 
                         if (!String.IsNullOrEmpty(this.Delete) && this.IncludeDeleteSection) sw.Write(this.Delete);
                         if (!String.IsNullOrEmpty(this.Header)) sw.Write(this.Header);

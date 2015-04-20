@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aConverter", "aConverter\aConverter.csproj", "{4E2D1A8E-E351-4F1A-A8DC-85FAD77B5216}"
 	ProjectSection(ProjectDependencies) = postProject
 		{784701E9-1903-4849-9CDC-94F4685F05A7} = {784701E9-1903-4849-9CDC-94F4685F05A7}
@@ -25,7 +23,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Конвертеры", "К�
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "029_Kandalaksha", "029_Kandalaksha\029_Kandalaksha.csproj", "{784701E9-1903-4849-9CDC-94F4685F05A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aConverterClassMariaDB", "aConverterClassMariaDB\aConverterClassMariaDB.csproj", "{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}"
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = aConverter.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -106,14 +109,23 @@ Global
 		{784701E9-1903-4849-9CDC-94F4685F05A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{784701E9-1903-4849-9CDC-94F4685F05A7}.Release|x64.ActiveCfg = Release|Any CPU
 		{784701E9-1903-4849-9CDC-94F4685F05A7}.Release|x86.ActiveCfg = Release|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Release|x64.ActiveCfg = Release|Any CPU
+		{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{784701E9-1903-4849-9CDC-94F4685F05A7} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
-	EndGlobalSection
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = aConverter.vsmdi
 	EndGlobalSection
 EndGlobal

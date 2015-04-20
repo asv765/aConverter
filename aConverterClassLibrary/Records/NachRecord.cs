@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DbfClassLibrary;
+using System.Windows.Forms;
 
 namespace aConverterClassLibrary.Records
 {
@@ -269,8 +270,49 @@ namespace aConverterClassLibrary.Records
 
         public string GetInsertScript(string tableName)
         {
+            
+            
             string rs = String.Format("INSERT INTO " + tableName + " (LSHET, DOCUMENTCD, MONTH, YEAR, MONTH2, YEAR2, FNATH, PROCHL, VOLUME, REGIMCD, REGIMNAME, SERVICECD, SERVICENAM, DATE_VV, TYPE, DOCNAME, DOCNUMBER, DOCDATE) VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, '{10}', {11}, '{12}', CTOD('{13}'), {14}, '{15}', '{16}', CTOD('{17}'))", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), String.IsNullOrEmpty(Documentcd) ? "" : Documentcd.Trim(), Month.ToString(), Year.ToString(), Month2.ToString(), Year2.ToString(), Fnath.ToString().Replace(',', '.'), Prochl.ToString().Replace(',', '.'), Volume.ToString().Replace(',', '.'), Regimcd.ToString(), String.IsNullOrEmpty(Regimname) ? "" : Regimname.Trim(), Servicecd.ToString(), String.IsNullOrEmpty(Servicenam) ? "" : Servicenam.Trim(), Date_vv == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Date_vv.Month, Date_vv.Day, Date_vv.Year), Type.ToString(), String.IsNullOrEmpty(Docname) ? "" : Docname.Trim(), String.IsNullOrEmpty(Docnumber) ? "" : Docnumber.Trim(), Docdate == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Docdate.Month, Docdate.Day, Docdate.Year));
+            
             return rs;
+        }
+
+        public void GetInsertMaria()
+        {
+            //ConverterdbEntities testcontext = new ConverterdbEntities();
+            //try
+            //{
+
+            //    nach nachisl = new nach
+            //    {
+            //        LSHET = String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(),
+            //        DOCUMENTCD = String.IsNullOrEmpty(Documentcd) ? "" : Documentcd.Trim(),
+            //        MONTH = Month,
+            //        YEAR = Year,
+            //        MONTH2 = Month2,
+            //        YEAR2 = Year2,
+            //        FNATH = Fnath,
+            //        PROCHL = Prochl,
+            //        VOLUME = Volume,
+            //        REGIMCD = Regimcd,
+            //        REGIMNAME = String.IsNullOrEmpty(Regimname) ? "" : Regimname.Trim(),
+            //        SERVICECD = Servicecd,
+            //        SERVICENAM = String.IsNullOrEmpty(Servicenam) ? "" : Servicenam.Trim(),
+            //        DATE_VV = Date_vv,
+            //        TYPE = Type,
+            //        DOCNAME = String.IsNullOrEmpty(Docname) ? "" : Docname.Trim(),
+            //        DOCNUMBER = String.IsNullOrEmpty(Docnumber) ? "" : Docnumber.Trim(),
+            //        DOCDATE = Docdate
+
+            //    };
+            //    testcontext.naches.AddObject(nachisl);
+            //    testcontext.SaveChanges();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.InnerException.ToString());
+            //}
+
         }
 
         public override string GetInsertScript()

@@ -12,7 +12,7 @@ namespace aConverterClassLibrary
         /// <summary>
         /// Наименование варианта корректировки
         /// </summary>
-        public string ConvertCaseName
+        public string ConvertCaseName//--------------------------------------------после 23
         {
             get { return convertCaseName; }
             set { convertCaseName = value; }
@@ -155,14 +155,14 @@ namespace aConverterClassLibrary
         /// Событие, возникающее, когда очередной шаг завершен
         /// </summary>
         public event StepFinishHandler onStepFinish;
-        protected void StepFinish()
+        protected void StepFinish()//--------------------------------------------------------неведомая вещь 1
         {
             if (onStepFinish != null) onStepFinish();
         }
 
         public delegate bool ErrorOpenFile(object sender, Exception errorMessage);
         /// <summary>
-        /// Обработчик событий ошибок при открытии файла
+        /// Обработчик событий ошибок при открытии файла ---------------------------------------------------1
         /// </summary>
         public event ErrorOpenFile ErrorOpenFileEvent;
 

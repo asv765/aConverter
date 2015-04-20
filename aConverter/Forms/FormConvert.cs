@@ -162,7 +162,7 @@ namespace aConverter.Forms
             //}
         }
 
-        void cc_onStepFinish()
+        void cc_onStepFinish()//------------------------------неведомая вещь 2
         {
             progressBarSteps.Increment(1);
             // progressBarSteps.Refresh();
@@ -239,7 +239,7 @@ namespace aConverter.Forms
         {
             progressBarProcess.Step = 1000;
 
-            int count = ListConvertCase.Count(p => p.IsChecked);
+            int count = ListConvertCase.Count(p => p.IsChecked);//////////-------count 3
             progressBarSteps.Maximum = 1;
             // int counter = 1;
 
@@ -259,7 +259,7 @@ namespace aConverter.Forms
                     try
                     {
                         cc.SetStepsCount(1);
-                        cc.InitializeManager(aConverter_RootSettings.SourceDBFFilePath, aConverter_RootSettings.DestDBFFilePath);
+                        cc.InitializeManager(aConverter_RootSettings.SourceDBFFilePath, aConverter_RootSettings.DestDBFFilePath);//////////--папки
                         if (checkBoxToFile.Checked)
                         {
 
@@ -270,7 +270,7 @@ namespace aConverter.Forms
                         else
                             cc.tmdest.SaveToFile = false;
 
-                        cc.DoConvert();
+                        cc.DoConvert();// ------------------------после 23
 
                         cc.Dispose();
                         cc.Result = ConvertCaseStatus.Шаг_выполнен_успешно;
@@ -280,7 +280,7 @@ namespace aConverter.Forms
                         cc.Result = ConvertCaseStatus.Ошибка_при_выполнении_шага;
                         cc.ErrorMessage = ex.ToString();
                     }
-                    dataGridViewConvertCase.Refresh();
+                    dataGridViewConvertCase.Refresh();// -------------после 23
                 }
             }
             string finalMessage = "Конвертация выполнена успешно!\r\n" +

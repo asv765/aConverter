@@ -5,6 +5,7 @@ using System.Text;
 using aConverterClassLibrary.Records;
 using DbfClassLibrary;
 
+
 namespace aConverterClassLibrary.Class
 {
     public class FactoryRecord
@@ -30,7 +31,8 @@ namespace aConverterClassLibrary.Class
             lt.Add(typeof(LcharsRecord));
             lt.Add(typeof(LgotaRecord));
             lt.Add(typeof(NachoplRecord));
-            lt.Add(typeof(NachRecord));
+            //lt.Add(typeof(NachRecord));----------------------------------------------------------------------------------------
+            //lt.Add(typeof(nach));
             lt.Add(typeof(OplataRecord));
             lt.Add(typeof(GcounterRecord));
             lt.Add(typeof(SupplnetRecord));

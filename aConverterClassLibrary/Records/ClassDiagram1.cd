@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="aConverterClassLibrary.RecordsEDM.NachRecord">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CIAGAggABAoCBgAIAgYAAAADAIRBBQCEQQIgQACCIgA=</HashCode>
+      <FileName>RecordsEDM\NachRecord.cs</FileName>
+      <NewMemberFileName>Records\NachRecord.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="aConverterClassLibrary.RecordsEDM.OplataRecord">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAEAggABAIABgQAAQYEAAEBAAQAAQGFAAAhQQAAIAA=</HashCode>
+      <FileName>RecordsEDM\OplataRecord.cs</FileName>
+      <NewMemberFileName>Records\OplataRecord.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

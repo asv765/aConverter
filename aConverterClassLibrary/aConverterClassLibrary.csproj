@@ -65,8 +65,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.5\Assemblies\v4.0\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -90,6 +98,7 @@
     <Compile Include="Class\CheckCases\FioCheckCase.cs" />
     <Compile Include="Class\CheckCases\HouseCDCheckCase.cs" />
     <Compile Include="Class\CheckCases\InternalForeighnKeyCheckCase.cs" />
+    <Compile Include="Class\CheckCases\KoneksiMariaDB.cs" />
     <Compile Include="Class\CheckCases\MainOrganizationCheckCase.cs" />
     <Compile Include="Class\CheckCases\NachoplCalculationCheckCase.cs" />
     <Compile Include="Class\CheckCases\NachoplNachCheckCase1.cs" />
@@ -192,6 +201,19 @@
     <Compile Include="Class\Statistic\FdbStatistic.cs" />
     <Compile Include="Class\Statistic\Statistic.cs" />
     <Compile Include="Class\Utils\aConverter_Utils.cs" />
+    <Compile Include="RecordsEDM\MariadbEDM.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MariadbEDM.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsEDM\PartialNachoplRecord.cs" />
+    <Compile Include="RecordsEDM\Utils\AbonentRecordUtils.cs" />
+    <Compile Include="RecordsEDM\Utils\CharsRecordUtils.cs" />
+    <Compile Include="RecordsEDM\Utils\CntrsindRecordUtils.cs" />
+    <Compile Include="RecordsEDM\Utils\CountersRecordUtils.cs" />
+    <Compile Include="RecordsEDM\Utils\LcharsRecordUtils.cs" />
+    <Compile Include="RecordsEDM\Utils\NachoplRecordUtils.cs" />
+    <Compile Include="RecordsEDM\Utils\SupplnetRecordUtils.cs" />
     <Compile Include="Records\AAddcharRecord.cs" />
     <Compile Include="Records\CharlstRecord.cs" />
     <Compile Include="Records\CharsRecord.cs">
@@ -238,6 +260,27 @@
     <Compile Include="Records\Utils\LcharsRecordUtils.cs" />
     <Compile Include="Records\Utils\NachoplRecordUtils.cs" />
     <Compile Include="Records\Utils\SupplnetRecordUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="RecordsEDM\MariadbEDM.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MariadbEDM.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="RecordsEDM\MariadbEDM.edmx.diagram">
+      <DependentUpon>MariadbEDM.edmx</DependentUpon>
+    </None>
+    <None Include="Records\ClassDiagram1.cd" />
+    <None Include="Records\ClassDiagram2.cd" />
+    <None Include="Records\ClassDiagram3.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Class\CheckCasesNew\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

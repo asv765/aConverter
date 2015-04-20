@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Data.OleDb;
 using System.Data;
+using MySql.Data.MySqlClient;
+using aConverterClassLibrary.Class.CheckCases;
 
 namespace aConverterClassLibrary
 {
@@ -31,15 +33,19 @@ namespace aConverterClassLibrary
         {
             this.Result = CheckCaseStatus.Ошибок_не_выявлено;
             this.ErrorList.Clear();
-            using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+
+            KoneksiMariaDB smon = new KoneksiMariaDB();
+            MySqlConnection dbConn = smon.mon;
+            //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            using (dbConn)
             {
-                using (OleDbCommand command = dbConn.CreateCommand())
+                using (MySqlCommand command = dbConn.CreateCommand())
                 {
                     command.CommandText = String.Format(
                         "SELECT {0} FROM {1} WHERE {0} NOT IN (SELECT {2} FROM {3})",
                         foreignKey, foreignTable, primaryKey, primaryTable);
                     DataTable dt = new DataTable();
-                    OleDbDataAdapter da = new OleDbDataAdapter(command);
+                    MySqlDataAdapter da = new MySqlDataAdapter(command);
                     da.Fill(dt);
 
                     if (dt.Rows.Count == 0)
