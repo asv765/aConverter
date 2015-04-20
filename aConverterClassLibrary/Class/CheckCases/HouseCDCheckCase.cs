@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using DbfClassLibrary;
 using MySql.Data.MySqlClient;
+using aConverterClassLibrary.Class.CheckCases;
 
 namespace aConverterClassLibrary
 {
@@ -21,7 +22,10 @@ namespace aConverterClassLibrary
             this.Result = CheckCaseStatus.Ошибок_не_выявлено;
             this.ErrorList.Clear();
 
-            using (MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'"))
+            KoneksiMariaDB smon = new KoneksiMariaDB();
+            MySqlConnection dbConn = smon.mon;
+
+            using (dbConn)
             {
                 dbConn.Open();
                 //TableManager tm = new TableManager(aConverter_RootSettings.DestDBFFilePath);

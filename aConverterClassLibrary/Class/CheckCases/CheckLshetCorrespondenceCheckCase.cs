@@ -5,6 +5,7 @@ using System.Text;
 using FirebirdSql.Data.FirebirdClient;
 using System.Data.OleDb;
 using MySql.Data.MySqlClient;
+using aConverterClassLibrary.Class.CheckCases;
 
 namespace aConverterClassLibrary
 {
@@ -22,8 +23,11 @@ namespace aConverterClassLibrary
             this.ErrorList.Clear();
             int lshetLength = 0;
 
+            KoneksiMariaDB smon = new KoneksiMariaDB();
+            MySqlConnection dbConn = smon.mon;
+
             //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
-            using (MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'"))
+            using (dbConn)
             {
                 using (MySqlCommand command = dbConn.CreateCommand())
                 {
@@ -69,7 +73,7 @@ namespace aConverterClassLibrary
             }
             int mismatchedLshets = 0;
             //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
-            using (MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'"))
+            using (dbConn)
             {
                 using (MySqlCommand command = dbConn.CreateCommand())
                 {

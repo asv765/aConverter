@@ -98,6 +98,7 @@
     <Compile Include="Class\CheckCases\FioCheckCase.cs" />
     <Compile Include="Class\CheckCases\HouseCDCheckCase.cs" />
     <Compile Include="Class\CheckCases\InternalForeighnKeyCheckCase.cs" />
+    <Compile Include="Class\CheckCases\KoneksiMariaDB.cs" />
     <Compile Include="Class\CheckCases\MainOrganizationCheckCase.cs" />
     <Compile Include="Class\CheckCases\NachoplCalculationCheckCase.cs" />
     <Compile Include="Class\CheckCases\NachoplNachCheckCase1.cs" />

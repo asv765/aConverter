@@ -5,6 +5,7 @@ using System.Text;
 using System.Data.OleDb;
 using System.Data;
 using MySql.Data.MySqlClient;
+using aConverterClassLibrary.Class.CheckCases;
 
 namespace aConverterClassLibrary
 {
@@ -21,9 +22,12 @@ namespace aConverterClassLibrary
             this.Result = CheckCaseStatus.Ошибок_не_выявлено;
             this.ErrorList.Clear();
 
+            KoneksiMariaDB smon = new KoneksiMariaDB();
+            MySqlConnection dbConn = smon.mon;
+
             #region Проверяем, является ли COUNTERID в таблице COUNTERS.DBF уникальным
             //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
-            using (MySqlConnection dbConn = new MySqlConnection("server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'"))
+            using (dbConn)
 
             {
                 using (MySqlCommand command = dbConn.CreateCommand())

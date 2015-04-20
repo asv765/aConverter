@@ -284,8 +284,7 @@ namespace aConverterClassLibrary.RecordsEDM
             using(ConverterdbEntities testcontext = new ConverterdbEntities())
             {
             foreach (nachopl nor in NachoplRecords.Values)
-            {
-                //tableManager.InsertRecord(nor.GetInsertScript());
+            {                
                 try
                 {
                     nachopl nachislopl = new nachopl

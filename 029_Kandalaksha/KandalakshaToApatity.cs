@@ -51,7 +51,7 @@ namespace _029_Kandalaksha
         public static int LastMonth = CurrentMonth == 1 ? 12 : CurrentMonth - 1;
 
         //public const string SourceDir = @"C:\Work\aConverter_Data\029_Kandalaksha\Source";
-        public const string SourceDir = @"D:\GitDiplom\aConverter\029_Kandalaksha\Source\";
+        public const string SourceDir = @"D:\GitDiplom1\aConverter\029_Kandalaksha\Source\";
 
         public static string GetLs(int intls)
         {
