@@ -12,7 +12,7 @@ namespace aConverterClassLibrary
             this.ErrorName = "В таблице NACHOPL.DBF встречаются несколько записей по одному лицевому счету в одном месяце по одной услуге";
             this.IsTerminating = true;
 
-            Statistic ss = new DbfStatistic("Задвоенные записи в NACHOPL.DBF",
+            Statistic ss = new MySQLStatistic("Задвоенные записи в NACHOPL.DBF",
                 "select * " +
                 "from nachopl " +
                 "where lshet + STR(servicecd, 6) + Str(month, 2) + str(year, 4) in " +

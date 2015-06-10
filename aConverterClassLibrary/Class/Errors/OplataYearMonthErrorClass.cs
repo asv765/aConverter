@@ -14,7 +14,7 @@ namespace aConverterClassLibrary
             this.IsTerminating = false;
 
             List<string> rl = new List<string>();
-            Statistic ss = new DbfStatistic("Записи с ошибочными значениями в полях MONTH, YEAR в файле OPLATA.DBF",
+            Statistic ss = new MySQLStatistic("Записи с ошибочными значениями в полях MONTH, YEAR в файле OPLATA.DBF",
                 String.Format("SELECT * FROM OPLATA WHERE !BETWEEN(MONTH,1,12) OR !BETWEEN(YEAR,2000,{0})",
                    DateTime.Now.Year),
                 rl);

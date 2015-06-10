@@ -13,6 +13,7 @@ using System.Linq;
 using aConverterClassLibrary.RecordsEDM.Utils;
 using aConverterClassMariaDB;
 using System.Windows.Forms;
+using System.Data.EntityClient;
 
 
 
@@ -71,6 +72,20 @@ namespace _029_Kandalaksha
             return table;
         }
 
+        public static string ConnectionString
+        {
+            get
+            {
+                var ecsb = new EntityConnectionStringBuilder
+                {
+                    Provider = "MySql.Data.MySqlClient",
+                    ProviderConnectionString = aConverter_RootSettings.DestMySqlConnectionString,
+                    Metadata = @".\Metadata\MariadbEDM.csdl|.\Metadata\MariadbEDM.ssdl|.\Metadata\MariadbEDM.msl"
+                };
+                return ecsb.ConnectionString;
+            }
+        }
+
     }
 
 
@@ -118,7 +133,7 @@ namespace _029_Kandalaksha
             SetStepsCount(1);
             StepStart(1);
             //
-            ExecuteScript.CreateDatabaseMariaDB();
+            ExecuteScript.CreateDatabaseMariaDb("ConverterDB");
             //
             //FactoryRecord.CreateAllTables(tmdest); //--------------создались все таблици 
             Result = ConvertCaseStatus.Шаг_выполнен_успешно;
@@ -367,7 +382,7 @@ namespace _029_Kandalaksha
                         DateTime endMonthDate = new DateTime(Consts.CurrentYear, i, DateTime.DaysInMonth(Consts.CurrentYear, i));
 
                         // manager.RegisterBeginSaldo(lshet, i, Consts.CurrentYear, 1, saldobeg - prevpenid);
-                        manager.RegisterEndSaldo(lshet, i, Consts.CurrentYear, 1, saldoend);
+                        manager.RegisterEndSaldo(lshet, i, Consts.CurrentYear, 1, "Сжиженный газ", saldoend);
 
                         bool counterPresent = false;
                         if (!(dr["СчетчикID"] is DBNull))
@@ -540,20 +555,19 @@ namespace _029_Kandalaksha
                 #endregion
 
                 StepStart(1);
-                manager.SaveNachRecords(tmdest);//---------------------------------15 цикла
+                manager.SaveNachRecords(Consts.ConnectionString); //---------------------------------15 цикла
                 Iterate();
                 StepFinish();
 
                 StepStart(1);
-                manager.SaveNachoplRecords(tmdest);//------------------------------16 после цикла началось отсюда
+                manager.SaveNachoplRecords(Consts.ConnectionString); //------------------------------16 после цикла началось отсюда
                 Iterate();
                 StepFinish();
 
                 StepStart(1);
-                manager.SaveOplataRecords(tmdest);//-----------------------------17 после цикла
+                manager.SaveOplataRecords(Consts.ConnectionString); //-----------------------------17 после цикла
                 Iterate();
                 StepFinish();
-
             }
 
             AbonentRecordUtils.SetUniqueHouseCd(ref arlist, Consts.StartHouseCd);//-----------------------17

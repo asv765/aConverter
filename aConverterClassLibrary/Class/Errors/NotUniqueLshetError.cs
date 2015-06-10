@@ -12,7 +12,7 @@ namespace aConverterClassLibrary
             this.ErrorName = "В таблице ABONENT.DBF встречаются не уникальные лицевые счета";
             this.IsTerminating = true;
 
-            Statistic ss = new DbfStatistic("Задвоенные лицевые счета",
+            Statistic ss = new MySQLStatistic("Задвоенные лицевые счета",
                 "select lshet, count(*) from abonent group by lshet having count(*) > 1",
                 null);
             StatisticSets.Add(ss);

@@ -68,13 +68,13 @@ namespace aConverter.Forms
             this.добавитьСтатистикуToolStripMenuItem,
             this.удалитьСтатистикуToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(226, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(217, 114);
             // 
             // сформироватьВсеToolStripMenuItem
             // 
             this.сформироватьВсеToolStripMenuItem.Image = global::aConverter.Properties.Resources.bullet_go;
             this.сформироватьВсеToolStripMenuItem.Name = "сформироватьВсеToolStripMenuItem";
-            this.сформироватьВсеToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.сформироватьВсеToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.сформироватьВсеToolStripMenuItem.Text = "Сформировать все";
             this.сформироватьВсеToolStripMenuItem.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
@@ -82,7 +82,7 @@ namespace aConverter.Forms
             // 
             this.сформироватьToolStripMenuItem.Image = global::aConverter.Properties.Resources.application_go;
             this.сформироватьToolStripMenuItem.Name = "сформироватьToolStripMenuItem";
-            this.сформироватьToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.сформироватьToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.сформироватьToolStripMenuItem.Text = "Сформировать";
             this.сформироватьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
@@ -90,7 +90,7 @@ namespace aConverter.Forms
             // 
             this.редактироватьToolStripMenuItem.Image = global::aConverter.Properties.Resources.application_edit;
             this.редактироватьToolStripMenuItem.Name = "редактироватьToolStripMenuItem";
-            this.редактироватьToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.редактироватьToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.редактироватьToolStripMenuItem.Text = "Редактировать статистику";
             this.редактироватьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
@@ -98,7 +98,7 @@ namespace aConverter.Forms
             // 
             this.добавитьСтатистикуToolStripMenuItem.Image = global::aConverter.Properties.Resources.add;
             this.добавитьСтатистикуToolStripMenuItem.Name = "добавитьСтатистикуToolStripMenuItem";
-            this.добавитьСтатистикуToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.добавитьСтатистикуToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.добавитьСтатистикуToolStripMenuItem.Text = "Добавить статистику";
             this.добавитьСтатистикуToolStripMenuItem.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
@@ -106,7 +106,7 @@ namespace aConverter.Forms
             // 
             this.удалитьСтатистикуToolStripMenuItem.Image = global::aConverter.Properties.Resources.delete;
             this.удалитьСтатистикуToolStripMenuItem.Name = "удалитьСтатистикуToolStripMenuItem";
-            this.удалитьСтатистикуToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.удалитьСтатистикуToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.удалитьСтатистикуToolStripMenuItem.Text = "Удалить статистику";
             this.удалитьСтатистикуToolStripMenuItem.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
@@ -181,6 +181,7 @@ namespace aConverter.Forms
             this.toolStripComboBoxSelectType1.Items.AddRange(new object[] {
             "Все",
             "По исходным данным (DBF)",
+            "По исходным данным (MySQL)",
             "По целевой базе (FDB)"});
             this.toolStripComboBoxSelectType1.Name = "toolStripComboBoxSelectType1";
             this.toolStripComboBoxSelectType1.Size = new System.Drawing.Size(160, 25);

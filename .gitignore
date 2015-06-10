@@ -159,3 +159,4 @@ $RECYCLE.BIN/
 
 # Ignore access DB files
 *.mdb
+/.project

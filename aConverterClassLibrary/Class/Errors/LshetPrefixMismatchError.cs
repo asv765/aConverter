@@ -14,7 +14,7 @@ namespace aConverterClassLibrary
                 Alshet_prefix);
             this.IsTerminating = false;
 
-            Statistic s = new DbfStatistic("Таблица ABONENT.DBF",
+            Statistic s = new MySQLStatistic("Таблица ABONENT.DBF",
                 "select * from abonent",
                 null);
             this.StatisticSets.Add(s);

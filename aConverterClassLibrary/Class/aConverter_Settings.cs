@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using DbfClassLibrary;
 
@@ -67,7 +68,7 @@ namespace aConverterClassLibrary
         /// </summary>
         public static string DestDBFFilePath
         {
-            get 
+            get
             {
                 // return @"E:\Misc\Разработка\aConverter_Data\006_Prohladny\Source\120615\Orig";
                 if (SettingsCaseId == -1) return "";
@@ -75,12 +76,44 @@ namespace aConverterClassLibrary
                 string rv = lsc[SettingsCaseId].DestDBFFilePath;
                 return rv;
             }
-            set 
+            set
             {
                 if (SettingsCaseId == -1) return;
                 List<SettingsCase> lsc = ReadSettingsCase();
                 lsc[SettingsCaseId].DestDBFFilePath = value;
                 WriteSettingsCase(lsc);
+            }
+        }
+
+
+        /// <summary>
+        /// Наименование промежуточной MySQL базы данных для конвертации
+        /// </summary>
+        public static string DestMySqlConnectionString
+        {
+            get
+            {
+                if (SettingsCaseId == -1) return "";
+                List<SettingsCase> lsc = ReadSettingsCase();
+                string rv = lsc[SettingsCaseId].DestMySqlConnectionString;
+                return rv;
+            }
+            set
+            {
+                if (SettingsCaseId == -1) return;
+                List<SettingsCase> lsc = ReadSettingsCase();
+                lsc[SettingsCaseId].DestMySqlConnectionString = value;
+                WriteSettingsCase(lsc);
+            }
+        }
+
+        public static string DestMySqlDatabaseName
+        {
+            get
+            {
+                string cs = DestMySqlConnectionString;
+                Match m = Regex.Match(cs, @"(?<=database=').*(?=')");
+                return m.Success ? m.Value : "";
             }
         }
 
@@ -488,6 +521,16 @@ namespace aConverterClassLibrary
         {
             get { return destDBFFilePath; }
             set { destDBFFilePath = value; }
+        }
+
+        private string _destMySqlConnectionString;
+        /// <summary>
+        /// Строка подключения к MySQL базе данных
+        /// </summary>
+        public string DestMySqlConnectionString
+        {
+            get { return _destMySqlConnectionString; }
+            set { _destMySqlConnectionString = value; }
         }
 
         private string patternsPath;

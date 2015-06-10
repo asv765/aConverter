@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dc73c2fabeaf4ac9bdef44e5a9eb9558" Name="Диаграмма1" ZoomLevel="75">
+        <EntityTypeShape EntityType="converterdbModel.aaddchar" Width="1.5" PointX="0.625" PointY="0.75" />
+        <EntityTypeShape EntityType="converterdbModel.abonent" Width="1.5" PointX="2.25" PointY="0.75" />
+        <EntityTypeShape EntityType="converterdbModel.charlst" Width="1.5" PointX="3.875" PointY="0.75" />
+        <EntityTypeShape EntityType="converterdbModel.char" Width="1.5" PointX="5.5" PointY="0.75" />
+        <EntityTypeShape EntityType="converterdbModel.charval" Width="1.5" PointX="7.125" PointY="0.75" />
+        <EntityTypeShape EntityType="converterdbModel.cntrsind" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="converterdbModel.counter" Width="1.5" PointX="0.625" PointY="2.75" />
+        <EntityTypeShape EntityType="converterdbModel.dogovor" Width="1.5" PointX="3.875" PointY="3.125" />
+        <EntityTypeShape EntityType="converterdbModel.equipmnt" Width="1.5" PointX="5.5" PointY="3.125" />
+        <EntityTypeShape EntityType="converterdbModel.gcounter" Width="1.5" PointX="7.125" PointY="2.75" />
+        <EntityTypeShape EntityType="converterdbModel.haddchar" Width="1.5" PointX="7.125" PointY="4.625" />
+        <EntityTypeShape EntityType="converterdbModel.lchar" Width="1.5" PointX="8.75" PointY="3.5" />
+        <EntityTypeShape EntityType="converterdbModel.lgota" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="converterdbModel.nach" Width="1.5" PointX="12" PointY="0.75" />
+        <EntityTypeShape EntityType="converterdbModel.nachopl" Width="1.5" PointX="5.5" PointY="5.875" />
+        <EntityTypeShape EntityType="converterdbModel.oplata" Width="1.5" PointX="8.75" PointY="6.125" />
+        <EntityTypeShape EntityType="converterdbModel.supplnet" Width="1.5" PointX="12" PointY="5.625" />
+        <EntityTypeShape EntityType="converterdbModel.peni" Width="1.5" PointX="0.75" PointY="8.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

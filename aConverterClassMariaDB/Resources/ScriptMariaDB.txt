@@ -1,9 +1,9 @@
 ﻿begin;
-DROP DATABASE IF EXISTS ConverterDB;
+DROP DATABASE IF EXISTS %databasename%;
 COMMIT;
 begin;
-create database `ConverterDB` default CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `converterdb`;
+create database `%databasename%` default CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `%databasename%`;
 
 CREATE TABLE `aaddchar` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -12,6 +12,7 @@ CREATE TABLE `aaddchar` (
   `VALUE` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `aaddchar` ADD INDEX `i_aaddchar_lshet` (`LSHET`);
 
 
 CREATE TABLE `abonent` (
@@ -43,7 +44,7 @@ CREATE TABLE `abonent` (
   `ISDELETED` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
-
+ALTER TABLE `abonent` ADD INDEX `i_abonent_lshet` (`LSHET`);
 
 CREATE TABLE `charlst` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -64,6 +65,7 @@ CREATE TABLE `chars` (
   `DATE` date DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `chars` ADD INDEX `i_chars_lshet` (`LSHET`);
 
 
 CREATE TABLE `charvals` (
@@ -108,6 +110,7 @@ CREATE TABLE `counters` (
   `NAME` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `counters` ADD INDEX `i_counters_lshet` (`LSHET`);
 
 
 CREATE TABLE  `dogovor` (
@@ -122,6 +125,7 @@ CREATE TABLE  `dogovor` (
   `NOMER` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `dogovor` ADD INDEX `i_dogovor_lshet` (`LSHET`);
 
 
 CREATE TABLE `equipmnt` (
@@ -135,6 +139,7 @@ CREATE TABLE `equipmnt` (
   `SERIALNUM` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `equipmnt` ADD INDEX `i_equipmnt_lshet` (`LSHET`);
 
 
 CREATE TABLE  `gcounter` (
@@ -143,6 +148,7 @@ CREATE TABLE  `gcounter` (
   `LSHET` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `gcounter` ADD INDEX `i_gcounter_lshet` (`LSHET`);
 
 
 CREATE TABLE `haddchar` (
@@ -164,6 +170,7 @@ CREATE TABLE `lchars` (
   `DATE` date DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `lchars` ADD INDEX `i_lchars_lshet` (`LSHET`);
 
 
 CREATE TABLE `lgota` (
@@ -205,6 +212,7 @@ CREATE TABLE `lgota` (
   `VREMREG` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `lgota` ADD INDEX `i_lgota_lshet` (`LSHET`);
 
 
 CREATE TABLE `nach`(
@@ -229,6 +237,7 @@ CREATE TABLE `nach`(
   `DOCDATE` date DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `nach` ADD INDEX `i_nach_lshet` (`LSHET`);
 
 
 CREATE TABLE `nachopl` (
@@ -247,6 +256,7 @@ CREATE TABLE `nachopl` (
   `SERVICENAM` varchar(50) NOT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `nachopl` ADD INDEX `i_nachopl_lshet` (`LSHET`);
 
 
 CREATE TABLE `oplata` (
@@ -266,6 +276,7 @@ CREATE TABLE `oplata` (
   `PRIM_` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `oplata` ADD INDEX `i_oplata_lshet` (`LSHET`);
 
 
 CREATE TABLE `supplnet` (
@@ -280,9 +291,15 @@ CREATE TABLE `supplnet` (
   `CONNECTED` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 );
+ALTER TABLE `supplnet` ADD INDEX `i_supplnet_lshet` (`LSHET`);
 
-
-
+CREATE TABLE `peni` (
+	`LSHET` VARCHAR(10) NOT NULL COMMENT 'Лицевой счет',
+	`SERVICECD` INT(11) NOT NULL,
+	`DOLGDATE` DATE NOT NULL,
+	`DOLG` DECIMAL(20,4) NOT NULL
+);
+ALTER TABLE `peni` ADD INDEX `i_peni_lshet` (`LSHET`);
 
 COMMIT;
 

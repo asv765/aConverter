@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MySqlBulkCopy</name>
+    </assembly>
+    <members>
+        <member name="M:IndiansInc.MySqlBulkCopy.Upload(MySql.Data.MySqlClient.MySqlDataReader)">
+            <summary>
+            Method that uploads the data from the MySqlDataReader that contains the data.
+            </summary>
+            <param name="reader">Data reader that contains the source data that to be uploaded</param>
+        </member>
+        <member name="M:IndiansInc.MySqlBulkCopy.Upload(System.Data.DataTable)">
+            <summary>
+            Method that uploads the data from the <see cref="T:System.Data.DataTable">DataTable</see> that contains the data.
+            </summary>
+            <param name="table">Data table that contains source data that to be uploaded</param>
+        </member>
+        <member name="P:IndiansInc.MySqlBulkCopy.ColumnMapItems">
+            <summary>
+            All column mappings between source column and destination table columns
+            </summary>
+        </member>
+        <member name="P:IndiansInc.MySqlBulkCopy.DestinationDbConnection">
+            <summary>
+            The connection that to be used while connecting destination column
+            </summary>
+        </member>
+        <member name="P:IndiansInc.MySqlBulkCopy.DestinationTableName">
+            <summary>
+            The destination table name that need to be updated.
+            </summary>
+        </member>
+        <member name="P:IndiansInc.MySqlBulkCopy.BatchSize">
+            <summary>
+            Size of the batch that need to be completed before notifying caller
+            </summary>
+        </member>
+        <member name="P:IndiansInc.MySqlBulkCopy.OnBatchSizeCompleted">
+            <summary>
+            Delegate that need to invoked once the assembly uploads the specified BatchSize
+            </summary>
+        </member>
+        <member name="T:IndiansInc.MySqlBulkCopy.OnBatchSizeCompletedDelegate">
+            <summary>
+            Delegate to subscribe notification from assembly
+            </summary>
+            <param name="e">Event arguments </param>
+        </member>
+        <member name="M:IndiansInc.Internals.CommonFunctions.GetColumnNames(IndiansInc.Internals.ColumnMapItemCollection,IndiansInc.Internals.ColumnProperty)">
+            <summary>
+            Method to get the column names 
+            </summary>
+            <param name="mapItemCollection"></param>
+            <param name="propertyToFetch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IndiansInc.Internals.CommonFunctions.ConstructIndividualValue(System.String,System.String)">
+            <summary>
+            Method that constructs the individual value. This method determines the quote model based on the datatype
+            </summary>
+            <param name="dataType">data type of destination column</param>
+            <param name="value">Value that to be constructed</param>
+            <returns>formatted value based on data type</returns>
+        </member>
+        <member name="M:IndiansInc.Internals.ColumnMapItemCollection.Item(System.Int32)">
+            <summary>
+            Method to retrieve a <seealso cref="T:IndiansInc.Internals.ColumnMapItem">ColumnMapItem</seealso> from <seealso cref="T:IndiansInc.Internals.ColumnMapItemCollection">ColumnMapItem Collection</seealso>.
+            </summary>
+            <param name="index">item position in the collection</param>
+            <returns>ColumnMapItem if present in the position</returns>
+            <exception cref="T:System.IndexOutOfRangeException">Position provided is not within the <seealso cref="T:IndiansInc.Internals.ColumnMapItemCollection">ColumnMapItem Collection</seealso> range</exception>
+        </member>
+        <member name="M:IndiansInc.Internals.ColumnMapItemCollection.Add(IndiansInc.Internals.ColumnMapItem)">
+            <summary>
+            Method to add new <seealso cref="T:IndiansInc.Internals.ColumnMapItem">ColumnMapItem</seealso> into the <seealso cref="T:IndiansInc.Internals.ColumnMapItemCollection">ColumnMapItem Collection</seealso>.
+            </summary>
+            <param name="item">Item that to be added to the collection</param>
+            <exception cref="T:System.ArgumentNullException">Item is null</exception>
+        </member>
+        <member name="M:IndiansInc.Internals.ColumnMapItemCollection.Remove(System.Int32)">
+            <summary>
+            Method to reemove <seealso cref="T:IndiansInc.Internals.ColumnMapItem">ColumnMapItem</seealso> from <seealso cref="T:IndiansInc.Internals.ColumnMapItemCollection">ColumnMapItem Collection</seealso>
+            </summary>
+            <param name="index">item position that to be removed</param>
+            <exception cref="T:System.IndexOutOfRangeException">Occurs if the provided index is not within <seealso cref="T:IndiansInc.Internals.ColumnMapItemCollection">ColumnMapItem Collection</seealso> range</exception>
+            
+        </member>
+        <member name="M:IndiansInc.Internals.ColumnMapItemCollection.Find(System.String)">
+            <summary>
+            Method to find a <seealso cref="T:IndiansInc.Internals.ColumnMapItem">ColumnMapItem</seealso> in the <seealso cref="T:IndiansInc.Internals.ColumnMapItemCollection">ColumnMapItem Collection</seealso>.
+            </summary>
+            <param name="destinationColumnName">The search destination column value</param>
+            <returns>ColumnMapitem if found else null</returns>
+        </member>
+        <member name="M:IndiansInc.Internals.ColumnMapItemCollection.Replace(System.Int32,IndiansInc.Internals.ColumnMapItem)">
+            <summary>
+            replaces an existing <seealso cref="T:IndiansInc.Internals.ColumnMapItem">ColumnMapItem</seealso> with a new <seealso cref="T:IndiansInc.Internals.ColumnMapItem">ColumnMapItem</seealso> element
+            </summary>
+            <param name="index">Item position in the <seealso cref="T:IndiansInc.Internals.ColumnMapItemCollection">ColumnMapItemCollection</seealso></param>
+            <param name="item"><seealso cref="T:IndiansInc.Internals.ColumnMapItem">ColumnMapItem</seealso> item</param>
+            <exception cref="T:System.IndexOutOfRangeException">if index does not contain in the range</exception>
+        </member>
+    </members>
+</doc>

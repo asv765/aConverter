@@ -53,6 +53,7 @@ namespace aConverter.Forms
             {
                 textBoxStatisticName.Text = statistic.StatisticName;
                 if (statistic is DbfStatistic) radioButtonDbfClass.Checked = true;
+                if (statistic is MySQLStatistic) radioButtonMySQLclass.Checked = true;
                 if (statistic is FdbStatistic) radioButtonFdbClass.Checked = true;
                 comboBoxStatisticType.SelectedIndex = statistic.StatisticTypeId;
                 textBoxSQL.Text = statistic.Sql.Replace("\r\n","\n").Replace("\n","\r\n");
@@ -68,6 +69,8 @@ namespace aConverter.Forms
                 s = new DbfStatistic();
             else if (radioButtonFdbClass.Checked)
                 s = new FdbStatistic();
+            else if (radioButtonMySQLclass.Checked)
+                s = new MySQLStatistic();
             else
                 throw new Exception("Неизвестный класс статистики.");
 

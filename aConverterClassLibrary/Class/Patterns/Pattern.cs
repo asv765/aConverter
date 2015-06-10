@@ -337,27 +337,27 @@ namespace aConverterClassLibrary
                     using (MySqlCommand oledbCommand = dbConn.CreateCommand())
                     {
                         // Считаем количество строк
-                        string query = this.Query.Replace('\r', ' ').Replace('\n', ' ').Trim();
-                        query = Regex.Replace(query, "(?I)(?<=^select).*?(?=from)", " 0 ");
-                        query = query + " INTO CURSOR Q1";
-                        oledbCommand.CommandText = String.Format("EXECSCRIPT('{0}\rRETURN RECCOUNT()')", query);
+                        //string query = this.Query.Replace('\r', ' ').Replace('\n', ' ').Trim();
+                        //query = Regex.Replace(query, "(?I)(?<=^select).*?(?=from)", " 0 ");
+                        //query = query + " INTO CURSOR Q1";
+                        //oledbCommand.CommandText = String.Format("EXECSCRIPT('{0}\rRETURN RECCOUNT()')", query);
                         int count = -1;
-                        try
-                        {
-                            count = Convert.ToInt32(oledbCommand.ExecuteScalar());
-                            if (count == 0)
-                            {
-                                if (onCounted != null) onCounted(1);
-                                if (onIterate != null) onIterate();
-                                return;
-                            }
-                            else
-                                if (onCounted != null) onCounted(count);
-                        }
-                        catch
-                        {
+                        //try
+                        //{
+                        //    count = Convert.ToInt32(oledbCommand.ExecuteScalar());
+                        //    if (count == 0)
+                        //    {
+                        //        if (onCounted != null) onCounted(1);
+                        //        if (onIterate != null) onIterate();
+                        //        return;
+                        //    }
+                        //    else
+                        //        if (onCounted != null) onCounted(count);
+                        //}
+                        //catch
+                        //{
                             if (onCounted != null) onCounted(1);
-                        }
+                        //}
 
                         oledbCommand.CommandText = this.Query;
                         MySqlDataReader dr = oledbCommand.ExecuteReader();

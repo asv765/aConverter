@@ -16,7 +16,7 @@ namespace aConverterClassLibrary
             missingValues = AMissingValues;
             this.IsTerminating = false;
 
-            Statistic ss = new DbfStatistic("Записи об улицах",
+            Statistic ss = new MySQLStatistic("Записи об улицах",
                 "SELECT UlicaKod, TownsKod, Max(UlicaName) as UlicaName, Count(*) FROM ABONENT GROUP BY UlicaKod, TownsKod",
                 null);
             StatisticSets.Add(ss);

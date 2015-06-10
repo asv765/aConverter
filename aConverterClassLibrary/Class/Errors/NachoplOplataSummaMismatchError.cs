@@ -12,7 +12,7 @@ namespace aConverterClassLibrary
             this.ErrorName = "В некоторых строках NACHOPL.DBF значение в поле OPLATA не совпадает с суммой полученной по файлу OPLATA.DBF";
             this.IsTerminating = false;
 
-            Statistic ss = new DbfStatistic("Записи NACHOPL.DBF в которых значение в поле OPLATA не совпадает с суммой полученной по файлу OPLATA.DBF",
+            Statistic ss = new MySQLStatistic("Записи NACHOPL.DBF в которых значение в поле OPLATA не совпадает с суммой полученной по файлу OPLATA.DBF",
                "select n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata, SUM(o.summa) as summa " +
                                             "from nachopl n inner join oplata o on " +
                                             "    n.lshet+STR(n.servicecd,5)+STR(n.year,4)+STR(n.month,2) =  " +

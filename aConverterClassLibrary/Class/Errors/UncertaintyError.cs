@@ -22,7 +22,7 @@ namespace aConverterClassLibrary
             this.ErrorName = String.Format("Для некоторых одинаковых значений кодов {0}.{1} встречаются разные значения {0}.{2}",
                 tableName, fieldCD, fieldDescription);
 
-            Statistic ss = new DbfStatistic(String.Format("Список различных значений {0}.{2} для кода {0}.{1}",
+            Statistic ss = new MySQLStatistic(String.Format("Список различных значений {0}.{2} для кода {0}.{1}",
                 tableName, fieldCD, fieldDescription),
                 String.Format(
                 "select {1}, {2}, count(*) as cnt " +

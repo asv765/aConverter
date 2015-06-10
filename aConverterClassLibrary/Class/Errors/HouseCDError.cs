@@ -26,7 +26,7 @@ namespace aConverterClassLibrary
             this.ErrorName = String.Format("В таблице ABONENT.DBF для домов встречаются неуникальные значения HouseCD");
             this.IsTerminating = true;
 
-            Statistic ss = new DbfStatistic("Дома с неуникальнымми значениями HOUSECD", FindQuery, null);
+            Statistic ss = new MySQLStatistic("Дома с неуникальнымми значениями HOUSECD", FindQuery, null);
             StatisticSets.Add(ss);
         }
 

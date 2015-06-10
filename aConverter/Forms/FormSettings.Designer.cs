@@ -50,12 +50,14 @@
             this.buttonCheckConnection = new System.Windows.Forms.Button();
             this.textBoxFirebirdConnectionString = new System.Windows.Forms.TextBox();
             this.labelFirebirdConnectionString = new System.Windows.Forms.Label();
+            this.labelDestMySqlConnectionString = new System.Windows.Forms.Label();
+            this.textBoxDestMySqlConnectionString = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Location = new System.Drawing.Point(552, 537);
+            this.buttonSave.Location = new System.Drawing.Point(552, 571);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 0;
@@ -66,7 +68,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(633, 537);
+            this.buttonCancel.Location = new System.Drawing.Point(633, 571);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -77,7 +79,7 @@
             // labelCoverFileBodyPattern
             // 
             this.labelCoverFileBodyPattern.AutoSize = true;
-            this.labelCoverFileBodyPattern.Location = new System.Drawing.Point(12, 278);
+            this.labelCoverFileBodyPattern.Location = new System.Drawing.Point(12, 316);
             this.labelCoverFileBodyPattern.Name = "labelCoverFileBodyPattern";
             this.labelCoverFileBodyPattern.Size = new System.Drawing.Size(334, 13);
             this.labelCoverFileBodyPattern.TabIndex = 44;
@@ -87,7 +89,7 @@
             // 
             this.textBoxCoverFileBodyPattern.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxCoverFileBodyPattern.Location = new System.Drawing.Point(15, 294);
+            this.textBoxCoverFileBodyPattern.Location = new System.Drawing.Point(15, 332);
             this.textBoxCoverFileBodyPattern.Multiline = true;
             this.textBoxCoverFileBodyPattern.Name = "textBoxCoverFileBodyPattern";
             this.textBoxCoverFileBodyPattern.Size = new System.Drawing.Size(693, 196);
@@ -97,7 +99,7 @@
             // 
             this.textBoxGeneratedFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxGeneratedFilePath.Location = new System.Drawing.Point(15, 508);
+            this.textBoxGeneratedFilePath.Location = new System.Drawing.Point(15, 546);
             this.textBoxGeneratedFilePath.Name = "textBoxGeneratedFilePath";
             this.textBoxGeneratedFilePath.Size = new System.Drawing.Size(690, 20);
             this.textBoxGeneratedFilePath.TabIndex = 42;
@@ -105,7 +107,7 @@
             // labelGeneratedFilePath
             // 
             this.labelGeneratedFilePath.AutoSize = true;
-            this.labelGeneratedFilePath.Location = new System.Drawing.Point(12, 493);
+            this.labelGeneratedFilePath.Location = new System.Drawing.Point(12, 531);
             this.labelGeneratedFilePath.Name = "labelGeneratedFilePath";
             this.labelGeneratedFilePath.Size = new System.Drawing.Size(172, 13);
             this.labelGeneratedFilePath.TabIndex = 41;
@@ -132,7 +134,7 @@
             // labelConvertPath
             // 
             this.labelConvertPath.AutoSize = true;
-            this.labelConvertPath.Location = new System.Drawing.Point(12, 234);
+            this.labelConvertPath.Location = new System.Drawing.Point(12, 272);
             this.labelConvertPath.Name = "labelConvertPath";
             this.labelConvertPath.Size = new System.Drawing.Size(156, 13);
             this.labelConvertPath.TabIndex = 38;
@@ -142,7 +144,7 @@
             // 
             this.textBoxConvertPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxConvertPath.Location = new System.Drawing.Point(15, 250);
+            this.textBoxConvertPath.Location = new System.Drawing.Point(15, 288);
             this.textBoxConvertPath.Name = "textBoxConvertPath";
             this.textBoxConvertPath.Size = new System.Drawing.Size(693, 20);
             this.textBoxConvertPath.TabIndex = 36;
@@ -151,7 +153,7 @@
             // 
             this.textBoxPatternsPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPatternsPath.Location = new System.Drawing.Point(15, 211);
+            this.textBoxPatternsPath.Location = new System.Drawing.Point(15, 249);
             this.textBoxPatternsPath.Name = "textBoxPatternsPath";
             this.textBoxPatternsPath.Size = new System.Drawing.Size(693, 20);
             this.textBoxPatternsPath.TabIndex = 37;
@@ -159,7 +161,7 @@
             // labelPatternsPath
             // 
             this.labelPatternsPath.AutoSize = true;
-            this.labelPatternsPath.Location = new System.Drawing.Point(12, 195);
+            this.labelPatternsPath.Location = new System.Drawing.Point(12, 233);
             this.labelPatternsPath.Name = "labelPatternsPath";
             this.labelPatternsPath.Size = new System.Drawing.Size(98, 13);
             this.labelPatternsPath.TabIndex = 35;
@@ -233,9 +235,9 @@
             this.labelDestDBFFilePath.AutoSize = true;
             this.labelDestDBFFilePath.Location = new System.Drawing.Point(12, 156);
             this.labelDestDBFFilePath.Name = "labelDestDBFFilePath";
-            this.labelDestDBFFilePath.Size = new System.Drawing.Size(315, 13);
+            this.labelDestDBFFilePath.Size = new System.Drawing.Size(339, 13);
             this.labelDestDBFFilePath.TabIndex = 28;
-            this.labelDestDBFFilePath.Text = "Путь к промежуточным (типовым) файлам для конвертации:";
+            this.labelDestDBFFilePath.Text = "Путь к промежуточным (типовым) DBF-файлам для конвертации:";
             // 
             // buttonCheckConnection
             // 
@@ -267,11 +269,29 @@
             this.labelFirebirdConnectionString.TabIndex = 25;
             this.labelFirebirdConnectionString.Text = "Строка подключения к БД Firebird:";
             // 
+            // labelDestMySqlConnectionString
+            // 
+            this.labelDestMySqlConnectionString.AutoSize = true;
+            this.labelDestMySqlConnectionString.Location = new System.Drawing.Point(12, 195);
+            this.labelDestMySqlConnectionString.Name = "labelDestMySqlConnectionString";
+            this.labelDestMySqlConnectionString.Size = new System.Drawing.Size(272, 13);
+            this.labelDestMySqlConnectionString.TabIndex = 28;
+            this.labelDestMySqlConnectionString.Text = "Строка подключения к промежуточной MySQL-базе:";
+            // 
+            // textBoxDestMySqlConnectionString
+            // 
+            this.textBoxDestMySqlConnectionString.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDestMySqlConnectionString.Location = new System.Drawing.Point(15, 211);
+            this.textBoxDestMySqlConnectionString.Name = "textBoxDestMySqlConnectionString";
+            this.textBoxDestMySqlConnectionString.Size = new System.Drawing.Size(693, 20);
+            this.textBoxDestMySqlConnectionString.TabIndex = 29;
+            // 
             // FormSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(720, 572);
+            this.ClientSize = new System.Drawing.Size(720, 606);
             this.Controls.Add(this.labelCoverFileBodyPattern);
             this.Controls.Add(this.textBoxCoverFileBodyPattern);
             this.Controls.Add(this.textBoxGeneratedFilePath);
@@ -287,7 +307,9 @@
             this.Controls.Add(this.buttonDeleteSettingsCase);
             this.Controls.Add(this.labelSettingsCase);
             this.Controls.Add(this.comboBoxSettingsCase);
+            this.Controls.Add(this.textBoxDestMySqlConnectionString);
             this.Controls.Add(this.textBoxDestDBFFilePath);
+            this.Controls.Add(this.labelDestMySqlConnectionString);
             this.Controls.Add(this.labelDestDBFFilePath);
             this.Controls.Add(this.buttonCheckConnection);
             this.Controls.Add(this.textBoxFirebirdConnectionString);
@@ -326,5 +348,7 @@
         private System.Windows.Forms.Button buttonCheckConnection;
         private System.Windows.Forms.TextBox textBoxFirebirdConnectionString;
         private System.Windows.Forms.Label labelFirebirdConnectionString;
+        private System.Windows.Forms.Label labelDestMySqlConnectionString;
+        private System.Windows.Forms.TextBox textBoxDestMySqlConnectionString;
     }
 }

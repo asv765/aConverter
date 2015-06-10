@@ -23,9 +23,13 @@ namespace aConverterClassLibrary
             this.foreignTable = ForeighnTable;
             this.foreignKey = ForeignKey;
 
-            Statistic ss = new DbfStatistic(String.Format("Записи таблицы {0}, поле {1} которой не расшифровывается в {2}.{3}", PrimaryTable, PrimaryKey, ForeighnTable, ForeignKey),
-                String.Format("SELECT * FROM {0} WHERE {0}.{1} NOT IN (SELECT {2}.{3} FROM {2})", PrimaryTable, PrimaryKey, ForeighnTable, ForeignKey),
-                null);
+            //Statistic ss = new DbfStatistic(String.Format("Записи таблицы {0}, поле {1} которой не расшифровывается в {2}.{3}", PrimaryTable, PrimaryKey, ForeighnTable, ForeignKey),
+            //    String.Format("SELECT * FROM {0} WHERE {0}.{1} NOT IN (SELECT {2}.{3} FROM {2})", PrimaryTable, PrimaryKey, ForeighnTable, ForeignKey),
+            //    null);
+            Statistic ss = new MySQLStatistic(String.Format("Записи таблицы {0}, поле {1} которой не расшифровывается в {2}.{3}", PrimaryTable, PrimaryKey, ForeighnTable, ForeignKey),
+                            String.Format("SELECT * FROM {0} WHERE {0}.{1} NOT IN (SELECT {2}.{3} FROM {2})", PrimaryTable, PrimaryKey, ForeighnTable, ForeignKey),
+                            null);
+            
             StatisticSets.Add(ss);
 
             this.IsTerminating = false;

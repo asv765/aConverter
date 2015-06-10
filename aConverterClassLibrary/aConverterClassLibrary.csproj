@@ -61,6 +61,9 @@
     <Reference Include="DbfClassLibrary">
       <HintPath>..\lib\DbfClassLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=3.0.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\FirebirdSql.Data.FirebirdClient.dll</HintPath>
@@ -69,7 +72,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.5\Assemblies\v4.0\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MySqlBulkCopy">
+      <HintPath>..\lib\MySqlBulkCopy.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
@@ -98,7 +105,7 @@
     <Compile Include="Class\CheckCases\FioCheckCase.cs" />
     <Compile Include="Class\CheckCases\HouseCDCheckCase.cs" />
     <Compile Include="Class\CheckCases\InternalForeighnKeyCheckCase.cs" />
-    <Compile Include="Class\CheckCases\KoneksiMariaDB.cs" />
+    <Compile Include="Class\CheckCases\MariaDBConnection.cs" />
     <Compile Include="Class\CheckCases\MainOrganizationCheckCase.cs" />
     <Compile Include="Class\CheckCases\NachoplCalculationCheckCase.cs" />
     <Compile Include="Class\CheckCases\NachoplNachCheckCase1.cs" />
@@ -199,6 +206,7 @@
     <Compile Include="Class\QualityParamsParser.cs" />
     <Compile Include="Class\Statistic\DbfStatistic.cs" />
     <Compile Include="Class\Statistic\FdbStatistic.cs" />
+    <Compile Include="Class\Statistic\MySQLStatistic.cs" />
     <Compile Include="Class\Statistic\Statistic.cs" />
     <Compile Include="Class\Utils\aConverter_Utils.cs" />
     <Compile Include="RecordsEDM\MariadbEDM.Designer.cs">
@@ -207,6 +215,7 @@
       <DependentUpon>MariadbEDM.edmx</DependentUpon>
     </Compile>
     <Compile Include="RecordsEDM\PartialNachoplRecord.cs" />
+    <Compile Include="RecordsEDM\PartialNachRecord.cs" />
     <Compile Include="RecordsEDM\Utils\AbonentRecordUtils.cs" />
     <Compile Include="RecordsEDM\Utils\CharsRecordUtils.cs" />
     <Compile Include="RecordsEDM\Utils\CntrsindRecordUtils.cs" />
@@ -269,6 +278,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
+    <None Include="packages.config" />
     <None Include="RecordsEDM\MariadbEDM.edmx.diagram">
       <DependentUpon>MariadbEDM.edmx</DependentUpon>
     </None>
@@ -281,6 +291,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Class\CheckCasesNew\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,7 +12,7 @@ namespace aConverterClassLibrary
             this.ErrorName = "В файле OPLATA.DBF есть записи с таким лицевым счетом, месяцем и услугой, для которых отсутствует запись в NACHOPL.DBF";
             this.IsTerminating = false;
 
-            Statistic ss = new DbfStatistic("Записи OPLATA.DBF с ненулевой суммой, для которых отсутствует соответствующая запись в NACHOPL.DBF",
+            Statistic ss = new MySQLStatistic("Записи OPLATA.DBF с ненулевой суммой, для которых отсутствует соответствующая запись в NACHOPL.DBF",
                 "select * " +
                         "from oplata o " +
                         "where o.Summa <> 0  AND " + 

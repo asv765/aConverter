@@ -16,7 +16,7 @@ namespace aConverterClassLibrary
 
             List<string> rl = new List<string>();
             rl.Add("LSHET;Лицевой счет");
-            Statistic ss = new DbfStatistic("Записи с ошибкой в арифметике в таблице NACHOPL.DBF", 
+            Statistic ss = new MySQLStatistic("Записи с ошибкой в арифметике в таблице NACHOPL.DBF", 
                 "SELECT * FROM NACHOPL WHERE EDEBET <> (BDEBET + FNATH + PROCHL - OPLATA)",
                 rl);
             StatisticSets.Add(ss);

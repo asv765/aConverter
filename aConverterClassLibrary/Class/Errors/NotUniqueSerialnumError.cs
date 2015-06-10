@@ -12,7 +12,7 @@ namespace aConverterClassLibrary
             this.ErrorName = "В таблице COUNTERS.DBF встречаются не уникальные идентификаторы счетчиков (Counterid)";
             this.IsTerminating = true;
 
-            Statistic ss = new DbfStatistic("Задвоенные серийные номера",
+            Statistic ss = new MySQLStatistic("Задвоенные серийные номера",
                 "select counterid, count(*) from counters group by counterid having count(*) > 1",
                 null);
             StatisticSets.Add(ss);

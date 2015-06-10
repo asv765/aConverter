@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using DbfClassLibrary;
-using System.Windows.Forms;
-using System.Text;
-
-
-
-
-
+using System.Data;
+using System.Data.Objects;
+using System.Globalization;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary.RecordsEDM
 {
@@ -33,10 +29,6 @@ namespace aConverterClassLibrary.RecordsEDM
             return storedNachopl;
         }
     }
-
-
-
-   
 
     public partial class nachopl
     {
@@ -134,8 +126,9 @@ namespace aConverterClassLibrary.RecordsEDM
         /// <param name="month"></param>
         /// <param name="year"></param>
         /// <param name="servicecd"></param>
+        /// <param name="servicename"></param>
         /// <returns></returns>
-        private nachopl GetActiveNachoplRecord(string lshet, int month, int year, long servicecd)
+        private nachopl GetActiveNachoplRecord(string lshet, int month, int year, long servicecd, string servicename)
         {
             var noks = new NachoplKeySet()
             {
@@ -149,6 +142,7 @@ namespace aConverterClassLibrary.RecordsEDM
             if (!NachoplRecords.TryGetValue(noks, out nr))
             {
                 nr = nachopl.CreateFromKeySet(noks);
+                nr.SERVICENAM = servicename;
                 NachoplRecords.Add(noks, nr);
             }
 
@@ -161,11 +155,11 @@ namespace aConverterClassLibrary.RecordsEDM
         public void RegisterNach(nach defaultNachRecord, string lshet, int month, int year, decimal fnath, decimal prochl,
             DateTime dateVv, string documentcd)
         {
-            NachRecords.Add(new nach()
+            var nr = new nach()
             {
                 TYPE = defaultNachRecord.TYPE,
                 VOLUME = defaultNachRecord.VOLUME,
-                REGIMCD = 10,
+                REGIMCD = defaultNachRecord.REGIMCD,
                 REGIMNAME = defaultNachRecord.REGIMNAME,
                 SERVICECD = defaultNachRecord.SERVICECD,
                 SERVICENAM = defaultNachRecord.SERVICENAM,
@@ -176,18 +170,10 @@ namespace aConverterClassLibrary.RecordsEDM
                 MONTH2 = month,
                 YEAR = year,
                 YEAR2 = year,
-                DATE_VV = dateVv
-            });
-            nach nr = defaultNachRecord;
-            //var nr = (nach)defaultNachRecord;
-            nr.LSHET = lshet;
-            nr.FNATH = fnath;
-            nr.PROCHL = prochl;
-            nr.MONTH = nr.MONTH2 = month;
-            nr.YEAR = nr.YEAR2 = year;
-            nr.DATE_VV = dateVv;
-            nr.DOCUMENTCD = documentcd;           
-            //NachRecords.Add(nr);
+                DATE_VV = dateVv,
+                DOCUMENTCD = documentcd
+            };
+            NachRecords.Add(nr);
             UpdateNachoplDicByNachRecord(nr);
         }
 
@@ -196,7 +182,8 @@ namespace aConverterClassLibrary.RecordsEDM
             var nr = GetActiveNachoplRecord(nachRecord.LSHET,
                 nachRecord.DATE_VV.Month,
                 nachRecord.DATE_VV.Year,
-                nachRecord.SERVICECD);
+                nachRecord.SERVICECD,
+                nachRecord.SERVICENAM);
 
             nr.FNATH += nachRecord.FNATH;
             nr.PROCHL += nachRecord.PROCHL;
@@ -211,12 +198,12 @@ namespace aConverterClassLibrary.RecordsEDM
         /// </summary>
         public void RegisterOplata(oplata defaultOplataRecord, string lshet, int month, int year, decimal summa, DateTime date, DateTime dateVv, string documentcd)
         {
-            OplataRecords.Add(new oplata()
+            var or = new oplata()
             {
                 SERVICECD = defaultOplataRecord.SERVICECD,
                 SERVICENAM = defaultOplataRecord.SERVICENAM,
                 SOURCECD = defaultOplataRecord.SOURCECD,
-                SOURCENAME= defaultOplataRecord.SOURCENAME,
+                SOURCENAME = defaultOplataRecord.SOURCENAME,
                 LSHET = lshet,
                 SUMMA = summa,
                 MONTH = month,
@@ -224,18 +211,8 @@ namespace aConverterClassLibrary.RecordsEDM
                 DATE = date,
                 DATE_VV = dateVv,
                 DOCUMENTCD = documentcd
-            });            
-            
-            oplata or = defaultOplataRecord;
-            //var or = (oplata)defaultOplataRecord;
-            or.LSHET = lshet;
-            or.SUMMA = summa;
-            or.MONTH = month;
-            or.YEAR = year;
-            or.DATE = date;
-            or.DATE_VV = dateVv;
-            or.DOCUMENTCD = documentcd;
-            //OplataRecords.Add(or);
+            };
+            OplataRecords.Add(or);
             UpdateNachoplDicByOplataRecord(or);
         }
 
@@ -244,7 +221,8 @@ namespace aConverterClassLibrary.RecordsEDM
             var nr = GetActiveNachoplRecord(oplataRecord.LSHET,
                 oplataRecord.DATE_VV.Month,
                 oplataRecord.DATE_VV.Year,
-                oplataRecord.SERVICECD);
+                oplataRecord.SERVICECD,
+                oplataRecord.SERVICENAM);
 
             nr.OPLATA += oplataRecord.SUMMA;
             if (_saldoCorrectionType == NachoplCorrectionType.Пересчитать_сальдо_на_конец)
@@ -256,9 +234,9 @@ namespace aConverterClassLibrary.RecordsEDM
         /// <summary>
         /// Зарегистрировать сальдо на начало
         /// </summary>
-        public void RegisterBeginSaldo(string lshet, int month, int year, int servicecd, decimal saldo)
+        public void RegisterBeginSaldo(string lshet, int month, int year, int servicecd, string servicename, decimal saldo)
         {
-            var nr = GetActiveNachoplRecord(lshet, month, year, servicecd);
+            var nr = GetActiveNachoplRecord(lshet, month, year, servicecd, servicename);
             nr.BDEBET += saldo;
             if (_saldoCorrectionType == NachoplCorrectionType.Пересчитать_сальдо_на_конец)
                 nr.EDEBET = nr.CalculatedEdebet;
@@ -267,9 +245,9 @@ namespace aConverterClassLibrary.RecordsEDM
         /// <summary>
         /// Зарегистрировать сальдо на конец
         /// </summary>
-        public void RegisterEndSaldo(string lshet, int month, int year, int servicecd, decimal saldo)
+        public void RegisterEndSaldo(string lshet, int month, int year, int servicecd, string servicename, decimal saldo)
         {
-            var nr = GetActiveNachoplRecord(lshet, month, year, servicecd);
+            var nr = GetActiveNachoplRecord(lshet, month, year, servicecd, servicename);
             nr.EDEBET += saldo;
             if (_saldoCorrectionType == NachoplCorrectionType.Пересчитать_сальдо_на_начало)
                 nr.BDEBET = nr.CalculatedBdebet;
@@ -278,127 +256,79 @@ namespace aConverterClassLibrary.RecordsEDM
         /// <summary>
         /// Сохранить данные из NachoplRecords----------------------------------------------------------16
         /// </summary>
-        /// <param name="tableManager"></param>
-        public void SaveNachoplRecords(TableManager tableManager)
+        public void SaveNachoplRecords(string connectionString)
         {
-            using(ConverterdbEntities testcontext = new ConverterdbEntities())
-            {
+            var context = new ConverterdbEntities(connectionString);
+            int i = 0;
             foreach (nachopl nor in NachoplRecords.Values)
-            {                
-                try
+            {
+                if ((++i%1000) == 0)
                 {
-                    nachopl nachislopl = new nachopl
-                    {
-                        LSHET = String.IsNullOrEmpty(nor.LSHET) ? "" : nor.LSHET.Trim(),
-                        MONTH = nor.MONTH,
-                        YEAR = nor.YEAR,
-                        MONTH2 = nor.MONTH2,
-                        YEAR2 = nor.YEAR2,
-                        BDEBET = nor.BDEBET,
-                        FNATH = nor.FNATH,
-                        PROCHL = nor.PROCHL,
-                        OPLATA = nor.OPLATA,
-                        EDEBET = nor.EDEBET,
-                        SERVICECD = nor.SERVICECD,
-                        SERVICENAM = String.IsNullOrEmpty(nor.SERVICENAM) ? "" : nor.SERVICENAM.Trim()
-                    };
-                    testcontext.nachopls.AddObject(nachislopl);
+                    context.SaveChanges();
+                    context.Dispose();
+                    context = new ConverterdbEntities(connectionString);
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.InnerException.ToString());
-                }
+                context.nachopls.AddObject(nor);
             }
-            testcontext.SaveChanges();
-        }
+            context.SaveChanges();
         }
 
         /// <summary>
         /// Сохранить данные из NachRecords-------------------------------------------------------------15
         /// </summary>
-        public void SaveNachRecords(TableManager tableManager)
+        public void SaveNachRecords(string connectionString)
         {
-            using (ConverterdbEntities testcontext = new ConverterdbEntities()) 
+            //var context = new ConverterdbEntities(connectionString);
+            //int step = 1000;
+            //var cloneList = new List<nach>();
+            //for (int i = 0; i < NachRecords.Count; i++)
+            //{
+            //    nach cloneNach = NachRecords[i].Clone();
+            //    cloneList.Add(cloneNach);
+            //    context.naches.AddObject(cloneNach);
+            //    if (((i+1) % step) == 0)
+            //    {
+            //        context.SaveChanges(SaveOptions.AcceptAllChangesAfterSave);
+            //        cloneList.Clear();
+            //        cloneList = new List<nach>();
+            //        var entityConnection = context.Connection;
+            //        entityConnection.Dispose();
+            //        context.Dispose();
+            //        context = new ConverterdbEntities(connectionString);
+            //    }
+            //}
+            //context.SaveChanges();
+            using (MySqlConnection msconn = new MySqlConnection(aConverter_RootSettings.DestMySqlConnectionString))
             {
-                foreach (nach or in NachRecords)
+                msconn.Open();
+                var msc = new MySqlCommand {Connection = msconn};
+                foreach (nach nachRecord in NachRecords)
                 {
-                    //tableManager.InsertRecord(or.GetInsertScript());
-                    try
-                    {
-                       // string myString = "Антон";
-                        //byte[] bytes = Encoding.Default.GetBytes(myString);
-                        nach nachisl = new nach
-                        {
-                            LSHET = String.IsNullOrEmpty(or.LSHET) ? "" : or.LSHET.Trim(),
-                            DOCUMENTCD = String.IsNullOrEmpty(or.DOCUMENTCD) ? "" : or.DOCUMENTCD.Trim(),
-                            MONTH = or.MONTH,
-                            YEAR = or.YEAR,
-                            MONTH2 = or.MONTH2,
-                            YEAR2 = or.YEAR2,
-                            FNATH = or.FNATH,
-                            PROCHL = or.PROCHL,
-                            VOLUME = or.VOLUME,
-                            REGIMCD = or.REGIMCD,
-                            //REGIMNAME = Encoding.UTF8.GetString(bytes),
-                            REGIMNAME = String.IsNullOrEmpty(or.REGIMNAME) ? "" : or.REGIMNAME.Trim(),                            
-                            SERVICECD = or.SERVICECD,
-                            SERVICENAM = String.IsNullOrEmpty(or.SERVICENAM) ? "" : or.SERVICENAM.Trim(),
-                            DATE_VV = or.DATE_VV,
-                            TYPE = or.TYPE,
-                            DOCNAME = String.IsNullOrEmpty(or.DOCNAME) ? "" : or.DOCNAME.Trim(),
-                            DOCNUMBER = String.IsNullOrEmpty(or.DOCNUMBER) ? "" : or.DOCNUMBER.Trim(),
-                            DOCDATE = or.DOCDATE
-                        };
-                        testcontext.naches.AddObject(nachisl);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.InnerException.ToString());
-                    }
+                    msc.CommandText = nachRecord.InsertCommand;
+                    msc.ExecuteNonQuery();
                 }
-                testcontext.SaveChanges();
             }
         }
-
 
         /// <summary>
         /// Сохранить данные из OplataRecords--------------------------------------------------------17
         /// </summary>
-        public void SaveOplataRecords(TableManager tableManager)
+        public void SaveOplataRecords(string connectionString)
         {
-            using (ConverterdbEntities testcontext = new ConverterdbEntities())
+            var context = new ConverterdbEntities(connectionString);
+            int i = 1;
+            foreach (oplata or in OplataRecords)
             {
-                foreach (oplata or in OplataRecords)
+                if ((++i%1000) == 0)
                 {
-                    //tableManager.InsertRecord(or.GetInsertScript());
-                    try
-                    {
-                        oplata oplat = new oplata
-                        {
-                            LSHET = String.IsNullOrEmpty(or.LSHET) ? "" : or.LSHET.Trim(),
-                            DOCUMENTCD = String.IsNullOrEmpty(or.DOCUMENTCD) ? "" : or.DOCUMENTCD.Trim(),
-                            MONTH = or.MONTH,
-                            YEAR = or.YEAR,
-                            SUMMA = or.SUMMA,
-                            DATE = or.DATE,
-                            DATE_VV = or.DATE_VV,
-                            DATETIND = or.DATETIND,
-                            SOURCECD = or.SOURCECD,
-                            SOURCENAME = String.IsNullOrEmpty(or.SOURCENAME) ? "" : or.SOURCENAME.Trim(),
-                            SERVICECD = or.SERVICECD,
-                            SERVICENAM = String.IsNullOrEmpty(or.SERVICENAM) ? "" : or.SERVICENAM.Trim(),
-                            PRIM_ = String.IsNullOrEmpty(or.PRIM_) ? "" : or.PRIM_.Trim()
-                        };
-                        testcontext.oplatas.AddObject(oplat);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.InnerException.ToString());
-                    }
+                    context.SaveChanges();
+                    context.Dispose();
+                    context = new ConverterdbEntities(connectionString);
                 }
-                testcontext.SaveChanges();
+                context.oplatas.AddObject(or);
             }
-        }        
+            context.SaveChanges();
+        }
     }
 }
 

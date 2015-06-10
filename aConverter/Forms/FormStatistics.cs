@@ -112,8 +112,13 @@ namespace aConverter.Forms
             }
             else if (toolStripComboBoxSelectType1.SelectedIndex == 2)
             {
+                ies = ies.Where(s => s is MySQLStatistic);
+            }
+            else if (toolStripComboBoxSelectType1.SelectedIndex == 2)
+            {
                 ies = ies.Where(s => s is FdbStatistic);
             }
+
 
             if (toolStripComboBoxSelectType2.SelectedIndex == 1)
             {

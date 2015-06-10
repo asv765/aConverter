@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.OleDb;
+using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -33,16 +34,17 @@ namespace aConverterClassLibrary
             this.Result = CorrectionCaseStatus.Корректировка_выполнена_успешно;
             this.Message = "Корректировка завершилась успешно";
 
-            using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
+            using (MySqlConnection dbConn = new MySqlConnection(aConverter_RootSettings.DestMySqlConnectionString))
             {
                 dbConn.Open();
-                using (OleDbCommand command = dbConn.CreateCommand())
+                using (MySqlCommand command = dbConn.CreateCommand())
                 {
                     try
                     {
                         command.CommandText = String.Format(
                             "DELETE FROM {1} WHERE {0} NOT IN (SELECT {2} FROM {3})",
                             foreignKey, foreignTable, primaryKey, primaryTable);
+                        command.CommandTimeout = 0;
                         command.ExecuteNonQuery();
                     }
                     catch(Exception ex)

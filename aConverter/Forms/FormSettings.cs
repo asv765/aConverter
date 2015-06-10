@@ -43,6 +43,7 @@ namespace aConverter.Forms
             aConverter_RootSettings.FirebirdStringConnection = textBoxFirebirdConnectionString.Text;
             aConverter_RootSettings.SourceDBFFilePath = textBoxSourceDBFFilePath.Text;
             aConverter_RootSettings.DestDBFFilePath = textBoxDestDBFFilePath.Text;
+            aConverter_RootSettings.DestMySqlConnectionString = textBoxDestMySqlConnectionString.Text;
             aConverter_RootSettings.PatternsPath = textBoxPatternsPath.Text;
             aConverter_RootSettings.ConvertPath = textBoxConvertPath.Text;
             //aConverter_RootSettings.ConvertPath = @"d:\GitDiplom\aConverter\aConverterClassLibrary\bin\Debug\";
@@ -66,6 +67,7 @@ namespace aConverter.Forms
             textBoxSourceDBFFilePath.Text = aConverter_RootSettings.SourceDBFFilePath; // Путь к DBF файлам заказчика
             textBoxCoverFileBodyPattern.Text = aConverter_RootSettings.CoverFileBodyPattern; 
             textBoxDestDBFFilePath.Text = aConverter_RootSettings.DestDBFFilePath; // Путь к промежуточным типовым файлам для конвертации
+            textBoxDestMySqlConnectionString.Text = aConverter_RootSettings.DestMySqlConnectionString; // Путь к промежуточным MySQL базе данных
             textBoxPatternsPath.Text = aConverter_RootSettings.PatternsPath; // Путь к шаблонам
             textBoxConvertPath.Text = aConverter_RootSettings.ConvertPath; // Путь к модулям импорта
         }

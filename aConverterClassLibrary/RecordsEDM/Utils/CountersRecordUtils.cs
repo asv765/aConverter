@@ -15,4 +15,22 @@ namespace aConverterClassLibrary.RecordsEDM
         Cчетчик_5 = 5,
         Cчетчик_6 = 6
     }
+
+
+    //public class CountersRecordUtils
+    //{
+    //    public static CounterSetupPlace GetByString(string place)
+    //    {
+    //        string placeToFind = place.ToUpper();
+    //        if (place.Contains("САНУЗЕЛ") || place.Contains("ТУАЛЕТ") || place.Contains("ВАННАЯ"))
+    //        {
+    //            return CounterSetupPlace.Ванна_туалет;
+    //        }
+    //        else if (place.Contains("САНУЗЕЛ") || place.Contains("ТУАЛЕТ") || place.Contains("ВАННАЯ"))
+    //        {
+
+    //        }
+
+    //    }
+    //}
 }

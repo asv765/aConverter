@@ -22,8 +22,8 @@ namespace aConverterClassLibrary
             this.Result = CheckCaseStatus.Ошибок_не_выявлено;
             this.ErrorList.Clear();
 
-            KoneksiMariaDB smon = new KoneksiMariaDB();
-            MySqlConnection dbConn = smon.mon;
+            MariaDbConnection smon = new MariaDbConnection(aConverter_RootSettings.DestMySqlConnectionString);
+            MySqlConnection dbConn = smon.Connection;
             //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
             using (dbConn)
 
@@ -79,26 +79,11 @@ namespace aConverterClassLibrary
                     //    "    o.lshet+STR(o.servicecd,5)+STR(YEAR(o.date_vv),4)+STR(MONTH(o.date_vv),2)  " +
                     //    "group BY n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata " +
                     //    "HAVING n.oplata <> SUM(o.summa)";
-                    command.CommandText = "alter table nachopl add index i1_lshet (lshet)";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "alter table nach add index i2_lshet (lshet)";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "alter table oplata add index i3_lshet (lshet)";
-                    command.ExecuteNonQuery();
 
                     command.CommandText = "select count(*)from nachopl n inner join oplata o on n.lshet = o.lshet and convert(n.servicecd,char) = convert(o.servicecd,char) and convert(n.year,char) = convert(YEAR(o.date_vv),char) and convert(n.month,char) = convert(MONTH(o.date_vv),char) group BY n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata HAVING n.oplata <> SUM(o.summa)";
-
+                    command.CommandTimeout = 0;
                     count2 = Convert.ToInt32(command.ExecuteScalar());
 
-                    command.CommandText = "DROP INDEX i1_lshet ON nachopl";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "DROP INDEX i2_lshet ON nach";
-                    command.ExecuteNonQuery();
-                    command.CommandText = "DROP INDEX i3_lshet ON oplata";
-                    command.ExecuteNonQuery();
-
-
-	
                     //dt = new DataTable();
                     //da = new OleDbDataAdapter(command);
                     //da.Fill(dt);

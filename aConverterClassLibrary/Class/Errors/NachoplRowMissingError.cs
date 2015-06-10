@@ -39,7 +39,7 @@ namespace aConverterClassLibrary
                 lshet, month, year, servicecd, servicename);
             this.IsTerminating = true;
 
-            Statistic ss = new DbfStatistic(
+            Statistic ss = new MySQLStatistic(
                 String.Format("История оплат/начислений для абонента {0} по услуге с кодом {1} ({2})", 
                     lshet, servicecd, servicename),
                 String.Format("SELECT * FROM NACHOPL WHERE lshet = '{0}' AND servicecd = {1} order by lshet, year, month",

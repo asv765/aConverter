@@ -16,7 +16,7 @@ namespace aConverterClassLibrary
             wrongValues = AWrongValues;
             this.IsTerminating = false;
 
-            Statistic ss = new DbfStatistic("Записи о групповых установках",
+            Statistic ss = new MySQLStatistic("Записи о групповых установках",
                 "SELECT CapCD, Max(CapName) as CapName, Count(*) as Cnt FROM ABONENT group by CapCd order by CapCD",
                 null);
             StatisticSets.Add(ss);

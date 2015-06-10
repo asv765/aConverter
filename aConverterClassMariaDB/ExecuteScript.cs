@@ -12,22 +12,20 @@ using System.Windows.Forms;
 namespace aConverterClassMariaDB
 {
     public class ExecuteScript
-    {     
-        public static void CreateDatabaseMariaDB()
+    {
+        public static void CreateDatabaseMariaDb(string databaseName, string server = "localhost", string user="root", string password = "masterkey", string port="3307")
         {
-            MySqlConnection mon = new MySqlConnection();
-            string StrKon = "server ='localhost';user id='root';password='das03071993';port='3307';database='converterdb'";
-            mon = new MySqlConnection(StrKon);          
-            try
-            {
-                //MySqlScript script = new MySqlScript(mon, File.ReadAllText(@"d:\GitDiplom\aConverter\aConverterClassMariaDB\scriptMariaDBnew.mysql"));
-                MySqlScript script = new MySqlScript(mon,aConverterClassMariaDB.Resource1.ScriptMariaDB);
-                script.Execute();                  
-            }
-            catch
-            {
-                MessageBox.Show("Error accessing resources!");
-            }                   
+            string connectionString = String.Format("server='{0}';user id='{1}';password='{2}';port='{3}';database='{4}'",
+                server,
+                user,
+                password,
+                port,
+                databaseName);
+            var mon = new MySqlConnection(connectionString);
+            string createDatabaseString = aConverterClassMariaDB.Resource1.ScriptMariaDB;
+            createDatabaseString = createDatabaseString.Replace("%databasename%", databaseName);
+            var script = new MySqlScript(mon, createDatabaseString);
+            script.Execute();                  
         }      
     }
 }

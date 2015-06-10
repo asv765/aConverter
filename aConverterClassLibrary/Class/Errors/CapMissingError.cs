@@ -18,19 +18,19 @@ namespace aConverterClassLibrary
 
             PossibleErrorParams.Add(ErrorParam.Код_марки_группового_счетчика_из_таблицы_COUNTERSTYPES);
 
-            Statistic ss = new DbfStatistic("Записи о групповых установках",
+            Statistic ss = new MySQLStatistic("Записи о групповых установках",
                 "SELECT CapCD, Max(CapName) as CapName, Count(*) as Cnt FROM ABONENT group by CapCd order by CapCd",
                 null);
             StatisticSets.Add(ss);
-            ss = new FdbStatistic("Таблица RESOURCECOUNTERS, записи с COUNTER_LEVEL = 1",
+            ss = new MySQLStatistic("Таблица RESOURCECOUNTERS, записи с COUNTER_LEVEL = 1",
                 "SELECT * FROM RESOURCECOUNTERS WHERE COUNTER_LEVEL = 1 ORDER BY KOD",
                 null);
             StatisticSets.Add(ss);
-            ss = new FdbStatistic("Таблица RESOURCECOUNTERS",
+            ss = new MySQLStatistic("Таблица RESOURCECOUNTERS",
                 "SELECT * FROM RESOURCECOUNTERS ORDER BY KOD",
                 null);
             StatisticSets.Add(ss);
-            ss = new FdbStatistic("Таблица COUNTERSTYPES",
+            ss = new MySQLStatistic("Таблица COUNTERSTYPES",
                 "SELECT * FROM COUNTERSTYPES ORDER BY KOD",
                 null);
             StatisticSets.Add(ss);

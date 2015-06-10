@@ -16,7 +16,7 @@ namespace aConverterClassLibrary
             missingValues = AMissingValues;
             this.IsTerminating = false;
 
-            Statistic ss = new DbfStatistic("Записи об источниках оплаты",
+            Statistic ss = new MySQLStatistic("Записи об источниках оплаты",
                 "SELECT SourceCD, Max(SourceName) as SourceName, Count(*) FROM OPLATA group by SourceCD",
                 null);
             StatisticSets.Add(ss);

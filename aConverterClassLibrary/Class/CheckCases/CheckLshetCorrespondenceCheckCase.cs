@@ -23,8 +23,8 @@ namespace aConverterClassLibrary
             this.ErrorList.Clear();
             int lshetLength = 0;
 
-            KoneksiMariaDB smon = new KoneksiMariaDB();
-            MySqlConnection dbConn = smon.mon;
+            MariaDbConnection smon = new MariaDbConnection(aConverter_RootSettings.DestMySqlConnectionString);
+            MySqlConnection dbConn = smon.Connection;
 
             //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
             using (dbConn)

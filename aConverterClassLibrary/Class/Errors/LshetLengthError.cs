@@ -13,7 +13,7 @@ namespace aConverterClassLibrary
                 minLength, maxLength);
             this.IsTerminating = true;
 
-            Statistic ss = new DbfStatistic("Файл ABONENT.DBF, длина лицевых счетов",
+            Statistic ss = new MySQLStatistic("Файл ABONENT.DBF, длина лицевых счетов",
                 "select LEN(ALLT(LSHET)) as len, ABONENT.LSHET from ABONENT order by 1",
                 null);
             StatisticSets.Add(ss);
