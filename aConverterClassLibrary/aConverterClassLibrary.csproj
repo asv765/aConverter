@@ -87,8 +87,25 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Telerik.OpenAccess, Version=2015.1.225.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.OpenAccess.35.Extensions, Version=2015.1.225.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RecordsDataAccessORM\ABONENT.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\ADDDCHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CHARVAL.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CITIZEN.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
     <Compile Include="Class\AbonentCover\AbonentCover.cs" />
     <Compile Include="Class\AbonentCover\CitizenScriptGenerator.cs" />
     <Compile Include="Class\AbonentCover\Document.cs" />
@@ -209,6 +226,59 @@
     <Compile Include="Class\Statistic\MySQLStatistic.cs" />
     <Compile Include="Class\Statistic\Statistic.cs" />
     <Compile Include="Class\Utils\aConverter_Utils.cs" />
+    <Compile Include="RecordsDataAccessORM\CNTRSIND.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\COUNTER.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\DOGOVOR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\EntitiesModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\EQUIPMENT.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\GCOUNTER.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\HADDCHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\LCHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\NACH.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\NACHOPL.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\OPLATA.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\PartialSUPPLNETRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PENI.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\PartialNACHOPLRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\SupplnetRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\Utils\AbonentRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\Utils\BufferEntitiesManager.cs" />
+    <Compile Include="RecordsDataAccessORM\Utils\CharsRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\Utils\CntrsindRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\Utils\CountersRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\Utils\LCharsRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\Utils\NachoplRecordUtils.cs" />
     <Compile Include="RecordsEDM\MariadbEDM.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -269,6 +339,9 @@
     <Compile Include="Records\Utils\LcharsRecordUtils.cs" />
     <Compile Include="Records\Utils\NachoplRecordUtils.cs" />
     <Compile Include="Records\Utils\SupplnetRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\SUPPLNET.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="RecordsEDM\MariadbEDM.edmx">
@@ -278,6 +351,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
+    <OpenAccessDeploy Include="RecordsDataAccessORM\EntitiesModel.rlinq">
+      <Generator>MetaModelCodeGenerator</Generator>
+      <LastGenOutput>EntitiesModel.cs</LastGenOutput>
+    </OpenAccessDeploy>
+    <None Include="RecordsDataAccessORM\EntitiesModel.rlinq.diagram">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="RecordsEDM\MariadbEDM.edmx.diagram">
       <DependentUpon>MariadbEDM.edmx</DependentUpon>
@@ -295,6 +375,64 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CNV_ABONENT_d.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CNV_ABONENT.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CNV_ADDDCHAR.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CNV_ADDDCHAR_d.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CNV_CHARS.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CNV_CHARS_d.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CNV_LCHARS.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CNV_LCHARS_d.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\CNV_CHARVALS.sql" />
+    <Content Include="Resources\CNV_CHARVALS_d.sql" />
+    <Content Include="Resources\CNV_CITIZENS.sql" />
+    <Content Include="Resources\CNV_CITIZENS_d.sql" />
+    <Content Include="Resources\CNV_CNTRSIND.sql" />
+    <Content Include="Resources\CNV_CNTRSIND_d.sql" />
+    <Content Include="Resources\CNV_COUNTERS.sql" />
+    <Content Include="Resources\CNV_COUNTERS_d.sql" />
+    <Content Include="Resources\CNV_DOGOVOR.sql" />
+    <Content Include="Resources\CNV_DOGOVOR_d.sql" />
+    <Content Include="Resources\CNV_EQUIPMENT.sql" />
+    <Content Include="Resources\CNV_EQUIPMENT_d.sql" />
+    <Content Include="Resources\CNV_GCOUNTER.sql" />
+    <Content Include="Resources\CNV_GCOUNTER_d.sql" />
+    <Content Include="Resources\CNV_HADDCHAR.sql" />
+    <Content Include="Resources\CNV_HADDCHAR_d.sql" />
+    <Content Include="Resources\CNV_NACH.sql" />
+    <Content Include="Resources\CNV_NACHOPL.sql" />
+    <Content Include="Resources\CNV_NACHOPL_d.sql" />
+    <Content Include="Resources\CNV_NACH_d.sql" />
+    <Content Include="Resources\CNV_OPLATA.sql" />
+    <Content Include="Resources\CNV_OPLATA_d.sql" />
+    <Content Include="Resources\CNV_PENI.sql" />
+    <Content Include="Resources\CNV_PENI_d.sql" />
+    <Content Include="Resources\CNV_SUPPLNET.sql" />
+    <Content Include="Resources\CNV_SUPPLNET_d.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -303,4 +441,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Condition="Exists('$(MSBuildExtensionsPath)\OpenAccess.targets')" Project="$(MSBuildExtensionsPath)\OpenAccess.targets" />
 </Project>

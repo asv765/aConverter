@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aConverter", "aConverter\aConverter.csproj", "{4E2D1A8E-E351-4F1A-A8DC-85FAD77B5216}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4EBFAE0B-1E77-427C-9A94-54EB2092A5D1} = {4EBFAE0B-1E77-427C-9A94-54EB2092A5D1}
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E} = {D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}
 		{784701E9-1903-4849-9CDC-94F4685F05A7} = {784701E9-1903-4849-9CDC-94F4685F05A7}
 	EndProjectSection
 EndProject
@@ -29,6 +30,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aConverterClassMariaDB", "aConverterClassMariaDB\aConverterClassMariaDB.csproj", "{0CB2E34C-82EB-4C1A-8A38-81D0DE02B20C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "032_RyagskTeplo", "032_RyagskTeplo\032_RyagskTeplo.csproj", "{4EBFAE0B-1E77-427C-9A94-54EB2092A5D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessModel", "DataAccessModel\DataAccessModel.csproj", "{C50145E6-A244-4F1F-B41F-90D1925B4A00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "033_YrupinskConvert", "033_YrupinskConvert\033_YrupinskConvert.csproj", "{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4DD34293-327E-4229-99BB-4952206592EC} = {4DD34293-327E-4229-99BB-4952206592EC}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,6 +143,30 @@ Global
 		{4EBFAE0B-1E77-427C-9A94-54EB2092A5D1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4EBFAE0B-1E77-427C-9A94-54EB2092A5D1}.Release|x64.ActiveCfg = Release|Any CPU
 		{4EBFAE0B-1E77-427C-9A94-54EB2092A5D1}.Release|x86.ActiveCfg = Release|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Release|x64.ActiveCfg = Release|Any CPU
+		{C50145E6-A244-4F1F-B41F-90D1925B4A00}.Release|x86.ActiveCfg = Release|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Release|x64.ActiveCfg = Release|Any CPU
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,6 +174,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{784701E9-1903-4849-9CDC-94F4685F05A7} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{4EBFAE0B-1E77-427C-9A94-54EB2092A5D1} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
+		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
