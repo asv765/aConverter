@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-using DbfClassLibrary;
 
 
 
@@ -17,8 +14,8 @@ namespace aConverterClassLibrary
     {
         public static int SettingsCaseId
         {
-            get { return getValue<int>(aConverter_RootSettings.SettingsFileName, "SettingsCaseId", -1); }// ??????????????????????????
-            set { setValue(aConverter_RootSettings.SettingsFileName, "SettingsCaseId", value); }
+            get { return GetValue<int>(aConverter_RootSettings.SettingsFileName, "SettingsCaseId", -1); }// ??????????????????????????
+            set { SetValue(aConverter_RootSettings.SettingsFileName, "SettingsCaseId", value); }
         }
 
         /// <summary>
@@ -45,77 +42,77 @@ namespace aConverterClassLibrary
         /// <summary>
         /// Путь к DBF-файлам, для которых будет генерироваться обертка
         /// </summary>
-        public static string SourceDBFFilePath
+        public static string SourceDbfFilePath
         {
             get
             {
                 if (SettingsCaseId == -1) return "";
                 List<SettingsCase> lsc = ReadSettingsCase();
-                string rv = lsc[SettingsCaseId].SourceDBFFilePath;
+                string rv = lsc[SettingsCaseId].SourceDbfFilePath;
                 return rv;
             }
             set 
             {
                 if (SettingsCaseId == -1) return;
                 List<SettingsCase> lsc = ReadSettingsCase();
-                lsc[SettingsCaseId].SourceDBFFilePath = value;
+                lsc[SettingsCaseId].SourceDbfFilePath = value;
                 WriteSettingsCase(lsc);
             }
         }
 
-        /// <summary>
-        /// Путь к DBF-файлам для импорта ?????????????????????????????????????????
-        /// </summary>
-        public static string DestDBFFilePath
-        {
-            get
-            {
-                // return @"E:\Misc\Разработка\aConverter_Data\006_Prohladny\Source\120615\Orig";
-                if (SettingsCaseId == -1) return "";
-                List<SettingsCase> lsc = ReadSettingsCase();
-                string rv = lsc[SettingsCaseId].DestDBFFilePath;
-                return rv;
-            }
-            set
-            {
-                if (SettingsCaseId == -1) return;
-                List<SettingsCase> lsc = ReadSettingsCase();
-                lsc[SettingsCaseId].DestDBFFilePath = value;
-                WriteSettingsCase(lsc);
-            }
-        }
+        ///// <summary>
+        ///// Путь к DBF-файлам для импорта ?????????????????????????????????????????
+        ///// </summary>
+        //public static string DestDBFFilePath
+        //{
+        //    get
+        //    {
+        //        // return @"E:\Misc\Разработка\aConverter_Data\006_Prohladny\Source\120615\Orig";
+        //        if (SettingsCaseId == -1) return "";
+        //        List<SettingsCase> lsc = ReadSettingsCase();
+        //        string rv = lsc[SettingsCaseId].DestDBFFilePath;
+        //        return rv;
+        //    }
+        //    set
+        //    {
+        //        if (SettingsCaseId == -1) return;
+        //        List<SettingsCase> lsc = ReadSettingsCase();
+        //        lsc[SettingsCaseId].DestDBFFilePath = value;
+        //        WriteSettingsCase(lsc);
+        //    }
+        //}
 
 
-        /// <summary>
-        /// Наименование промежуточной MySQL базы данных для конвертации
-        /// </summary>
-        public static string DestMySqlConnectionString
-        {
-            get
-            {
-                if (SettingsCaseId == -1) return "";
-                List<SettingsCase> lsc = ReadSettingsCase();
-                string rv = lsc[SettingsCaseId].DestMySqlConnectionString;
-                return rv;
-            }
-            set
-            {
-                if (SettingsCaseId == -1) return;
-                List<SettingsCase> lsc = ReadSettingsCase();
-                lsc[SettingsCaseId].DestMySqlConnectionString = value;
-                WriteSettingsCase(lsc);
-            }
-        }
+        ///// <summary>
+        ///// Наименование промежуточной MySQL базы данных для конвертации
+        ///// </summary>
+        //public static string DestMySqlConnectionString
+        //{
+        //    get
+        //    {
+        //        if (SettingsCaseId == -1) return "";
+        //        List<SettingsCase> lsc = ReadSettingsCase();
+        //        string rv = lsc[SettingsCaseId].DestMySqlConnectionString;
+        //        return rv;
+        //    }
+        //    set
+        //    {
+        //        if (SettingsCaseId == -1) return;
+        //        List<SettingsCase> lsc = ReadSettingsCase();
+        //        lsc[SettingsCaseId].DestMySqlConnectionString = value;
+        //        WriteSettingsCase(lsc);
+        //    }
+        //}
 
-        public static string DestMySqlDatabaseName
-        {
-            get
-            {
-                string cs = DestMySqlConnectionString;
-                Match m = Regex.Match(cs, @"(?<=database=').*(?=')");
-                return m.Success ? m.Value : "";
-            }
-        }
+        //public static string DestMySqlDatabaseName
+        //{
+        //    get
+        //    {
+        //        string cs = DestMySqlConnectionString;
+        //        Match m = Regex.Match(cs, @"(?<=database=').*(?=')");
+        //        return m.Success ? m.Value : "";
+        //    }
+        //}
 
         /// <summary>
         /// Путь к шаблонам для генерации скриптов
@@ -145,7 +142,7 @@ namespace aConverterClassLibrary
         {
             get
             {
-                if (SettingsCaseId == -1) return @"D:\GitDiplom\aConverter\029_Kandalaksha\bin\Debug\";
+                if (SettingsCaseId == -1) return "";
                 List<SettingsCase> lsc = ReadSettingsCase();
                 string rv = lsc[SettingsCaseId].ConvertPath;
                 return rv;
@@ -159,23 +156,23 @@ namespace aConverterClassLibrary
             }
         }
 
-        public static string DBFConnectionString
-        {
-            get
-            {
-                string rv = String.Format(TableManager.VFPOLEDBConnectionString, aConverter_RootSettings.DestDBFFilePath);
-                return rv;
-            }
-        }
+        //public static string DBFConnectionString
+        //{
+        //    get
+        //    {
+        //        string rv = String.Format(TableManager.VFPOLEDBConnectionString, aConverter_RootSettings.DestDBFFilePath);
+        //        return rv;
+        //    }
+        //}
 
         /// <summary>
         /// Шаблон для имени .cs файлов (%f - имя (без расширения) исходного DBF-файла)
         /// </summary>
-        //public static string CoverFileNamePattern
-        //{
-        //    get { return getValue<string>(aConverter_RootSettings.SettingsFileName, "CoverFileNamePattern", ""); }
-        //    set { setValue(aConverter_RootSettings.SettingsFileName, "CoverFileNamePattern", value); }
-        //}
+        public static string CoverFileNamePattern
+        {
+            get { return GetValue<string>(aConverter_RootSettings.SettingsFileName, "CoverFileNamePattern", ""); }
+            set { SetValue(aConverter_RootSettings.SettingsFileName, "CoverFileNamePattern", value); }
+        }
 
         /// <summary>
         /// Шаблон для содержимого .cs файлов (%s - содержимое класса) ,
@@ -228,25 +225,22 @@ namespace aConverterClassLibrary
         /// <returns></returns>
         public static List<Statistic> ReadStatistics()
         {
-            List<Statistic> lss;
-
-            StreamReader sr = new StreamReader("Statistics.xml", Encoding.GetEncoding(1251));
-            XmlSerializer fmt = new XmlSerializer(typeof(List<Statistic>));
-            lss = (List<Statistic>)fmt.Deserialize(sr);
+            var sr = new StreamReader("Statistics.xml", Encoding.GetEncoding(1251));
+            var fmt = new XmlSerializer(typeof(List<Statistic>));
+            var lss = (List<Statistic>)fmt.Deserialize(sr);
             sr.Close();
-
             return lss;
         }
 
         /// <summary>
         /// Сохраняет список статистик на диск
         /// </summary>
-        /// <param name="Statistics"></param>
-        public static void WriteStatistics(List<Statistic> Statistics)
+        /// <param name="statistics"></param>
+        public static void WriteStatistics(List<Statistic> statistics)
         {
-            StreamWriter sw = new StreamWriter("Statistics.xml", false, Encoding.GetEncoding(1251));
-            XmlSerializer fmt = new XmlSerializer(Statistics.GetType());
-            fmt.Serialize(sw, Statistics);
+            var sw = new StreamWriter("Statistics.xml", false, Encoding.GetEncoding(1251));
+            var fmt = new XmlSerializer(statistics.GetType());
+            fmt.Serialize(sw, statistics);
             sw.Close();
         }
 
@@ -256,11 +250,11 @@ namespace aConverterClassLibrary
         /// <returns></returns>
         public static List<SettingsCase> ReadSettingsCase()
         {
-            List<SettingsCase> lsc = new List<SettingsCase>();
+            var lsc = new List<SettingsCase>();
 
             if (File.Exists("SettingsCase.xml"))
             {
-                StreamReader sr = new StreamReader("SettingsCase.xml", Encoding.GetEncoding(1251));
+                var sr = new StreamReader("SettingsCase.xml", Encoding.GetEncoding(1251));
                 XmlSerializer fmt = null;
                 // Подавляем ошибку. Глюки Studio. См.например http://stackoverflow.com/questions/3494886/filenotfoundexception-in-applicationsettingsbase
                 try
@@ -275,10 +269,10 @@ namespace aConverterClassLibrary
                     throw new Exception("По неизвестной причине не был создан XmlSerializer");
                 sr.Close();
             }
-            for (int i = 0; i < lsc.Count; i++)
+            foreach (SettingsCase sc in lsc)
             {
-                if (!String.IsNullOrEmpty(lsc[i].CoverFileBodyPattern))
-                    lsc[i].CoverFileBodyPattern = lsc[i].CoverFileBodyPattern.Replace("\n", "\r\n");
+                if (!String.IsNullOrEmpty(sc.CoverFileBodyPattern))
+                    sc.CoverFileBodyPattern = sc.CoverFileBodyPattern.Replace("\n", "\r\n");
             }
             return lsc;
         }
@@ -286,12 +280,12 @@ namespace aConverterClassLibrary
         /// <summary>
         /// Сохраняет список статистик на диск
         /// </summary>
-        /// <param name="SettingsCase"></param>
-        public static void WriteSettingsCase(List<SettingsCase> SettingsCase)
+        /// <param name="settingsCase"></param>
+        public static void WriteSettingsCase(List<SettingsCase> settingsCase)
         {
-            StreamWriter sw = new StreamWriter("SettingsCase.xml", false, Encoding.GetEncoding(1251));
-            XmlSerializer fmt = new XmlSerializer(SettingsCase.GetType());
-            fmt.Serialize(sw, SettingsCase);
+            var sw = new StreamWriter("SettingsCase.xml", false, Encoding.GetEncoding(1251));
+            var fmt = new XmlSerializer(settingsCase.GetType());
+            fmt.Serialize(sw, settingsCase);
             sw.Close();
         } 
 
@@ -307,60 +301,59 @@ namespace aConverterClassLibrary
         /// Получает значение параметра типа T. Если параметр отсутствует в файле конфигурации,
         /// то возвращает значение по умолчанию, переданное в качестве параметра.
         /// Используется в get-терах параметров-свойств.
-        protected static T getValue<T>(string AFileName, string AVariableName, T DefaultValue)
+        protected static T GetValue<T>(string aFileName, string aVariableName, T defaultValue)
         {
-            string _variableValue = "";
+            string variableValue;
             if (ConfigFile.ReadVariable(SettingsFileName,
-                    AVariableName, out _variableValue))
-                return ParseString<T>(_variableValue);
-            else
-                return DefaultValue;
+                    aVariableName, out variableValue))
+                return ParseString<T>(variableValue);
+            return defaultValue;
         }
 
         /// <summary>
         /// Сохраняет значение параметра AVariableName в файле конфигурации.
         /// </summary>
-        /// <param name="AVariableName"></param>
-        /// <param name="AValue"></param>
+        /// <param name="aFileName"></param>
+        /// <param name="aVariableName"></param>
+        /// <param name="aValue"></param>
         /// <returns></returns>
-        protected static void setValue(string AFileName, string AVariableName, object AValue)
+        protected static void SetValue(string aFileName, string aVariableName, object aValue)
         {
 
             ConfigFile.SetVariable(SettingsFileName,
-                AVariableName, AValue.ToString().Replace("\r\n","\\r\\n"));
+                aVariableName, aValue.ToString().Replace("\r\n","\\r\\n"));
         }
 
         /// <summary>
         /// Преобразует строку AValue к заданному типу
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="AValue"></param>
+        /// <param name="aValue"></param>
         /// <returns></returns>
-        public static T ParseString<T>(string AValue)
+        public static T ParseString<T>(string aValue)
         {
             Type genericType = typeof(T);
-            if (genericType.Equals(typeof(String)))
+            if (genericType == typeof(String))
             {
-                ConstructorInfo constructor = genericType.GetConstructor(new Type[] { typeof(char[]) });
-                return (T)constructor.Invoke(new object[] { AValue.Replace("\\r\\n", "\r\n").ToCharArray() });
+                ConstructorInfo constructor = genericType.GetConstructor(new[] { typeof(char[]) });
+                return (T)constructor.Invoke(new object[] { aValue.Replace("\\r\\n", "\r\n").ToCharArray() });
             }
-            ConstructorInfo defaultConstructor = genericType.GetConstructor(new Type[] { });
             T result;
-            MethodInfo parseMethod = genericType.GetMethod("Parse", new Type[] { typeof(string), typeof(CultureInfo) });
+            MethodInfo parseMethod = genericType.GetMethod("Parse", new[] { typeof(string), typeof(CultureInfo) });
             if (parseMethod != null)
             {
                 try
                 {
-                    CultureInfo culture = new CultureInfo("ru-RU");
+                    var culture = new CultureInfo("ru-RU");
                     try
                     {
                         culture.NumberFormat.NumberDecimalSeparator = ",";
-                        result = (T)parseMethod.Invoke(null, new object[] { AValue, culture });
+                        result = (T)parseMethod.Invoke(null, new object[] { aValue, culture });
                     }
                     catch
                     {
                         culture.NumberFormat.NumberDecimalSeparator = ".";
-                        result = (T)parseMethod.Invoke(null, new object[] { AValue, culture });
+                        result = (T)parseMethod.Invoke(null, new object[] { aValue, culture });
                     }
                 }
                 catch
@@ -369,19 +362,19 @@ namespace aConverterClassLibrary
                     try
                     {
                         culture.NumberFormat.NumberDecimalSeparator = ",";
-                        result = (T)parseMethod.Invoke(null, new object[] { AValue, culture });
+                        result = (T)parseMethod.Invoke(null, new object[] { aValue, culture });
                     }
                     catch
                     {
                         culture.NumberFormat.NumberDecimalSeparator = ".";
-                        result = (T)parseMethod.Invoke(null, new object[] { AValue, culture });
+                        result = (T)parseMethod.Invoke(null, new object[] { aValue, culture });
                     }
                 }
             }
             else
             {
-                parseMethod = genericType.GetMethod("Parse", new Type[] { typeof(string) });
-                result = (T)parseMethod.Invoke(null, new object[] { AValue });
+                parseMethod = genericType.GetMethod("Parse", new[] { typeof(string) });
+                result = (T)parseMethod.Invoke(null, new object[] { aValue });
             }
             return result;
         }
@@ -392,22 +385,22 @@ namespace aConverterClassLibrary
         /// <summary>
         /// Читает значение параметра из файла конфигурации
         /// </summary>
-        /// <param name="AFileName"></param>
-        /// <param name="AVariableName"></param>
-        /// <param name="AVariableValue"></param>
+        /// <param name="aFileName"></param>
+        /// <param name="aVariableName"></param>
+        /// <param name="aVariableValue"></param>
         /// <returns></returns>
-        public static bool ReadVariable(string AFileName, string AVariableName, out string AVariableValue)
+        public static bool ReadVariable(string aFileName, string aVariableName, out string aVariableValue)
         {
-            AVariableValue = "";
-            if (!File.Exists(AFileName)) return false;
-            string[] sa = File.ReadAllLines(AFileName, Encoding.GetEncoding(1251));
+            aVariableValue = "";
+            if (!File.Exists(aFileName)) return false;
+            string[] sa = File.ReadAllLines(aFileName, Encoding.GetEncoding(1251));
             // string[] sa = File.ReadAllLines(AFileName);
             for (int i = 0; i < sa.Length; i++)
             {
-                string[] _configVariable = sa[i].Split((new char[] { '=' }), 2);
-                if (_configVariable[0] == AVariableName)
+                string[] configVariable = sa[i].Split((new[] { '=' }), 2);
+                if (configVariable[0] == aVariableName)
                 {
-                    AVariableValue = _configVariable[1];
+                    aVariableValue = configVariable[1];
                     return true;
                 }
             }
@@ -417,33 +410,33 @@ namespace aConverterClassLibrary
         /// <summary>
         /// Сохраняет значение параметра в файле
         /// </summary>
-        /// <param name="AFileName"></param>
-        /// <param name="AVariableName"></param>
-        /// <param name="AVariableValue"></param>
-        public static void SetVariable(string AFileName, string AVariableName, string AVariableValue)
+        /// <param name="aFileName"></param>
+        /// <param name="aVariableName"></param>
+        /// <param name="aVariableValue"></param>
+        public static void SetVariable(string aFileName, string aVariableName, string aVariableValue)
         {
-            if (File.Exists(AFileName))
+            if (File.Exists(aFileName))
             {
-                string[] sa = File.ReadAllLines(AFileName,Encoding.GetEncoding(1251));
+                string[] sa = File.ReadAllLines(aFileName,Encoding.GetEncoding(1251));
                 for (int i = 0; i < sa.Length; i++)
                 {
-                    string[] _configVariable = sa[i].Split((new char[] { '=' }), 2);
-                    if (_configVariable[0] == AVariableName)
+                    string[] configVariable = sa[i].Split((new[] { '=' }), 2);
+                    if (configVariable[0] == aVariableName)
                     {
-                        _configVariable[1] = AVariableValue;
-                        sa[i] = _configVariable[0] + "=" + _configVariable[1];
-                        lock ("ConfigFile") File.WriteAllLines(AFileName, sa, Encoding.GetEncoding(1251));
+                        configVariable[1] = aVariableValue;
+                        sa[i] = configVariable[0] + "=" + configVariable[1];
+                        lock ("ConfigFile") File.WriteAllLines(aFileName, sa, Encoding.GetEncoding(1251));
                         return;
                     }
                 }
             }
-            else if (!String.IsNullOrEmpty(Path.GetDirectoryName(AFileName)))
+            else if (!String.IsNullOrEmpty(Path.GetDirectoryName(aFileName)))
             {
-                if (!Directory.Exists(Path.GetDirectoryName(AFileName)))
-                    Directory.CreateDirectory(Path.GetDirectoryName(AFileName));
+                if (!Directory.Exists(Path.GetDirectoryName(aFileName)))
+                    Directory.CreateDirectory(Path.GetDirectoryName(aFileName));
             }
-            StreamWriter sw = new StreamWriter(AFileName, true, Encoding.GetEncoding(1251));
-            lock ("ConfigFile") sw.WriteLine(AVariableName + "=" + AVariableValue);
+            var sw = new StreamWriter(aFileName, true, Encoding.GetEncoding(1251));
+            lock ("ConfigFile") sw.WriteLine(aVariableName + "=" + aVariableValue);
             sw.Close();
             return;
         }
@@ -451,23 +444,23 @@ namespace aConverterClassLibrary
         /// <summary>
         /// Удаляет параметр из файла конфигурации
         /// </summary>
-        /// <param name="AFileName"></param>
-        /// <param name="AVariableName"></param>
+        /// <param name="aFileName"></param>
+        /// <param name="aVariableName"></param>
         /// <returns></returns>
-        public static bool RemoveVariable(string AFileName, string AVariableName)
+        public static bool RemoveVariable(string aFileName, string aVariableName)
         {
-            if (File.Exists(AFileName))
+            if (File.Exists(aFileName))
             {
-                string[] sa = File.ReadAllLines(AFileName);
+                string[] sa = File.ReadAllLines(aFileName);
                 for (int i = 0; i < sa.Length; i++)
                 {
-                    string[] _configVariable = sa[i].Split((new char[] { '=' }), 2);
-                    if (_configVariable[0] == AVariableName)
+                    string[] configVariable = sa[i].Split((new char[] { '=' }), 2);
+                    if (configVariable[0] == aVariableName)
                     {
-                        string[] _newsa = new string[sa.Length - 1];
-                        for (int j = 0; j < i; j++) _newsa[j] = sa[j];
-                        for (int j = i + 1; j < sa.Length; j++) _newsa[j - 1] = sa[j];
-                        lock ("ConfigFile") File.WriteAllLines(AFileName, _newsa);
+                        var newsa = new string[sa.Length - 1];
+                        for (int j = 0; j < i; j++) newsa[j] = sa[j];
+                        for (int j = i + 1; j < sa.Length; j++) newsa[j - 1] = sa[j];
+                        lock ("ConfigFile") File.WriteAllLines(aFileName, newsa);
                         return true;
                     }
                 }
@@ -482,56 +475,56 @@ namespace aConverterClassLibrary
     [Serializable]
     public class SettingsCase
     {
-        private string settingsCaseName;
+        private string _settingsCaseName;
         /// <summary>
         /// Наименование варианта настройки
         /// </summary>
         public string SettingsCaseName
         {
-            get { return settingsCaseName; }
-            set { settingsCaseName = value; }
+            get { return _settingsCaseName; }
+            set { _settingsCaseName = value; }
         }
 
 
-        private string firebirdStringConnection;
+        private string _firebirdStringConnection;
         /// <summary>
         /// Строка подключения к БД Firebird
         /// </summary>
         public string FirebirdStringConnection
         {
-            get { return firebirdStringConnection; }
-            set { firebirdStringConnection = value; }
+            get { return _firebirdStringConnection; }
+            set { _firebirdStringConnection = value; }
         }
 
-        private string sourceDBFFilePath;
+        private string _sourceDbfFilePath;
         /// <summary>
         /// Исходные файлы ?????????????????????????????
         /// </summary>
-        public string SourceDBFFilePath
+        public string SourceDbfFilePath
         {
-            get { return sourceDBFFilePath; }
-            set { sourceDBFFilePath = value; }
+            get { return _sourceDbfFilePath; }
+            set { _sourceDbfFilePath = value; }
         }
 
-        private string destDBFFilePath;
-        /// <summary>
-        /// Путь к DBF-файлам, для которых будет генерироваться обертка ????????????????????????????????????????
-        /// </summary>
-        public string DestDBFFilePath
-        {
-            get { return destDBFFilePath; }
-            set { destDBFFilePath = value; }
-        }
+        //private string destDBFFilePath;
+        ///// <summary>
+        ///// Путь к DBF-файлам, для которых будет генерироваться обертка ????????????????????????????????????????
+        ///// </summary>
+        //public string DestDBFFilePath
+        //{
+        //    get { return destDBFFilePath; }
+        //    set { destDBFFilePath = value; }
+        //}
 
-        private string _destMySqlConnectionString;
-        /// <summary>
-        /// Строка подключения к MySQL базе данных
-        /// </summary>
-        public string DestMySqlConnectionString
-        {
-            get { return _destMySqlConnectionString; }
-            set { _destMySqlConnectionString = value; }
-        }
+        //private string _destMySqlConnectionString;
+        ///// <summary>
+        ///// Строка подключения к MySQL базе данных
+        ///// </summary>
+        //public string DestMySqlConnectionString
+        //{
+        //    get { return _destMySqlConnectionString; }
+        //    set { _destMySqlConnectionString = value; }
+        //}
 
         private string patternsPath;
         /// <summary>

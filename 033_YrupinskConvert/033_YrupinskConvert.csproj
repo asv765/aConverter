@@ -45,6 +45,11 @@
     <Reference Include="Telerik.OpenAccess.35.Extensions, Version=2015.1.225.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Records\AbonentRecord.cs" />
+    <Compile Include="Records\CharsRecord.cs" />
+    <Compile Include="Records\CntrsindRecord.cs" />
+    <Compile Include="Records\CountersRecord.cs" />
+    <Compile Include="Records\LcharsRecord.cs" />
     <Compile Include="YrupinskConvert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -54,6 +59,7 @@
       <Name>aConverterClassLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

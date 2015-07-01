@@ -11,20 +11,21 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// Заполняет уникальными значениями поле HouseCD списка абонентов
         /// </summary>
         /// <param name="list"></param>
-        public static void SetUniqueHouseCd(ref List<ABONENT> list, int startValue)
+        public static void SetUniqueHouseCd(IEnumerable<CNV_ABONENT> list, int startValue)
         {
             int counter = 0;
             var keysdic = new Dictionary<object, int>();
-            foreach (ABONENT ar in list)
+            foreach (CNV_ABONENT ar in list.Where(p => p.HOUSECD == null))
             {
-                // RAYONKOD, TOWNSKOD, ULICAKOD, NDOMA, KORPUS
                 object o = new
                 {
                     RayonKod = ar.RAYONKOD,
                     TownsKod = ar.TOWNSKOD,
                     UlicaKod = ar.ULICAKOD,
-                    Ndoma = ar.NDOMA,
-                    Korpus = ar.KORPUS
+                    Houseno = ar.HOUSENO,
+                    Housepostfix = ar.HOUSEPOSTFIX,
+                    Korpusno = ar.KORPUSNO,
+                    Korpuspostfix = ar.KORPUSPOSTFIX
                 };
                 int housecd;
                 if (!keysdic.TryGetValue(o, out housecd))

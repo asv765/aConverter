@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using aConverterClassLibrary.RecordsEDM;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
 {
 
     public class NachoplRecordUtils
     {
-        public static NACHOPL UpdateOrInsertNachoplRecord(NACHOPL nr, ref Dictionary<NachoplKeySet, NACHOPL> dnr)
+        public static CNV_NACHOPL UpdateOrInsertNachoplRecord(CNV_NACHOPL nr, ref Dictionary<NachoplKeySet, CNV_NACHOPL> dnr)
         {
-            NACHOPL storedNachopl;
+            CNV_NACHOPL storedNachopl;
             if (!dnr.TryGetValue(nr.NachoplKeySet, out storedNachopl))
             {
                 dnr.Add(nr.NachoplKeySet, nr);
@@ -32,25 +31,25 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
     {
         private readonly NachoplCorrectionType _saldoCorrectionType;
 
-        private Dictionary<NachoplKeySet, NACHOPL> _nachoplRecords = new Dictionary<NachoplKeySet, NACHOPL>();
+        private Dictionary<NachoplKeySet, CNV_NACHOPL> _nachoplRecords = new Dictionary<NachoplKeySet, CNV_NACHOPL>();
         // Записи истории оплат/начислений
-        public Dictionary<NachoplKeySet, NACHOPL> NachoplRecords
+        public Dictionary<NachoplKeySet, CNV_NACHOPL> NachoplRecords
         {
             get { return _nachoplRecords; }
             set { _nachoplRecords = value; }
         }
 
-        private List<nach> _nachRecords = new List<nach>();
+        private List<CNV_NACH> _nachRecords = new List<CNV_NACH>();
         // Записи начислений
-        public List<nach> NachRecords
+        public List<CNV_NACH> NachRecords
         {
             get { return _nachRecords; }
             set { _nachRecords = value; }
         }
 
-        private List<oplata> _oplataRecords = new List<oplata>();
+        private List<CNV_OPLATA> _oplataRecords = new List<CNV_OPLATA>();
         // Записи оплат
-        public List<oplata> OplataRecords
+        public List<CNV_OPLATA> OplataRecords
         {
             get { return _oplataRecords; }
             set { _oplataRecords = value; }
@@ -72,7 +71,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <param name="servicecd"></param>
         /// <param name="servicename"></param>
         /// <returns></returns>
-        private NACHOPL GetActiveNachoplRecord(string lshet, int month, int year, long servicecd, string servicename)
+        private CNV_NACHOPL GetActiveNachoplRecord(string lshet, int month, int year, long servicecd, string servicename)
         {
             var noks = new NachoplKeySet
             {
@@ -82,10 +81,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 Servicecd = servicecd
             };
 
-            NACHOPL nr;
+            CNV_NACHOPL nr;
             if (!NachoplRecords.TryGetValue(noks, out nr))
             {
-                nr = NACHOPL.CreateFromKeySet(noks);
+                nr = CNV_NACHOPL.CreateFromKeySet(noks);
                 nr.SERVICENAM = servicename;
                 NachoplRecords.Add(noks, nr);
             }
@@ -96,13 +95,13 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <summary>
         /// Зарегистрировать новый факт начисления
         /// </summary>
-        public void RegisterNach(nach defaultNachRecord, string lshet, int month, int year, decimal fnath,
+        public void RegisterNach(CNV_NACH defaultNachRecord, string lshet, int month, int year, decimal fnath,
             decimal prochl,
             DateTime dateVv, string documentcd)
         {
-            var nr = new nach
+            var nr = new CNV_NACH
             {
-                TYPE = defaultNachRecord.TYPE,
+                TYPE_ = defaultNachRecord.TYPE_,
                 VOLUME = defaultNachRecord.VOLUME,
                 REGIMCD = defaultNachRecord.REGIMCD,
                 REGIMNAME = defaultNachRecord.REGIMNAME,
@@ -111,9 +110,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 LSHET = lshet,
                 FNATH = fnath,
                 PROCHL = prochl,
-                MONTH = month,
+                MONTH_ = month,
                 MONTH2 = month,
-                YEAR = year,
+                YEAR_ = year,
                 YEAR2 = year,
                 DATE_VV = dateVv,
                 DOCUMENTCD = documentcd
@@ -122,7 +121,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             UpdateNachoplDicByNachRecord(nr);
         }
 
-        private void UpdateNachoplDicByNachRecord(nach nachRecord)
+        private void UpdateNachoplDicByNachRecord(CNV_NACH nachRecord)
         {
             var nr = GetActiveNachoplRecord(nachRecord.LSHET,
                 nachRecord.DATE_VV.Month,
@@ -141,10 +140,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <summary>
         /// Зарегистрировать новый факт оплаты
         /// </summary>
-        public void RegisterOplata(oplata defaultOplataRecord, string lshet, int month, int year, decimal summa,
+        public void RegisterOplata(CNV_OPLATA defaultOplataRecord, string lshet, int month, int year, decimal summa,
             DateTime date, DateTime dateVv, string documentcd)
         {
-            var or = new oplata
+            var or = new CNV_OPLATA
             {
                 SERVICECD = defaultOplataRecord.SERVICECD,
                 SERVICENAM = defaultOplataRecord.SERVICENAM,
@@ -152,9 +151,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 SOURCENAME = defaultOplataRecord.SOURCENAME,
                 LSHET = lshet,
                 SUMMA = summa,
-                MONTH = month,
-                YEAR = year,
-                DATE = date,
+                MONTH_ = month,
+                YEAR_ = year,
+                DATE_ = date,
                 DATE_VV = dateVv,
                 DOCUMENTCD = documentcd
             };
@@ -162,7 +161,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             UpdateNachoplDicByOplataRecord(or);
         }
 
-        private void UpdateNachoplDicByOplataRecord(oplata oplataRecord)
+        private void UpdateNachoplDicByOplataRecord(CNV_OPLATA oplataRecord)
         {
             var nr = GetActiveNachoplRecord(oplataRecord.LSHET,
                 oplataRecord.DATE_VV.Month,

@@ -32,10 +32,10 @@
             this.анализToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.конвертацияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.проверкаЦелостностиДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.индексироватьИсходныФайлыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.описаниеТиповойСтруктурыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.шаблоныToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.статистикиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.анализИсходныхФайловToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.генерацияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.файлаcsПеречисленийДляLCHARSDBFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.файлаcsПеречисленияДляCHARSDBFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,7 +48,6 @@
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.экспериментыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.анализИсходныхФайловToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,7 +70,6 @@
             this.анализToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.конвертацияToolStripMenuItem,
             this.проверкаЦелостностиДанныхToolStripMenuItem,
-            this.индексироватьИсходныФайлыToolStripMenuItem,
             this.описаниеТиповойСтруктурыToolStripMenuItem,
             this.шаблоныToolStripMenuItem1,
             this.статистикиToolStripMenuItem,
@@ -83,44 +81,44 @@
             // конвертацияToolStripMenuItem
             // 
             this.конвертацияToolStripMenuItem.Name = "конвертацияToolStripMenuItem";
-            this.конвертацияToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.конвертацияToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.конвертацияToolStripMenuItem.Text = "Конвертация";
             this.конвертацияToolStripMenuItem.Click += new System.EventHandler(this.конвертацияToolStripMenuItem_Click);
             // 
             // проверкаЦелостностиДанныхToolStripMenuItem
             // 
             this.проверкаЦелостностиДанныхToolStripMenuItem.Name = "проверкаЦелостностиДанныхToolStripMenuItem";
-            this.проверкаЦелостностиДанныхToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.проверкаЦелостностиДанныхToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.проверкаЦелостностиДанныхToolStripMenuItem.Text = "Проверка целостности данных";
             this.проверкаЦелостностиДанныхToolStripMenuItem.Click += new System.EventHandler(this.проверкаЦелостностиДанныхToolStripMenuItem_Click);
-            // 
-            // индексироватьИсходныФайлыToolStripMenuItem
-            // 
-            this.индексироватьИсходныФайлыToolStripMenuItem.Name = "индексироватьИсходныФайлыToolStripMenuItem";
-            this.индексироватьИсходныФайлыToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
-            this.индексироватьИсходныФайлыToolStripMenuItem.Text = "Индексировать исходные файлы";
-            this.индексироватьИсходныФайлыToolStripMenuItem.Click += new System.EventHandler(this.индексироватьИсходныеФайлыToolStripMenuItem_Click);
             // 
             // описаниеТиповойСтруктурыToolStripMenuItem
             // 
             this.описаниеТиповойСтруктурыToolStripMenuItem.Name = "описаниеТиповойСтруктурыToolStripMenuItem";
-            this.описаниеТиповойСтруктурыToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.описаниеТиповойСтруктурыToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.описаниеТиповойСтруктурыToolStripMenuItem.Text = "Описание типовой структуры";
             this.описаниеТиповойСтруктурыToolStripMenuItem.Click += new System.EventHandler(this.описаниеТиповойСтруктурыToolStripMenuItem_Click);
             // 
             // шаблоныToolStripMenuItem1
             // 
             this.шаблоныToolStripMenuItem1.Name = "шаблоныToolStripMenuItem1";
-            this.шаблоныToolStripMenuItem1.Size = new System.Drawing.Size(255, 22);
+            this.шаблоныToolStripMenuItem1.Size = new System.Drawing.Size(244, 22);
             this.шаблоныToolStripMenuItem1.Text = "Шаблоны";
             this.шаблоныToolStripMenuItem1.Click += new System.EventHandler(this.шаблоныToolStripMenuItem1_Click);
             // 
             // статистикиToolStripMenuItem
             // 
             this.статистикиToolStripMenuItem.Name = "статистикиToolStripMenuItem";
-            this.статистикиToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.статистикиToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.статистикиToolStripMenuItem.Text = "Статистики";
             this.статистикиToolStripMenuItem.Click += new System.EventHandler(this.статистикиToolStripMenuItem_Click);
+            // 
+            // анализИсходныхФайловToolStripMenuItem
+            // 
+            this.анализИсходныхФайловToolStripMenuItem.Name = "анализИсходныхФайловToolStripMenuItem";
+            this.анализИсходныхФайловToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.анализИсходныхФайловToolStripMenuItem.Text = "Анализ исходных файлов";
+            this.анализИсходныхФайловToolStripMenuItem.Click += new System.EventHandler(this.анализИсходныхФайловToolStripMenuItem_Click);
             // 
             // генерацияToolStripMenuItem
             // 
@@ -210,13 +208,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // анализИсходныхФайловToolStripMenuItem
-            // 
-            this.анализИсходныхФайловToolStripMenuItem.Name = "анализИсходныхФайловToolStripMenuItem";
-            this.анализИсходныхФайловToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
-            this.анализИсходныхФайловToolStripMenuItem.Text = "Анализ исходных файлов";
-            this.анализИсходныхФайловToolStripMenuItem.Click += new System.EventHandler(this.анализИсходныхФайловToolStripMenuItem_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -250,7 +241,6 @@
         private System.Windows.Forms.ToolStripMenuItem файлcaПеречисленияСоСпискомУслугToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem проверкаЦелостностиДанныхToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem файлcsПеречисленияПараметровГражданToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem индексироватьИсходныФайлыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem описаниеТиповойСтруктурыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem шаблоныToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem статистикиToolStripMenuItem;

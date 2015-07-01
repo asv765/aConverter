@@ -106,20 +106,6 @@ namespace aConverter.Forms
         {
             IEnumerable<Statistic> ies = statisticList;
 
-            if (toolStripComboBoxSelectType1.SelectedIndex == 1)
-            {
-                ies = ies.Where(s => s is DbfStatistic);
-            }
-            else if (toolStripComboBoxSelectType1.SelectedIndex == 2)
-            {
-                ies = ies.Where(s => s is MySQLStatistic);
-            }
-            else if (toolStripComboBoxSelectType1.SelectedIndex == 2)
-            {
-                ies = ies.Where(s => s is FdbStatistic);
-            }
-
-
             if (toolStripComboBoxSelectType2.SelectedIndex == 1)
             {
                 ies = ies.Where(s => s.StatisticType == StatisticType.Таблица);

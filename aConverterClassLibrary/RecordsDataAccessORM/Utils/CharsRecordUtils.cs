@@ -11,10 +11,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// Прореживает список количественных характеристик
         /// </summary>
         /// <param name="lrl"></param>
-        public static List<CHAR> ThinOutList(List<CHAR> crl)
+        public static List<CNV_CHAR> ThinOutList(List<CNV_CHAR> crl)
         {
             // Сортируем список
-            List<CHAR> rcrl = new List<CHAR>();
+            var rcrl = new List<CNV_CHAR>();
             crl.Sort(CompareChars);
             // Удалем дублирующиеся строки
             string oldlshet = ""; long oldcharcd = -1; decimal oldcharvalue = -1;
@@ -37,7 +37,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <param name="lr1"></param>
         /// <param name="lr2"></param>
         /// <returns></returns>
-        public static int CompareChars(CHAR cr1, CHAR cr2)
+        public static int CompareChars(CNV_CHAR cr1, CNV_CHAR cr2)
         {
             if (Convert.ToUInt64(cr1.LSHET) < Convert.ToUInt64(cr2.LSHET))
                 return -1;

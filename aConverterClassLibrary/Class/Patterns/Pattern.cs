@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Data.OleDb;
-using System.Data;
-using MySql.Data.MySqlClient;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace aConverterClassLibrary
 {
@@ -331,10 +328,10 @@ namespace aConverterClassLibrary
             {
                 foreach (PatternDictionary pd in this.DictionaryCollection.Values) pd.ExecuteDictionary();
 
-                using (MySqlConnection dbConn = new MySqlConnection(this.ConnectionString))
+                using (FbConnection dbConn = new FbConnection(this.ConnectionString))
                 {
                     dbConn.Open();
-                    using (MySqlCommand oledbCommand = dbConn.CreateCommand())
+                    using (FbCommand oledbCommand = dbConn.CreateCommand())
                     {
                         // Считаем количество строк
                         //string query = this.Query.Replace('\r', ' ').Replace('\n', ' ').Trim();
@@ -360,7 +357,7 @@ namespace aConverterClassLibrary
                         //}
 
                         oledbCommand.CommandText = this.Query;
-                        MySqlDataReader dr = oledbCommand.ExecuteReader();
+                        FbDataReader dr = oledbCommand.ExecuteReader();
 
                         if (!String.IsNullOrEmpty(this.Delete) && this.IncludeDeleteSection) sw.Write(this.Delete);
                         if (!String.IsNullOrEmpty(this.Header)) sw.Write(this.Header);

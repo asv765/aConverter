@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.OleDb;
-using System.Data;
-using MySql.Data.MySqlClient;
-using aConverterClassLibrary.Class.CheckCases;
+﻿using aConverterClassLibrary.Class;
+using aConverterClassLibrary.Properties;
+using FirebirdSql.Data.FirebirdClient;
+using System;
 
 namespace aConverterClassLibrary
 {
@@ -13,106 +9,179 @@ namespace aConverterClassLibrary
     {
         public NachoplOplataCheckCase()
         {
-            this.CheckCaseName = "Проверяется, что сумма итоговой оплаты по услуге за месяц в файле OPLATA соответствует значение в поле OPLATA таблицы NACHOPL.DBF";
-            this.CheckCaseClass = CheckCaseClass.Целостность_конвертируемых_данных;
+            CheckCaseName = "Проверяется, что сумма итоговой оплаты по услуге за месяц в файле OPLATA соответствует значение в поле OPLATA таблицы NACHOPL.DBF";
         }
 
         public override void Analize()
         {
-            this.Result = CheckCaseStatus.Ошибок_не_выявлено;
-            this.ErrorList.Clear();
+            Result = CheckCaseStatus.Ошибок_не_выявлено;
+            ErrorList.Clear();
 
-            MariaDbConnection smon = new MariaDbConnection(aConverter_RootSettings.DestMySqlConnectionString);
-            MySqlConnection dbConn = smon.Connection;
-            //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
-            using (dbConn)
-
+            using (var connection = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
             {
-                dbConn.Open();
-                using (MySqlCommand command = dbConn.CreateCommand())
+                using (FbCommand command = connection.CreateCommand())
                 {
-                    // Выявляем три типа ошибок
-                    // 1. В файле NACHOPL.DBF сумма не равна нулю, а в OPLATA.DBF записи отсутствуют
-                    // 2. В NACHOPL.DBF значчение в поле OPLATA не совпадает с суммой полученной по файлу OPLATA.DBF
-                    // 3. В OPLATA.DBF есть записи с таким лицевым счетом, месяцем и услугой, для которых отсутствует запись в NACHOPL.DBF
-                    
-                    // 1. В файле NACHOPL.DBF сумма не равна нулю, а в OPLATA.DBF записи отсутствуют
-                    //command.CommandText = "select COUNT(*) from nachopl n where n.oplata <> 0 and " +
-                    //    "n.lshet + str(n.ServiceCD,5) + str(n.Year,4) + str(n.month,2) not in " +
-                    //    "(select o.lshet + str(o.ServiceCD,5) + str(Year(o.Date_vv),4) + str(Month(o.Date_Vv),2) from oplata o)";
+                    connection.Open();
 
-                    command.CommandText = "select COUNT(*) from nachopl n where n.oplata <> 0 and n.lshet + convert(n.ServiceCD,char) + convert(n.Year,char) + convert(n.month,char) not in (select o.lshet + convert(o.ServiceCD,char) + convert(Year(o.Date_vv),char) + convert(Month(o.Date_Vv),char) from oplata o)";
+                    #region 1. В файле NACHOPL.DBF сумма не равна нулю, а в OPLATA.DBF записи отсутствуют
+                    command.CommandText = Resources.NachoplOplataCheckCase1_NotFoundInOplata;
                     int count2 = Convert.ToInt32(command.ExecuteScalar());
-
-                    //DataTable dt = new DataTable();
-                    //OleDbDataAdapter da = new OleDbDataAdapter(command);
-                    //da.Fill(dt);
-
-                    // if (dt.Rows.Count != 0)
                     if (count2 > 0)
                     {
-                        OplataRowMissingError er = new OplataRowMissingError();
-                        er.ParentCheckCase = this;
-                        this.ErrorList.Add(er);
-                        this.Result = CheckCaseStatus.Выявлена_ошибка;
+                        var er = new OplataRowMissingError {ParentCheckCase = this};
+                        ErrorList.Add(er);
+                        Result = CheckCaseStatus.Выявлена_ошибка;
                     }
-                    // 2. В NACHOPL.DBF значчение в поле OPLATA не совпадает с суммой полученной по файлу OPLATA.DBF
-                    //command.CommandText = "select lshet, servicecd, servicenam, month, year, oplata, " +
-                    //                    "(select sum(summa) " +
-                    //                    "from oplata " + 
-                    //                    "where oplata.lshet = nachopl.lshet and " +
-                    //                    "oplata.servicecd = nachopl.servicecd and " + 
-                    //                    "Month(oplata.Date_vv) = nachopl.Month and " +
-                    //                    "Year(oplata.Date_vv) = nachopl.Year) as summa " +
-                    //                    "from nachopl having oplata <> summa";
+                    #endregion
 
-                    //command.CommandText = "select n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata, SUM(o.summa) as summa " +
-                    //                        "from nachopl n inner join oplata o on " +
-                    //                        "    n.lshet+STR(n.servicecd,5)+STR(n.year,4)+STR(n.month,2) =  " +
-                    //                        "    o.lshet+STR(o.servicecd,5)+STR(YEAR(o.date_vv),4)+STR(MONTH(o.date_vv),2)  " +
-                    //                        "group BY n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata " +
-                    //                        "HAVING n.oplata <> SUM(o.summa)";
-
-                    //command.CommandText = "select count(*) " +
-                    //    "from nachopl n inner join oplata o on " +
-                    //    "    n.lshet+STR(n.servicecd,5)+STR(n.year,4)+STR(n.month,2) =  " +
-                    //    "    o.lshet+STR(o.servicecd,5)+STR(YEAR(o.date_vv),4)+STR(MONTH(o.date_vv),2)  " +
-                    //    "group BY n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata " +
-                    //    "HAVING n.oplata <> SUM(o.summa)";
-
-                    command.CommandText = "select count(*)from nachopl n inner join oplata o on n.lshet = o.lshet and convert(n.servicecd,char) = convert(o.servicecd,char) and convert(n.year,char) = convert(YEAR(o.date_vv),char) and convert(n.month,char) = convert(MONTH(o.date_vv),char) group BY n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata HAVING n.oplata <> SUM(o.summa)";
+                    #region 2. В NACHOPL.DBF значчение в поле OPLATA не совпадает с суммой полученной по файлу OPLATA.DBF
+                    command.CommandText = Resources.NachoplOplataCheckCase2_OplataSummMismatch;
                     command.CommandTimeout = 0;
                     count2 = Convert.ToInt32(command.ExecuteScalar());
-
-                    //dt = new DataTable();
-                    //da = new OleDbDataAdapter(command);
-                    //da.Fill(dt);
-
                     if (count2 > 0)
                     {
-                        NachoplOplataSummaMismatchError er = new NachoplOplataSummaMismatchError();
-                        er.ParentCheckCase = this;
-                        this.ErrorList.Add(er);
-                        this.Result = CheckCaseStatus.Выявлена_ошибка;
+                        var er = new NachoplOplataSummaMismatchError {ParentCheckCase = this};
+                        ErrorList.Add(er);
+                        Result = CheckCaseStatus.Выявлена_ошибка;
                     }
+                    #endregion
 
-                    // 3. В OPLATA.DBF есть записи с таким лицевым счетом, месяцем и услугой, для которых отсутствует запись в NACHOPL.DBF
-                    //command.CommandText = "select count(*) " +
-                    //    "from oplata o " +
-                    //    "where o.Summa <> 0  AND " +
-                    //        "o.lshet + str(o.ServiceCD,5) + str(Year(o.Date_vv),4) + str(Month(o.Date_vv),2) not in " +
-                    //        "(select n.lshet + str(n.ServiceCD,5) + str(n.Year,4) + str(n.month,2) from nachopl n)";
-                    command.CommandText = "select count(*) from oplata o where o.Summa <> 0  AND o.lshet + convert(o.ServiceCD,char) + convert(Year(o.Date_vv),char) + convert(Month(o.Date_vv),char) not in (select n.lshet + convert(n.ServiceCD,char) + convert(n.Year,char) + convert(n.month,char) from nachopl n)";
-                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    #region 3. В OPLATA.DBF есть записи с таким лицевым счетом, месяцем и услугой, для которых отсутствует запись в NACHOPL.DBF
+                    command.CommandText = Resources.NachoplOplataCheckCase3_NotFoundInNachopl;
+                    var count = Convert.ToInt32(command.ExecuteScalar());
                     if (count != 0)
                     {
-                        OplataExcessRowError er = new OplataExcessRowError();
-                        er.ParentCheckCase = this;
-                        this.ErrorList.Add(er);
-                        this.Result = CheckCaseStatus.Выявлена_ошибка;
+                        var er = new OplataExcessRowError {ParentCheckCase = this};
+                        ErrorList.Add(er);
+                        Result = CheckCaseStatus.Выявлена_ошибка;
                     }
+                    #endregion
                 }
             }
         }
     }
+
+    public class OplataRowMissingError : ErrorClass
+    {
+        public OplataRowMissingError()
+        {
+            ErrorName = "В некоторых строках CNV$NACHOPL значение в поле OPLATA не равно нулю, но не расшифровывется в таблице CNV$OPLATA";
+            IsTerminating = false;
+
+            Statistic ss = new FdbStatistic("Записи CNV$NACHOPL в которых значение в поле OPLATA не совпадает с суммой полученной по таблице CNV$OPLATA",
+                Resources.NachoplSummaNotFoundInOplataStatistic,
+                null);
+            StatisticSets.Add(ss);
+        }
+
+        public override void GenerateCorrectionCases()
+        {
+            CorrectionCases.Clear();
+            var cc = new NachoplOplataSetNullCorrectionCase {ParentError = this};
+            CorrectionCases.Add(cc);
+        }
+    }
+
+    public class OplataExcessRowError : ErrorClass
+    {
+        public OplataExcessRowError()
+        {
+            ErrorName = "В таблице CNV$OPLATA есть записи с таким лицевым счетом, месяцем и услугой, для которых отсутствует запись в CNV$NACHOPL";
+            IsTerminating = false;
+
+            Statistic ss = new FdbStatistic("Записи CNV$OPLATA с ненулевой суммой, для которых отсутствует соответствующая запись в CNV$NACHOPL",
+                Resources.OplataSummaNotFoundInNachoplStatistic,
+                null);
+            StatisticSets.Add(ss);
+        }
+
+        public override void GenerateCorrectionCases()
+        {
+            CorrectionCases.Clear();
+            var cc = new DeleteOplataExcessRowCorrectionCase {ParentError = this};
+            CorrectionCases.Add(cc);
+        }
+    }
+
+    public class NachoplOplataSummaMismatchError : ErrorClass
+    {
+        public NachoplOplataSummaMismatchError()
+        {
+            ErrorName = "В некоторых строках CNV$NACHOPL значение в поле OPLATA не совпадает с суммой, полученной по таблице CNV$OPLATA";
+            IsTerminating = false;
+
+            Statistic ss = new FdbStatistic("Записи NACHOPL.DBF в которых значение в поле OPLATA не совпадает с суммой полученной по файлу OPLATA.DBF",
+                Resources.NachoplOplataSummaMismatchErrorStatistic,
+                null);
+            StatisticSets.Add(ss);
+        }
+
+        public override void GenerateCorrectionCases()
+        {
+            CorrectionCases.Clear();
+            var nocc = new NachoplOplataCorrectionCase {ParentError = this};
+            CorrectionCases.Add(nocc);
+        }
+    }
+
+    public class NachoplOplataSetNullCorrectionCase : CorrectionCase
+    {
+        public NachoplOplataSetNullCorrectionCase()
+        {
+            CorrectionCaseName = String.Format(
+                "Установить в ноль значение поля OPLATA в файле CNV$NACHOPL для записей, которые не расшифровываются в CNV$OPLATA");
+        }
+
+        /// <summary>
+        /// Создает таблицу на диске
+        /// </summary>
+        public override void Correct()
+        {
+            Result = CorrectionCaseStatus.Корректировка_выполнена_успешно;
+            Message = "Корректировка завершилась успешно";
+            var fbManager = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbManager.ExecuteNonQuery(Resources.NachoplOplataSetNullCorrectionCase);
+        }
+    }
+
+    public class DeleteOplataExcessRowCorrectionCase : CorrectionCase
+    {
+        public DeleteOplataExcessRowCorrectionCase()
+        {
+            CorrectionCaseName = String.Format(
+                "Удалить из таблицы CNV$OPLATA записи с таким лицевым счетом, месяцем и услугой, для которых отсутствует запись в CNV$NACHOPL");
+        }
+
+        /// <summary>
+        /// Создает таблицу на диске
+        /// </summary>
+        public override void Correct()
+        {
+            Result = CorrectionCaseStatus.Корректировка_выполнена_успешно;
+            Message = "Корректировка завершилась успешно";
+            var fbManager = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbManager.ExecuteNonQuery(Resources.DeleteOplataExcessRowCorrectionCase);
+        }
+    }
+
+    public class NachoplOplataCorrectionCase : CorrectionCase
+    {
+        public NachoplOplataCorrectionCase()
+        {
+            CorrectionCaseName = String.Format(
+                "Обновить значение поля OPLATA в таблице CNV$NACHOPL по данным из CNV$OPLATA");
+        }
+
+        /// <summary>
+        /// Создает таблицу на диске
+        /// </summary>
+        public override void Correct()
+        {
+            Result = CorrectionCaseStatus.Корректировка_выполнена_успешно;
+            Message = "Корректировка завершилась успешно";
+            var fbManager = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbManager.ExecuteNonQuery(Resources.NachoplOplataCorrectionCase);
+        }
+    }
+
 }

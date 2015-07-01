@@ -41,12 +41,9 @@ namespace aConverter.Forms
 
             aConverter_RootSettings.SettingsCaseId = comboBoxSettingsCase.SelectedIndex;
             aConverter_RootSettings.FirebirdStringConnection = textBoxFirebirdConnectionString.Text;
-            aConverter_RootSettings.SourceDBFFilePath = textBoxSourceDBFFilePath.Text;
-            aConverter_RootSettings.DestDBFFilePath = textBoxDestDBFFilePath.Text;
-            aConverter_RootSettings.DestMySqlConnectionString = textBoxDestMySqlConnectionString.Text;
+            aConverter_RootSettings.SourceDbfFilePath = textBoxSourceDBFFilePath.Text;
             aConverter_RootSettings.PatternsPath = textBoxPatternsPath.Text;
             aConverter_RootSettings.ConvertPath = textBoxConvertPath.Text;
-            //aConverter_RootSettings.ConvertPath = @"d:\GitDiplom\aConverter\aConverterClassLibrary\bin\Debug\";
             aConverter_RootSettings.CoverFileBodyPattern = textBoxCoverFileBodyPattern.Text;
             aConverter_RootSettings.GeneratedFilePath = textBoxGeneratedFilePath.Text;
         }
@@ -64,10 +61,8 @@ namespace aConverter.Forms
             textBoxFirebirdConnectionString.Text = aConverter_RootSettings.FirebirdStringConnection; // Строка подключения к базе данных Firebird
             textBoxGeneratedFilePath.Text = aConverter_RootSettings.GeneratedFilePath; // Путь для генерируемых файлов
             // textBoxCoverFilenamePattern.Text = aConverter_RootSettings.CoverFileNamePattern;
-            textBoxSourceDBFFilePath.Text = aConverter_RootSettings.SourceDBFFilePath; // Путь к DBF файлам заказчика
+            textBoxSourceDBFFilePath.Text = aConverter_RootSettings.SourceDbfFilePath; // Путь к DBF файлам заказчика
             textBoxCoverFileBodyPattern.Text = aConverter_RootSettings.CoverFileBodyPattern; 
-            textBoxDestDBFFilePath.Text = aConverter_RootSettings.DestDBFFilePath; // Путь к промежуточным типовым файлам для конвертации
-            textBoxDestMySqlConnectionString.Text = aConverter_RootSettings.DestMySqlConnectionString; // Путь к промежуточным MySQL базе данных
             textBoxPatternsPath.Text = aConverter_RootSettings.PatternsPath; // Путь к шаблонам
             textBoxConvertPath.Text = aConverter_RootSettings.ConvertPath; // Путь к модулям импорта
         }
@@ -113,8 +108,7 @@ namespace aConverter.Forms
             SettingsCase sc = (SettingsCase)comboBoxSettingsCase.SelectedItem;
 
             textBoxFirebirdConnectionString.Text = sc.FirebirdStringConnection;
-            textBoxSourceDBFFilePath.Text = sc.SourceDBFFilePath;
-            textBoxDestDBFFilePath.Text = sc.DestDBFFilePath;
+            textBoxSourceDBFFilePath.Text = sc.SourceDbfFilePath;
             textBoxPatternsPath.Text = sc.PatternsPath;
             textBoxConvertPath.Text = sc.ConvertPath;
             textBoxCoverFileBodyPattern.Text = sc.CoverFileBodyPattern;
@@ -130,8 +124,7 @@ namespace aConverter.Forms
                 SettingsCase sc = new SettingsCase();
                 sc.SettingsCaseName = fesc.SettingsCaseName;
                 sc.FirebirdStringConnection = "";
-                sc.SourceDBFFilePath = "";
-                sc.DestDBFFilePath = "";
+                sc.SourceDbfFilePath = "";
                 sc.PatternsPath = "";
                 sc.ConvertPath = "";
                 sc.CoverFileBodyPattern = "";
@@ -156,7 +149,6 @@ namespace aConverter.Forms
                 {
                     comboBoxSettingsCase.Text = "";
                     textBoxFirebirdConnectionString.Text = "";
-                    textBoxDestDBFFilePath.Text = "";
                     textBoxPatternsPath.Text = "";
                 }
                 else

@@ -26,8 +26,8 @@ namespace aConverter.Forms
         private void reloadFileStatisticList()
         {
             // 1. Получаем список всех файлов в исходном каталоге
-            string[] files = Directory.GetFiles(aConverter_RootSettings.SourceDBFFilePath, "*.DBF");
-            TableManager tm = new TableManager(aConverter_RootSettings.SourceDBFFilePath);
+            string[] files = Directory.GetFiles(aConverter_RootSettings.SourceDbfFilePath, "*.DBF");
+            TableManager tm = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tm.Init();
             tm.ErrorOpenFileEvent += new TableManager.ErrorOpenFile(tm_ErrorOpenFileEvent);
             // 2. Запускаем цикл по файлам
@@ -58,7 +58,7 @@ namespace aConverter.Forms
 
         private void FormSourceAnalize_Load(object sender, EventArgs e)
         {
-            textBoxPath.Text = aConverter_RootSettings.SourceDBFFilePath;
+            textBoxPath.Text = aConverter_RootSettings.SourceDbfFilePath;
             reloadFileStatisticList();
             bindingSourceFile.DataSource = lfsb;
             this.WindowState = FormWindowState.Maximized;

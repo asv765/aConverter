@@ -45,13 +45,9 @@
             this.buttonDeleteSettingsCase = new System.Windows.Forms.Button();
             this.labelSettingsCase = new System.Windows.Forms.Label();
             this.comboBoxSettingsCase = new System.Windows.Forms.ComboBox();
-            this.textBoxDestDBFFilePath = new System.Windows.Forms.TextBox();
-            this.labelDestDBFFilePath = new System.Windows.Forms.Label();
             this.buttonCheckConnection = new System.Windows.Forms.Button();
             this.textBoxFirebirdConnectionString = new System.Windows.Forms.TextBox();
             this.labelFirebirdConnectionString = new System.Windows.Forms.Label();
-            this.labelDestMySqlConnectionString = new System.Windows.Forms.Label();
-            this.textBoxDestMySqlConnectionString = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonSave
@@ -79,7 +75,7 @@
             // labelCoverFileBodyPattern
             // 
             this.labelCoverFileBodyPattern.AutoSize = true;
-            this.labelCoverFileBodyPattern.Location = new System.Drawing.Point(12, 316);
+            this.labelCoverFileBodyPattern.Location = new System.Drawing.Point(12, 239);
             this.labelCoverFileBodyPattern.Name = "labelCoverFileBodyPattern";
             this.labelCoverFileBodyPattern.Size = new System.Drawing.Size(334, 13);
             this.labelCoverFileBodyPattern.TabIndex = 44;
@@ -89,10 +85,10 @@
             // 
             this.textBoxCoverFileBodyPattern.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxCoverFileBodyPattern.Location = new System.Drawing.Point(15, 332);
+            this.textBoxCoverFileBodyPattern.Location = new System.Drawing.Point(15, 255);
             this.textBoxCoverFileBodyPattern.Multiline = true;
             this.textBoxCoverFileBodyPattern.Name = "textBoxCoverFileBodyPattern";
-            this.textBoxCoverFileBodyPattern.Size = new System.Drawing.Size(693, 196);
+            this.textBoxCoverFileBodyPattern.Size = new System.Drawing.Size(693, 273);
             this.textBoxCoverFileBodyPattern.TabIndex = 43;
             // 
             // textBoxGeneratedFilePath
@@ -134,7 +130,7 @@
             // labelConvertPath
             // 
             this.labelConvertPath.AutoSize = true;
-            this.labelConvertPath.Location = new System.Drawing.Point(12, 272);
+            this.labelConvertPath.Location = new System.Drawing.Point(12, 195);
             this.labelConvertPath.Name = "labelConvertPath";
             this.labelConvertPath.Size = new System.Drawing.Size(156, 13);
             this.labelConvertPath.TabIndex = 38;
@@ -144,7 +140,7 @@
             // 
             this.textBoxConvertPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxConvertPath.Location = new System.Drawing.Point(15, 288);
+            this.textBoxConvertPath.Location = new System.Drawing.Point(15, 211);
             this.textBoxConvertPath.Name = "textBoxConvertPath";
             this.textBoxConvertPath.Size = new System.Drawing.Size(693, 20);
             this.textBoxConvertPath.TabIndex = 36;
@@ -153,7 +149,7 @@
             // 
             this.textBoxPatternsPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPatternsPath.Location = new System.Drawing.Point(15, 249);
+            this.textBoxPatternsPath.Location = new System.Drawing.Point(15, 172);
             this.textBoxPatternsPath.Name = "textBoxPatternsPath";
             this.textBoxPatternsPath.Size = new System.Drawing.Size(693, 20);
             this.textBoxPatternsPath.TabIndex = 37;
@@ -161,7 +157,7 @@
             // labelPatternsPath
             // 
             this.labelPatternsPath.AutoSize = true;
-            this.labelPatternsPath.Location = new System.Drawing.Point(12, 233);
+            this.labelPatternsPath.Location = new System.Drawing.Point(12, 156);
             this.labelPatternsPath.Name = "labelPatternsPath";
             this.labelPatternsPath.Size = new System.Drawing.Size(98, 13);
             this.labelPatternsPath.TabIndex = 35;
@@ -221,24 +217,6 @@
             this.comboBoxSettingsCase.TabIndex = 30;
             this.comboBoxSettingsCase.SelectedIndexChanged += new System.EventHandler(this.comboBoxSettingsCase_SelectedIndexChanged);
             // 
-            // textBoxDestDBFFilePath
-            // 
-            this.textBoxDestDBFFilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxDestDBFFilePath.Location = new System.Drawing.Point(15, 172);
-            this.textBoxDestDBFFilePath.Name = "textBoxDestDBFFilePath";
-            this.textBoxDestDBFFilePath.Size = new System.Drawing.Size(693, 20);
-            this.textBoxDestDBFFilePath.TabIndex = 29;
-            // 
-            // labelDestDBFFilePath
-            // 
-            this.labelDestDBFFilePath.AutoSize = true;
-            this.labelDestDBFFilePath.Location = new System.Drawing.Point(12, 156);
-            this.labelDestDBFFilePath.Name = "labelDestDBFFilePath";
-            this.labelDestDBFFilePath.Size = new System.Drawing.Size(339, 13);
-            this.labelDestDBFFilePath.TabIndex = 28;
-            this.labelDestDBFFilePath.Text = "Путь к промежуточным (типовым) DBF-файлам для конвертации:";
-            // 
             // buttonCheckConnection
             // 
             this.buttonCheckConnection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -269,24 +247,6 @@
             this.labelFirebirdConnectionString.TabIndex = 25;
             this.labelFirebirdConnectionString.Text = "Строка подключения к БД Firebird:";
             // 
-            // labelDestMySqlConnectionString
-            // 
-            this.labelDestMySqlConnectionString.AutoSize = true;
-            this.labelDestMySqlConnectionString.Location = new System.Drawing.Point(12, 195);
-            this.labelDestMySqlConnectionString.Name = "labelDestMySqlConnectionString";
-            this.labelDestMySqlConnectionString.Size = new System.Drawing.Size(272, 13);
-            this.labelDestMySqlConnectionString.TabIndex = 28;
-            this.labelDestMySqlConnectionString.Text = "Строка подключения к промежуточной MySQL-базе:";
-            // 
-            // textBoxDestMySqlConnectionString
-            // 
-            this.textBoxDestMySqlConnectionString.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxDestMySqlConnectionString.Location = new System.Drawing.Point(15, 211);
-            this.textBoxDestMySqlConnectionString.Name = "textBoxDestMySqlConnectionString";
-            this.textBoxDestMySqlConnectionString.Size = new System.Drawing.Size(693, 20);
-            this.textBoxDestMySqlConnectionString.TabIndex = 29;
-            // 
             // FormSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -307,10 +267,6 @@
             this.Controls.Add(this.buttonDeleteSettingsCase);
             this.Controls.Add(this.labelSettingsCase);
             this.Controls.Add(this.comboBoxSettingsCase);
-            this.Controls.Add(this.textBoxDestMySqlConnectionString);
-            this.Controls.Add(this.textBoxDestDBFFilePath);
-            this.Controls.Add(this.labelDestMySqlConnectionString);
-            this.Controls.Add(this.labelDestDBFFilePath);
             this.Controls.Add(this.buttonCheckConnection);
             this.Controls.Add(this.textBoxFirebirdConnectionString);
             this.Controls.Add(this.labelFirebirdConnectionString);
@@ -343,12 +299,8 @@
         private System.Windows.Forms.Button buttonDeleteSettingsCase;
         private System.Windows.Forms.Label labelSettingsCase;
         private System.Windows.Forms.ComboBox comboBoxSettingsCase;
-        private System.Windows.Forms.TextBox textBoxDestDBFFilePath;
-        private System.Windows.Forms.Label labelDestDBFFilePath;
         private System.Windows.Forms.Button buttonCheckConnection;
         private System.Windows.Forms.TextBox textBoxFirebirdConnectionString;
         private System.Windows.Forms.Label labelFirebirdConnectionString;
-        private System.Windows.Forms.Label labelDestMySqlConnectionString;
-        private System.Windows.Forms.TextBox textBoxDestMySqlConnectionString;
     }
 }

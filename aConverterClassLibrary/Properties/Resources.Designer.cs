@@ -320,7 +320,6 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to DROP TRIGGER CNV$CNTRSIND_BI;
         ///DROP SEQUENCE GEN_CNV$CNTRSIND_ID;
-        ///DROP INDEX CNV$CNTRSIND_IDX1;
         ///DROP TABLE CNV$CNTRSIND;
         ///
         ///
@@ -603,19 +602,19 @@ namespace aConverterClassLibrary.Properties {
         ///  ID INTEGER NOT NULL,
         ///  LSHET varchar(10) NOT NULL,
         ///  DOCUMENTCD varchar(20) NOT NULL,
-        ///  MONTH INTEGER NOT NULL,
-        ///  YEAR INTEGER NOT NULL,
+        ///  MONTH_ INTEGER NOT NULL,
+        ///  YEAR_ INTEGER NOT NULL,
         ///  MONTH2 INTEGER NOT NULL,
         ///  YEAR2 INTEGER NOT NULL,
-        ///  FNATH decimal(20,4) NOT NULL,
-        ///  PROCHL decimal(20,4) NOT NULL,
-        ///  VOLUME decimal(20,4) NOT NULL,
+        ///  FNATH NUMERIC(18,4) NOT NULL,
+        ///  PROCHL NUMERIC(18,4) NOT NULL,
+        ///  VOLUME NUMERIC(18,4) NOT NULL,
         ///  REGIMCD INTEGER NOT NULL,
         ///  REGIMNAME varchar(50) NOT NULL,
         ///  SERVICECD INTEGER NOT NULL,
         ///  SERVICENAM varchar(50) NOT NULL,
         ///  DATE_VV timestamp NOT NULL,
-        ///  TYPE_ INTEGER NOT NULL, [rest of string was truncated]&quot;;.
+        ///  TYPE_ INTEGER NOT NUL [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_NACH {
             get {
@@ -642,23 +641,21 @@ namespace aConverterClassLibrary.Properties {
         ///   Looks up a localized string similar to CREATE TABLE CNV$NACHOPL (
         ///  ID INTEGER NOT NULL,
         ///  LSHET varchar(10) NOT NULL,
-        ///  MONTH INTEGER NOT NULL,
-        ///  YEAR INTEGER NOT NULL,
+        ///  MONTH_ INTEGER NOT NULL,
+        ///  YEAR_ INTEGER NOT NULL,
         ///  MONTH2 INTEGER NOT NULL,
         ///  YEAR2 INTEGER NOT NULL,
-        ///  BDEBET NUMERIC(20,4) NOT NULL,
-        ///  FNATH NUMERIC(20,4) NOT NULL,
-        ///  PROCHL NUMERIC(20,4) NOT NULL,
-        ///  OPLATA NUMERIC(20,2) NOT NULL,
-        ///  EDEBET NUMERIC(20,4) NOT NULL,
+        ///  BDEBET NUMERIC(18,4) NOT NULL,
+        ///  FNATH NUMERIC(18,4) NOT NULL,
+        ///  PROCHL NUMERIC(18,4) NOT NULL,
+        ///  OPLATA NUMERIC(18,2) NOT NULL,
+        ///  EDEBET NUMERIC(18,4) NOT NULL,
         ///  SERVICECD INTEGER NOT NULL,
         ///  SERVICENAM varchar(50) NOT NULL,
         ///  PRIMARY KEY (ID)
         ///);
-        ///CREATE SEQUENCE GEN_CNV$NACHOPL_ID;
-        ///
-        ///SET TERM ^ ;
-        ///CREATE T [rest of string was truncated]&quot;;.
+        ///CREATE INDEX CNV$NACHOPL_IDX1 ON CNV$NACHOPL (LSHET);
+        ///CREA [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_NACHOPL {
             get {
@@ -683,12 +680,12 @@ namespace aConverterClassLibrary.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$OPLATA (
-        ///  ID INTEGER NOT NULL AUTO_INCREMENT,
+        ///  ID INTEGER NOT NULL,
         ///  LSHET varchar(10) NOT NULL,
         ///  DOCUMENTCD varchar(20) NOT NULL,
-        ///  MONTH INTEGER NOT NULL,
-        ///  YEAR INTEGER NOT NULL,
-        ///  SUMMA NUMERIC(20,2) NOT NULL,
+        ///  MONTH_ INTEGER NOT NULL,
+        ///  YEAR_ INTEGER NOT NULL,
+        ///  SUMMA NUMERIC(18,2) NOT NULL,
         ///  DATE_ timestamp NOT NULL,
         ///  DATE_VV timestamp NOT NULL,
         ///  DATETIND timestamp DEFAULT NULL,
@@ -699,7 +696,7 @@ namespace aConverterClassLibrary.Properties {
         ///  PRIM_ varchar(100) DEFAULT NULL,
         ///  PRIMARY KEY (ID)
         ///);
-        ///CREA [rest of string was truncated]&quot;;.
+        ///CREATE INDEX CNV$ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_OPLATA {
             get {
@@ -724,11 +721,14 @@ namespace aConverterClassLibrary.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$PENI (
-        ///  LSHET VARCHAR(10) NOT NULL COMMENT &apos;Лицевой счет&apos;,
-        ///  SERVICECD INT(11) NOT NULL,
+        ///  ID INTEGER NOT NULL,
+        ///  LSHET VARCHAR(10) NOT NULL,
+        ///  SERVICECD INTEGER NOT NULL,
         ///  DOLGDATE TIMESTAMP NOT NULL,
-        ///  DOLG NUMERIC(20,4) NOT NULL
+        ///  DOLG NUMERIC(18,4) NOT NULL,
+        ///  PRIMARY KEY (ID)
         ///);
+        ///CREATE INDEX CNV$PENI_IDX1 ON CNV$PENI (LSHET);
         ///CREATE SEQUENCE GEN_CNV$PENI_ID;
         ///
         ///SET TERM ^ ;
@@ -777,13 +777,11 @@ namespace aConverterClassLibrary.Properties {
         ///  CONNECTED SMALLINT DEFAULT NULL,
         ///  PRIMARY KEY (ID)
         ///);
+        ///CREATE INDEX CNV$SUPPLNET_IDX1 ON CNV$SUPPLNET (LSHET);
         ///CREATE SEQUENCE GEN_CNV$SUPPLNET_ID;
         ///
         ///SET TERM ^ ;
-        ///CREATE TRIGGER CNV$SUPPLNET_BI FOR CNV$SUPPLNET
-        ///ACTIVE BEFORE INSERT POSITION 0
-        ///AS
-        ///BEG [rest of string was truncated]&quot;;.
+        ///CREATE TRIGGER CNV$SUPPLNET_BI F [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_SUPPLNET {
             get {
@@ -803,6 +801,147 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_SUPPLNET_d {
             get {
                 return ResourceManager.GetString("CNV_SUPPLNET_d", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to delete from cnv$oplata o
+        ///where o.summa &lt;&gt; 0 and not exists
+        ///      (select lshet from cnv$nachopl n
+        ///       where n.lshet = o.lshet and
+        ///             n.servicecd = o.servicecd and
+        ///             n.year_ = o.year_ and
+        ///             n.month_ = o.month_).
+        /// </summary>
+        internal static string DeleteOplataExcessRowCorrectionCase {
+            get {
+                return ResourceManager.GetString("DeleteOplataExcessRowCorrectionCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select COUNT(*) from cnv$nachopl n
+        ///where n.oplata &lt;&gt; 0 and not exists
+        ///      (select lshet from cnv$oplata o
+        ///       where n.lshet = o.lshet and
+        ///             n.servicecd = o.servicecd and
+        ///             n.year_ = o.year_ and
+        ///             n.month_ = o.month_).
+        /// </summary>
+        internal static string NachoplOplataCheckCase1_NotFoundInOplata {
+            get {
+                return ResourceManager.GetString("NachoplOplataCheckCase1_NotFoundInOplata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select count(*)
+        ///from cnv$nachopl n inner join cnv$oplata o
+        ///    on n.lshet = o.lshet and
+        ///    n.servicecd = o.servicecd and
+        ///    n.year_ = EXTRACT(YEAR FROM o.date_vv) and
+        ///    n.month_ = EXTRACT(MONTH FROM o.date_vv)
+        ///group BY n.lshet, n.servicecd, n.servicenam, n.month_, n.year_, n.oplata
+        ///HAVING n.oplata &lt;&gt; SUM(o.summa).
+        /// </summary>
+        internal static string NachoplOplataCheckCase2_OplataSummMismatch {
+            get {
+                return ResourceManager.GetString("NachoplOplataCheckCase2_OplataSummMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select COUNT(*) from cnv$oplata o
+        ///where o.summa &lt;&gt; 0 and not exists
+        ///      (select lshet from cnv$nachopl n
+        ///       where n.lshet = o.lshet and
+        ///             n.servicecd = o.servicecd and
+        ///             n.year_ = o.year_ and
+        ///             n.month_ = o.month_).
+        /// </summary>
+        internal static string NachoplOplataCheckCase3_NotFoundInNachopl {
+            get {
+                return ResourceManager.GetString("NachoplOplataCheckCase3_NotFoundInNachopl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to update cnv$nachopl n set n.oplata = (select sum(summa)
+        ///from cnv$oplata o
+        ///where n.lshet = o.lshet and
+        ///     n.servicecd = o.servicecd and
+        ///     n.year_ = o.year_ and
+        ///     n.month_ = o.month_)
+        ///where exists (select lshet from cnv$oplata o
+        ///       where n.lshet = o.lshet and
+        ///             n.servicecd = o.servicecd and
+        ///             n.year_ = o.year_ and
+        ///             n.month_ = o.month_).
+        /// </summary>
+        internal static string NachoplOplataCorrectionCase {
+            get {
+                return ResourceManager.GetString("NachoplOplataCorrectionCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to update cnv$nachopl n set n.oplata = 0
+        ///where n.oplata &lt;&gt; 0 and not exists
+        ///      (select lshet from cnv$oplata o
+        ///       where n.lshet = o.lshet and
+        ///             n.servicecd = o.servicecd and
+        ///             n.year_ = o.year_ and
+        ///             n.month_ = o.month_).
+        /// </summary>
+        internal static string NachoplOplataSetNullCorrectionCase {
+            get {
+                return ResourceManager.GetString("NachoplOplataSetNullCorrectionCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select n.lshet, n.servicecd, n.servicenam, n.month_, n.year_, n.oplata, SUM(o.summa) as summa
+        ///from cnv$nachopl n inner join cnv$oplata o
+        ///    on n.lshet = o.lshet and
+        ///    n.servicecd = o.servicecd and
+        ///    n.year_ = EXTRACT(YEAR FROM o.date_vv) and
+        ///    n.month_ = EXTRACT(MONTH FROM o.date_vv)
+        ///group BY n.lshet, n.servicecd, n.servicenam, n.month_, n.year_, n.oplata
+        ///HAVING n.oplata &lt;&gt; SUM(o.summa).
+        /// </summary>
+        internal static string NachoplOplataSummaMismatchErrorStatistic {
+            get {
+                return ResourceManager.GetString("NachoplOplataSummaMismatchErrorStatistic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select * from cnv$nachopl n
+        ///where n.oplata &lt;&gt; 0 and not exists
+        ///      (select lshet from cnv$oplata o
+        ///       where n.lshet = o.lshet and
+        ///             n.servicecd = o.servicecd and
+        ///             n.year_ = o.year_ and
+        ///             n.month_ = o.month_).
+        /// </summary>
+        internal static string NachoplSummaNotFoundInOplataStatistic {
+            get {
+                return ResourceManager.GetString("NachoplSummaNotFoundInOplataStatistic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select * from cnv$oplata o
+        ///where o.summa &lt;&gt; 0 and not exists
+        ///      (select lshet from cnv$nachopl n
+        ///       where n.lshet = o.lshet and
+        ///             n.servicecd = o.servicecd and
+        ///             n.year_ = o.year_ and
+        ///             n.month_ = o.month_).
+        /// </summary>
+        internal static string OplataSummaNotFoundInNachoplStatistic {
+            get {
+                return ResourceManager.GetString("OplataSummaNotFoundInNachoplStatistic", resourceCulture);
             }
         }
     }

@@ -10,8 +10,6 @@ using System.IO;
 namespace aConverterClassLibrary
 {
     [Serializable]
-    [XmlInclude(typeof(DbfStatistic))]
-    [XmlInclude(typeof(MySQLStatistic))]
     [XmlInclude(typeof(FdbStatistic))]
     public abstract class Statistic
     {

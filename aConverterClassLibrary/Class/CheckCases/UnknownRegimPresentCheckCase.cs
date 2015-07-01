@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FirebirdSql.Data.FirebirdClient;
-using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -11,14 +7,13 @@ namespace aConverterClassLibrary
     {
         public UnknownRegimPresentCheckCase()
         {
-            this.CheckCaseName = String.Format("Проверка, что в целевой базе существует режим с кодом 10 (Неизвестен)");
-            this.CheckCaseClass = CheckCaseClass.Целостность_целевой_БД;
+            CheckCaseName = String.Format("Проверка, что в целевой базе существует режим с кодом 10 (Неизвестен)");
         }
 
         public override void Analize()
         {
-            this.Result = CheckCaseStatus.Ошибок_не_выявлено;
-            this.ErrorList.Clear();
+            Result = CheckCaseStatus.Ошибок_не_выявлено;
+            ErrorList.Clear();
 
             #region Проверяем, существует ли в целевой БД режим с кодом 10 (неизвестен)
             using (FbConnection connection = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))

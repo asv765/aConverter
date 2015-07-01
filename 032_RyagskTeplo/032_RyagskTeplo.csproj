@@ -110,10 +110,6 @@
       <Project>{4dd34293-327e-4229-99bb-4952206592ec}</Project>
       <Name>aConverterClassLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\aConverterClassMariaDB\aConverterClassMariaDB.csproj">
-      <Project>{0cb2e34c-82eb-4c1a-8a38-81d0de02b20c}</Project>
-      <Name>aConverterClassMariaDB</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

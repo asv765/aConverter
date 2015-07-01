@@ -61,19 +61,9 @@
     <Reference Include="DbfClassLibrary">
       <HintPath>..\lib\DbfClassLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=3.0.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\FirebirdSql.Data.FirebirdClient.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.5\Assemblies\v4.0\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="MySqlBulkCopy">
-      <HintPath>..\lib\MySqlBulkCopy.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -91,148 +81,93 @@
     <Reference Include="Telerik.OpenAccess.35.Extensions, Version=2015.1.225.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RecordsDataAccessORM\ABONENT.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    <Compile Include="Class\CheckCases\CheckCaseClass.cs">
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\ADDDCHAR.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    <Compile Include="Class\CorrectionCases\CorrectionCase.cs">
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\CHAR.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    <Compile Include="Class\Errors\ErrorClass.cs">
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\CHARVAL.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    <Compile Include="Class\Errors\ErrorParam.cs">
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\CITIZEN.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
-    </Compile>
+    <Compile Include="Class\FbManager.cs" />
     <Compile Include="Class\AbonentCover\AbonentCover.cs" />
     <Compile Include="Class\AbonentCover\CitizenScriptGenerator.cs" />
     <Compile Include="Class\AbonentCover\Document.cs" />
     <Compile Include="Class\aConverter_Settings.cs" />
     <Compile Include="Class\AbonentCover\Citizen.cs" />
-    <Compile Include="Class\CheckCases\CapCheckCase.cs" />
-    <Compile Include="Class\CheckCases\CheckCaseClass.cs" />
     <Compile Include="Class\CheckCases\CheckCaseFactory.cs" />
-    <Compile Include="Class\CheckCases\CheckLshetCorrespondenceCheckCase.cs" />
-    <Compile Include="Class\CheckCases\CheckLshetFormatCheckCase.cs" />
-    <Compile Include="Class\CheckCases\CodePageCheckCase.cs" />
-    <Compile Include="Class\CheckCases\DistrictCheckCase.cs" />
-    <Compile Include="Class\CheckCases\ExternalForeighnKeyCheckCase.cs" />
-    <Compile Include="Class\CheckCases\FioCheckCase.cs" />
-    <Compile Include="Class\CheckCases\HouseCDCheckCase.cs" />
-    <Compile Include="Class\CheckCases\InternalForeighnKeyCheckCase.cs" />
-    <Compile Include="Class\CheckCases\MariaDBConnection.cs" />
-    <Compile Include="Class\CheckCases\MainOrganizationCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NachoplCalculationCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NachoplNachCheckCase1.cs" />
-    <Compile Include="Class\CheckCases\NachoplNachCheckCase2.cs" />
-    <Compile Include="Class\CheckCases\NachoplOplataCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NachoplSaldoCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NachoplYearMonthCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NotUniqueCharsValuesCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NotUniqueLcharsValuesCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NotUniqueLshetCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NotUniqueNachoplSaldoCheckCase.cs" />
-    <Compile Include="Class\CheckCases\NotUniqueSerialnumCheckCase.cs" />
-    <Compile Include="Class\CheckCases\OplataYearMonthCheckCase.cs" />
-    <Compile Include="Class\CheckCases\PunktCheckCase.cs" />
-    <Compile Include="Class\CheckCases\RegionDistrictCheckCase.cs" />
-    <Compile Include="Class\CheckCases\SourceDocCheckCase.cs" />
-    <Compile Include="Class\CheckCases\StreetCheckCase.cs" />
-    <Compile Include="Class\CheckCases\StructureCheckCase.cs" />
-    <Compile Include="Class\CheckCases\TablePresentCheckCase.cs" />
-    <Compile Include="Class\CheckCases\UncertaintyCheckCase.cs" />
-    <Compile Include="Class\CheckCases\UnknownEmployeePresentCheckCase.cs" />
-    <Compile Include="Class\CheckCases\UnknownRegimPresentCheckCase.cs" />
     <Compile Include="Class\ClassFileStatisticBuilder.cs" />
     <Compile Include="Class\ConvertCases\ConvertCase.cs" />
-    <Compile Include="Class\CorrectionCases\AddFirstSaldoRowCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\AddMainOrganizationCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\AddRowToNachoplCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\AddUnknownEmployeeCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\AddUnknownRegimCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\CapMissingCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\CapWrongCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\CodePageCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\CorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\CorrectStructureCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\CreateTableCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\DeleteNachoplRepeatedRowsCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\DeleteOplataExcessRowCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\DeleteUnexpectedForeighnKeysCorrectionClass.cs" />
-    <Compile Include="Class\CorrectionCases\DistrictCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\FixUncertaintyCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\LshetLengthMismatchCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\LshetPrefixCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\MakeHouseCDUniqueCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\NachoplCalculationCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\NachoplNachSetNullCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\NachoplOplataCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\NachoplOplataSetNullCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\NachoplSaldoCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\PunktCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\RegionDistrictCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\SourceDocCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\SplitFIOCorrectionCase.cs" />
-    <Compile Include="Class\CorrectionCases\StreetCorrectionCase.cs" />
     <Compile Include="Class\Enums.cs" />
-    <Compile Include="Class\Errors\CapMissingError.cs" />
-    <Compile Include="Class\Errors\CapWrongError.cs" />
-    <Compile Include="Class\Errors\DbfStructureError.cs" />
-    <Compile Include="Class\Errors\DistrictError.cs" />
-    <Compile Include="Class\Errors\ErrorClass.cs" />
-    <Compile Include="Class\Errors\ErrorParam.cs" />
-    <Compile Include="Class\Errors\ExternalIntegrityErrorClass.cs" />
-    <Compile Include="Class\Errors\FioErrorClass.cs" />
-    <Compile Include="Class\Errors\FirstSaldoIsNotNullError.cs" />
-    <Compile Include="Class\Errors\HouseCDError.cs" />
-    <Compile Include="Class\Errors\InternalIntegrityErrorClass.cs" />
-    <Compile Include="Class\Errors\LshetLengthError.cs" />
-    <Compile Include="Class\Errors\LshetLengthMismatchError.cs" />
-    <Compile Include="Class\Errors\LshetPrefixMismatchError.cs" />
-    <Compile Include="Class\Errors\MainOrganizationNotPresentError.cs" />
-    <Compile Include="Class\Errors\NachoplCalculationErrorClass.cs" />
-    <Compile Include="Class\Errors\NachoplOplataSummaMismatchError.cs" />
-    <Compile Include="Class\Errors\NachoplRowMissingError.cs" />
-    <Compile Include="Class\Errors\NachoplYearMonthErrorClass.cs" />
-    <Compile Include="Class\Errors\NachRowMissingError.cs" />
-    <Compile Include="Class\Errors\NotUniqueCharsValuesError.cs" />
-    <Compile Include="Class\Errors\NotUniqueLcharsValuesError.cs" />
-    <Compile Include="Class\Errors\NotUniqueLshetError.cs" />
-    <Compile Include="Class\Errors\NotUniqueNachoplSaldoError.cs" />
-    <Compile Include="Class\Errors\NotUniqueSerialnumError.cs" />
-    <Compile Include="Class\Errors\OldNewSaldoMismatchError.cs" />
-    <Compile Include="Class\Errors\OplataExcessRowError.cs" />
-    <Compile Include="Class\Errors\OplataRowMissingError.cs" />
-    <Compile Include="Class\Errors\OplataYearMonthErrorClass.cs" />
-    <Compile Include="Class\Errors\PunktError.cs" />
-    <Compile Include="Class\Errors\RegionDistrictError.cs" />
-    <Compile Include="Class\Errors\SourceDocError.cs" />
-    <Compile Include="Class\Errors\StreetError.cs" />
-    <Compile Include="Class\Errors\TableNotFoundError.cs" />
-    <Compile Include="Class\Errors\UncertaintyError.cs" />
-    <Compile Include="Class\Errors\UnknownEmployeeNotPresentError.cs" />
-    <Compile Include="Class\Errors\UnknownRegimNotPresentError.cs" />
-    <Compile Include="Class\Errors\WrongCodePageError.cs" />
-    <Compile Include="Class\Errors\WrongFileError.cs" />
-    <Compile Include="Class\FactoryRecord.cs" />
     <Compile Include="Class\Patterns\Pattern.cs" />
     <Compile Include="Class\Patterns\PatternDictionary.cs" />
     <Compile Include="Class\Patterns\PatternUtils.cs" />
     <Compile Include="Class\QualityParamsParser.cs" />
-    <Compile Include="Class\Statistic\DbfStatistic.cs" />
     <Compile Include="Class\Statistic\FdbStatistic.cs" />
-    <Compile Include="Class\Statistic\MySQLStatistic.cs" />
     <Compile Include="Class\Statistic\Statistic.cs" />
     <Compile Include="Class\Utils\aConverter_Utils.cs" />
-    <Compile Include="RecordsDataAccessORM\CNTRSIND.generated.cs">
+    <Compile Include="RecordsDataAccessORM\ABONENT.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\COUNTER.generated.cs">
+    <Compile Include="RecordsDataAccessORM\BALANCESLIST.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\DOGOVOR.generated.cs">
+    <Compile Include="RecordsDataAccessORM\CCHARSLIST.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_ABONENT.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_ADDDCHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_CHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_CHARVAL.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_CITIZEN.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_CNTRSIND.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_COUNTER.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_DOGOVOR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_EQUIPMENT.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_GCOUNTER.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_HADDCHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_LCHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_NACH.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_NACHOPL.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_OPLATA.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_PENI.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_SUPPLNET.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
     <Compile Include="RecordsDataAccessORM\EntitiesModel.cs">
@@ -240,38 +175,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\EQUIPMENT.generated.cs">
+    <Compile Include="RecordsDataAccessORM\EXTORGSTREET.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\GCOUNTER.generated.cs">
+    <Compile Include="RecordsDataAccessORM\HOUSE.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\HADDCHAR.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
-    </Compile>
-    <Compile Include="RecordsDataAccessORM\LCHAR.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
-    </Compile>
-    <Compile Include="RecordsDataAccessORM\NACH.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
-    </Compile>
-    <Compile Include="RecordsDataAccessORM\NACHOPL.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
-    </Compile>
-    <Compile Include="RecordsDataAccessORM\OPLATA.generated.cs">
+    <Compile Include="RecordsDataAccessORM\LCHARSLIST.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
     <Compile Include="RecordsDataAccessORM\PartialSUPPLNETRecord.cs" />
-    <Compile Include="RecordsDataAccessORM\PENI.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RecordsDataAccessORM\PartialNACHOPLRecord.cs" />
-    <Compile Include="RecordsDataAccessORM\SupplnetRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\STREET.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\Utils\SupplnetRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\AbonentRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\BufferEntitiesManager.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\CharsRecordUtils.cs" />
@@ -279,75 +202,7 @@
     <Compile Include="RecordsDataAccessORM\Utils\CountersRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\LCharsRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\NachoplRecordUtils.cs" />
-    <Compile Include="RecordsEDM\MariadbEDM.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MariadbEDM.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="RecordsEDM\PartialNachoplRecord.cs" />
-    <Compile Include="RecordsEDM\PartialNachRecord.cs" />
-    <Compile Include="RecordsEDM\Utils\AbonentRecordUtils.cs" />
-    <Compile Include="RecordsEDM\Utils\CharsRecordUtils.cs" />
-    <Compile Include="RecordsEDM\Utils\CntrsindRecordUtils.cs" />
-    <Compile Include="RecordsEDM\Utils\CountersRecordUtils.cs" />
-    <Compile Include="RecordsEDM\Utils\LcharsRecordUtils.cs" />
-    <Compile Include="RecordsEDM\Utils\NachoplRecordUtils.cs" />
-    <Compile Include="RecordsEDM\Utils\SupplnetRecordUtils.cs" />
-    <Compile Include="Records\AAddcharRecord.cs" />
-    <Compile Include="Records\CharlstRecord.cs" />
-    <Compile Include="Records\CharsRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\CharValsRecord.cs" />
-    <Compile Include="Records\CntrsindRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\CountersRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\DogovorRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\EquipmntRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\GcounterRecord.cs" />
-    <Compile Include="Records\HAddCharRecord.cs" />
-    <Compile Include="Records\LcharsRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\LgotaRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\NachoplRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\NachRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Records\OplataRecord.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Records\AbonentRecord.cs" />
-    <Compile Include="Records\PartialNachoplRecord.cs" />
-    <Compile Include="Records\SupplnetRecord.cs" />
-    <Compile Include="Records\Utils\AbonentRecordUtils.cs" />
-    <Compile Include="Records\Utils\CharsRecordUtils.cs" />
-    <Compile Include="Records\Utils\CntrsindRecordUtils.cs" />
-    <Compile Include="Records\Utils\CountersRecordUtils.cs" />
-    <Compile Include="Records\Utils\LcharsRecordUtils.cs" />
-    <Compile Include="Records\Utils\NachoplRecordUtils.cs" />
-    <Compile Include="Records\Utils\SupplnetRecordUtils.cs" />
-    <Compile Include="RecordsDataAccessORM\SUPPLNET.generated.cs">
-      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="RecordsEDM\MariadbEDM.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MariadbEDM.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
@@ -359,18 +214,13 @@
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </None>
     <None Include="packages.config" />
-    <None Include="RecordsEDM\MariadbEDM.edmx.diagram">
-      <DependentUpon>MariadbEDM.edmx</DependentUpon>
-    </None>
-    <None Include="Records\ClassDiagram1.cd" />
-    <None Include="Records\ClassDiagram2.cd" />
-    <None Include="Records\ClassDiagram3.cd" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Class\CheckCasesNew\" />
+    <Folder Include="RecordsEDM\Utils\" />
+    <Folder Include="Records\Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -379,6 +229,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -406,8 +257,13 @@
     <None Include="Resources\CNV_LCHARS_d.sql" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\CheckCaseQueries\NachoplOplataCheckCase1_NotFoundInOplata.sql" />
+    <Content Include="Resources\CheckCaseQueries\NachoplOplataCheckCase2_OplataSummMismatch.sql" />
+    <Content Include="Resources\CheckCaseQueries\NachoplOplataCheckCase3_NotFoundInNachopl.sql" />
     <Content Include="Resources\CNV_CHARVALS.sql" />
     <Content Include="Resources\CNV_CHARVALS_d.sql" />
+    <Content Include="Resources\CNV_CHECKCASESPDESC.sql" />
+    <Content Include="Resources\CNV_CHECKCASESPDESC_d.sql" />
     <Content Include="Resources\CNV_CITIZENS.sql" />
     <Content Include="Resources\CNV_CITIZENS_d.sql" />
     <Content Include="Resources\CNV_CNTRSIND.sql" />
@@ -432,6 +288,12 @@
     <Content Include="Resources\CNV_PENI_d.sql" />
     <Content Include="Resources\CNV_SUPPLNET.sql" />
     <Content Include="Resources\CNV_SUPPLNET_d.sql" />
+    <Content Include="Resources\CorrectionCaseQueries\DeleteOplataExcessRowCorrectionCase.sql" />
+    <Content Include="Resources\CorrectionCaseQueries\NachoplOplataCorrectionCase.sql" />
+    <Content Include="Resources\CorrectionCaseQueries\NachoplOplataSetNullCorrectionCase.sql" />
+    <Content Include="Resources\StatisticQueries\NachoplOplataSummaMismatchErrorStatistic.sql" />
+    <Content Include="Resources\StatisticQueries\NachoplSummaNotFoundInOplataStatistic.sql" />
+    <Content Include="Resources\StatisticQueries\OplataSummaNotFoundInNachoplStatistic.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
-﻿using aConverterClassLibrary.Records;
+﻿using aConverterClassLibrary.RecordsDataAccessORM;
+using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -71,52 +72,52 @@ namespace aConverterTestProject
         [TestMethod()]
         public void RestoreHistoryTest()
         {
-            List<CntrsindRecord> cirl = new List<CntrsindRecord>();
-            cirl.Add(new CntrsindRecord() { Counterid = "1", Indication = 1000, Inddate = new DateTime(2013, 1, 10) });
-            cirl.Add(new CntrsindRecord() { Counterid = "1", Indication = 1500, Inddate = new DateTime(2013, 3, 12) });
-            cirl.Add(new CntrsindRecord() { Counterid = "1", Indication = 1200, Inddate = new DateTime(2013, 2, 11) });
-            cirl.Add(new CntrsindRecord() { Counterid = "2", Indication = 10, Inddate = new DateTime(2013, 1, 10) });
-            cirl.Add(new CntrsindRecord() { Counterid = "2", Indication = 12, Inddate = new DateTime(2013, 2, 11) });
-            cirl.Add(new CntrsindRecord() { Counterid = "2", Indication = 15, Inddate = new DateTime(2013, 3, 12) });
+            List<CNTRSIND> cirl = new List<CNTRSIND>();
+            cirl.Add(new CNTRSIND() { COUNTERID = "1", INDICATION = 1000, INDDATE = new DateTime(2013, 1, 10) });
+            cirl.Add(new CNTRSIND() { COUNTERID = "1", INDICATION = 1500, INDDATE = new DateTime(2013, 3, 12) });
+            cirl.Add(new CNTRSIND() { COUNTERID = "1", INDICATION = 1200, INDDATE = new DateTime(2013, 2, 11) });
+            cirl.Add(new CNTRSIND() { COUNTERID = "2", INDICATION = 10, INDDATE = new DateTime(2013, 1, 10) });
+            cirl.Add(new CNTRSIND() { COUNTERID = "2", INDICATION = 12, INDDATE = new DateTime(2013, 2, 11) });
+            cirl.Add(new CNTRSIND() { COUNTERID = "2", INDICATION = 15, INDDATE = new DateTime(2013, 3, 12) });
 
             RestoreHistoryType restoreHistoryType = RestoreHistoryType.С_конца_по_конечным_показаниям;
 
             CntrsindRecordUtils.RestoreHistory(ref cirl, restoreHistoryType);
 
-            Assert.AreEqual(cirl[0].Counterid, "2");
-            Assert.AreEqual(cirl[1].Counterid, "2");
-            Assert.AreEqual(cirl[2].Counterid, "2");
-            Assert.AreEqual(cirl[3].Counterid, "1");
-            Assert.AreEqual(cirl[4].Counterid, "1");
-            Assert.AreEqual(cirl[5].Counterid, "1");
+            Assert.AreEqual(cirl[0].COUNTERID, "2");
+            Assert.AreEqual(cirl[1].COUNTERID, "2");
+            Assert.AreEqual(cirl[2].COUNTERID, "2");
+            Assert.AreEqual(cirl[3].COUNTERID, "1");
+            Assert.AreEqual(cirl[4].COUNTERID, "1");
+            Assert.AreEqual(cirl[5].COUNTERID, "1");
 
-            Assert.AreEqual(cirl[0].Inddate, new DateTime(2013, 3, 12));
-            Assert.AreEqual(cirl[1].Inddate, new DateTime(2013, 2, 11));
-            Assert.AreEqual(cirl[2].Inddate, new DateTime(2013, 1, 10));
-            Assert.AreEqual(cirl[3].Inddate, new DateTime(2013, 3, 12));
-            Assert.AreEqual(cirl[4].Inddate, new DateTime(2013, 2, 11) );
-            Assert.AreEqual(cirl[5].Inddate, new DateTime(2013, 1, 10) );
+            Assert.AreEqual(cirl[0].INDDATE, new DateTime(2013, 3, 12));
+            Assert.AreEqual(cirl[1].INDDATE, new DateTime(2013, 2, 11));
+            Assert.AreEqual(cirl[2].INDDATE, new DateTime(2013, 1, 10));
+            Assert.AreEqual(cirl[3].INDDATE, new DateTime(2013, 3, 12));
+            Assert.AreEqual(cirl[4].INDDATE, new DateTime(2013, 2, 11) );
+            Assert.AreEqual(cirl[5].INDDATE, new DateTime(2013, 1, 10) );
 
-            Assert.AreEqual(cirl[0].Indication, 15);
-            Assert.AreEqual(cirl[1].Indication, 12);
-            Assert.AreEqual(cirl[2].Indication, 10);
-            Assert.AreEqual(cirl[3].Indication, 1500);
-            Assert.AreEqual(cirl[4].Indication, 1200);
-            Assert.AreEqual(cirl[5].Indication, 1000);
+            Assert.AreEqual(cirl[0].INDICATION, 15);
+            Assert.AreEqual(cirl[1].INDICATION, 12);
+            Assert.AreEqual(cirl[2].INDICATION, 10);
+            Assert.AreEqual(cirl[3].INDICATION, 1500);
+            Assert.AreEqual(cirl[4].INDICATION, 1200);
+            Assert.AreEqual(cirl[5].INDICATION, 1000);
 
-            Assert.AreEqual(cirl[0].Oldind, 12);
-            Assert.AreEqual(cirl[1].Oldind, 10);
-            Assert.AreEqual(cirl[2].Oldind, 0);
-            Assert.AreEqual(cirl[3].Oldind, 1200);
-            Assert.AreEqual(cirl[4].Oldind, 1000);
-            Assert.AreEqual(cirl[5].Oldind, 0);
+            Assert.AreEqual(cirl[0].OLDIND, 12);
+            Assert.AreEqual(cirl[1].OLDIND, 10);
+            Assert.AreEqual(cirl[2].OLDIND, 0);
+            Assert.AreEqual(cirl[3].OLDIND, 1200);
+            Assert.AreEqual(cirl[4].OLDIND, 1000);
+            Assert.AreEqual(cirl[5].OLDIND, 0);
 
-            Assert.AreEqual(cirl[0].Ob_em, 3);
-            Assert.AreEqual(cirl[1].Ob_em, 2);
-            Assert.AreEqual(cirl[2].Ob_em, 0);
-            Assert.AreEqual(cirl[3].Ob_em, 300);
-            Assert.AreEqual(cirl[4].Ob_em, 200);
-            Assert.AreEqual(cirl[5].Ob_em, 0);
+            Assert.AreEqual(cirl[0].OB_EM, 3);
+            Assert.AreEqual(cirl[1].OB_EM, 2);
+            Assert.AreEqual(cirl[2].OB_EM, 0);
+            Assert.AreEqual(cirl[3].OB_EM, 300);
+            Assert.AreEqual(cirl[4].OB_EM, 200);
+            Assert.AreEqual(cirl[5].OB_EM, 0);
 
             
         }

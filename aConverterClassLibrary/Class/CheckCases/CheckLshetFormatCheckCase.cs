@@ -16,39 +16,30 @@ namespace aConverterClassLibrary
         public CheckLshetFormatCheckCase()
         {
             this.CheckCaseName = String.Format("Проверка соответствия формата лицевого счета (является ли лицевой счет в таблице ABONENT строкой одинаковой длины)");
-            this.CheckCaseClass = CheckCaseClass.Целостность_между_конвертируемыми_данными_и_целевой_БД;
         }
 
         public override void Analize()
         {
-            this.Result = CheckCaseStatus.Ошибок_не_выявлено;
-            this.ErrorList.Clear();
-            int lshetLength = 0;
+            Result = CheckCaseStatus.Ошибок_не_выявлено;
+            ErrorList.Clear();
 
-            MariaDbConnection smon = new MariaDbConnection(aConverter_RootSettings.DestMySqlConnectionString);
-            MySqlConnection dbConn = smon.Connection;
-
-            #region Проверяем, является ли лицевой счет в таблице ABONENT.DBF строкой одинаковой длины
+            #region Проверяем, является ли лицевой счет в таблице CNV$ABONENT строкой одинаковой длины
             //using (OleDbConnection dbConn = new OleDbConnection(aConverter_RootSettings.DBFConnectionString))
-            using (dbConn)
+            using (FbConnection connection = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
             {
-                using (MySqlCommand command = dbConn.CreateCommand())
+                using (FbCommand command = connection.CreateCommand())
                 {
-                    dbConn.Open();
+                    connection.Open();
 
-                    //command.CommandText = "SELECT MIN(LEN(ALLT(LSHET))) as MIN FROM ABONENT";
-                    command.CommandText = "SELECT MIN(CHAR_LENGTH(LSHET)) as MIN FROM ABONENT";
+                    command.CommandText = "SELECT MIN(CHAR_LENGTH(LSHET)) as MIN_ FROM CNV$ABONENT";
                     object result = command.ExecuteScalar();
                     int minLength = 0;
                     if (!(result is DBNull)) minLength = Convert.ToInt32(result);
 
-                    //command.CommandText = "SELECT MAX(LEN(ALLT(LSHET))) as MIN FROM ABONENT";
-                    command.CommandText = "SELECT MAX(CHAR_LENGTH(LSHET)) as MIN FROM ABONENT";
+                    command.CommandText = "SELECT MAX(CHAR_LENGTH(LSHET)) as MAX_ FROM CNV$ABONENT";
                     result = command.ExecuteScalar();
                     int maxLength = 0;
                     if (!(result is DBNull)) maxLength = Convert.ToInt32(result);
-
-                    lshetLength = maxLength;
 
                     if (minLength != maxLength)
                     {
@@ -60,6 +51,25 @@ namespace aConverterClassLibrary
                 }
             }
             #endregion
+        }
+    }
+
+    public class LshetLengthError : ErrorClass
+    {
+        public LshetLengthError(int minLength, int maxLength)
+        {
+            this.ErrorName = String.Format("В таблице CNV$ABONENT встречаются лицевые счета разной длины: {0} и {1} ",
+                minLength, maxLength);
+            this.IsTerminating = true;
+
+            Statistic ss = new FdbStatistic("Таблица CNV$ABONENT, длина лицевых счетов",
+                "select CHAR_LENGTH(LSHET) as len, LSHET from CNV$ABONENT order by CHAR_LENGTH(LSHET)",
+                null);
+            StatisticSets.Add(ss);
+        }
+
+        public override void GenerateCorrectionCases()
+        {
         }
     }
 }

@@ -9,7 +9,7 @@ namespace aConverterClassLibrary
     {
         public static List<CheckCase> GenerateCheckCases()
         {
-            List<CheckCase> checkCaseList = new List<CheckCase>();
+            var checkCaseList = new List<CheckCase>();
 
             //TablePresentCheckCase tpcc = new TablePresentCheckCase();
             //checkCaseList.Add(tpcc);
@@ -20,196 +20,180 @@ namespace aConverterClassLibrary
             //StructureCheckCase scc1 = new StructureCheckCase();
             //checkCaseList.Add(scc1);
 
-            CheckLshetFormatCheckCase clfcc = new CheckLshetFormatCheckCase();
-            checkCaseList.Add(clfcc);
 
-            NotUniqueLshetCheckCase nulcc = new NotUniqueLshetCheckCase();
-            checkCaseList.Add(nulcc);
+            //var clfcc = new CheckLshetFormatCheckCase();
+            //checkCaseList.Add(clfcc);
 
-            FioCheckCase fiocc = new FioCheckCase();
-            checkCaseList.Add(fiocc);
+            //var nulcc = new NotUniqueLshetCheckCase();
+            //checkCaseList.Add(nulcc);
 
-            NotUniqueNachoplSaldoCheckCase nunscc = new NotUniqueNachoplSaldoCheckCase();
-            checkCaseList.Add(nunscc);
+            //var fiocc = new FioCheckCase();
+            //checkCaseList.Add(fiocc);
 
-            //NachoplSaldoCheckCase nscc = new NachoplSaldoCheckCase();
+            //var nunscc = new NotUniqueNachoplSaldoCheckCase();
+            //checkCaseList.Add(nunscc);
+
+            //var nscc = new NachoplSaldoCheckCase();
             //checkCaseList.Add(nscc);
 
-            NachoplOplataCheckCase nocc = new NachoplOplataCheckCase();
-            checkCaseList.Add(nocc);
+            //var nocc = new NachoplOplataCheckCase();
+            //checkCaseList.Add(nocc);
 
-            NachoplNachCheckCase1 nncc1 = new NachoplNachCheckCase1();
-            checkCaseList.Add(nncc1);
+            //var nncc1 = new NachoplNachCheckCase1();
+            //checkCaseList.Add(nncc1);
 
-            NachoplCalculationCheckCase nccc = new NachoplCalculationCheckCase();
-            checkCaseList.Add(nccc);
+            //var nccc = new NachoplCalculationCheckCase();
+            //checkCaseList.Add(nccc);
 
-            OplataYearMonthCheckCase oemcc = new OplataYearMonthCheckCase();
-            checkCaseList.Add(oemcc);
+            //var oemcc = new OplataYearMonthCheckCase();
+            //checkCaseList.Add(oemcc);
 
-            NachoplYearMonthCheckCase noymcc = new NachoplYearMonthCheckCase();
-            checkCaseList.Add(noymcc);
+            //var noymcc = new NachoplYearMonthCheckCase();
+            //checkCaseList.Add(noymcc);
 
-            //NachoplNachCheckCase2 nncc2 = new NachoplNachCheckCase2();
-            //checkCaseList.Add(nncc2);
-            NotUniqueCounteridCheckCase nuscc = new NotUniqueCounteridCheckCase();
-            checkCaseList.Add(nuscc);
+            ////NachoplNachCheckCase2 nncc2 = new NachoplNachCheckCase2();
+            ////checkCaseList.Add(nncc2);
 
-            InternalForeighnKeyCheckCase cifcc;
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "NACHOPL", "LSHET");
-            checkCaseList.Add(cifcc);
+            //var nuscc = new NotUniqueCounteridCheckCase();
+            //checkCaseList.Add(nuscc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "NACH", "LSHET");
-            checkCaseList.Add(cifcc);
+            //var cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "NACHOPL", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "OPLATA", "LSHET");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "NACH", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "CHARS", "LSHET");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "OPLATA", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "LCHARS", "LSHET");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "CHARS", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("COUNTERS", "COUNTERID", "CNTRSIND", "COUNTERID");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "LCHARS", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "COUNTERS", "LSHET");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("COUNTERS", "COUNTERID", "CNTRSIND", "COUNTERID");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "DOGOVOR", "LSHET");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "COUNTERS", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "EQUIPMNT", "LSHET");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "DOGOVOR", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "LGOTA", "LSHET");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "EQUIPMNT", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "AADDCHAR", "LSHET");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "LGOTA", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("CHARLST", "ADDCHARCD", "AADDCHAR", "ADDCHARCD");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("ABONENT", "LSHET", "AADDCHAR", "LSHET");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("CHARLST", "ADDCHARCD", "CHARVALS", "ADDCHARCD");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("CHARLST", "ADDCHARCD", "AADDCHAR", "ADDCHARCD");
+            //checkCaseList.Add(cifcc);
 
-            cifcc = new InternalForeighnKeyCheckCase("AADDCHAR", "ADDCHARCD", "CHARVALS", "ADDCHARCD");
-            checkCaseList.Add(cifcc);
+            //cifcc = new InternalForeighnKeyCheckCase("CHARLST", "ADDCHARCD", "CHARVALS", "ADDCHARCD");
+            //checkCaseList.Add(cifcc);
 
-            UncertaintyCheckCase ucc = new UncertaintyCheckCase("ABONENT", "ULICAKOD", "ULICANAME", UncertaintyCDType.Число);
-            checkCaseList.Add(ucc);
+            //cifcc = new InternalForeighnKeyCheckCase("AADDCHAR", "ADDCHARCD", "CHARVALS", "ADDCHARCD");
+            //checkCaseList.Add(cifcc);
 
-            NotUniqueCharsValuesCheckCase nucvcc = new NotUniqueCharsValuesCheckCase();
-            checkCaseList.Add(nucvcc);
-
-            NotUniqueLcharsValuesCheckCase nulcvcc = new NotUniqueLcharsValuesCheckCase();
-            checkCaseList.Add(nulcvcc);
-
-            HouseCDCheckCase hccc = new HouseCDCheckCase();
-            checkCaseList.Add(hccc);
-
-            //UncertaintyCheckCase ucc2 = new UncertaintyCheckCase("ABONENT", "HOUSECD", "STR(DISTKOD,6)+STR(TOWNSKOD,6)+STR(ULICAKOD,6)+NDOMA", UncertaintyCDType.Число);
-            //checkCaseList.Add(ucc2);
-
-            ucc = new UncertaintyCheckCase("ABONENT", "RayonKod", "RayonName", UncertaintyCDType.Число);
-            checkCaseList.Add(ucc);
-
-            ucc = new UncertaintyCheckCase("ABONENT", "TownsKod", "TownsName", UncertaintyCDType.Число);
-            checkCaseList.Add(ucc);
-
-            //ucc = new UncertaintyCheckCase("ABONENT", "CapCD", "CapName", UncertaintyCDType.Число);
+            //var ucc = new UncertaintyCheckCase("ABONENT", "ULICAKOD", "ULICANAME", UncertaintyCDType.Число);
             //checkCaseList.Add(ucc);
 
-            ucc = new UncertaintyCheckCase("CHARS", "CharCD", "CharName", UncertaintyCDType.Число);
-            checkCaseList.Add(ucc);
+            //var nucvcc = new NotUniqueCharsValuesCheckCase();
+            //checkCaseList.Add(nucvcc);
 
-            ucc = new UncertaintyCheckCase("LCHARS", "LCharCD", "LCharName", UncertaintyCDType.Число);
-            checkCaseList.Add(ucc);
+            //var nulcvcc = new NotUniqueLcharsValuesCheckCase();
+            //checkCaseList.Add(nulcvcc);
 
-            //ucc = new UncertaintyCheckCase("LCHARS", "Str(LCharCD,5) + Str(Value,5)", "ValueDesc", UncertaintyCDType.Строка);
-            ucc = new UncertaintyCheckCase("LCHARS", "Convert(LCharCD,char) + Convert(Value,char)", "ValueDesc", UncertaintyCDType.Строка);
-            checkCaseList.Add(ucc);
+            //var hccc = new HouseCDCheckCase();
+            //checkCaseList.Add(hccc);
 
-            ucc = new UncertaintyCheckCase("LGOTA", "Lgota", "LgotaName", UncertaintyCDType.Число);
-            checkCaseList.Add(ucc);
+            //ucc = new UncertaintyCheckCase("ABONENT", "RayonKod", "RayonName", UncertaintyCDType.Число);
+            //checkCaseList.Add(ucc);
 
-            ucc = new UncertaintyCheckCase("OPLATA", "SourceCD", "SourceName", UncertaintyCDType.Число);
-            checkCaseList.Add(ucc);
+            //ucc = new UncertaintyCheckCase("ABONENT", "TownsKod", "TownsName", UncertaintyCDType.Число);
+            //checkCaseList.Add(ucc);
 
-            ExternalForeighnKeyCheckCase efkcc = new ExternalForeighnKeyCheckCase("CHARS", "CHARCD", "CCHARSLIST", "KOD");
-            checkCaseList.Add(efkcc);
+            //ucc = new UncertaintyCheckCase("CHARS", "CharCD", "CharName", UncertaintyCDType.Число);
+            //checkCaseList.Add(ucc);
 
-            efkcc = new ExternalForeighnKeyCheckCase("LCHARS", "LCHARCD", "LCHARSLIST", "KOD");
-            checkCaseList.Add(efkcc);
+            //ucc = new UncertaintyCheckCase("LCHARS", "LCharCD", "LCharName", UncertaintyCDType.Число);
+            //checkCaseList.Add(ucc);
 
-            efkcc = new ExternalForeighnKeyCheckCase("LCHARS", "LCHARCD*10000+Value", "LOGICVALUES", "KOD*10000+Significance");
-            checkCaseList.Add(efkcc);
+            //ucc = new UncertaintyCheckCase("LCHARS", "Convert(LCharCD,char) + Convert(Value,char)", "ValueDesc", UncertaintyCDType.Строка);
+            //checkCaseList.Add(ucc);
 
-            efkcc = new ExternalForeighnKeyCheckCase("COUNTERS", "CNTTYPE", "COUNTERSTYPES", "KOD");
-            checkCaseList.Add(efkcc);
+            //ucc = new UncertaintyCheckCase("LGOTA", "Lgota", "LgotaName", UncertaintyCDType.Число);
+            //checkCaseList.Add(ucc);
 
-            //efkcc = new ExternalForeighnKeyCheckCase("COUNTERS", "SERVICECD", "BALANCESLIST", "BALANCE_KOD");
+            //ucc = new UncertaintyCheckCase("OPLATA", "SourceCD", "SourceName", UncertaintyCDType.Число);
+            //checkCaseList.Add(ucc);
+
+            //var efkcc = new ExternalForeighnKeyCheckCase("CHARS", "CHARCD", "CCHARSLIST", "KOD");
             //checkCaseList.Add(efkcc);
 
-            efkcc = new ExternalForeighnKeyCheckCase("NACHOPL", "SERVICECD", "BALANCESLIST", "BALANCE_KOD");
-            checkCaseList.Add(efkcc);
+            //efkcc = new ExternalForeighnKeyCheckCase("LCHARS", "LCHARCD", "LCHARSLIST", "KOD");
+            //checkCaseList.Add(efkcc);
 
-            efkcc = new ExternalForeighnKeyCheckCase("OPLATA", "SERVICECD", "BALANCESLIST", "BALANCE_KOD");
-            checkCaseList.Add(efkcc);
+            //efkcc = new ExternalForeighnKeyCheckCase("LCHARS", "LCHARCD*10000+Value", "LOGICVALUES", "KOD*10000+Significance");
+            //checkCaseList.Add(efkcc);
 
-            efkcc = new ExternalForeighnKeyCheckCase("NACH", "REGIMCD", "RESOURCESREGIMSLIST", "KODREGIM");
-            checkCaseList.Add(efkcc);
+            //efkcc = new ExternalForeighnKeyCheckCase("COUNTERS", "CNTTYPE", "COUNTERSTYPES", "KOD");
+            //checkCaseList.Add(efkcc);
 
-            efkcc = new ExternalForeighnKeyCheckCase("ABONENT", "DUCD", "INFORMATIONOWNERS", "OWNERID");
-            checkCaseList.Add(efkcc);
+            //efkcc = new ExternalForeighnKeyCheckCase("NACHOPL", "SERVICECD", "BALANCESLIST", "BALANCE_KOD");
+            //checkCaseList.Add(efkcc);
 
-            CheckLshetCorrespondenceCheckCase clccc = new CheckLshetCorrespondenceCheckCase();
-            checkCaseList.Add(clccc);
+            //efkcc = new ExternalForeighnKeyCheckCase("OPLATA", "SERVICECD", "BALANCESLIST", "BALANCE_KOD");
+            //checkCaseList.Add(efkcc);
 
-            UnknownRegimPresentCheckCase urpcc = new UnknownRegimPresentCheckCase();
-            checkCaseList.Add(urpcc);
+            //efkcc = new ExternalForeighnKeyCheckCase("NACH", "REGIMCD", "RESOURCESREGIMSLIST", "KODREGIM");
+            //checkCaseList.Add(efkcc);
 
-            MainOrganizationCheckCase mocc = new MainOrganizationCheckCase();
-            checkCaseList.Add(mocc);
+            //efkcc = new ExternalForeighnKeyCheckCase("ABONENT", "DUCD", "INFORMATIONOWNERS", "OWNERID");
+            //checkCaseList.Add(efkcc);
 
-            UnknownEmployeePresentCheckCase uepcc = new UnknownEmployeePresentCheckCase();
-            checkCaseList.Add(uepcc);
+            //var clccc = new CheckLshetCorrespondenceCheckCase();
+            //checkCaseList.Add(clccc);
 
-            // Здесь добавляются свои варианты для проверки и заполнения следующих справочников
-            // 1. Справочник районов области
-            //RegionDistrictCheckCase rdcc = new RegionDistrictCheckCase();
-            //checkCaseList.Add(rdcc);
+            //var urpcc = new UnknownRegimPresentCheckCase();
+            //checkCaseList.Add(urpcc);
 
-            // 2. Справочник населенных пунктов.
-            //PunktCheckCase pcc = new PunktCheckCase();
-            //checkCaseList.Add(pcc);
+            //var mocc = new MainOrganizationCheckCase();
+            //checkCaseList.Add(mocc);
 
-            // 3. Справочник улиц.
-            //StreetCheckCase scc = new StreetCheckCase();
-            //checkCaseList.Add(scc);
+            //var uepcc = new UnknownEmployeePresentCheckCase();
+            //checkCaseList.Add(uepcc);
 
-            // 4. Справочник районов города.
-            //DistrictCheckCase dcc = new DistrictCheckCase();
-            //checkCaseList.Add(dcc);
+            //// Здесь добавляются свои варианты для проверки и заполнения следующих справочников
+            //// 1. Справочник районов области
+            ////RegionDistrictCheckCase rdcc = new RegionDistrictCheckCase();
+            ////checkCaseList.Add(rdcc);
 
-            // 5. Справочник источников оплаты
-            //SourceDocCheckCase sdcc = new SourceDocCheckCase();
-            //checkCaseList.Add(sdcc);
+            //// 2. Справочник населенных пунктов.
+            ////PunktCheckCase pcc = new PunktCheckCase();
+            ////checkCaseList.Add(pcc);
 
-            //// 6. Справочник групповых счетчиков
-            //CapCheckCase ccc = new CapCheckCase();
-            //checkCaseList.Add(ccc);
+            //// 3. Справочник улиц.
+            ////StreetCheckCase scc = new StreetCheckCase();
+            ////checkCaseList.Add(scc);
+
+            //// 4. Справочник районов города.
+            ////DistrictCheckCase dcc = new DistrictCheckCase();
+            ////checkCaseList.Add(dcc);
+
+            //// 5. Справочник источников оплаты
+            ////SourceDocCheckCase sdcc = new SourceDocCheckCase();
+            ////checkCaseList.Add(sdcc);
+
+            ////// 6. Справочник групповых счетчиков
+            ////CapCheckCase ccc = new CapCheckCase();
+            ////checkCaseList.Add(ccc);
 
             return checkCaseList;
-        }
-
-        public static List<CheckCase> GenerateCheckCases(CheckCaseClass ACheckCaseClass)
-        {
-            List<CheckCase> lcc = GenerateCheckCases();
-            lcc = lcc.Where(c => c.CheckCaseClass == ACheckCaseClass).ToList();
-            return lcc;
         }
     }
 }

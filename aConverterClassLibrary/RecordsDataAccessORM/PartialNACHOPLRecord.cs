@@ -5,7 +5,7 @@ using System.Text;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM
 {
-    public partial class NACHOPL
+    public partial class CNV_NACHOPL
     {
 
         public NachoplKeySet NachoplKeySet
@@ -23,9 +23,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
             }
         }
 
-        public static NACHOPL CreateFromKeySet(NachoplKeySet noks)
+        public static CNV_NACHOPL CreateFromKeySet(NachoplKeySet noks)
         {
-            var nor = new NACHOPL()
+            var nor = new CNV_NACHOPL()
             {
                 LSHET = noks.Lshet,
                 MONTH_ = (Int32)noks.Month,

@@ -83,14 +83,7 @@ namespace aConverter.Forms
 
         private void FormCheckCasesList_Load(object sender, EventArgs e)
         {
-            toolStripComboBoxCheckCaseClass.Items.Add("Все");
-            string[] names = Enum.GetNames(typeof(CheckCaseClass));
-            foreach (string s in names)
-            {
-                toolStripComboBoxCheckCaseClass.Items.Add(s.Replace('_', ' '));
-            }
-            toolStripComboBoxCheckCaseClass.Text = "Все";
-            this.Text = "Варианты проверки (" + aConverter_RootSettings.DestDBFFilePath + ")";
+            this.Text = "Варианты проверки (" + aConverter_RootSettings.FirebirdStringConnection + ")";
             checkCaseList = CheckCaseFactory.GenerateCheckCases();
             dataGridView1.DataSource = checkCaseList;
         }
@@ -155,22 +148,6 @@ namespace aConverter.Forms
                 ccc.NeedAnalize = false;
                 e.ThrowException = false;
             }
-        }
-
-        private void toolStripComboBoxCheckCaseClass_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (toolStripComboBoxCheckCaseClass.SelectedItem.ToString() == "Все")
-            {
-                checkCaseList = CheckCaseFactory.GenerateCheckCases();
-            }
-            else
-            {
-                string enumValue = toolStripComboBoxCheckCaseClass.SelectedItem.ToString().Replace(' ', '_');
-                CheckCaseClass ccc = (CheckCaseClass)Enum.Parse(typeof(CheckCaseClass), enumValue);
-                checkCaseList = CheckCaseFactory.GenerateCheckCases(ccc);
-            }
-            dataGridView1.DataSource = checkCaseList;
-            dataGridView1.Refresh();
         }
     }
 }

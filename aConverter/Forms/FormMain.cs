@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 using aConverterClassLibrary;
-using aConverterClassLibrary.Records;
 using System.IO;
 using aConverter.Forms;
-using System.Data.OleDb;
-using aConverterClassLibrary.Class;
 using DbfClassLibrary;
 using FirebirdSql.Data.FirebirdClient;
-
-
-
-
 
 namespace aConverter
 {
@@ -35,21 +25,21 @@ namespace aConverter
 
         private void экспериментыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string s = "0";
+            const string s = "0";
             string[] sa = s.Replace("..", "~").Split('~');
-            MessageBox.Show(sa.Length.ToString());
+            MessageBox.Show(sa.Length.ToString(CultureInfo.InvariantCulture));
         }
 
         private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormSettings fs = new FormSettings();
+            var fs = new FormSettings();
             fs.ShowDialog();
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            this.Text += " " + aConverterClassLibrary.Utils.GetVersion().ToString();
-            this.WindowState = FormWindowState.Maximized;
+            Text += " " + aConverterClassLibrary.Utils.GetVersion().ToString();
+            WindowState = FormWindowState.Maximized;
         }
 
         private void файлаcsПеречисленийДляLCHARSDBFToolStripMenuItem_Click(object sender, EventArgs e)
@@ -96,12 +86,12 @@ namespace aConverter
                             fileBody, Encoding.GetEncoding(1251));
                         #endregion
 
-                        MessageBox.Show("Файл сгенерирован успешно.", "Результаты", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(@"Файл сгенерирован успешно.", @"Результаты", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Ошибка выполнения команды:\n" + ex.Message,
-                            "Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(@"Ошибка выполнения команды:" + ex.Message,
+                            @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -112,19 +102,19 @@ namespace aConverter
             // Алгоритм
             // Инициализации
             string dataSource = String.Format(TableManager.VFPOLEDBConnectionString,
-                aConverter_RootSettings.SourceDBFFilePath);
+                aConverter_RootSettings.SourceDbfFilePath);
 
             // 1. Получаем список всех файлов в исходном каталоге
-            string[] files = Directory.GetFiles(aConverter_RootSettings.SourceDBFFilePath, "*.DBF");
+            string[] files = Directory.GetFiles(aConverter_RootSettings.SourceDbfFilePath, "*.DBF");
             // 2. Запускаем цикл по файлам
             int counter = 0;
 
-            CoverRecordGeneratorClass crgc = new CoverRecordGeneratorClass(dataSource, aConverter_RootSettings.CoverFileBodyPattern);
+            var crgc = new CoverRecordGeneratorClass(dataSource, aConverter_RootSettings.CoverFileBodyPattern);
             foreach (string fn in files)
             {
                 string shortFileName = Path.GetFileNameWithoutExtension(fn);
                 // Шаблон для имени .cs файлов (%f - имя (без расширения) исходного DBF-файла)
-                string coverFileNamePattern = "%fRecord.cs";
+                const string coverFileNamePattern = "%fRecord.cs";
                 string destFileName = coverFileNamePattern.Replace("%f",
                         shortFileName.Substring(0, 1).ToUpper() + shortFileName.Substring(1, shortFileName.Length - 1).ToLower());
                 try
@@ -377,26 +367,6 @@ namespace aConverter
                 }
             }
 
-        }
-
-        private void индексироватьИсходныеФайлыToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TableManager tm = new TableManager(aConverter_RootSettings.DestDBFFilePath);
-            tm.ErrorOpenFileEvent += new TableManager.ErrorOpenFile(tm_ErrorOpenFileEvent);
-            tm.Init();
-            foreach (Type t in FactoryRecord.GetAllRecordTypes())
-            {
-                tm.IndexTable(t);
-            }
-            tm.ErrorOpenFileEvent -= new TableManager.ErrorOpenFile(tm_ErrorOpenFileEvent);
-            tm.Dispose();
-            MessageBox.Show("Индексация успешно завершена!");
-        }
-
-        bool tm_ErrorOpenFileEvent(object sender, Exception errorMessage)
-        {
-            DialogResult dr = MessageBox.Show(errorMessage.Message+"\r\nПовторить?", "Ошибка выполнения запроса", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-            return dr == System.Windows.Forms.DialogResult.Yes;
         }
 
         private void описаниеТиповойСтруктурыToolStripMenuItem_Click(object sender, EventArgs e)

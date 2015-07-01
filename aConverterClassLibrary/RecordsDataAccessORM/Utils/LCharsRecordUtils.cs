@@ -10,14 +10,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// Прореживает список качественных характеристик
         /// </summary>
         /// <param name="lrl"></param>
-        public static List<LCHAR> ThinOutList(List<LCHAR> lrl)// -----------------------------
+        public static List<CNV_LCHAR> ThinOutList(List<CNV_LCHAR> lrl)// -----------------------------
         {
             // Сортируем список
-            var rlrl = new List<LCHAR>();
+            var rlrl = new List<CNV_LCHAR>();
             lrl.Sort(CompareLchars);
             // Удалем дублирующиеся строки
             string oldlshet = ""; long oldlcharcd = -1; decimal oldlcharvalue = -1;
-            foreach (LCHAR t in lrl)
+            foreach (CNV_LCHAR t in lrl)
             {
                 if (t.LSHET != oldlshet || t.LCHARCD != oldlcharcd || t.VALUE_ != oldlcharvalue)
                 {
@@ -36,7 +36,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <param name="lr1"></param>
         /// <param name="lr2"></param>
         /// <returns></returns>
-        public static int CompareLchars(LCHAR lr1, LCHAR lr2)
+        public static int CompareLchars(CNV_LCHAR lr1, CNV_LCHAR lr2)
         {
             if (Convert.ToUInt64(lr1.LSHET) < Convert.ToUInt64(lr2.LSHET))
                 return -1;
@@ -94,28 +94,28 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             recodeList = RecodeList;
         }
 
-        public List<LCHAR> GenerateLChars(DataRow row, string lshet, DateTime startDateTime)
+        public List<CNV_LCHAR> GenerateLChars(DataRow row, string lshet, DateTime startDateTime)
         {
-            List<LCHAR> lcrl = new List<LCHAR>();
+            var lcrl = new List<CNV_LCHAR>();
             foreach (RlCharsRecord rlcr in recodeList)
             {
                 if (CheckExpression(row, rlcr))
                 {
-                    LCHAR lcr = rlcr.GetLChars(lshet, startDateTime);
+                    CNV_LCHAR lcr = rlcr.GetLChars(lshet, startDateTime);
                     lcrl.Add(lcr);
                 }
             }
             return lcrl;
         }
 
-        public List<LCHAR> GenerateLChars(string fieldName, int fieldValue, string lshet, DateTime startDateTime, bool createObligatoryLchars)
+        public List<CNV_LCHAR> GenerateLChars(string fieldName, int fieldValue, string lshet, DateTime startDateTime, bool createObligatoryLchars)
         {
-            List<LCHAR> lcrl = new List<LCHAR>();
+            List<CNV_LCHAR> lcrl = new List<CNV_LCHAR>();
             foreach (RlCharsRecord rlcr in recodeList)
             {
                 if (CheckExpression(fieldName, fieldValue, rlcr))
                 {
-                    LCHAR lcr = rlcr.GetLChars(lshet, startDateTime);
+                    CNV_LCHAR lcr = rlcr.GetLChars(lshet, startDateTime);
                     lcrl.Add(lcr);
                 }
             }
@@ -206,9 +206,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             Addparam = aAddParam;
         }
 
-        public LCHAR GetLChars(string lshet, DateTime date)
+        public CNV_LCHAR GetLChars(string lshet, DateTime date)
         {
-            var lcr = new LCHAR
+            var lcr = new CNV_LCHAR
             {
                 LSHET = lshet,
                 LCHARCD = Lcharcd,

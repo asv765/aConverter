@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FirebirdSql.Data.FirebirdClient;
 using aConverterClassLibrary.Class.Errors;
-using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -13,7 +9,6 @@ namespace aConverterClassLibrary
         public UnknownEmployeePresentCheckCase()
         {
             this.CheckCaseName = String.Format("Проверка, что в целевой базе существует сотрудник с кодом 1 (Неизвестен или SYSDBA)");
-            this.CheckCaseClass = CheckCaseClass.Целостность_целевой_БД;
         }
 
         public override void Analize()

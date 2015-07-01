@@ -18,24 +18,12 @@ using Telerik.OpenAccess.Metadata;
 using Telerik.OpenAccess.Data.Common;
 using Telerik.OpenAccess.Metadata.Fluent;
 using Telerik.OpenAccess.Metadata.Fluent.Advanced;
+using aConverterClassLibrary.RecordsDataAccessORM;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM	
 {
 	public partial class ABONENT
 	{
-		private int _iD;
-		public virtual int ID
-		{
-			get
-			{
-				return this._iD;
-			}
-			set
-			{
-				this._iD = value;
-			}
-		}
-		
 		private string _lSHET;
 		public virtual string LSHET
 		{
@@ -46,6 +34,45 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			set
 			{
 				this._lSHET = value;
+			}
+		}
+		
+		private int? _oWNERID;
+		public virtual int? OWNERID
+		{
+			get
+			{
+				return this._oWNERID;
+			}
+			set
+			{
+				this._oWNERID = value;
+			}
+		}
+		
+		private int? _iSDELETED;
+		public virtual int? ISDELETED
+		{
+			get
+			{
+				return this._iSDELETED;
+			}
+			set
+			{
+				this._iSDELETED = value;
+			}
+		}
+		
+		private DateTime? _dOGOVORDT;
+		public virtual DateTime? DOGOVORDT
+		{
+			get
+			{
+				return this._dOGOVORDT;
+			}
+			set
+			{
+				this._dOGOVORDT = value;
 			}
 		}
 		
@@ -62,302 +89,328 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private int? _dISTKOD;
-		public virtual int? DISTKOD
+		private short? _fLATNO;
+		public virtual short? FLATNO
 		{
 			get
 			{
-				return this._dISTKOD;
+				return this._fLATNO;
 			}
 			set
 			{
-				this._dISTKOD = value;
+				this._fLATNO = value;
 			}
 		}
 		
-		private string _dISTNAME;
-		public virtual string DISTNAME
+		private short? _rOOMNO;
+		public virtual short? ROOMNO
 		{
 			get
 			{
-				return this._dISTNAME;
+				return this._rOOMNO;
 			}
 			set
 			{
-				this._dISTNAME = value;
+				this._rOOMNO = value;
 			}
 		}
 		
-		private int? _rAYONKOD;
-		public virtual int? RAYONKOD
+		private string _fIO;
+		public virtual string FIO
 		{
 			get
 			{
-				return this._rAYONKOD;
+				return this._fIO;
 			}
 			set
 			{
-				this._rAYONKOD = value;
+				this._fIO = value;
 			}
 		}
 		
-		private string _rAYONNAME;
-		public virtual string RAYONNAME
+		private string _nAME;
+		public virtual string NAME
 		{
 			get
 			{
-				return this._rAYONNAME;
+				return this._nAME;
 			}
 			set
 			{
-				this._rAYONNAME = value;
+				this._nAME = value;
 			}
 		}
 		
-		private int? _tOWNSKOD;
-		public virtual int? TOWNSKOD
+		private string _sECOND_NAME;
+		public virtual string SECOND_NAME
 		{
 			get
 			{
-				return this._tOWNSKOD;
+				return this._sECOND_NAME;
 			}
 			set
 			{
-				this._tOWNSKOD = value;
+				this._sECOND_NAME = value;
 			}
 		}
 		
-		private string _tOWNSNAME;
-		public virtual string TOWNSNAME
+		private string _tEL;
+		public virtual string TEL
 		{
 			get
 			{
-				return this._tOWNSNAME;
+				return this._tEL;
 			}
 			set
 			{
-				this._tOWNSNAME = value;
+				this._tEL = value;
 			}
 		}
 		
-		private int? _uLICAKOD;
-		public virtual int? ULICAKOD
+		private string _nOTE;
+		public virtual string NOTE
 		{
 			get
 			{
-				return this._uLICAKOD;
+				return this._nOTE;
 			}
 			set
 			{
-				this._uLICAKOD = value;
+				this._nOTE = value;
 			}
 		}
 		
-		private string _uLICANAME;
-		public virtual string ULICANAME
+		private short? _dELETED;
+		public virtual short? DELETED
 		{
 			get
 			{
-				return this._uLICANAME;
+				return this._dELETED;
 			}
 			set
 			{
-				this._uLICANAME = value;
+				this._dELETED = value;
 			}
 		}
 		
-		private string _nDOMA;
-		public virtual string NDOMA
+		private short? _nEEDMONTHDOLGRECOUNT;
+		public virtual short? NEEDMONTHDOLGRECOUNT
 		{
 			get
 			{
-				return this._nDOMA;
+				return this._nEEDMONTHDOLGRECOUNT;
 			}
 			set
 			{
-				this._nDOMA = value;
+				this._nEEDMONTHDOLGRECOUNT = value;
 			}
 		}
 		
-		private int? _kORPUS;
-		public virtual int? KORPUS
+		private int? _cHANGEDOCUMENTCD;
+		public virtual int? CHANGEDOCUMENTCD
 		{
 			get
 			{
-				return this._kORPUS;
+				return this._cHANGEDOCUMENTCD;
 			}
 			set
 			{
-				this._kORPUS = value;
+				this._cHANGEDOCUMENTCD = value;
 			}
 		}
 		
-		private string _kVARTIRA;
-		public virtual string KVARTIRA
+		private int? _aDDDOCUMENTCD;
+		public virtual int? ADDDOCUMENTCD
 		{
 			get
 			{
-				return this._kVARTIRA;
+				return this._aDDDOCUMENTCD;
 			}
 			set
 			{
-				this._kVARTIRA = value;
+				this._aDDDOCUMENTCD = value;
 			}
 		}
 		
-		private int? _kOMNATA;
-		public virtual int? KOMNATA
+		private string _rEMINDING;
+		public virtual string REMINDING
 		{
 			get
 			{
-				return this._kOMNATA;
+				return this._rEMINDING;
 			}
 			set
 			{
-				this._kOMNATA = value;
+				this._rEMINDING = value;
 			}
 		}
 		
-		private string _f;
-		public virtual string F
+		private string _fLATPOSTFIX;
+		public virtual string FLATPOSTFIX
 		{
 			get
 			{
-				return this._f;
+				return this._fLATPOSTFIX;
 			}
 			set
 			{
-				this._f = value;
+				this._fLATPOSTFIX = value;
 			}
 		}
 		
-		private string _i;
-		public virtual string I
+		private DateTime? _dELETE_DATE;
+		public virtual DateTime? DELETE_DATE
 		{
 			get
 			{
-				return this._i;
+				return this._dELETE_DATE;
 			}
 			set
 			{
-				this._i = value;
+				this._dELETE_DATE = value;
 			}
 		}
 		
-		private string _o;
-		public virtual string O
+		private string _rOOMPOSTFIX;
+		public virtual string ROOMPOSTFIX
 		{
 			get
 			{
-				return this._o;
+				return this._rOOMPOSTFIX;
 			}
 			set
 			{
-				this._o = value;
+				this._rOOMPOSTFIX = value;
 			}
 		}
 		
-		private string _pRIM_;
-		public virtual string PRIM_
+		private string _kR;
+		public virtual string KR
 		{
 			get
 			{
-				return this._pRIM_;
+				return this._kR;
 			}
 			set
 			{
-				this._pRIM_ = value;
+				this._kR = value;
 			}
 		}
 		
-		private string _eXTLSHET;
-		public virtual string EXTLSHET
+		private int? _rEMINDINGUSERCD;
+		public virtual int? REMINDINGUSERCD
 		{
 			get
 			{
-				return this._eXTLSHET;
+				return this._rEMINDINGUSERCD;
 			}
 			set
 			{
-				this._eXTLSHET = value;
+				this._rEMINDINGUSERCD = value;
 			}
 		}
 		
-		private string _eXTLSHET2;
-		public virtual string EXTLSHET2
+		private string _lASTUSER;
+		public virtual string LASTUSER
 		{
 			get
 			{
-				return this._eXTLSHET2;
+				return this._lASTUSER;
 			}
 			set
 			{
-				this._eXTLSHET2 = value;
+				this._lASTUSER = value;
 			}
 		}
 		
-		private string _pHONENUM;
-		public virtual string PHONENUM
+		private int? _tABNUMBER;
+		public virtual int? TABNUMBER
 		{
 			get
 			{
-				return this._pHONENUM;
+				return this._tABNUMBER;
 			}
 			set
 			{
-				this._pHONENUM = value;
+				this._tABNUMBER = value;
 			}
 		}
 		
-		private string _pOSTINDEX;
-		public virtual string POSTINDEX
+		private string _gUID;
+		public virtual string GUID
 		{
 			get
 			{
-				return this._pOSTINDEX;
+				return this._gUID;
 			}
 			set
 			{
-				this._pOSTINDEX = value;
+				this._gUID = value;
 			}
 		}
 		
-		private int? _dUCD;
-		public virtual int? DUCD
+		private string _kLADR;
+		public virtual string KLADR
 		{
 			get
 			{
-				return this._dUCD;
+				return this._kLADR;
 			}
 			set
 			{
-				this._dUCD = value;
+				this._kLADR = value;
 			}
 		}
 		
-		private string _dUNAME;
-		public virtual string DUNAME
+		private string _pCLOGIN;
+		public virtual string PCLOGIN
 		{
 			get
 			{
-				return this._dUNAME;
+				return this._pCLOGIN;
 			}
 			set
 			{
-				this._dUNAME = value;
+				this._pCLOGIN = value;
 			}
 		}
 		
-		private int? _iSDELETED;
-		public virtual int? ISDELETED
+		private short? _rESTRICT_LOAD_CHANGES_FROM_PS;
+		public virtual short? RESTRICT_LOAD_CHANGES_FROM_PS
 		{
 			get
 			{
-				return this._iSDELETED;
+				return this._rESTRICT_LOAD_CHANGES_FROM_PS;
 			}
 			set
 			{
-				this._iSDELETED = value;
+				this._rESTRICT_LOAD_CHANGES_FROM_PS = value;
+			}
+		}
+		
+		private short? _rESTRICT_SEND_CHANGES_TO_PS;
+		public virtual short? RESTRICT_SEND_CHANGES_TO_PS
+		{
+			get
+			{
+				return this._rESTRICT_SEND_CHANGES_TO_PS;
+			}
+			set
+			{
+				this._rESTRICT_SEND_CHANGES_TO_PS = value;
+			}
+		}
+		
+		private HOUSE _hOUSE;
+		public virtual HOUSE HOUSE
+		{
+			get
+			{
+				return this._hOUSE;
+			}
+			set
+			{
+				this._hOUSE = value;
 			}
 		}
 		

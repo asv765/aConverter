@@ -3,8 +3,7 @@ using System.Data.EntityClient;
 using System.Globalization;
 using System.Linq;
 using aConverterClassLibrary;
-using aConverterClassLibrary.RecordsEDM;
-using aConverterClassMariaDB;
+using aConverterClassLibrary.RecordsDataAccessORM;
 using System;
 using System.Data;
 using DbfClassLibrary;
@@ -93,7 +92,7 @@ namespace _032_RyagskTeplo
         {
             SetStepsCount(5);
 
-            var tms = new TableManager(aConverter_RootSettings.SourceDBFFilePath);
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
             #region 1. Грузим справочник абонентов
@@ -258,7 +257,7 @@ namespace _032_RyagskTeplo
         {
             SetStepsCount(5);
 
-            var tms = new TableManager(aConverter_RootSettings.SourceDBFFilePath);
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
             #region 1. Грузим справочник абонентов (для конвертации площади)
@@ -366,7 +365,7 @@ namespace _032_RyagskTeplo
         {
             SetStepsCount(2);
 
-            var tms = new TableManager(aConverter_RootSettings.SourceDBFFilePath);
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
             #region 1. Проходим по справочнику абонентов
@@ -407,7 +406,7 @@ namespace _032_RyagskTeplo
             #endregion
         }
 
-        public List<lchar> GetLcharListByTarif(int tarifCd, string lshet)
+        public List<LCHAR> GetLcharListByTarif(int tarifCd, string lshet)
         {
             var llchar = new List<lchar>();
             if (tarifCd == 4)
@@ -496,7 +495,7 @@ namespace _032_RyagskTeplo
             var nom = new NachoplManager(NachoplCorrectionType.Пересчитать_сальдо_на_конец);
 
             #region 1. Данные из файла сальдо ARCSR.DBF
-            var dt = tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM ARCSR");
+            var dt = Tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM ARCSR");
             StepStart(dt.Rows.Count);
             var asr = new ArcsrRecord();
             foreach (DataRow row in dt.Rows)
@@ -531,7 +530,7 @@ namespace _032_RyagskTeplo
             #endregion
 
             #region 2. Данные из файла начислений ROF.DBF
-            dt = tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM ROF");
+            dt = Tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM ROF");
             StepStart(dt.Rows.Count);
             var rr = new RofRecord();
             var defaultNachRecord = new nach()
@@ -579,7 +578,7 @@ namespace _032_RyagskTeplo
             #endregion
 
             #region 3. Данные из файла корректировок KORRAS.DBF
-            dt = tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM KORRAS");
+            dt = Tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM KORRAS");
             StepStart(dt.Rows.Count);
             var krr = new KorrasRecord();
             defaultNachRecord = new nach()
@@ -624,7 +623,7 @@ namespace _032_RyagskTeplo
             #endregion
 
             #region 4. Данные из файла оплат PAY.DBF
-            dt = tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM RIF");
+            dt = Tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM RIF");
             StepStart(dt.Rows.Count);
             var rifr = new RifRecord();
             var defaultOplataRecord = new oplata()
@@ -726,7 +725,7 @@ namespace _032_RyagskTeplo
             SetStepsCount(2);
 
             #region 1. Данные о счетчиках помещаем в список
-            DataTable dt = tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM COUNTERS");
+            DataTable dt = Tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM COUNTERS");
             StepStart(dt.Rows.Count);
             var cr = new CountersRecord();
 
@@ -807,7 +806,7 @@ namespace _032_RyagskTeplo
             SetStepsCount(2);
 
             #region 1. Данные о показаниях счетчиков помещаем в список
-            DataTable dt = tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM COUNTIND");
+            DataTable dt = Tmsource.ExecuteQuery("SELECT RECNO() AS RECNO, * FROM COUNTIND");
             StepStart(dt.Rows.Count);
             var cir = new CountindRecord();
 
@@ -875,7 +874,7 @@ namespace _032_RyagskTeplo
 
             #region 1. Данные о пени
 
-            DataTable dt = tmsource.ExecuteQuery("SELECT * FROM SPRRAB WHERE PENI <> 0");
+            DataTable dt = Tmsource.ExecuteQuery("SELECT * FROM SPRRAB WHERE PENI <> 0");
             StepStart(dt.Rows.Count);
             var sr = new SprrabRecord();
 

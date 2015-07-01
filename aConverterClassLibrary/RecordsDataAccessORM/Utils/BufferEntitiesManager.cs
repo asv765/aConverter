@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FirebirdSql.Data.FirebirdClient;
 using FirebirdSql.Data.Isql;
 using System.Data;
@@ -10,42 +11,61 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <summary>
         /// (Пере)создает все нобходимые для конвертации сущность в целевой Firebird базе данных
         /// </summary>
-        public static void CreateAllEntities()
+        public static void ReCreateAllEntities()
         {
-            DropEntity("ADDDCHAR");
-            CreateEntity("ADDDCHAR");
-            DropEntity("ABONENT");
-            CreateEntity("ABONENT");
-            DropEntity("CHARS");
-            CreateEntity("CHARS");
-            DropEntity("CHARVALS");
-            CreateEntity("CHARVALS");
-            DropEntity("CITIZENS");
-            CreateEntity("CITIZENS");
-            DropEntity("CNTRSIND");
-            CreateEntity("CNTRSIND");
-            DropEntity("COUNTERS");
-            CreateEntity("COUNTERS");
-            DropEntity("DOGOVOR");
-            CreateEntity("DOGOVOR");
-            DropEntity("EQUIPMENT");
-            CreateEntity("EQUIPMENT");
-            DropEntity("GCOUNTER");
-            CreateEntity("GCOUNTER");
-            DropEntity("HADDCHAR");
-            CreateEntity("HADDCHAR");
-            DropEntity("LCHARS");
-            CreateEntity("LCHARS");
-            DropEntity("NACH");
-            CreateEntity("NACH");
-            DropEntity("NACHOPL");
-            CreateEntity("NACHOPL");
-            DropEntity("OPLATA");
-            CreateEntity("OPLATA");
-            DropEntity("PENI");
-            CreateEntity("PENI");
-            DropEntity("SUPPLNET");
-            CreateEntity("SUPPLNET");
+            var l = GetAllEntities();
+            foreach (var s in l)
+            {
+                DropEntity(s);
+                CreateEntity(s);
+            }
+        }
+
+        public static List<string> GetAllEntities()
+        {
+            var l = new List<string>
+            {
+                "ADDDCHAR",
+                "ABONENT",
+                "CHARS",
+                "CHARVALS",
+                "CITIZENS",
+                "CNTRSIND",
+                "COUNTERS",
+                "DOGOVOR",
+                "EQUIPMENT",
+                "GCOUNTER",
+                "HADDCHAR",
+                "LCHARS",
+                "NACH",
+                "NACHOPL",
+                "OPLATA",
+                "PENI",
+                "SUPPLNET",
+                "CHECKCASESPDESC"
+            };
+            return l;
+        }
+
+        public static void DropAllData()
+        {
+            var l = GetAllEntities();
+            foreach (var s in l)
+            {
+                if (s == "CHECKCASESPDESC") continue;
+                DropTableData("CNV$" + s);
+            }
+        }
+
+        public static void DropTableData(string tableName)
+        {
+            using (var fc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                fc.Open();
+                string dropcommand = "DELETE FROM " + tableName;
+                var fbc = new FbCommand(dropcommand, fc);
+                fbc.ExecuteNonQuery();
+            }            
         }
 
         /// <summary>
@@ -54,7 +74,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <param name="entityName"></param>
         public static void CreateEntity(string entityName)
         {
-            using (FbConnection fc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
+            using (var fc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
             {
                 string createScript =
                     Properties.Resources.ResourceManager.GetString("CNV_" + entityName);
@@ -72,7 +92,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         public static bool DropEntity(string entityName)
         {
             // Проверяем, существует ли соответствующая сущность
-            using (FbConnection fc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
+            using (var fc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
             {
                 fc.Open();
                 DataTable dt = fc.GetSchema("Tables", new[] { null, null, null, "TABLE" });
@@ -106,11 +126,11 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         {
             if (script == null) throw new ArgumentNullException("script");
             if (connection == null) throw new ArgumentNullException("connection");
-            FbScript fs = new FbScript(script);
+            var fs = new FbScript(script);
             fs.Parse();
             foreach (var result in fs.Results)
             {
-                FbCommand fbc = new FbCommand(result, connection);
+                var fbc = new FbCommand(result, connection);
                 fbc.ExecuteNonQuery();
             }
         }

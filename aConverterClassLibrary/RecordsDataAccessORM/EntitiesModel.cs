@@ -50,131 +50,179 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			:base(connection, backendConfiguration, metadataSource)
 		{ }
 			
-		public IQueryable<SUPPLNET> SUPPLNETs 
+		public IQueryable<CNV_SUPPLNET> CNV_SUPPLNETs 
 		{
 			get
 			{
-				return this.GetAll<SUPPLNET>();
+				return this.GetAll<CNV_SUPPLNET>();
 			}
 		}
 		
-		public IQueryable<PENI> PENIs 
+		public IQueryable<CNV_PENI> CNV_PENIs 
 		{
 			get
 			{
-				return this.GetAll<PENI>();
+				return this.GetAll<CNV_PENI>();
 			}
 		}
 		
-		public IQueryable<OPLATA> OPLATAs 
+		public IQueryable<CNV_OPLATA> CNV_OPLATAs 
 		{
 			get
 			{
-				return this.GetAll<OPLATA>();
+				return this.GetAll<CNV_OPLATA>();
 			}
 		}
 		
-		public IQueryable<NACHOPL> NACHOPLs 
+		public IQueryable<CNV_NACHOPL> CNV_NACHOPLs 
 		{
 			get
 			{
-				return this.GetAll<NACHOPL>();
+				return this.GetAll<CNV_NACHOPL>();
 			}
 		}
 		
-		public IQueryable<NACH> NACHes 
+		public IQueryable<CNV_NACH> CNV_NACHes 
 		{
 			get
 			{
-				return this.GetAll<NACH>();
+				return this.GetAll<CNV_NACH>();
 			}
 		}
 		
-		public IQueryable<LCHAR> LCHARs 
+		public IQueryable<CNV_LCHAR> CNV_LCHARs 
 		{
 			get
 			{
-				return this.GetAll<LCHAR>();
+				return this.GetAll<CNV_LCHAR>();
 			}
 		}
 		
-		public IQueryable<HADDCHAR> HADDCHARs 
+		public IQueryable<CNV_HADDCHAR> CNV_HADDCHARs 
 		{
 			get
 			{
-				return this.GetAll<HADDCHAR>();
+				return this.GetAll<CNV_HADDCHAR>();
 			}
 		}
 		
-		public IQueryable<GCOUNTER> GCOUNTERs 
+		public IQueryable<CNV_GCOUNTER> CNV_GCOUNTERs 
 		{
 			get
 			{
-				return this.GetAll<GCOUNTER>();
+				return this.GetAll<CNV_GCOUNTER>();
 			}
 		}
 		
-		public IQueryable<EQUIPMENT> EQUIPMENT 
+		public IQueryable<CNV_EQUIPMENT> CNV_EQUIPMENTs 
 		{
 			get
 			{
-				return this.GetAll<EQUIPMENT>();
+				return this.GetAll<CNV_EQUIPMENT>();
 			}
 		}
 		
-		public IQueryable<DOGOVOR> DOGOVORs 
+		public IQueryable<CNV_DOGOVOR> CNV_DOGOVORs 
 		{
 			get
 			{
-				return this.GetAll<DOGOVOR>();
+				return this.GetAll<CNV_DOGOVOR>();
 			}
 		}
 		
-		public IQueryable<COUNTER> COUNTERs 
+		public IQueryable<CNV_COUNTER> CNV_COUNTERs 
 		{
 			get
 			{
-				return this.GetAll<COUNTER>();
+				return this.GetAll<CNV_COUNTER>();
 			}
 		}
 		
-		public IQueryable<CNTRSIND> CNTRSINDs 
+		public IQueryable<CNV_CNTRSIND> CNV_CNTRSINDs 
 		{
 			get
 			{
-				return this.GetAll<CNTRSIND>();
+				return this.GetAll<CNV_CNTRSIND>();
 			}
 		}
 		
-		public IQueryable<CITIZEN> CITIZENs 
+		public IQueryable<CNV_CITIZEN> CNV_CITIZENs 
 		{
 			get
 			{
-				return this.GetAll<CITIZEN>();
+				return this.GetAll<CNV_CITIZEN>();
 			}
 		}
 		
-		public IQueryable<CHARVAL> CHARVALs 
+		public IQueryable<CNV_CHARVAL> CNV_CHARVALs 
 		{
 			get
 			{
-				return this.GetAll<CHARVAL>();
+				return this.GetAll<CNV_CHARVAL>();
 			}
 		}
 		
-		public IQueryable<CHAR> CHARs 
+		public IQueryable<CNV_CHAR> CNV_CHARs 
 		{
 			get
 			{
-				return this.GetAll<CHAR>();
+				return this.GetAll<CNV_CHAR>();
 			}
 		}
 		
-		public IQueryable<ADDDCHAR> ADDDCHARs 
+		public IQueryable<CNV_ADDDCHAR> CNV_ADDDCHARs 
 		{
 			get
 			{
-				return this.GetAll<ADDDCHAR>();
+				return this.GetAll<CNV_ADDDCHAR>();
+			}
+		}
+		
+		public IQueryable<CNV_ABONENT> CNV_ABONENTs 
+		{
+			get
+			{
+				return this.GetAll<CNV_ABONENT>();
+			}
+		}
+		
+		public IQueryable<EXTORGSTREET> EXTORGSTREETs 
+		{
+			get
+			{
+				return this.GetAll<EXTORGSTREET>();
+			}
+		}
+		
+		public IQueryable<LCHARSLIST> LCHARSLISTs 
+		{
+			get
+			{
+				return this.GetAll<LCHARSLIST>();
+			}
+		}
+		
+		public IQueryable<HOUSE> HOUSEs 
+		{
+			get
+			{
+				return this.GetAll<HOUSE>();
+			}
+		}
+		
+		public IQueryable<CCHARSLIST> CCHARSLISTs 
+		{
+			get
+			{
+				return this.GetAll<CCHARSLIST>();
+			}
+		}
+		
+		public IQueryable<BALANCESLIST> BALANCESLISTs 
+		{
+			get
+			{
+				return this.GetAll<BALANCESLIST>();
 			}
 		}
 		
@@ -183,6 +231,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			get
 			{
 				return this.GetAll<ABONENT>();
+			}
+		}
+		
+		public IQueryable<STREET> STREETs 
+		{
+			get
+			{
+				return this.GetAll<STREET>();
 			}
 		}
 		
@@ -207,71 +263,99 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 	
 	public interface IAbonentConvertationEntitiesModelUnitOfWork : IUnitOfWork
 	{
-		IQueryable<SUPPLNET> SUPPLNETs
+		IQueryable<CNV_SUPPLNET> CNV_SUPPLNETs
 		{
 			get;
 		}
-		IQueryable<PENI> PENIs
+		IQueryable<CNV_PENI> CNV_PENIs
 		{
 			get;
 		}
-		IQueryable<OPLATA> OPLATAs
+		IQueryable<CNV_OPLATA> CNV_OPLATAs
 		{
 			get;
 		}
-		IQueryable<NACHOPL> NACHOPLs
+		IQueryable<CNV_NACHOPL> CNV_NACHOPLs
 		{
 			get;
 		}
-		IQueryable<NACH> NACHes
+		IQueryable<CNV_NACH> CNV_NACHes
 		{
 			get;
 		}
-		IQueryable<LCHAR> LCHARs
+		IQueryable<CNV_LCHAR> CNV_LCHARs
 		{
 			get;
 		}
-		IQueryable<HADDCHAR> HADDCHARs
+		IQueryable<CNV_HADDCHAR> CNV_HADDCHARs
 		{
 			get;
 		}
-		IQueryable<GCOUNTER> GCOUNTERs
+		IQueryable<CNV_GCOUNTER> CNV_GCOUNTERs
 		{
 			get;
 		}
-		IQueryable<EQUIPMENT> EQUIPMENT
+		IQueryable<CNV_EQUIPMENT> CNV_EQUIPMENTs
 		{
 			get;
 		}
-		IQueryable<DOGOVOR> DOGOVORs
+		IQueryable<CNV_DOGOVOR> CNV_DOGOVORs
 		{
 			get;
 		}
-		IQueryable<COUNTER> COUNTERs
+		IQueryable<CNV_COUNTER> CNV_COUNTERs
 		{
 			get;
 		}
-		IQueryable<CNTRSIND> CNTRSINDs
+		IQueryable<CNV_CNTRSIND> CNV_CNTRSINDs
 		{
 			get;
 		}
-		IQueryable<CITIZEN> CITIZENs
+		IQueryable<CNV_CITIZEN> CNV_CITIZENs
 		{
 			get;
 		}
-		IQueryable<CHARVAL> CHARVALs
+		IQueryable<CNV_CHARVAL> CNV_CHARVALs
 		{
 			get;
 		}
-		IQueryable<CHAR> CHARs
+		IQueryable<CNV_CHAR> CNV_CHARs
 		{
 			get;
 		}
-		IQueryable<ADDDCHAR> ADDDCHARs
+		IQueryable<CNV_ADDDCHAR> CNV_ADDDCHARs
+		{
+			get;
+		}
+		IQueryable<CNV_ABONENT> CNV_ABONENTs
+		{
+			get;
+		}
+		IQueryable<EXTORGSTREET> EXTORGSTREETs
+		{
+			get;
+		}
+		IQueryable<LCHARSLIST> LCHARSLISTs
+		{
+			get;
+		}
+		IQueryable<HOUSE> HOUSEs
+		{
+			get;
+		}
+		IQueryable<CCHARSLIST> CCHARSLISTs
+		{
+			get;
+		}
+		IQueryable<BALANCESLIST> BALANCESLISTs
 		{
 			get;
 		}
 		IQueryable<ABONENT> ABONENTs
+		{
+			get;
+		}
+		IQueryable<STREET> STREETs
 		{
 			get;
 		}

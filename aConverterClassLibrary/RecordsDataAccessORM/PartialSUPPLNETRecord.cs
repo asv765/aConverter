@@ -5,11 +5,11 @@ using System.Text;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM
 {
-    public partial class SUPPLNET
+    public partial class CNV_SUPPLNET
     {
-        public SUPPLNET CloneRecord()
+        public CNV_SUPPLNET CloneRecord()
         {
-            var sr = new SUPPLNET
+            var sr = new CNV_SUPPLNET
             {
                 LSHET = this.LSHET,
                 SERVICECD = this.SERVICECD,

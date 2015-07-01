@@ -220,4 +220,31 @@
   <data name="CNV_SUPPLNET_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_supplnet_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="DeleteOplataExcessRowCorrectionCase" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\correctioncasequeries\deleteoplataexcessrowcorrectioncase.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NachoplOplataCheckCase1_NotFoundInOplata" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\checkcasequeries\nachoploplatacheckcase1_notfoundinoplata.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NachoplOplataCheckCase2_OplataSummMismatch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\checkcasequeries\nachoploplatacheckcase2_oplatasummmismatch.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NachoplOplataCheckCase3_NotFoundInNachopl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\checkcasequeries\nachoploplatacheckcase3_notfoundinnachopl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NachoplOplataCorrectionCase" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\correctioncasequeries\nachoploplatacorrectioncase.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NachoplOplataSetNullCorrectionCase" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\correctioncasequeries\nachoploplatasetnullcorrectioncase.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NachoplOplataSummaMismatchErrorStatistic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\statisticqueries\nachoploplatasummamismatcherrorstatistic.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NachoplSummaNotFoundInOplataStatistic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\statisticqueries\nachoplsummanotfoundinoplatastatistic.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="OplataSummaNotFoundInNachoplStatistic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\statisticqueries\oplatasummanotfoundinnachoplstatistic.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

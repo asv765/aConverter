@@ -17,23 +17,23 @@ namespace aConverterClassLibrary
             set { checkCaseName = value; }
         }
 
-        private CheckCaseClass checkCaseClass;
-        /// <summary>
-        /// Класс варианта проверки
-        /// </summary>
-        public CheckCaseClass CheckCaseClass
-        {
-            get { return checkCaseClass; }
-            set { checkCaseClass = value; }
-        }
+        //private CheckCaseClass checkCaseClass;
+        ///// <summary>
+        ///// Класс варианта проверки
+        ///// </summary>
+        //public CheckCaseClass CheckCaseClass
+        //{
+        //    get { return checkCaseClass; }
+        //    set { checkCaseClass = value; }
+        //}
 
         /// <summary>
         /// Наименование класса варианта проверки
         /// </summary>
-        public string CheckCaseClassName
-        {
-            get { return checkCaseClass.ToString().Replace('_', ' '); }
-        }
+        //public string CheckCaseClassName
+        //{
+        //    get { return checkCaseClass.ToString().Replace('_', ' '); }
+        //}
 
         private CheckCaseStatus result = CheckCaseStatus.Анализ_не_проводился;
         /// <summary>
@@ -107,11 +107,11 @@ namespace aConverterClassLibrary
         Выполняется_анализ = 4 
     }
 
-    public enum CheckCaseClass
-    {
-        Целостность_конвертируемых_данных,
-        Целостность_между_конвертируемыми_данными_и_целевой_БД,
-        Целостность_структуры_конвертируемых_данных,
-        Целостность_целевой_БД
-    }
+    //public enum CheckCaseClass
+    //{
+    //    Целостность_конвертируемых_данных,
+    //    Целостность_между_конвертируемыми_данными_и_целевой_БД,
+    //    Целостность_структуры_конвертируемых_данных,
+    //    Целостность_целевой_БД
+    //}
 }

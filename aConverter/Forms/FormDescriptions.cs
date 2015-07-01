@@ -58,22 +58,22 @@ namespace aConverter.Forms
 
         private void FormDescriptions_Load(object sender, EventArgs e)
         {
-            foreach(Type t in FactoryRecord.GetAllRecordTypes())
-            {
-                CheckBox cb = new CheckBox();
-                cb.Checked = true;
-                cb.Tag = t;
-                cb.Text = "";
-                cb.AutoSize = true;
-                cb.Anchor = AnchorStyles.Left;
-                tableLayoutPanel1.Controls.Add(cb);
-                Label l = new Label();
-                l.Text = TableManager.GetTableDescription(t) + " (" + TableManager.GetTableName(t) + ".DBF)";
-                l.Anchor = AnchorStyles.Left;
-                l.TextAlign = ContentAlignment.MiddleLeft;
-                l.AutoSize = true;
-                tableLayoutPanel1.Controls.Add(l);
-            }
+            //foreach(Type t in FactoryRecord.GetAllRecordTypes())
+            //{
+            //    CheckBox cb = new CheckBox();
+            //    cb.Checked = true;
+            //    cb.Tag = t;
+            //    cb.Text = "";
+            //    cb.AutoSize = true;
+            //    cb.Anchor = AnchorStyles.Left;
+            //    tableLayoutPanel1.Controls.Add(cb);
+            //    Label l = new Label();
+            //    l.Text = TableManager.GetTableDescription(t) + " (" + TableManager.GetTableName(t) + ".DBF)";
+            //    l.Anchor = AnchorStyles.Left;
+            //    l.TextAlign = ContentAlignment.MiddleLeft;
+            //    l.AutoSize = true;
+            //    tableLayoutPanel1.Controls.Add(l);
+            //}
         }
     }
 }

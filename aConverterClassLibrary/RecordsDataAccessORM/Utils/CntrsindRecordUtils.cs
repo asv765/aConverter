@@ -8,14 +8,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <summary>
         /// Прореживает список показаний
         /// </summary>
-        public static List<CNTRSIND> ThinOutList(List<CNTRSIND> cirl)
+        public static List<CNV_CNTRSIND> ThinOutList(List<CNV_CNTRSIND> cirl)
         {
             // Сортируем список
-            List<CNTRSIND> rcirl = new List<CNTRSIND>();
+            var rcirl = new List<CNV_CNTRSIND>();
             cirl.Sort(CompareCntrsind);
-            CNTRSIND oldcir = new CNTRSIND();
+            var oldcir = new CNV_CNTRSIND();
             // Удалем дублирующиеся строки
-            foreach (CNTRSIND cir in cirl)
+            foreach (CNV_CNTRSIND cir in cirl)
             {
                 if (CompareCntrsind(cir, oldcir) != 0)
                 {
@@ -26,7 +26,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             return rcirl;
         }
 
-        public static void RestoreHistory(ref List<CNTRSIND> cirl, RestoreHistoryType restoreHistoryType)
+        public static void RestoreHistory(ref List<CNV_CNTRSIND> cirl, RestoreHistoryType restoreHistoryType)
         {
             // Сортируем список
             // List<CntrsindRecord> rcirl = new List<CntrsindRecord>();
@@ -36,10 +36,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             {
                 cirl.Reverse();
             }
-            CNTRSIND oldcir = new CNTRSIND();
+            var oldcir = new CNV_CNTRSIND();
             oldcir.COUNTERID = "Not Defined";
             // Удаляем дублирующиеся строки
-            foreach (CNTRSIND cir in cirl)
+            foreach (CNV_CNTRSIND cir in cirl)
             {
                 if (restoreHistoryType == RestoreHistoryType.С_конца_по_конечным_показаниям)
                 {
@@ -85,7 +85,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// Метод-делегат для сравнения двух записей в Cntrsind
         /// </summary>
         /// <returns></returns>
-        public static int CompareCntrsind(CNTRSIND cir1, CNTRSIND cir2)
+        public static int CompareCntrsind(CNV_CNTRSIND cir1, CNV_CNTRSIND cir2)
         {
             int compare = System.String.CompareOrdinal(cir1.COUNTERID, cir2.COUNTERID);
             if (compare == 0) compare = DateTime.Compare((DateTime)cir1.INDDATE, (DateTime)cir2.INDDATE);

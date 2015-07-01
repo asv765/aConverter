@@ -36,7 +36,7 @@ namespace aConverter.Forms
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            Statistic = getStatistic();
+            Statistic = GetStatistic();
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
             Close();
         }
@@ -52,28 +52,14 @@ namespace aConverter.Forms
             if (statistic != null)
             {
                 textBoxStatisticName.Text = statistic.StatisticName;
-                if (statistic is DbfStatistic) radioButtonDbfClass.Checked = true;
-                if (statistic is MySQLStatistic) radioButtonMySQLclass.Checked = true;
-                if (statistic is FdbStatistic) radioButtonFdbClass.Checked = true;
                 comboBoxStatisticType.SelectedIndex = statistic.StatisticTypeId;
                 textBoxSQL.Text = statistic.Sql.Replace("\r\n","\n").Replace("\n","\r\n");
             }
         }
 
-        private Statistic getStatistic()
+        private Statistic GetStatistic()
         {
-            Statistic s;
-
-            // Собираем данные с полей
-            if (radioButtonDbfClass.Checked)
-                s = new DbfStatistic();
-            else if (radioButtonFdbClass.Checked)
-                s = new FdbStatistic();
-            else if (radioButtonMySQLclass.Checked)
-                s = new MySQLStatistic();
-            else
-                throw new Exception("Неизвестный класс статистики.");
-
+            var s = new FdbStatistic();
             s.StatisticName = textBoxStatisticName.Text;
             s.StatisticTypeId = comboBoxStatisticType.SelectedIndex;
             s.Sql = textBoxSQL.Text;
@@ -83,7 +69,7 @@ namespace aConverter.Forms
 
         private void buttonCheck_Click(object sender, EventArgs e)
         {
-            Statistic s = getStatistic();
+            Statistic s = GetStatistic();
             ShowStatisticClass.ShowStatistic(s);
         }
     }

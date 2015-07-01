@@ -1,163 +1,123 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DbfClassLibrary;
 
 namespace aConverterClassLibrary
 {
     public abstract class ConvertCase : IDisposable
     {
-        private string convertCaseName = "ИМЯ НЕ ОПРЕДЕЛЕНО";
+        private string _convertCaseName = "ИМЯ НЕ ОПРЕДЕЛЕНО";
         /// <summary>
         /// Наименование варианта корректировки
         /// </summary>
         public string ConvertCaseName//--------------------------------------------после 23
         {
-            get { return convertCaseName; }
-            set { convertCaseName = value; }
+            get { return _convertCaseName; }
+            set { _convertCaseName = value; }
         }
 
-        private bool ischecked = false;
         /// <summary>
         /// Выбран для конвертации
         /// </summary>
-        public bool IsChecked
-        {
-            get { return ischecked; }
-            set { ischecked = value; }
-        }
+        public bool IsChecked { get; set; }
 
-        private bool isInitial = false;
         /// <summary>
-        /// Является инициализируюим - выполняется первым, после выполнения добавляется в списокъ
+        /// Является инициализируюим - выполняется первым, после выполнения добавляется в список
         /// InitialConvertCases других ConvertCase-ов
         /// </summary>
-        public bool IsInitial
-        {
-            get { return isInitial; }
-            set { isInitial = value; }
-        }
+        public bool IsInitial { get; set; }
 
-        private List<ConvertCase> initialConvertCases = new List<ConvertCase>();
         /// <summary>
         /// Список инициализирующих ConvertCase-ов. Удобны, например, для однократной загрузки 
         /// исходных данных
         /// </summary>
-        public List<ConvertCase> InitialConvertCases
-        {
-            get { return initialConvertCases; }
-            set { initialConvertCases = value; }
-        }
+        public List<ConvertCase> InitialConvertCases { get; set; }
 
-        private int position;
         /// <summary>
         /// Позиция внутри списка шагов конвертации (определяет порядок выполнения)
         /// </summary>
-        public int Position
-        {
-            get { return position; }
-            set { position = value; }
-        }
+        public int Position { get; set; }
 
-        private ConvertCaseStatus result = ConvertCaseStatus.Шаг_не_выполнен;
+        private ConvertCaseStatus _result = ConvertCaseStatus.Шаг_не_выполнен;
         /// <summary>
         /// Результаты выполнения варианта корректировки
         /// </summary>
         public ConvertCaseStatus Result
         {
-            get { return result; }
-            set { result = value; }
+            get { return _result; }
+            set { _result = value; }
         }
 
-        private string errorMessage;
         /// <summary>
         /// Сообщение об ошибке (если есть)
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return errorMessage; }
-            set { errorMessage = value; }
-        }
+        public string ErrorMessage { get; set; }
 
-        private string sourceDir;
         /// <summary>
         /// Каталог с исходными данными для конвертации
         /// </summary>
-        protected string SourceDir
-        {
-            get { return sourceDir; }
-            set { sourceDir = value; }
-        }
+        protected string SourceDir { get; set; }
 
         /// <summary>
         /// Менеджер для работы с DBF-файлами источника
         /// </summary>
-        protected TableManager tmsource;
+        protected TableManager Tmsource;
 
-        private string destDir;
-        /// <summary>
-        /// Каталог с результатами конвертации
-        /// </summary>
-        protected string DestDir
+        private bool _visible = true;
+
+        public ConvertCase()
         {
-            get { return destDir; }
-            set { destDir = value; }
+            InitialConvertCases = new List<ConvertCase>();
+            IsChecked = false;
         }
 
-        /// <summary>
-        /// Менеджер для работы с DBF-файлами результата
-        /// </summary>
-        public TableManager tmdest;
-
-        private bool visible = true;
         /// <summary>
         /// Признак, является ли класс "видимым" в списке шагов конвертации
         /// </summary>
         public bool Visible
         {
-            get { return visible; }
-            set { visible = value; }
+            get { return _visible; }
+            set { _visible = value; }
         }
 
-        public delegate void SetStepsCountHandler(int MaximumSteps);
+        public delegate void SetStepsCountHandler(int maximumSteps);
         /// <summary>
         /// Событие, возникающее, когда становится известным максимальное количество шагов
         /// </summary>
-        public event SetStepsCountHandler onSetStepsCount;
-        public void SetStepsCount(int MaximumSteps)
+        public event SetStepsCountHandler OnSetStepsCount;
+        public void SetStepsCount(int maximumSteps)
         {
-            if (onSetStepsCount != null) onSetStepsCount(MaximumSteps);
+            if (OnSetStepsCount != null) OnSetStepsCount(maximumSteps);
         }
 
-        public delegate void StepStartHandler(int ProgressBarMaximumValue);
+        public delegate void StepStartHandler(int progressBarMaximumValue);
         /// <summary>
         /// Событие, возникающее, когда становится известным максимальное количество итераций
         /// </summary>
-        public event StepStartHandler onStepStart;
-        protected void StepStart(int MaximumSteps)
+        public event StepStartHandler OnStepStart;
+        protected void StepStart(int maximumSteps)
         {
-            if (onStepStart != null) onStepStart(MaximumSteps);
+            if (OnStepStart != null) OnStepStart(maximumSteps);
         }
 
         public delegate void IterateHandler();
         /// <summary>
         /// Событие, возникающее при каждой очередной итерации конвертера.
         /// </summary>
-        public event IterateHandler onIterate;
+        public event IterateHandler OnIterate;
         protected void Iterate()
         {
-            if (onIterate != null) onIterate(); 
+            if (OnIterate != null) OnIterate(); 
         }
 
         public delegate void StepFinishHandler();
         /// <summary>
         /// Событие, возникающее, когда очередной шаг завершен
         /// </summary>
-        public event StepFinishHandler onStepFinish;
+        public event StepFinishHandler OnStepFinish;
         protected void StepFinish()//--------------------------------------------------------неведомая вещь 1
         {
-            if (onStepFinish != null) onStepFinish();
+            if (OnStepFinish != null) OnStepFinish();
         }
 
         public delegate bool ErrorOpenFile(object sender, Exception errorMessage);
@@ -166,34 +126,27 @@ namespace aConverterClassLibrary
         /// </summary>
         public event ErrorOpenFile ErrorOpenFileEvent;
 
-        public void InitializeManager(string ASourceDir, string ADestDir)
+        public void InitializeManager(string aSourceDir)
         {
-            SourceDir = ASourceDir;
-            tmsource = new TableManager(ASourceDir);
-            tmsource.Init();
-            tmsource.ErrorOpenFileEvent += new TableManager.ErrorOpenFile(tm_ErrorOpenFileEvent);
-            DestDir = ADestDir;
-            tmdest = new TableManager(ADestDir);
-            tmdest.Init();
-            tmdest.ErrorOpenFileEvent += new TableManager.ErrorOpenFile(tm_ErrorOpenFileEvent);
+            SourceDir = aSourceDir;
+            Tmsource = new TableManager(aSourceDir);
+            Tmsource.Init();
+            Tmsource.ErrorOpenFileEvent += tm_ErrorOpenFileEvent;
         }
 
         bool tm_ErrorOpenFileEvent(object sender, Exception errorMessage)
         {
             if (ErrorOpenFileEvent != null)
                 return ErrorOpenFileEvent(sender, errorMessage);
-            else
-                return false;
+            return false;
         }
 
         public abstract void DoConvert();
 
         public void Dispose()
         {
-            tmdest.ErrorOpenFileEvent -= new TableManager.ErrorOpenFile(tm_ErrorOpenFileEvent);
-            tmdest.Dispose();
-            tmsource.ErrorOpenFileEvent -= new TableManager.ErrorOpenFile(tm_ErrorOpenFileEvent);
-            tmsource.Dispose();
+            Tmsource.ErrorOpenFileEvent -= tm_ErrorOpenFileEvent;
+            Tmsource.Dispose();
         }
     }
 

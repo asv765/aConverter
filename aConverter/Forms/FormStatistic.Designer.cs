@@ -37,10 +37,6 @@
             this.labelSQL = new System.Windows.Forms.Label();
             this.buttonCheck = new System.Windows.Forms.Button();
             this.textBoxSQL = new System.Windows.Forms.TextBox();
-            this.labelStatisticClass = new System.Windows.Forms.Label();
-            this.radioButtonDbfClass = new System.Windows.Forms.RadioButton();
-            this.radioButtonFdbClass = new System.Windows.Forms.RadioButton();
-            this.radioButtonMySQLclass = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // buttonCancel
@@ -86,7 +82,7 @@
             // labelStatisticType
             // 
             this.labelStatisticType.AutoSize = true;
-            this.labelStatisticType.Location = new System.Drawing.Point(12, 84);
+            this.labelStatisticType.Location = new System.Drawing.Point(12, 48);
             this.labelStatisticType.Name = "labelStatisticType";
             this.labelStatisticType.Size = new System.Drawing.Size(89, 13);
             this.labelStatisticType.TabIndex = 4;
@@ -97,7 +93,7 @@
             this.comboBoxStatisticType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxStatisticType.FormattingEnabled = true;
-            this.comboBoxStatisticType.Location = new System.Drawing.Point(12, 100);
+            this.comboBoxStatisticType.Location = new System.Drawing.Point(12, 64);
             this.comboBoxStatisticType.Name = "comboBoxStatisticType";
             this.comboBoxStatisticType.Size = new System.Drawing.Size(603, 21);
             this.comboBoxStatisticType.TabIndex = 5;
@@ -105,7 +101,7 @@
             // labelSQL
             // 
             this.labelSQL.AutoSize = true;
-            this.labelSQL.Location = new System.Drawing.Point(12, 124);
+            this.labelSQL.Location = new System.Drawing.Point(12, 88);
             this.labelSQL.Name = "labelSQL";
             this.labelSQL.Size = new System.Drawing.Size(85, 13);
             this.labelSQL.TabIndex = 6;
@@ -127,62 +123,17 @@
             this.textBoxSQL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSQL.Location = new System.Drawing.Point(12, 140);
+            this.textBoxSQL.Location = new System.Drawing.Point(12, 104);
             this.textBoxSQL.Multiline = true;
             this.textBoxSQL.Name = "textBoxSQL";
-            this.textBoxSQL.Size = new System.Drawing.Size(603, 293);
+            this.textBoxSQL.Size = new System.Drawing.Size(603, 329);
             this.textBoxSQL.TabIndex = 8;
-            // 
-            // labelStatisticClass
-            // 
-            this.labelStatisticClass.AutoSize = true;
-            this.labelStatisticClass.Location = new System.Drawing.Point(12, 48);
-            this.labelStatisticClass.Name = "labelStatisticClass";
-            this.labelStatisticClass.Size = new System.Drawing.Size(101, 13);
-            this.labelStatisticClass.TabIndex = 9;
-            this.labelStatisticClass.Text = "Класс статистики:";
-            // 
-            // radioButtonDbfClass
-            // 
-            this.radioButtonDbfClass.AutoSize = true;
-            this.radioButtonDbfClass.Checked = true;
-            this.radioButtonDbfClass.Location = new System.Drawing.Point(15, 64);
-            this.radioButtonDbfClass.Name = "radioButtonDbfClass";
-            this.radioButtonDbfClass.Size = new System.Drawing.Size(145, 17);
-            this.radioButtonDbfClass.TabIndex = 10;
-            this.radioButtonDbfClass.TabStop = true;
-            this.radioButtonDbfClass.Text = "исходные данные (DBF)";
-            this.radioButtonDbfClass.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonFdbClass
-            // 
-            this.radioButtonFdbClass.AutoSize = true;
-            this.radioButtonFdbClass.Location = new System.Drawing.Point(349, 64);
-            this.radioButtonFdbClass.Name = "radioButtonFdbClass";
-            this.radioButtonFdbClass.Size = new System.Drawing.Size(164, 17);
-            this.radioButtonFdbClass.TabIndex = 12;
-            this.radioButtonFdbClass.Text = "целевая база данных (FDB)";
-            this.radioButtonFdbClass.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonMySQLclass
-            // 
-            this.radioButtonMySQLclass.AutoSize = true;
-            this.radioButtonMySQLclass.Location = new System.Drawing.Point(166, 64);
-            this.radioButtonMySQLclass.Name = "radioButtonMySQLclass";
-            this.radioButtonMySQLclass.Size = new System.Drawing.Size(177, 17);
-            this.radioButtonMySQLclass.TabIndex = 11;
-            this.radioButtonMySQLclass.Text = "исходная база данных MySQL";
-            this.radioButtonMySQLclass.UseVisualStyleBackColor = true;
             // 
             // FormStatistic
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(627, 474);
-            this.Controls.Add(this.radioButtonMySQLclass);
-            this.Controls.Add(this.radioButtonFdbClass);
-            this.Controls.Add(this.radioButtonDbfClass);
-            this.Controls.Add(this.labelStatisticClass);
             this.Controls.Add(this.textBoxSQL);
             this.Controls.Add(this.buttonCheck);
             this.Controls.Add(this.labelSQL);
@@ -211,9 +162,5 @@
         private System.Windows.Forms.Label labelSQL;
         private System.Windows.Forms.Button buttonCheck;
         private System.Windows.Forms.TextBox textBoxSQL;
-        private System.Windows.Forms.Label labelStatisticClass;
-        private System.Windows.Forms.RadioButton radioButtonDbfClass;
-        private System.Windows.Forms.RadioButton radioButtonFdbClass;
-        private System.Windows.Forms.RadioButton radioButtonMySQLclass;
     }
 }

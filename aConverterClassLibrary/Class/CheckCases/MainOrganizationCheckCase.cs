@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FirebirdSql.Data.FirebirdClient;
-using MySql.Data.MySqlClient;
 
 namespace aConverterClassLibrary
 {
@@ -13,7 +9,6 @@ namespace aConverterClassLibrary
         public MainOrganizationCheckCase()
         {
             this.CheckCaseName = String.Format("Проверка, что в целевой базе существует организация с кодом 1");
-            this.CheckCaseClass = CheckCaseClass.Целостность_целевой_БД;
         }
 
         public override void Analize()

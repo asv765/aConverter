@@ -42,7 +42,6 @@ namespace aConverter.Forms
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripComboBoxCheckCaseClass = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.checkCaseClassBindingSource)).BeginInit();
@@ -130,8 +129,7 @@ namespace aConverter.Forms
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripComboBoxCheckCaseClass});
+            this.toolStripButton2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(546, 25);
@@ -157,13 +155,6 @@ namespace aConverter.Forms
             this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton2.Text = "Остановить анализ";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
-            // 
-            // toolStripComboBoxCheckCaseClass
-            // 
-            this.toolStripComboBoxCheckCaseClass.DropDownWidth = 300;
-            this.toolStripComboBoxCheckCaseClass.Name = "toolStripComboBoxCheckCaseClass";
-            this.toolStripComboBoxCheckCaseClass.Size = new System.Drawing.Size(300, 25);
-            this.toolStripComboBoxCheckCaseClass.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxCheckCaseClass_SelectedIndexChanged);
             // 
             // FormCheckCasesList
             // 
@@ -198,6 +189,5 @@ namespace aConverter.Forms
         private System.Windows.Forms.DataGridViewTextBoxColumn checkCaseNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn checkCaseClassNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn resultDataGridViewTextBoxColumn;
-        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxCheckCaseClass;
     }
 }

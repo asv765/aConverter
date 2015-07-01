@@ -41,34 +41,19 @@ namespace aConverter.Forms
             }
             textBoxConvertPath.Text = aConverter_RootSettings.ConvertPath;
 
-            if (!Directory.Exists(aConverter_RootSettings.SourceDBFFilePath))
+            if (!Directory.Exists(aConverter_RootSettings.SourceDbfFilePath))
             {
                 DialogResult dr = MessageBox.Show(String.Format("Не найден каталог с исходными файлами для конвертации {0}. Создать каталог?",
-                    aConverter_RootSettings.SourceDBFFilePath), "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    aConverter_RootSettings.SourceDbfFilePath), "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                 if (dr == System.Windows.Forms.DialogResult.Yes)
-                    Directory.CreateDirectory(aConverter_RootSettings.SourceDBFFilePath);
+                    Directory.CreateDirectory(aConverter_RootSettings.SourceDbfFilePath);
                 else
                 {
                     textBoxSourceDBFFilePath.BackColor = Color.WhiteSmoke;
                     textBoxSourceDBFFilePath.ForeColor = Color.Red;
                 }
             }
-            textBoxSourceDBFFilePath.Text = aConverter_RootSettings.SourceDBFFilePath;
-
-            if (!Directory.Exists(aConverter_RootSettings.DestDBFFilePath))
-            {
-                DialogResult dr = MessageBox.Show(String.Format("Не найден каталог для размещения результатов конвертации {0}. Создать каталог?",
-                    aConverter_RootSettings.DestDBFFilePath), "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (dr == System.Windows.Forms.DialogResult.Yes)
-                    Directory.CreateDirectory(aConverter_RootSettings.DestDBFFilePath);
-                else
-                {
-                    textBoxSourceDBFFilePath.BackColor = Color.WhiteSmoke;
-                 
-                    textBoxDestDBFFilePath.ForeColor = Color.Red;
-                }
-            }
-            textBoxDestDBFFilePath.Text = aConverter_RootSettings.DestDBFFilePath;
+            textBoxSourceDBFFilePath.Text = aConverter_RootSettings.SourceDbfFilePath;
 
             labelSteps.Text = String.Format(labelStepsText, 0, 0);
             labelProcess.Text = String.Format(labelProcessText, 0, 0);
@@ -89,11 +74,11 @@ namespace aConverter.Forms
                                 ConvertCase cc = (ConvertCase) extAssemblyFile.CreateInstance(t.FullName);
                                 if (cc.Visible)
                                 {
-                                    cc.onStepStart += new ConvertCase.StepStartHandler(cc_onCountMaximumSteps);
-                                    cc.onIterate += new ConvertCase.IterateHandler(cc_onIterate);
-                                    cc.onSetStepsCount += new ConvertCase.SetStepsCountHandler(cc_onStepsMaximum);
+                                    cc.OnStepStart += new ConvertCase.StepStartHandler(cc_onCountMaximumSteps);
+                                    cc.OnIterate += new ConvertCase.IterateHandler(cc_onIterate);
+                                    cc.OnSetStepsCount += new ConvertCase.SetStepsCountHandler(cc_onStepsMaximum);
                                     cc.ErrorOpenFileEvent += new ConvertCase.ErrorOpenFile(cc_ErrorOpenFileEvent);
-                                    cc.onStepFinish += cc_onStepFinish;
+                                    cc.OnStepFinish += cc_onStepFinish;
                                     ListConvertCase.Add(cc);
                                 }
                             }
@@ -239,17 +224,14 @@ namespace aConverter.Forms
         {
             progressBarProcess.Step = 1000;
 
-            int count = ListConvertCase.Count(p => p.IsChecked);//////////-------count 3
+            int count = ListConvertCase.Count(p => p.IsChecked);
             progressBarSteps.Maximum = 1;
-            // int counter = 1;
 
             foreach (ConvertCase cc in ListConvertCase) cc.Result = ConvertCaseStatus.Шаг_не_выполнен;
                 
             dataGridViewConvertCase.Refresh();
 
             DateTime startTime = DateTime.Now;
-            // bool isfirst = true;
-            int volume = Convert.ToInt32(numericUpDown1.Value);
             foreach (ConvertCase cc in ListConvertCase)
             {
                 if (cc.IsChecked)
@@ -259,16 +241,7 @@ namespace aConverter.Forms
                     try
                     {
                         cc.SetStepsCount(1);
-                        cc.InitializeManager(aConverter_RootSettings.SourceDBFFilePath, aConverter_RootSettings.DestDBFFilePath);//////////--папки
-                        if (checkBoxToFile.Checked)
-                        {
-
-                            cc.tmdest.FileToSave = textBoxToFile.Text;
-                            cc.tmdest.SaveToFile = true;
-                            cc.tmdest.OpenFileToWrite(volume++);
-                        }
-                        else
-                            cc.tmdest.SaveToFile = false;
+                        cc.InitializeManager(aConverter_RootSettings.SourceDbfFilePath);//////////--папки
 
                         cc.DoConvert();// ------------------------после 23
 
@@ -286,20 +259,6 @@ namespace aConverter.Forms
             string finalMessage = "Конвертация выполнена успешно!\r\n" +
                 "Затраченное время: " + (DateTime.Now - startTime).ToString();
             MessageBox.Show(finalMessage, "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void checkBoxToFile_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxToFile.Checked)
-            {
-                textBoxToFile.ReadOnly = false;
-                numericUpDown1.ReadOnly = false;
-            }
-            else
-            {
-                textBoxToFile.ReadOnly = true;
-                numericUpDown1.ReadOnly = true;
-            }
         }
     }
 }
