@@ -192,19 +192,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private string _sERVICENAM;
-		public virtual string SERVICENAM
-		{
-			get
-			{
-				return this._sERVICENAM;
-			}
-			set
-			{
-				this._sERVICENAM = value;
-			}
-		}
-		
 		private DateTime _dATE_VV;
 		public virtual DateTime DATE_VV
 		{
@@ -267,6 +254,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			set
 			{
 				this._dOCDATE = value;
+			}
+		}
+		
+		private string _sERVICENAME;
+		public virtual string SERVICENAME
+		{
+			get
+			{
+				return this._sERVICENAME;
+			}
+			set
+			{
+				this._sERVICENAME = value;
 			}
 		}
 		

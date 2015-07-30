@@ -73,6 +73,17 @@ namespace _033_Yrupinsk.Records
             set { date = value; }
         }
 
+        private DateTime enddate;
+        // <summary>
+        // ENDDATE D(8)
+        // </summary>
+        [FieldName("ENDDATE"), FieldType('D'), FieldWidth(8)]
+        public DateTime Enddate
+        {
+            get { return enddate; }
+            set { enddate = value; }
+        }
+
         public override void ReadDataRow(System.Data.DataRow ADataRow)
         {
             if (ADataRow.Table.Columns.Contains("LSHET")) Lshet = ADataRow["LSHET"].ToString(); else Lshet = "";
@@ -81,6 +92,7 @@ namespace _033_Yrupinsk.Records
             if (ADataRow.Table.Columns.Contains("VALUE")) Value_ = Convert.ToInt64(ADataRow["VALUE"]); else Value_ = 0;
             if (ADataRow.Table.Columns.Contains("VALUEDESC")) Valuedesc = ADataRow["VALUEDESC"].ToString(); else Valuedesc = "";
             if (ADataRow.Table.Columns.Contains("DATE")) Date = Convert.ToDateTime(ADataRow["DATE"]); else Date = DateTime.MinValue;
+            if (ADataRow.Table.Columns.Contains("ENDDATE")) Enddate = Convert.ToDateTime(ADataRow["ENDDATE"]); else Enddate = DateTime.MinValue;
         }
 
         public override AbstractRecord Clone()
@@ -92,12 +104,13 @@ namespace _033_Yrupinsk.Records
             retValue.Value_ = this.Value_;
             retValue.Valuedesc = this.Valuedesc;
             retValue.Date = this.Date;
+            retValue.Enddate = this.Enddate;
             return retValue;
         }
 
         public override string GetInsertScript()
         {
-            string rs = String.Format("INSERT INTO LCHARS (LSHET, LCHARCD, LCHARNAME, VALUE, VALUEDESC, DATE) VALUES ('{0}', {1}, '{2}', {3}, '{4}', CTOD('{5}'))", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), Lcharcd.ToString(), String.IsNullOrEmpty(Lcharname) ? "" : Lcharname.Trim(), Value_.ToString(), String.IsNullOrEmpty(Valuedesc) ? "" : Valuedesc.Trim(), Date == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Date.Month, Date.Day, Date.Year));
+            string rs = String.Format("INSERT INTO LCHARS (LSHET, LCHARCD, LCHARNAME, VALUE, VALUEDESC, DATE, ENDDATE) VALUES ('{0}', {1}, '{2}', {3}, '{4}', CTOD('{5}'), CTOD('{6}'))", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), Lcharcd.ToString(), String.IsNullOrEmpty(Lcharname) ? "" : Lcharname.Trim(), Value_.ToString(), String.IsNullOrEmpty(Valuedesc) ? "" : Valuedesc.Trim(), Date == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Date.Month, Date.Day, Date.Year), Enddate == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Enddate.Month, Enddate.Day, Enddate.Year));
             return rs;
         }
     }

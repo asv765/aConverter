@@ -1,4 +1,6 @@
-create procedure CNV$CC_SALDOHISTORYGAP (
+SET TERM ^ ;
+
+create or alter procedure CNV$CC_SALDOHISTORYGAP (
     ACTIONTYPE smallint = 0)
 returns (
     LSHET varchar(10),
@@ -74,5 +76,13 @@ BEGIN
      END
   END
   ELSE
-     EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0,1 или 2 не поддерживается процедурой';
-END
+     EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0 или 1 не поддерживается процедурой';
+END^
+
+SET TERM ; ^
+
+GRANT SELECT,INSERT ON CNV$NACHOPL TO PROCEDURE CNV$CC_SALDOHISTORYGAP;
+
+GRANT EXECUTE ON PROCEDURE CNV$CC_SALDOHISTORYGAP TO PROCEDURE CNV$CC_SALDOHISTORYGAP;
+
+GRANT EXECUTE ON PROCEDURE CNV$CC_SALDOHISTORYGAP TO SYSDBA;

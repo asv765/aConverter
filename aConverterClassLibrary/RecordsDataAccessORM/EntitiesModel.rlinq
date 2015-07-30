@@ -119,11 +119,11 @@
         <orm:field name="_sERVICECD" property="SERVICECD" behavior="readwrite" uniqueId="1594da44-cc65-4c31-8f4d-da105f1f9ee6" type="System.Int32">
           <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
-        <orm:field name="_sERVICENAM" property="SERVICENAM" behavior="readwrite" uniqueId="bfbfea61-0ffc-4818-8861-ae834e158671" type="System.String">
-          <orm:column name="SERVICENAM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
-        </orm:field>
         <orm:field name="_pRIM_" property="PRIM_" behavior="readwrite" uniqueId="715ca4c3-aab0-4518-a723-dfa1f1498a50" type="System.String">
           <orm:column name="PRIM_" sql-type="VARCHAR" nullable="true" length="100" scale="0" has-default-value="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sERVICENAME" property="SERVICENAME" behavior="readwrite" uniqueId="dbeaaaa7-f72e-4b6d-80a1-8f7206c2e05f" type="System.String">
+          <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:index name="CNV$OPLATA_IDX1">
           <orm:columnMapping>
@@ -233,9 +233,6 @@
         <orm:field name="_sERVICECD" property="SERVICECD" behavior="readwrite" uniqueId="dfb64495-e44d-41f0-90ce-818dd1122334" type="System.Int32">
           <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
-        <orm:field name="_sERVICENAM" property="SERVICENAM" behavior="readwrite" uniqueId="ca921865-b594-4125-8b01-096c6e35e1ae" type="System.String">
-          <orm:column name="SERVICENAM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
-        </orm:field>
         <orm:field name="_dATE_VV" property="DATE_VV" behavior="readwrite" uniqueId="7ebc9ad5-f793-4f3f-80b1-9cc30234abcd" type="System.DateTime">
           <orm:column name="DATE_VV" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
         </orm:field>
@@ -250,6 +247,9 @@
         </orm:field>
         <orm:field name="_dOCDATE" property="DOCDATE" behavior="readwrite" uniqueId="6aa60fb0-b777-473e-b425-4f3575d8c43f" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="DOCDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_sERVICENAME" property="SERVICENAME" behavior="readwrite" uniqueId="40ad90f5-c573-4014-88a9-0e21713cb7e4" type="System.String">
+          <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:index name="CNV$NACH_IDX1">
           <orm:columnMapping>
@@ -453,9 +453,6 @@
         <orm:field name="_sETUPPLACE" property="SETUPPLACE" behavior="readwrite" uniqueId="e9feabba-7b06-4e7c-bd58-9e311b59ac04" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="SETUPPLACE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
-        <orm:field name="_pLACE" property="PLACE" behavior="readwrite" uniqueId="ab5c79cc-765e-4282-9afd-1dbfe496ecab" type="System.String">
-          <orm:column name="PLACE" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
-        </orm:field>
         <orm:field name="_pLOMBDATE" property="PLOMBDATE" behavior="readwrite" uniqueId="a44e1306-2f00-4d08-a1a1-a26dde22a16a" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="PLOMBDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
         </orm:field>
@@ -463,7 +460,7 @@
           <orm:column name="PLOMBNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_lASTPOV" property="LASTPOV" behavior="readwrite" uniqueId="8800184b-eea8-40e8-9d46-dcb10577abe9" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="LASTPOV" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+          <orm:column name="LASTPOV" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
         </orm:field>
         <orm:field name="_nEXTPOV" property="NEXTPOV" behavior="readwrite" uniqueId="56bb1e28-b71d-40ea-a20b-1435bf958d39" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="NEXTPOV" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
@@ -478,11 +475,16 @@
           <orm:column name="TAG" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_nAME" property="NAME" behavior="readwrite" uniqueId="5a70ecfb-6d83-446d-908b-b45da6f0eb7d" type="System.String">
-          <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:index name="CNV$COUNTERS_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:index name="CNV$COUNTERS_IDX2">
+          <orm:columnMapping>
+            <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
       </orm:class>
@@ -519,6 +521,11 @@
         <orm:field name="_iNDTYPE" property="INDTYPE" behavior="readwrite" uniqueId="6ec31655-bac6-4e07-a64f-d7a4362dc51a" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="INDTYPE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
+        <orm:index name="CNV$CNTRSIND_IDX1">
+          <orm:columnMapping>
+            <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
       </orm:class>
       <orm:class name="CNV_CITIZEN" uniqueId="1957ec23-41bd-4067-89c5-9ef471c52b7c">
         <orm:table name="CNV$CITIZENS" />
@@ -737,12 +744,6 @@
         <orm:field name="_uLICANAME" property="ULICANAME" behavior="readwrite" uniqueId="06673c24-0fad-4718-a502-c6f54d0a62be" type="System.String">
           <orm:column name="ULICANAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
         </orm:field>
-        <orm:field name="_kVARTIRA" property="KVARTIRA" behavior="readwrite" uniqueId="4920b551-5d81-4b38-a580-b3759edaac33" type="System.String">
-          <orm:column name="KVARTIRA" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        </orm:field>
-        <orm:field name="_kOMNATA" property="KOMNATA" behavior="readwrite" uniqueId="930582de-1089-4c46-8849-3919475ad61d" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="KOMNATA" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        </orm:field>
         <orm:field name="_f" property="F" behavior="readwrite" uniqueId="9c2effea-de76-4139-8043-86ca6660529b" type="System.String">
           <orm:column name="F" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
@@ -774,7 +775,7 @@
           <orm:column name="DUNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_iSDELETED" property="ISDELETED" behavior="readwrite" uniqueId="d801e0d8-a6ca-4f35-bef0-cd76dfd0dfb8" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="ISDELETED" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="ISDELETED" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_kORPUSPOSTFIX" property="KORPUSPOSTFIX" behavior="readwrite" uniqueId="777b9c64-30e9-4d61-a340-f1f801ab4793" type="System.String">
           <orm:column name="KORPUSPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -787,6 +788,15 @@
         </orm:field>
         <orm:field name="_hOUSENO" property="HOUSENO" behavior="readwrite" uniqueId="53022a8a-0a2e-4028-a120-1aefc8ecfe5b" type="System.String">
           <orm:column name="HOUSENO" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_rOOMNO" property="ROOMNO" behavior="readwrite" uniqueId="42b87409-6dea-4e88-bddd-e2c383efe023" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ROOMNO" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_fLATPOSTFIX" property="FLATPOSTFIX" behavior="readwrite" uniqueId="adf59acb-f434-41f6-95cf-348130b0339d" type="System.String">
+          <orm:column name="FLATPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_fLATNO" property="FLATNO" behavior="readwrite" uniqueId="2fa75e89-1ce5-442a-92b9-760f65bdcfe3" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="FLATNO" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:index name="CNV$ABONENT_IDX1">
           <orm:columnMapping>
@@ -1127,12 +1137,6 @@
         <orm:field name="_pAYREQUISITESFROMHOUSE" property="PAYREQUISITESFROMHOUSE" behavior="readwrite" uniqueId="fa5e4dbf-e039-41a8-bc2c-0124c12a925f" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="PAYREQUISITESFROMHOUSE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
         </orm:field>
-        <orm:field name="_lCHARSLISTs" property="LCHARSLISTs" behavior="readwrite" uniqueId="c8bae048-1f11-48a6-88c7-73416ab9e42a" type="aConverterClassLibrary.RecordsDataAccessORM.LCHARSLIST">
-          <orm:collection element-class="aConverterClassLibrary.RecordsDataAccessORM.LCHARSLIST" inverse-field="_bALANCESLIST" order-by="" uniqueId="2ca18c69-fc0c-40b9-b7ec-018c5cbe37a1" />
-        </orm:field>
-        <orm:field name="_cCHARSLISTs" property="CCHARSLISTs" behavior="readwrite" uniqueId="83417f7c-3c8b-4260-8c1f-262e5e29fc4d" type="aConverterClassLibrary.RecordsDataAccessORM.CCHARSLIST">
-          <orm:collection element-class="aConverterClassLibrary.RecordsDataAccessORM.CCHARSLIST" inverse-field="_bALANCESLIST" order-by="" uniqueId="763b18d0-1b08-42de-bfff-af57cc797d7b" />
-        </orm:field>
         <orm:field name="_lCHARSLIST" property="LCHARSLIST" behavior="readwrite" uniqueId="7fc10b4f-4afd-4fcc-a29c-00d4e40d7bba" type="aConverterClassLibrary.RecordsDataAccessORM.LCHARSLIST">
           <orm:reference uniqueId="0be011c2-38d9-4905-af8a-d19ffc26cb6e" association-name="BALANCESLISTHasLCHARSLIST">
             <orm:sharedfield name="_cHECKACTIVELCHARCD" target-class="aConverterClassLibrary.RecordsDataAccessORM.LCHARSLIST" target-field="_kOD" />
@@ -1151,14 +1155,20 @@
             <orm:constraint name="R_1011" delete-action="dbdefaultrule" destination-table="BALANCESLIST" />
           </orm:reference>
         </orm:field>
-        <orm:field name="_bALANCESLISTs" property="BALANCESLISTs" behavior="readwrite" uniqueId="60a24a5e-b0ae-4aa7-887c-430e6b4b690c" type="aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST">
-          <orm:collection element-class="aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST" inverse-field="_bALANCESLIST1" order-by="" uniqueId="2890b3c2-c369-4641-9360-d0375e1a0872" />
-        </orm:field>
         <orm:field name="_bALANCESLIST2" property="BALANCESLIST2" behavior="readwrite" uniqueId="5290c8f1-1b73-4bcb-aaa4-ad21cb83a344" type="aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST">
           <orm:reference uniqueId="3954b053-8ffc-494f-b187-bfd037feb211" association-name="BALANCESLISTHasBALANCESLIST1">
             <orm:sharedfield name="_vIRTUALBALANCEBASE" target-class="aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST" target-field="_bALANCE_KOD" />
             <orm:constraint name="FK_BALANCESLIST_VIRTBALANCE" delete-action="dbdefaultrule" destination-table="BALANCESLIST" />
           </orm:reference>
+        </orm:field>
+        <orm:field name="_lCHARSLISTs" property="LCHARSLISTs" behavior="readwrite" uniqueId="c8bae048-1f11-48a6-88c7-73416ab9e42a" type="aConverterClassLibrary.RecordsDataAccessORM.LCHARSLIST">
+          <orm:collection element-class="aConverterClassLibrary.RecordsDataAccessORM.LCHARSLIST" inverse-field="_bALANCESLIST" order-by="" uniqueId="2ca18c69-fc0c-40b9-b7ec-018c5cbe37a1" />
+        </orm:field>
+        <orm:field name="_cCHARSLISTs" property="CCHARSLISTs" behavior="readwrite" uniqueId="83417f7c-3c8b-4260-8c1f-262e5e29fc4d" type="aConverterClassLibrary.RecordsDataAccessORM.CCHARSLIST">
+          <orm:collection element-class="aConverterClassLibrary.RecordsDataAccessORM.CCHARSLIST" inverse-field="_bALANCESLIST" order-by="" uniqueId="763b18d0-1b08-42de-bfff-af57cc797d7b" />
+        </orm:field>
+        <orm:field name="_bALANCESLISTs" property="BALANCESLISTs" behavior="readwrite" uniqueId="60a24a5e-b0ae-4aa7-887c-430e6b4b690c" type="aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST">
+          <orm:collection element-class="aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST" inverse-field="_bALANCESLIST1" order-by="" uniqueId="2890b3c2-c369-4641-9360-d0375e1a0872" />
         </orm:field>
         <orm:field name="_bALANCESLISTs1" property="BALANCESLISTs1" behavior="readwrite" uniqueId="e0144e86-cf50-49cb-9c3d-952a3f2120a1" type="aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST">
           <orm:collection element-class="aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST" inverse-field="_bALANCESLIST2" order-by="" uniqueId="3954b053-8ffc-494f-b187-bfd037feb211" />
@@ -1361,8 +1371,8 @@
         <orm:column name="SOURCECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         <orm:column name="SOURCENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="SERVICENAM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:column name="PRIM_" sql-type="VARCHAR" nullable="true" length="100" scale="0" has-default-value="true" ado-type="StringVariableLength" />
+        <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:index name="CNV$OPLATA_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
@@ -1403,12 +1413,12 @@
         <orm:column name="REGIMCD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         <orm:column name="REGIMNAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="SERVICENAM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:column name="DATE_VV" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="TYPE_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         <orm:column name="DOCNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
         <orm:column name="DOCNUMBER" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         <orm:column name="DOCDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:index name="CNV$NACH_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
@@ -1485,18 +1495,22 @@
         <orm:column name="SETUPDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="SERIALNUM" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
         <orm:column name="SETUPPLACE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="PLACE" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
         <orm:column name="PLOMBDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="PLOMBNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="LASTPOV" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="LASTPOV" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
         <orm:column name="NEXTPOV" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="PRIM_" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
         <orm:column name="DEACTDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="TAG" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:index name="CNV$COUNTERS_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:index name="CNV$COUNTERS_IDX2">
+          <orm:columnMapping>
+            <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
       </orm:table>
@@ -1509,6 +1523,11 @@
         <orm:column name="INDICATION" sql-type="NUMERIC" nullable="true" length="16" scale="4" ado-type="Numeric" />
         <orm:column name="INDDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="INDTYPE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:index name="CNV$CNTRSIND_IDX1">
+          <orm:columnMapping>
+            <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
       </orm:table>
       <orm:table name="CNV$CITIZENS">
         <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
@@ -1585,8 +1604,6 @@
         <orm:column name="TOWNSNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
         <orm:column name="ULICAKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="ULICANAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="KVARTIRA" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="KOMNATA" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="F" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:column name="I" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:column name="O" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
@@ -1597,11 +1614,14 @@
         <orm:column name="POSTINDEX" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
         <orm:column name="DUCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="DUNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="ISDELETED" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ISDELETED" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         <orm:column name="KORPUSPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         <orm:column name="KORPUSNO" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="HOUSEPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         <orm:column name="HOUSENO" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ROOMNO" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="FLATPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="FLATNO" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:index name="CNV$ABONENT_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -1856,11 +1876,11 @@
       <Property Id="2417b11d-c70b-4429-9cfe-a8b2e2b130e9" name="MONTH_" type="Int32" label="MONTH_ : Int32" kind="Persistent" fieldName="_mONTH_" />
       <Property Id="715ca4c3-aab0-4518-a723-dfa1f1498a50" name="PRIM_" label="PRIM_ : String" kind="Persistent" fieldName="_pRIM_" />
       <Property Id="1594da44-cc65-4c31-8f4d-da105f1f9ee6" name="SERVICECD" type="Int32" label="SERVICECD : Int32" kind="Persistent" fieldName="_sERVICECD" />
-      <Property Id="bfbfea61-0ffc-4818-8861-ae834e158671" name="SERVICENAM" label="SERVICENAM : String" kind="Persistent" fieldName="_sERVICENAM" />
       <Property Id="371ed806-2fea-427f-b646-4b298b05287c" name="SOURCECD" type="Int32" label="SOURCECD : Int32" kind="Persistent" fieldName="_sOURCECD" />
       <Property Id="e48358a2-b0df-428d-8e9a-78a3f489ac7f" name="SOURCENAME" label="SOURCENAME : String" kind="Persistent" fieldName="_sOURCENAME" />
       <Property Id="bc649549-6576-4c02-bb1f-a2b00039d8a9" name="SUMMA" type="Decimal" label="SUMMA : Decimal" kind="Persistent" fieldName="_sUMMA" />
       <Property Id="a5c59857-bf7b-4fc1-9067-6408015827dd" name="YEAR_" type="Int32" label="YEAR_ : Int32" kind="Persistent" fieldName="_yEAR_" />
+      <Property Id="dbeaaaa7-f72e-4b6d-80a1-8f7206c2e05f" name="SERVICENAME" label="SERVICENAME : String" kind="Persistent" fieldName="_sERVICENAME" />
     </DomainClass>
     <DomainClass Id="31ccdf0e-cab3-461f-8753-06b039f28db9" name="CNV_NACHOPL" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="1ec6c613-6b25-49dd-ae96-3eb9ba7755c9" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
@@ -1892,11 +1912,11 @@
       <Property Id="1469606e-8ba3-4025-b56e-3e5dd4a4be58" name="REGIMCD" type="Int32" label="REGIMCD : Int32" kind="Persistent" fieldName="_rEGIMCD" />
       <Property Id="4951e342-d3cb-4709-9359-97198ea44d10" name="REGIMNAME" label="REGIMNAME : String" kind="Persistent" fieldName="_rEGIMNAME" />
       <Property Id="dfb64495-e44d-41f0-90ce-818dd1122334" name="SERVICECD" type="Int32" label="SERVICECD : Int32" kind="Persistent" fieldName="_sERVICECD" />
-      <Property Id="ca921865-b594-4125-8b01-096c6e35e1ae" name="SERVICENAM" label="SERVICENAM : String" kind="Persistent" fieldName="_sERVICENAM" />
       <Property Id="7780b6e8-f622-4e64-a021-1472926c50fd" name="TYPE_" type="Int32" label="TYPE_ : Int32" kind="Persistent" fieldName="_tYPE_" />
       <Property Id="41feed6b-21bb-4d2d-bc6b-7a3ad56271a0" name="VOLUME" type="Decimal" label="VOLUME : Decimal" kind="Persistent" fieldName="_vOLUME" />
       <Property Id="e7890c99-b51e-4e70-bed1-05975a50b5ef" name="YEAR_" type="Int32" label="YEAR_ : Int32" kind="Persistent" fieldName="_yEAR_" />
       <Property Id="f93ab0b6-0acd-45a6-80fd-5c039802f91e" name="YEAR2" type="Int32" label="YEAR2 : Int32" kind="Persistent" fieldName="_yEAR2" />
+      <Property Id="40ad90f5-c573-4014-88a9-0e21713cb7e4" name="SERVICENAME" label="SERVICENAME : String" kind="Persistent" fieldName="_sERVICENAME" />
     </DomainClass>
     <DomainClass Id="28d3d09e-675e-4116-bd0b-e54dba7ec378" name="CNV_LCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="ae228361-4967-4568-a1fa-0d70c342ca59" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
@@ -1949,7 +1969,6 @@
       <Property Id="9434dc7f-f26f-4706-881d-a00d777c473b" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
       <Property Id="5a70ecfb-6d83-446d-908b-b45da6f0eb7d" name="NAME" label="NAME : String" kind="Persistent" fieldName="_nAME" />
       <Property Id="56bb1e28-b71d-40ea-a20b-1435bf958d39" name="NEXTPOV" type="DateTime" label="NEXTPOV : DateTime" nullable="true" kind="Persistent" fieldName="_nEXTPOV" />
-      <Property Id="ab5c79cc-765e-4282-9afd-1dbfe496ecab" name="PLACE" label="PLACE : String" kind="Persistent" fieldName="_pLACE" />
       <Property Id="a44e1306-2f00-4d08-a1a1-a26dde22a16a" name="PLOMBDATE" type="DateTime" label="PLOMBDATE : DateTime" nullable="true" kind="Persistent" fieldName="_pLOMBDATE" />
       <Property Id="9d9d3e00-1b44-45a9-9679-d51ca97780d7" name="PLOMBNAME" label="PLOMBNAME : String" kind="Persistent" fieldName="_pLOMBNAME" />
       <Property Id="fa7aae0e-55a9-4900-af74-943aa17de2de" name="PRIM_" label="PRIM_ : String" kind="Persistent" fieldName="_pRIM_" />
@@ -2028,8 +2047,6 @@
       <Property Id="354f9ba2-3ff1-408b-af0e-acbb57f7a283" name="HOUSECD" type="Int32" label="HOUSECD : Int32" nullable="true" kind="Persistent" fieldName="_hOUSECD" />
       <Property Id="a1e3867b-39ee-44b1-85ca-00d8217db555" name="I" label="I : String" kind="Persistent" fieldName="_i" />
       <Property Id="d801e0d8-a6ca-4f35-bef0-cd76dfd0dfb8" name="ISDELETED" type="Int32" label="ISDELETED : Int32" nullable="true" kind="Persistent" fieldName="_iSDELETED" />
-      <Property Id="930582de-1089-4c46-8849-3919475ad61d" name="KOMNATA" type="Int32" label="KOMNATA : Int32" nullable="true" kind="Persistent" fieldName="_kOMNATA" />
-      <Property Id="4920b551-5d81-4b38-a580-b3759edaac33" name="KVARTIRA" label="KVARTIRA : String" kind="Persistent" fieldName="_kVARTIRA" />
       <Property Id="bca80eb9-d6f4-4580-ab62-9de7a407c5b5" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
       <Property Id="6d494497-37bf-40ac-a457-a86e0489fce9" name="O" label="O : String" kind="Persistent" fieldName="_o" />
       <Property Id="c08a4483-0d4e-49c3-aebd-f26979b5ddf8" name="PHONENUM" label="PHONENUM : String" kind="Persistent" fieldName="_pHONENUM" />
@@ -2045,6 +2062,9 @@
       <Property Id="dbf50ca5-3581-4df2-9261-568dce0f9def" name="KORPUSNO" type="Int32" label="KORPUSNO : Int32" nullable="true" kind="Persistent" fieldName="_kORPUSNO" />
       <Property Id="8d5b9cc4-756a-4f3e-909e-c2a95b6a8329" name="HOUSEPOSTFIX" label="HOUSEPOSTFIX : String" kind="Persistent" fieldName="_hOUSEPOSTFIX" />
       <Property Id="53022a8a-0a2e-4028-a120-1aefc8ecfe5b" name="HOUSENO" label="HOUSENO : String" kind="Persistent" fieldName="_hOUSENO" />
+      <Property Id="42b87409-6dea-4e88-bddd-e2c383efe023" name="ROOMNO" type="Int16" label="ROOMNO : Int16" nullable="true" kind="Persistent" fieldName="_rOOMNO" />
+      <Property Id="adf59acb-f434-41f6-95cf-348130b0339d" name="FLATPOSTFIX" label="FLATPOSTFIX : String" kind="Persistent" fieldName="_fLATPOSTFIX" />
+      <Property Id="2fa75e89-1ce5-442a-92b9-760f65bdcfe3" name="FLATNO" type="Int32" label="FLATNO : Int32" nullable="true" kind="Persistent" fieldName="_fLATNO" />
     </DomainClass>
     <DomainClass Id="fa550a6a-fed8-48c9-9bdc-96746380bf5e" name="EXTORGSTREET" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
       <Property Id="0090bd92-43f0-47ef-93d6-5b8aa0181f61" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" kind="Persistent" identity="true" fieldName="_eXTORGCD" />

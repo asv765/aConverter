@@ -72,13 +72,13 @@ namespace aConverterTestProject
         [TestMethod()]
         public void RestoreHistoryTest()
         {
-            List<CNTRSIND> cirl = new List<CNTRSIND>();
-            cirl.Add(new CNTRSIND() { COUNTERID = "1", INDICATION = 1000, INDDATE = new DateTime(2013, 1, 10) });
-            cirl.Add(new CNTRSIND() { COUNTERID = "1", INDICATION = 1500, INDDATE = new DateTime(2013, 3, 12) });
-            cirl.Add(new CNTRSIND() { COUNTERID = "1", INDICATION = 1200, INDDATE = new DateTime(2013, 2, 11) });
-            cirl.Add(new CNTRSIND() { COUNTERID = "2", INDICATION = 10, INDDATE = new DateTime(2013, 1, 10) });
-            cirl.Add(new CNTRSIND() { COUNTERID = "2", INDICATION = 12, INDDATE = new DateTime(2013, 2, 11) });
-            cirl.Add(new CNTRSIND() { COUNTERID = "2", INDICATION = 15, INDDATE = new DateTime(2013, 3, 12) });
+            List<CNV_CNTRSIND> cirl = new List<CNV_CNTRSIND>();
+            cirl.Add(new CNV_CNTRSIND() { COUNTERID = "1", INDICATION = 1000, INDDATE = new DateTime(2013, 1, 10) });
+            cirl.Add(new CNV_CNTRSIND() { COUNTERID = "1", INDICATION = 1500, INDDATE = new DateTime(2013, 3, 12) });
+            cirl.Add(new CNV_CNTRSIND() { COUNTERID = "1", INDICATION = 1200, INDDATE = new DateTime(2013, 2, 11) });
+            cirl.Add(new CNV_CNTRSIND() { COUNTERID = "2", INDICATION = 10, INDDATE = new DateTime(2013, 1, 10) });
+            cirl.Add(new CNV_CNTRSIND() { COUNTERID = "2", INDICATION = 12, INDDATE = new DateTime(2013, 2, 11) });
+            cirl.Add(new CNV_CNTRSIND() { COUNTERID = "2", INDICATION = 15, INDDATE = new DateTime(2013, 3, 12) });
 
             RestoreHistoryType restoreHistoryType = RestoreHistoryType.С_конца_по_конечным_показаниям;
 

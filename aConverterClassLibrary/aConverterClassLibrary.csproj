@@ -65,6 +65,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -257,19 +258,16 @@
     <None Include="Resources\CNV_LCHARS_d.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\CheckCaseQueries\NachoplOplataCheckCase1_NotFoundInOplata.sql" />
-    <Content Include="Resources\CheckCaseQueries\NachoplOplataCheckCase2_OplataSummMismatch.sql" />
-    <Content Include="Resources\CheckCaseQueries\NachoplOplataCheckCase3_NotFoundInNachopl.sql" />
     <Content Include="Resources\CNV_CHARVALS.sql" />
     <Content Include="Resources\CNV_CHARVALS_d.sql" />
-    <Content Include="Resources\CNV_CHECKCASESPDESC.sql" />
-    <Content Include="Resources\CNV_CHECKCASESPDESC_d.sql" />
     <Content Include="Resources\CNV_CITIZENS.sql" />
     <Content Include="Resources\CNV_CITIZENS_d.sql" />
     <Content Include="Resources\CNV_CNTRSIND.sql" />
     <Content Include="Resources\CNV_CNTRSIND_d.sql" />
     <Content Include="Resources\CNV_COUNTERS.sql" />
     <Content Include="Resources\CNV_COUNTERS_d.sql" />
+    <None Include="Resources\CNV_DOCUMENTNUMERATORTABLE.sql" />
+    <None Include="Resources\CNV_DOCUMENTNUMERATORTABLE_d.sql" />
     <Content Include="Resources\CNV_DOGOVOR.sql" />
     <Content Include="Resources\CNV_DOGOVOR_d.sql" />
     <Content Include="Resources\CNV_EQUIPMENT.sql" />
@@ -288,12 +286,32 @@
     <Content Include="Resources\CNV_PENI_d.sql" />
     <Content Include="Resources\CNV_SUPPLNET.sql" />
     <Content Include="Resources\CNV_SUPPLNET_d.sql" />
-    <Content Include="Resources\CorrectionCaseQueries\DeleteOplataExcessRowCorrectionCase.sql" />
-    <Content Include="Resources\CorrectionCaseQueries\NachoplOplataCorrectionCase.sql" />
-    <Content Include="Resources\CorrectionCaseQueries\NachoplOplataSetNullCorrectionCase.sql" />
-    <Content Include="Resources\StatisticQueries\NachoplOplataSummaMismatchErrorStatistic.sql" />
-    <Content Include="Resources\StatisticQueries\NachoplSummaNotFoundInOplataStatistic.sql" />
-    <Content Include="Resources\StatisticQueries\OplataSummaNotFoundInNachoplStatistic.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00100_REGIONDISTRICTS.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00200_PUNKT.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00300_STREET.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00400_DISTRICT.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00500_INFORMATIONOWNERS.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00600_HOUSES.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00700_ABONENTS.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00800_CHARS.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00900_LCHARS.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_FIO.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_FIRSTSALDOISNOTNULL.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_LSHETLENGTH.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_NOTUNIQUELSHET.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_NOTUNIQUENACHOPLSALDO.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_OLDNEWSALDOMISMATCH.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_SALDOHISTORYGAP.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00950_COUNTERSTYPES.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_01000_COUNTERS.sql" />
+    <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHNOTFOUNDINNACHOPL.sql" />
+    <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLNACHMISMATCH.sql" />
+    <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLNACHNOTFOUND.sql" />
+    <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLOPLATAMISMATCH.sql" />
+    <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLOPLATANOTFOUND.sql" />
+    <Content Include="Resources\StoredProcs\CC\CNV_CC_OPLATANOTFOUNDINNACHOPL.sql" />
+    <Content Include="Resources\StoredProcs\CNV\cnv_cnv_documentnumerator.sql" />
+    <Content Include="Resources\StoredProcs\CNV_ADD_WRONG_PARAMETER_EXCEPTION.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

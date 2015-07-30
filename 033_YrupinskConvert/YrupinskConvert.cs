@@ -8,10 +8,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
+using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using DbfClassLibrary;
 using System;
+using _033_Yrupinsk;
 using _033_Yrupinsk.Records;
 using _033_YrupinskConvert;
 
@@ -35,13 +37,13 @@ namespace _033_YrupinskConvert
 
         public static string GetLs(long intls)
         {
-            return String.Format("{0:D8}", intls);
+            return String.Format("01{0:D6}", intls);
         }
     }
 
     public static class ConvertUtils
     {
-        public static Dictionary<long, long> GetStreetDictionary()
+        public static Dictionary<long, long> GetStreetRecodeDictionary()
         {
             var d = new Dictionary<long, long>();
             DataTable dt = Utils.ReadExcelFile(@"C:\Work\aConverter_Data\033_Yrupinsk\Service\StreetRecode.xlsx",
@@ -68,6 +70,30 @@ namespace _033_YrupinskConvert
             }
             return d;
         }
+
+        public static Dictionary<StreetKey, string> GetStreetNameDictionary()
+        {
+            var d = new Dictionary<StreetKey, string>();
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                foreach (STREET s in acem.STREETs)
+                {
+                    var sk = new StreetKey()
+                    {
+                        Punktcd = s.PUNKTCD,
+                        Streetcd = s.STREETCD
+                    };
+                    d.Add(sk, s.STREETNM);
+                }
+            }
+            return d;
+        }
+    }
+
+    public struct StreetKey
+    {
+        public int Streetcd;
+        public int Punktcd;
     }
 
     /// <summary>
@@ -79,27 +105,6 @@ namespace _033_YrupinskConvert
         {
             ConvertCaseName = "Создать таблицы для конвертации";
             Position = 10;
-            IsChecked = false;
-        }
-
-        public override void DoConvert()
-        {
-            SetStepsCount(1);
-            StepStart(1);
-
-            BufferEntitiesManager.ReCreateAllEntities();
-
-            Result = ConvertCaseStatus.Шаг_выполнен_успешно;
-            Iterate();
-        }
-    }
-
-    public class DropAllData : ConvertCase
-    {
-        public DropAllData()
-        {
-            ConvertCaseName = "Очистить таблицы конвертации";
-            Position = 15;
             IsChecked = true;
         }
 
@@ -108,12 +113,58 @@ namespace _033_YrupinskConvert
             SetStepsCount(1);
             StepStart(1);
 
-            BufferEntitiesManager.DropAllData();
+            BufferEntitiesManager.DropAllProcedures();
+            BufferEntitiesManager.DropAllEntities();
+            BufferEntitiesManager.CreateAllEntities();
+            BufferEntitiesManager.CreateAllProcedures();
 
             Result = ConvertCaseStatus.Шаг_выполнен_успешно;
             Iterate();
         }
     }
+
+    public class ReCreateProcedures : ConvertCase
+    {
+        public ReCreateProcedures()
+        {
+            ConvertCaseName = "Пересоздать хранимые процедуры";
+            Position = 15;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+
+            BufferEntitiesManager.DropAllProcedures();
+            BufferEntitiesManager.CreateAllProcedures();
+
+            Result = ConvertCaseStatus.Шаг_выполнен_успешно;
+            Iterate();
+        }
+    }
+
+    //public class DropAllData : ConvertCase
+    //{
+    //    public DropAllData()
+    //    {
+    //        ConvertCaseName = "Очистить таблицы конвертации";
+    //        Position = 15;
+    //        IsChecked = false;
+    //    }
+
+    //    public override void DoConvert()
+    //    {
+    //        SetStepsCount(1);
+    //        StepStart(1);
+
+    //        BufferEntitiesManager.DropAllData();
+
+    //        Result = ConvertCaseStatus.Шаг_выполнен_успешно;
+    //        Iterate();
+    //    }
+    //}
 
     /// <summary>
     /// Конвертирует данные об абонентах
@@ -136,8 +187,10 @@ namespace _033_YrupinskConvert
             tms.Init();
 
             SetStepsCount(2);
-            var streed = ConvertUtils.GetStreetDictionary();
+            var streed = ConvertUtils.GetStreetRecodeDictionary();
+            var streetnamed = ConvertUtils.GetStreetNameDictionary();
 
+            BufferEntitiesManager.DropTableData("CNV$ABONENT");
             DataTable dt = Tmsource.GetDataTable("ABONENT");
             var lca = new List<CNV_ABONENT>();
 
@@ -151,6 +204,7 @@ namespace _033_YrupinskConvert
                 {
                     var a = new CNV_ABONENT()
                     {
+                        LSHET = Consts.GetLs(Convert.ToInt64(ar.Lshet)),
                         EXTLSHET = ar.Lshet,
                         DISTKOD = 1,
                         DISTNAME = "Волгоградская область",
@@ -158,14 +212,24 @@ namespace _033_YrupinskConvert
                         RAYONNAME = "Урюпинск",
                         TOWNSKOD = 1,
                         TOWNSNAME = "Урюпинск",
-                        KVARTIRA = ar.Kvartira,
                         PRIM_ = ar.Prim,
                         POSTINDEX = ar.Postindex,
-                        DUCD = 8080,
-                        DUNAME = "Частный сектор",
+                        DUCD = 1,
+                        DUNAME = "МУП 'Водоканал'",
                         ULICAKOD = (int)abonentStreetCd,
-                        ULICANAME = ar.Ulicaname
+                        ISDELETED = 0
                     };
+
+                    int roomno;
+                    if (Int32.TryParse(ar.Kvartira, out roomno))
+                        a.ROOMNO = (short) roomno;
+                    string ulicaname;
+                    var sk = new StreetKey()
+                    {
+                        Streetcd = (int)abonentStreetCd,
+                        Punktcd = 1
+                    };
+                    a.ULICANAME = streetnamed.TryGetValue(sk, out ulicaname) ? ulicaname : ar.Ulicaname;
                     
                     Match m = Regex.Match(ar.Ndoma, @"^[0-9]+");
                     if (m.Success) a.HOUSENO = m.Value;
@@ -188,7 +252,7 @@ namespace _033_YrupinskConvert
                 Iterate();
             }
             StepFinish();
-
+            
 
             StepStart(1);
             using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
@@ -254,56 +318,61 @@ namespace _033_YrupinskConvert
         }
     }
 
-    public class FindAbonents : ConvertCase
+    //public class FindAbonents : ConvertCase
+    //{
+    //    public FindAbonents() 
+    //    {
+    //        ConvertCaseName = "Поиск абонентов и заполнение LSHET по найденным абонентам";
+    //        Position = 40;
+    //        IsChecked = true;
+    //    }
+
+    //    public override void DoConvert()
+    //    {
+    //        SetStepsCount(1);
+
+    //        using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+    //        {
+    //            StepStart(acem.CNV_ABONENTs.Count());
+    //            acem.Log = new StreamWriter(@"abonentsfind.log");
+    //            foreach (CNV_ABONENT cnvAbonent in acem.CNV_ABONENTs)
+    //            {
+    //                string extlshet = cnvAbonent.EXTLSHET;
+    //                int extnumlshet;
+    //                if (int.TryParse(extlshet, out extnumlshet))
+    //                {
+    //                    string lshet = Consts.GetLs(1000000 + extnumlshet);
+    //                    ABONENT a = acem.ABONENTs.FirstOrDefault(p => p.LSHET == lshet);
+    //                    //ABONENT a = acem.ABONENTs.FirstOrDefault(p =>
+    //                    //    p.HOUSECD == cnvAbonent.HOUSECD &&
+    //                    //    p.FIO == cnvAbonent.F &&
+    //                    //    p.NAME == cnvAbonent.I &&
+    //                    //    p.SECOND_NAME == cnvAbonent.O);
+    //                    if (a != null)
+    //                        cnvAbonent.LSHET = a.LSHET;
+    //                }
+    //            }
+    //            acem.SaveChanges();
+    //            Iterate();
+    //        }
+    //        StepFinish();
+    //    }
+    //}
+
+    public class FillEmptyHousecd : ConvertCase
     {
-        public FindAbonents() 
+        public FillEmptyHousecd()
         {
-            ConvertCaseName = "Поиск абонентов и заполнение LSHET по найденным абонентам";
-            Position = 40;
-            IsChecked = true;
-        }
-
-        public override void DoConvert()
-        {
-            SetStepsCount(1);
-
-            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                StepStart(acem.CNV_ABONENTs.Count());
-                acem.Log = new StreamWriter(@"abonentsfind.log");
-                foreach (CNV_ABONENT cnvAbonent in acem.CNV_ABONENTs)
-                {
-                    ABONENT a = acem.ABONENTs.FirstOrDefault(p =>
-                        p.HOUSECD == cnvAbonent.HOUSECD &&
-                        p.FIO == cnvAbonent.F &&
-                        p.NAME == cnvAbonent.I &&
-                        p.SECOND_NAME == cnvAbonent.O);
-                    if (a != null)
-                        cnvAbonent.LSHET = a.LSHET;
-                }
-                acem.SaveChanges();
-                Iterate();
-            }
-            StepFinish();
-        }
-    }
-
-    public class FillEmptyLshetAndHousecd : ConvertCase
-    {
-        public FillEmptyLshetAndHousecd()
-        {
-            ConvertCaseName = "Заполняем пустые лицевые счета и HOUSECD";
+            ConvertCaseName = "Заполняем пустые HOUSECD";
             Position = 50;
             IsChecked = true;
         }
 
         public override void DoConvert()
         {
-            SetStepsCount(2);
-
             using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
-                SetStepsCount(2);
+                SetStepsCount(1);
                 // Заполняем HOUSECD
 
                 StepStart(1);
@@ -311,23 +380,30 @@ namespace _033_YrupinskConvert
                 AbonentRecordUtils.SetUniqueHouseCd(acem.CNV_ABONENTs, maxhousecd);
                 StepFinish();
 
-                int maxlshet = Convert.ToInt32(acem.ABONENTs.Max(p => p.LSHET));
-                var q = from a in acem.CNV_ABONENTs
-                    where a.LSHET == null 
-                    select a;
-                StepStart(q.Count());
-                foreach (var cnvAbonent in q)
-                {
-                    if (cnvAbonent.LSHET == null) cnvAbonent.LSHET = Consts.GetLs(++maxlshet);
-                    Iterate();
-                }
-                StepFinish();
+                //int maxlshet = Convert.ToInt32(acem.ABONENTs.Max(p => p.LSHET));
+                //var q = from a in acem.CNV_ABONENTs
+                //    where a.LSHET == null 
+                //    select a;
+                //StepStart(q.Count());
+                //foreach (var cnvAbonent in q)
+                //{
+                //    if (cnvAbonent.LSHET == null) cnvAbonent.LSHET = Consts.GetLs(++maxlshet);
+                //    Iterate();
+                //}
+                //StepFinish();
                 acem.SaveChanges();
                 
             }
             StepFinish();
             
         }
+    }
+
+    public struct CharKey
+    {
+        public string Lshet;
+        public long Cd;
+        public DateTime Date_;
     }
 
     public class CharsConvert : ConvertCase
@@ -350,24 +426,40 @@ namespace _033_YrupinskConvert
             {
                 var cr = new CharsRecord();
                 var ld = ConvertUtils.GetLshetDictionary();
+                var chard = new Dictionary<CharKey, CNV_CHAR>();
+                var crl = new List<CNV_CHAR>();
                 foreach (DataRow dataRow in dt.Rows)
                 {
                     cr.ReadDataRow(dataRow);
                     string lshet;
                     if (ld.TryGetValue(cr.Lshet, out lshet))
                     {
-                        var c = new CNV_CHAR()
+                        var ck = new CharKey()
                         {
-                            CHARCD = (int) cr.Charcd,
-                            CHARNAME = cr.Charname,
-                            DATE_ = cr.Date,
-                            VALUE_ = cr.Value_,
-                            LSHET = lshet
+                            Lshet = lshet,
+                            Cd = cr.Charcd,
+                            Date_ = cr.Date
                         };
-                        acem.Add(c);
+                        if (!chard.ContainsKey(ck))
+                        {
+                            var charcd = (int) cr.Charcd;
+                            if (charcd == 2) charcd = 15;
+                            var c = new CNV_CHAR()
+                            {
+                                CHARCD = charcd,
+                                CHARNAME = cr.Charname,
+                                DATE_ = cr.Date,
+                                VALUE_ = cr.Value_,
+                                LSHET = lshet
+                            };
+                            crl.Add(c);
+                            chard.Add(ck, c);
+                        }
                     }
                     Iterate();
                 }
+                crl = CharsRecordUtils.ThinOutList(crl);
+                acem.Add(crl);
                 acem.SaveChanges();
             }
             StepFinish();
@@ -388,7 +480,7 @@ namespace _033_YrupinskConvert
             SetStepsCount(1);
 
             BufferEntitiesManager.DropTableData("CNV$LCHARS");
-            DataTable dt = Tmsource.ExecuteQuery("SELECT * FROM LCHARS ORDER BY LSHET, LCHARCD, `DATE` DESC ");
+            DataTable dt = Tmsource.ExecuteQuery("SELECT * FROM LCHARS WHERE EMPTY(ENDDATE) ORDER BY LSHET, LCHARCD, `DATE` DESC ");
             DataTable dtrecode = Utils.ReadExcelFile(
                 @"C:\Work\aConverter_Data\033_Yrupinsk\Service\LcharsRecode.xlsx",
                 "Лист1");
@@ -397,8 +489,10 @@ namespace _033_YrupinskConvert
             {
                 var lcr = new LcharsRecord();
                 var ld = ConvertUtils.GetLshetDictionary();
-                string oldlshet = "-1";
-                long oldlcharcd = -1;
+                var lcharkeys = new List<CharKey>();
+                var lcl = new List<CNV_LCHAR>();
+                //string oldlshet = "-1";
+                //long oldlcharcd = -1;
                 var errors = new List<string>();
                 foreach (DataRow dataRow in dt.Rows)
                 {
@@ -407,29 +501,38 @@ namespace _033_YrupinskConvert
                     if (ld.TryGetValue(lcr.Lshet, out lshet))
                     {
                         // if (lcr.Lshet == oldlshet && lcr.Lcharcd == oldlcharcd) continue;
-                        oldlshet = lcr.Lshet;
-                        oldlcharcd = lcr.Lcharcd;
+                        //oldlshet = lcr.Lshet;
+                        //oldlcharcd = lcr.Lcharcd;
                         bool found = false;
                         foreach (DataRow recodeDataRow in dtrecode.Rows)
                         {
                             long lcharcd = Convert.ToInt64(recodeDataRow["LCHARCD"]);
                             long value = Convert.ToInt64(recodeDataRow["VALUE"]);
-                            if (lcharcd  == lcr.Lcharcd &&
-                                value == lcr.Value_)
+                            if (lcharcd == lcr.Lcharcd && value == lcr.Value_)
                             {
                                 int ablcharcd = Convert.ToInt32(recodeDataRow["ABLCHARCD"]);
                                 int abvalue = Convert.ToInt32(recodeDataRow["ABVALUE"]);
                                 string comment = recodeDataRow["COMMENT"].ToString();
-                                var lc = new CNV_LCHAR()
+                                var ck = new CharKey()
                                 {
-                                    LCHARCD = ablcharcd,
-                                    LCHARNAME = "Характеристика с кодом " + ablcharcd,
-                                    DATE_ = lcr.Date,
-                                    VALUE_ = abvalue,
-                                    VALUEDESC = comment,
-                                    LSHET = lshet
+                                    Lshet = lshet,
+                                    Cd = ablcharcd,
+                                    Date_ = lcr.Date
                                 };
-                                acem.Add(lc);
+                                if (!lcharkeys.Contains(ck))
+                                {
+                                    lcharkeys.Add(ck);
+                                    var lc = new CNV_LCHAR()
+                                    {
+                                        LCHARCD = ablcharcd,
+                                        LCHARNAME = "Характеристика с кодом " + ablcharcd,
+                                        DATE_ = lcr.Date,
+                                        VALUE_ = abvalue,
+                                        VALUEDESC = comment,
+                                        LSHET = lshet
+                                    };
+                                    lcl.Add(lc);
+                                }
                                 found = true;
                             }
                         }
@@ -438,7 +541,7 @@ namespace _033_YrupinskConvert
                             string message =
                                 String.Format(
                                     "В таблице перекодировки не найдено значения для lcharcd = {0} ({1}), value = {2} ({3})",
-                                    lcr.Lcharcd, 
+                                    lcr.Lcharcd,
                                     lcr.Lcharname.Trim(),
                                     lcr.Value_,
                                     lcr.Valuedesc.Trim());
@@ -449,6 +552,8 @@ namespace _033_YrupinskConvert
                     Iterate();
                 }
                 File.WriteAllLines("errors.txt", errors, Encoding.GetEncoding(1251));
+                lcl = LcharsRecordUtils.ThinOutList(lcl);
+                acem.Add(lcl);
                 acem.SaveChanges();
             }
             StepFinish();
@@ -467,6 +572,26 @@ namespace _033_YrupinskConvert
         public override void DoConvert()
         {
             BufferEntitiesManager.DropTableData("CNV$COUNTERS");
+            // По таблице LCHARS.DBF получаем словарь <номер счетчика>, <код типа счетчика>
+            // Код типа счетчика определяется в зависимости от того, является ли услуга "поливом" (код типа счетчика 105)
+            // либо это водоснабжение/водоотведение (код 10)
+
+            DataTable dt1 = Tmsource.ExecuteQuery("SELECT * FROM LCHARS WHERE KOD > 0");
+            var polivCodes = new[] {12, 13, 35, 37, 61, 62, 69, 73};
+            var counterTypeDic = new Dictionary<int, int>();
+            foreach (DataRow dr in dt1.Rows)
+            {
+                int counterTypeId;
+                int lcharsKod = Convert.ToInt32(dr["KOD"]);
+                int lcharsValue = Convert.ToInt32(dr["VALUE"]);
+                if (!counterTypeDic.TryGetValue(lcharsKod, out counterTypeId))
+                {
+                    if (polivCodes.Contains(lcharsValue))
+                        counterTypeDic.Add(lcharsKod, 105);
+                    else
+                        counterTypeDic.Add(lcharsKod, 10);
+                }
+            }
             DataTable dt = Tmsource.GetDataTable("COUNTERS");
             StepStart(dt.Rows.Count);
             using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
@@ -479,11 +604,19 @@ namespace _033_YrupinskConvert
                     string lshet;
                     if (ld.TryGetValue(cr.Lshet, out lshet))
                     {
+                        int counterTypeId;
+                        if (!counterTypeDic.TryGetValue((int) cr.Kod, out counterTypeId))
+                            counterTypeId = 10;
+                        string counterName;
+                        if (counterTypeId == 10)
+                            counterName = "Счетчик холодной воды";
+                        else
+                            counterName = "Счетчик на полив";
                         var c = new CNV_COUNTER()
                         {
                             LSHET = lshet,
-                            CNTTYPE = 10, 
-                            CNTNAME = "Счетчик холодной воды",
+                            CNTTYPE = counterTypeId, 
+                            CNTNAME = counterName,
                             COUNTERID = cr.Kod.ToString(CultureInfo.InvariantCulture),
                             NAME = cr.Cntname
                         };
@@ -522,6 +655,7 @@ namespace _033_YrupinskConvert
 
                 var cr = new CntrsindRecord();
                 int i = 0;
+                int counter = 0;
                 foreach (DataRow dataRow in dt.Rows)
                 {
                     cr.ReadDataRow(dataRow);
@@ -541,6 +675,8 @@ namespace _033_YrupinskConvert
                         acem.Add(c);
                     }
                     Iterate();
+                    if (counter++ % 1000 == 0) 
+                        acem.SaveChanges();
                 }
                 acem.SaveChanges();
             }
@@ -548,4 +684,48 @@ namespace _033_YrupinskConvert
         }
     }
 
+    public class Convertation : ConvertCase
+    {
+        public Convertation()
+        {
+            ConvertCaseName = "Перенос данных в реальные таблицы";
+            Position = 1000;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+
+            StepStart(12);
+            fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
+            Iterate();
+            // Удаляем количественные характеристики по абонентам, с которыми заключен договор
+            fbm.ExecuteNonQuery("delete from cnv$chars where lshet in (select lshet from abonentscontract)");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "1" });
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new [] {"1"});
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
+            Iterate();
+            StepFinish();
+        }
+    }
 }

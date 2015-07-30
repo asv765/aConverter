@@ -5,7 +5,7 @@
 /******************************************************************************/
 /***      Following SET SQL DIALECT is just for the Database Comparer       ***/
 /******************************************************************************/
-SET SQL DIALECT 3;
+/* SET SQL DIALECT 3; */
 
 
 
@@ -25,10 +25,9 @@ CREATE TABLE CNV$COUNTERS (
     SETUPDATE   TIMESTAMP,
     SERIALNUM   VARCHAR(30),
     SETUPPLACE  INTEGER,
-    PLACE       VARCHAR(20),
     PLOMBDATE   TIMESTAMP,
     PLOMBNAME   VARCHAR(40),
-    LASTPOV     TIMESTAMP,
+    LASTPOV     DATE,
     NEXTPOV     TIMESTAMP,
     PRIM_       VARCHAR(100),
     DEACTDATE   TIMESTAMP,
@@ -51,7 +50,7 @@ ALTER TABLE CNV$COUNTERS ADD PRIMARY KEY (ID);
 /******************************************************************************/
 
 CREATE INDEX CNV$COUNTERS_IDX1 ON CNV$COUNTERS (LSHET);
-
+CREATE INDEX CNV$COUNTERS_IDX2 ON CNV$COUNTERS (COUNTERID);
 
 /******************************************************************************/
 /***                                Triggers                                ***/

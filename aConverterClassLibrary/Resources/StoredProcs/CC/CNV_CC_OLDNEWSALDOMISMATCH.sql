@@ -1,4 +1,6 @@
-create procedure CNV$CC_FIRSTSALDOISNOTNULL (
+SET TERM ^ ;
+
+create or alter procedure CNV$CC_OLDNEWSALDOMISMATCH (
     ACTIONTYPE smallint = 0,
     SALDOCORRECTIONTYPE smallint = 0)
 returns (
@@ -19,13 +21,24 @@ declare variable OPLATA decimal(18,4);
 declare variable COUNTEDDEBET decimal(18,4);
 BEGIN
   /* Тестирование, Диагностика */
-  IF (actiontype = 0) THEN BEGIN
-     FOR SELECT FIRST 1 lshet, servicecd, year_, month_,  bdebet
-         FROM cnv$nachopl n1
-         WHERE year_*100 + month_ = (SELECT MIN(year_*100+month_) FROM cnv$nachopl n2 WHERE n1.lshet = n2.lshet AND n1.servicecd = n2.servicecd)
-     INTO :lshet, :servicecd, :year_, :month_, :bdebet
+  IF (actiontype = 0 OR actiontype = 1 ) THEN BEGIN
+     FOR SELECT lshet, servicecd, year_, month_, bdebet, edebet
+         FROM cnv$nachopl
+         ORDER BY lshet, servicecd, year_, month_
+     INTO :lshet, :servicecd, :year_, :month_, :bdebet, :edebet
      DO BEGIN
-         SUSPEND;
+         IF (oldlshet = lshet AND oldservicecd = servicecd) THEN BEGIN
+            IF (bdebet <> oldedebet) THEN BEGIN
+                SUSPEND;
+                /* Если Диагностика, то при первом найденном пропуске выходим из процедуры */
+                IF (actiontype = 0) THEN LEAVE;
+            END
+         END
+         ELSE BEGIN
+            oldlshet = lshet;
+            oldservicecd = servicecd;
+         END
+         oldedebet = edebet;
      END
   END
   /* Исправление */
@@ -38,7 +51,7 @@ BEGIN
  */
   ELSE IF (actiontype = 2) THEN BEGIN
      IF (saldocorrectiontype = 1) THEN BEGIN
-        FOR SELECT DISTINCT lshet, servicecd FROM cnv$cc_FIRSTSALDOISNOTNULL(1)
+        FOR SELECT DISTINCT lshet, servicecd FROM cnv$cc_oldnewsaldomismatch(1)
             INTO :lshet, :servicecd
         DO BEGIN
            isfirstrow = 1;
@@ -47,16 +60,16 @@ BEGIN
                WHERE lshet = :lshet AND servicecd = :servicecd
                ORDER BY year_ DESCENDING, month_ DESCENDING
                INTO :year_, :month_, :fnath, :prochl, :oplata, :edebet DO BEGIN
-               IF (isfirstrow = 1) THEN BEGIN
+               if (isfirstrow = 1) then BEGIN
                   isfirstrow = 0;
                   counteddebet = edebet;
                END
                ELSE BEGIN
                   UPDATE CNV$NACHOPL SET edebet = :counteddebet
-                  WHERE lshet = :lshet AND servicecd = :servicecd AND year_ = :year_ AND month_ = :month_;
+                  WHERE lshet = :lshet AND servicecd = :servicecd and year_ = :year_ and month_ = :month_;
                END
                UPDATE CNV$NACHOPL SET bdebet = edebet - fnath - prochl + oplata
-               WHERE lshet = :lshet AND servicecd = :servicecd AND year_ = :year_ AND month_ = :month_;
+               WHERE lshet = :lshet AND servicecd = :servicecd and year_ = :year_ and month_ = :month_;
                counteddebet = counteddebet - fnath - prochl + oplata;
            END
         END
@@ -64,4 +77,12 @@ BEGIN
   END
   ELSE
      EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0, 1 или 2 не поддерживается процедурой';
-END
+END^
+
+SET TERM ; ^
+
+GRANT SELECT,UPDATE ON CNV$NACHOPL TO PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH;
+
+GRANT EXECUTE ON PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH TO PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH;
+
+GRANT EXECUTE ON PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH TO SYSDBA;

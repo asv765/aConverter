@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using aConverterClassLibrary;
 
@@ -12,7 +10,7 @@ namespace aConverter.Forms
 {
     public partial class FormCheckCasesList : Form
     {
-        private List<CheckCase> checkCaseList = new List<CheckCase>();
+        private List<CheckCase> _checkCaseList = new List<CheckCase>();
 
         public FormCheckCasesList()
         {
@@ -21,13 +19,12 @@ namespace aConverter.Forms
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            CheckCase ccc1 = checkCaseList.First();
-            bool needAnalize = true;
-            if (ccc1.NeedAnalize) needAnalize = false;
-            foreach (CheckCase ccc2 in checkCaseList)
+            var ccc1 = _checkCaseList.First();
+            var needAnalize = !ccc1.NeedTest;
+            foreach (var ccc2 in _checkCaseList)
             {
                 ccc2.Result = CheckCaseStatus.Анализ_не_проводился;
-                ccc2.NeedAnalize = needAnalize;
+                ccc2.NeedTest = needAnalize;
             }
             SendKeys.Send("{RIGHT}{LEFT}");
             dataGridView1.Refresh();
@@ -36,91 +33,73 @@ namespace aConverter.Forms
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             dataGridView1.EndEdit();
-            foreach (CheckCase ccc in checkCaseList) ccc.Result = CheckCaseStatus.Анализ_не_проводился;
+            foreach (CheckCase ccc in _checkCaseList) ccc.Result = CheckCaseStatus.Анализ_не_проводился;
             int errorsCount = 0;
-            foreach (CheckCase ccc in checkCaseList)
+            foreach (var ccc in _checkCaseList)
             {
-                if (ccc.NeedAnalize)
+                if (!ccc.NeedTest || !ccc.CanTest) continue;
+                ccc.Result = CheckCaseStatus.Выполняется_анализ;
+                dataGridView1.Refresh();
+                bool errorsPresent = ccc.Test();
+                if (errorsPresent)
+                    errorsCount++;
+                else
+                    ccc.NeedTest = false;
+                dataGridView1.Refresh();
+                if (ccc.Result == CheckCaseStatus.Выявлена_терминальная_ошибка)
                 {
-                    ccc.Result = CheckCaseStatus.Выполняется_анализ;
-                    dataGridView1.Refresh();
-                    ccc.Analize();
-                    errorsCount += ccc.ErrorList.Count;
-                    if (ccc.Result == CheckCaseStatus.Ошибок_не_выявлено) ccc.NeedAnalize = false;
-                    dataGridView1.Refresh();
-                    if (ccc.Result == CheckCaseStatus.Выявлена_терминальная_ошибка)
-                    {
-                        MessageBox.Show("Выявлена терминальная ошибка. Анализ прерван. Чтобы продолжить анализ, необходимо исправить выявленные ошибки.",
-                            "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        break;
-                    }
+                    MessageBox.Show(@"Выявлена терминальная ошибка. Анализ прерван. Чтобы продолжить анализ, необходимо исправить выявленные ошибки.",
+                        @"Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
                 }
             }
             if (errorsCount > 0)
-            {
-                DialogResult dr = MessageBox.Show(String.Format("Обнаружено {0} ошибок. Сформировать список?", errorsCount),
-                    "Результат", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (dr == System.Windows.Forms.DialogResult.Yes)
-                {
-                    List<ErrorClass> lec = new List<ErrorClass>();
-                    foreach (CheckCase ccc in checkCaseList)
-                    {
-                        foreach (ErrorClass ec in ccc.ErrorList)
-                        {
-                            lec.Add(ec);
-                        }
-                    }
-                    FormErrorsList fel = new FormErrorsList(lec);
-                    fel.MdiParent = this.MdiParent;
-                    fel.Show();
-                }
-            }
+                MessageBox.Show(String.Format("Обнаружено {0} ошибок.", errorsCount), @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
-                MessageBox.Show("Ошибок не обнаружено!",
-                    "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(@"Ошибок не обнаружено!",
+                    @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FormCheckCasesList_Load(object sender, EventArgs e)
         {
-            this.Text = "Варианты проверки (" + aConverter_RootSettings.FirebirdStringConnection + ")";
-            checkCaseList = CheckCaseFactory.GenerateCheckCases();
-            dataGridView1.DataSource = checkCaseList;
+            Text = @"Варианты проверки (" + aConverter_RootSettings.FirebirdStringConnection + @")";
+            _checkCaseList = CheckCaseFactory.GenerateCheckCases();
+            dataGridView1.DataSource = _checkCaseList;
         }
 
-        private void проверитьToolStripMenuItem_Click(object sender, EventArgs e)
+        private void тестироватьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridView1.CurrentRow != null)
             {
-                CheckCase ccc = (CheckCase)dataGridView1.CurrentRow.DataBoundItem;
-                ccc.Analize();
-                if (ccc.ErrorList.Count > 0)
+                var ccc = (CheckCase)dataGridView1.CurrentRow.DataBoundItem;
+                if (!ccc.CanTest)
                 {
-                    DialogResult dr = MessageBox.Show(String.Format("Обнаружено {0} ошибок. Сформировать список?", ccc.ErrorList.Count),
-                        "Результат", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                    if (dr == System.Windows.Forms.DialogResult.Yes)
+                    MessageBox.Show(@"Вариант не может быть вызван для тестирования", @"Внимание!", 
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    return;
+                }
+                var errorsPresent = ccc.Test();
+                if (errorsPresent)
+                {
+                    var dr = MessageBox.Show(@"Выявлена ошибка. Выполнить анализ?", @"Внимание!",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dr == DialogResult.Yes)
                     {
-                        List<ErrorClass> lec = new List<ErrorClass>();
-                        foreach (ErrorClass ec in ccc.ErrorList)
-                        {
-                            lec.Add(ec);
-                        }
-                        FormErrorsList fel = new FormErrorsList(lec);
-                        fel.MdiParent = this.MdiParent;
-                        fel.Show();
+                        DataTable dt = ccc.Analize();
+                        var fdt = new FormDataTable("Результаты проверки " + ccc.StoredProcName, dt);
+                        fdt.ShowDialog();
                     }
                 }
                 else
-                    MessageBox.Show("Ошибок не обнаружено!",
-                        "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(@"Ошибок не обнаружено!", @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             DataGridViewRow dgvr = dataGridView1.Rows[e.RowIndex];
-            CheckCase ccc = (CheckCase)dgvr.DataBoundItem;
+            var ccc = (CheckCase)dgvr.DataBoundItem;
             if (ccc != null)
             {
                 DataGridViewCellStyle newStyle = dataGridView1.DefaultCellStyle.Clone();
@@ -144,9 +123,46 @@ namespace aConverter.Forms
             // Подавляем ошибки преобразования логического типа
             if (e.ColumnIndex == 0)
             {
-                CheckCase ccc = (CheckCase)dataGridView1.CurrentRow.DataBoundItem;
-                ccc.NeedAnalize = false;
+                var ccc = (CheckCase)dataGridView1.CurrentRow.DataBoundItem;
+                ccc.NeedTest = false;
                 e.ThrowException = false;
+            }
+        }
+
+        private void анализToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow != null)
+            {
+                var ccc = (CheckCase) dataGridView1.CurrentRow.DataBoundItem;
+                if (!ccc.CanAnalyze)
+                {
+                    MessageBox.Show(@"Вариант не может быть вызван для анализа", @"Внимание!",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    return;
+                }
+                DataTable dt = ccc.Analize();
+                var fdt = new FormDataTable("Результаты проверки " + ccc.StoredProcName, dt);
+                fdt.ShowDialog();
+            }
+        }
+
+        private void исправлениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentRow != null)
+            {
+                var ccc = (CheckCase)dataGridView1.CurrentRow.DataBoundItem;
+                if (!ccc.CanFix)
+                {
+                    MessageBox.Show(@"Вариант не предусматривает исправления", @"Внимание!",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    return;
+                }
+                ccc.Fix();
+                MessageBox.Show(@"Выполнено.", @"Внимание!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
         }
     }

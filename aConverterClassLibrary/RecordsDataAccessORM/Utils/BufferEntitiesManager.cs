@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using aConverterClassLibrary.Class;
 using FirebirdSql.Data.FirebirdClient;
 using FirebirdSql.Data.Isql;
 using System.Data;
@@ -11,14 +13,16 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <summary>
         /// (Пере)создает все нобходимые для конвертации сущность в целевой Firebird базе данных
         /// </summary>
-        public static void ReCreateAllEntities()
+        public static void DropAllEntities()
         {
             var l = GetAllEntities();
-            foreach (var s in l)
-            {
-                DropEntity(s);
-                CreateEntity(s);
-            }
+            foreach (var s in l) DropEntity(s);
+        }
+
+        public static void CreateAllEntities()
+        {
+            var l = GetAllEntities();
+            foreach (var s in l) CreateDatabaseObject(s);
         }
 
         public static List<string> GetAllEntities()
@@ -42,7 +46,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "OPLATA",
                 "PENI",
                 "SUPPLNET",
-                "CHECKCASESPDESC"
+                "DOCUMENTNUMERATORTABLE",
             };
             return l;
         }
@@ -59,29 +63,21 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
 
         public static void DropTableData(string tableName)
         {
-            using (var fc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                fc.Open();
-                string dropcommand = "DELETE FROM " + tableName;
-                var fbc = new FbCommand(dropcommand, fc);
-                fbc.ExecuteNonQuery();
-            }            
+            var fbManager = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            string dropcommand = "DELETE FROM " + tableName;
+            fbManager.ExecuteNonQuery(dropcommand);
         }
 
         /// <summary>
         /// Создает сущность и все с ней связанное, используя скрипт из ресурсов
         /// </summary>
         /// <param name="entityName"></param>
-        public static void CreateEntity(string entityName)
+        public static void CreateDatabaseObject(string entityName)
         {
-            using (var fc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                string createScript =
-                    Properties.Resources.ResourceManager.GetString("CNV_" + entityName);
-                fc.Open();
-                ExecuteScript(createScript, fc);
-                fc.Close();
-            }
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            string createScript =
+                Properties.Resources.ResourceManager.GetString("CNV_" + entityName);
+            fbm.ExecuteScript(createScript);
         }
 
         /// <summary>
@@ -92,47 +88,105 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         public static bool DropEntity(string entityName)
         {
             // Проверяем, существует ли соответствующая сущность
-            using (var fc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            DataTable dt = fbm.GetSchema("Tables", new[] { null, null, null, "TABLE" });
+            bool tablePresent = false;
+            foreach (DataRow dataRow in dt.Rows)
             {
-                fc.Open();
-                DataTable dt = fc.GetSchema("Tables", new[] { null, null, null, "TABLE" });
-                bool tablePresent = false;
-                foreach (DataRow dataRow in dt.Rows)
+                if (dataRow[2].ToString() == "CNV$" + entityName)
                 {
-                    if (dataRow[2].ToString() == "CNV$" + entityName)
-                    {
-                        tablePresent = true;
-                        break;
-                    }
+                    tablePresent = true;
+                    break;
                 }
-                if (!tablePresent) return false;
-
-                string dropScript =
-                    Properties.Resources.ResourceManager.GetString("CNV_" + entityName + "_d");
-
-                ExecuteScript(dropScript, fc);
-                fc.Close();
             }
+            if (!tablePresent) return false;
+
+            string dropScript =
+                Properties.Resources.ResourceManager.GetString("CNV_" + entityName + "_d");
+
+            fbm.ExecuteScript(dropScript, true);
+            return true;
+        }
+
+        public static List<string> GetAllProcedures()
+        {
+            var l = new List<string>();
+            l.AddRange(GetAllProcedures(ProcedureType.ПроверкаЦелостности));
+            l.AddRange(GetAllProcedures(ProcedureType.Конвертация));
+            return l;
+        }
+
+        public static List<string> GetAllProcedures(ProcedureType procedureType)
+        {
+            var l = new List<string>();
+            if (procedureType == ProcedureType.Конвертация)
+            {
+                l.Add("CNV_DOCUMENTNUMERATOR");
+                l.Add("CNV_00100_REGIONDISTRICTS");
+                l.Add("CNV_00200_PUNKT");
+                l.Add("CNV_00300_STREET");
+                l.Add("CNV_00400_DISTRICT");
+                l.Add("CNV_00500_INFORMATIONOWNERS");
+                l.Add("CNV_00600_HOUSES");
+                l.Add("CNV_00700_ABONENTS");
+                l.Add("CNV_00800_CHARS");
+                l.Add("CNV_00900_LCHARS");
+                l.Add("CNV_00950_COUNTERSTYPES");
+                l.Add("CNV_01000_COUNTERS");
+            }
+            if (procedureType == ProcedureType.ПроверкаЦелостности)
+            {
+                var checkCaseList = CheckCaseFactory.GenerateCheckCases();
+                l.AddRange(checkCaseList.Select(checkCase => checkCase.ShortStoredProcName));
+            }
+
+            return l;
+        }
+
+        public static bool DropProcedure(string procedureName)
+        {
+            // Проверяем, существует ли соответствующая сущность
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            DataTable dt = fbm.GetSchema("Procedures");
+            bool procedurePresent = false;
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                if (dataRow[2].ToString() == "CNV$" + procedureName)
+                {
+                    procedurePresent = true;
+                    break;
+                }
+            }
+            if (!procedurePresent) return false;
+
+            string dropCommand = "DROP PROCEDURE " + "CNV$" + procedureName;
+            fbm.ExecuteNonQuery(dropCommand);
 
             return true;
         }
 
-        /// <summary>
-        /// Выполняет скрипт
-        /// </summary>
-        /// <param name="script"></param>
-        /// <param name="connection"></param>
-        public static void ExecuteScript(string script, FbConnection connection)
+        public static void DropAllProcedures()
         {
-            if (script == null) throw new ArgumentNullException("script");
-            if (connection == null) throw new ArgumentNullException("connection");
-            var fs = new FbScript(script);
-            fs.Parse();
-            foreach (var result in fs.Results)
-            {
-                var fbc = new FbCommand(result, connection);
-                fbc.ExecuteNonQuery();
-            }
+            var l = GetAllProcedures();
+            l.Reverse();
+            foreach (var s in l) DropProcedure(s);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            // DropException("WRONG_PARAMATER_VALUE");
         }
+
+        public static void CreateAllProcedures()
+        {
+            CreateDatabaseObject("ADD_WRONG_PARAMETER_EXCEPTION");
+            var l = GetAllProcedures();
+            foreach (var s in l) CreateDatabaseObject(s);
+        }
+
+    }
+
+    // Также - поле PROCTYPE в CNV$CHECKCASESPDESC
+    public enum ProcedureType
+    {
+        ПроверкаЦелостности,
+        Конвертация
     }
 }

@@ -1,4 +1,6 @@
-create procedure CNV$CC_NOTUNIQUENACHOPLSALDO (
+SET TERM ^ ;
+
+create or alter procedure CNV$CC_NOTUNIQUENACHOPLSALDO (
     ACTIONTYPE smallint = 0)
 returns (
     LSHET varchar(10),
@@ -45,5 +47,11 @@ begin
         nachopl1.servicecd = nachopl2.servicecd and
         nachopl1.rdb$db_key > nachopl2.rdb$db_key);
   else
-     EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0,1 или 2 не поддерживается процедурой';
-end
+     EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0 или 1 не поддерживается процедурой';
+end^
+
+SET TERM ; ^
+
+GRANT SELECT,DELETE ON CNV$NACHOPL TO PROCEDURE CNV$CC_NOTUNIQUENACHOPLSALDO;
+
+GRANT EXECUTE ON PROCEDURE CNV$CC_NOTUNIQUENACHOPLSALDO TO SYSDBA;

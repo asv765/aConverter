@@ -38,8 +38,6 @@
             this.labelSourceDBFFiles = new System.Windows.Forms.Label();
             this.labelConvertPath = new System.Windows.Forms.Label();
             this.textBoxConvertPath = new System.Windows.Forms.TextBox();
-            this.textBoxPatternsPath = new System.Windows.Forms.TextBox();
-            this.labelPatternsPath = new System.Windows.Forms.Label();
             this.buttonEditSettingsCase = new System.Windows.Forms.Button();
             this.buttonAddSettingsCase = new System.Windows.Forms.Button();
             this.buttonDeleteSettingsCase = new System.Windows.Forms.Button();
@@ -48,6 +46,8 @@
             this.buttonCheckConnection = new System.Windows.Forms.Button();
             this.textBoxFirebirdConnectionString = new System.Windows.Forms.TextBox();
             this.labelFirebirdConnectionString = new System.Windows.Forms.Label();
+            this.labelPatternsPath = new System.Windows.Forms.Label();
+            this.textBoxPatternsPath = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonSave
@@ -145,24 +145,6 @@
             this.textBoxConvertPath.Size = new System.Drawing.Size(693, 20);
             this.textBoxConvertPath.TabIndex = 36;
             // 
-            // textBoxPatternsPath
-            // 
-            this.textBoxPatternsPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPatternsPath.Location = new System.Drawing.Point(15, 172);
-            this.textBoxPatternsPath.Name = "textBoxPatternsPath";
-            this.textBoxPatternsPath.Size = new System.Drawing.Size(693, 20);
-            this.textBoxPatternsPath.TabIndex = 37;
-            // 
-            // labelPatternsPath
-            // 
-            this.labelPatternsPath.AutoSize = true;
-            this.labelPatternsPath.Location = new System.Drawing.Point(12, 156);
-            this.labelPatternsPath.Name = "labelPatternsPath";
-            this.labelPatternsPath.Size = new System.Drawing.Size(98, 13);
-            this.labelPatternsPath.TabIndex = 35;
-            this.labelPatternsPath.Text = "Путь к шаблонам:";
-            // 
             // buttonEditSettingsCase
             // 
             this.buttonEditSettingsCase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -247,6 +229,24 @@
             this.labelFirebirdConnectionString.TabIndex = 25;
             this.labelFirebirdConnectionString.Text = "Строка подключения к БД Firebird:";
             // 
+            // labelPatternsPath
+            // 
+            this.labelPatternsPath.AutoSize = true;
+            this.labelPatternsPath.Location = new System.Drawing.Point(12, 156);
+            this.labelPatternsPath.Name = "labelPatternsPath";
+            this.labelPatternsPath.Size = new System.Drawing.Size(98, 13);
+            this.labelPatternsPath.TabIndex = 35;
+            this.labelPatternsPath.Text = "Путь к шаблонам:";
+            // 
+            // textBoxPatternsPath
+            // 
+            this.textBoxPatternsPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxPatternsPath.Location = new System.Drawing.Point(15, 172);
+            this.textBoxPatternsPath.Name = "textBoxPatternsPath";
+            this.textBoxPatternsPath.Size = new System.Drawing.Size(693, 20);
+            this.textBoxPatternsPath.TabIndex = 37;
+            // 
             // FormSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -292,8 +292,6 @@
         private System.Windows.Forms.Label labelSourceDBFFiles;
         private System.Windows.Forms.Label labelConvertPath;
         private System.Windows.Forms.TextBox textBoxConvertPath;
-        private System.Windows.Forms.TextBox textBoxPatternsPath;
-        private System.Windows.Forms.Label labelPatternsPath;
         private System.Windows.Forms.Button buttonEditSettingsCase;
         private System.Windows.Forms.Button buttonAddSettingsCase;
         private System.Windows.Forms.Button buttonDeleteSettingsCase;
@@ -302,5 +300,7 @@
         private System.Windows.Forms.Button buttonCheckConnection;
         private System.Windows.Forms.TextBox textBoxFirebirdConnectionString;
         private System.Windows.Forms.Label labelFirebirdConnectionString;
+        private System.Windows.Forms.Label labelPatternsPath;
+        private System.Windows.Forms.TextBox textBoxPatternsPath;
     }
 }

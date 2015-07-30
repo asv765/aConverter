@@ -1,4 +1,6 @@
-create procedure CNV$CC_LSHETLENGTH (
+SET TERM ^ ;
+
+create or alter procedure CNV$CC_LSHETLENGTH (
     ACTIONTYPE smallint = 0)
 returns (
     LSHETLENGTH integer,
@@ -18,4 +20,10 @@ begin
   end
   else
      EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0 или 1 не поддерживается процедурой';
-end
+end^
+
+SET TERM ; ^
+
+GRANT SELECT ON CNV$ABONENT TO PROCEDURE CNV$CC_LSHETLENGTH;
+
+GRANT EXECUTE ON PROCEDURE CNV$CC_LSHETLENGTH TO SYSDBA;

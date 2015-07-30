@@ -105,11 +105,11 @@
     <Compile Include="Forms\FormConvert.Designer.cs">
       <DependentUpon>FormConvert.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormCorrectionCasesList.cs">
+    <Compile Include="Forms\FormDataTable.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormCorrectionCasesList.Designer.cs">
-      <DependentUpon>FormCorrectionCasesList.cs</DependentUpon>
+    <Compile Include="Forms\FormDataTable.Designer.cs">
+      <DependentUpon>FormDataTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormDescriptions.cs">
       <SubType>Form</SubType>
@@ -122,24 +122,6 @@
     </Compile>
     <Compile Include="Forms\FormEditSettingsCase.Designer.cs">
       <DependentUpon>FormEditSettingsCase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormErrorDetail.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormErrorDetail.Designer.cs">
-      <DependentUpon>FormErrorDetail.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormErrorParams.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormErrorParams.Designer.cs">
-      <DependentUpon>FormErrorParams.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormErrorsList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormErrorsList.Designer.cs">
-      <DependentUpon>FormErrorsList.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormManualAnalize.cs">
       <SubType>Form</SubType>
@@ -204,23 +186,14 @@
     <EmbeddedResource Include="Forms\FormConvert.resx">
       <DependentUpon>FormConvert.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormCorrectionCasesList.resx">
-      <DependentUpon>FormCorrectionCasesList.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormDataTable.resx">
+      <DependentUpon>FormDataTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormDescriptions.resx">
       <DependentUpon>FormDescriptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEditSettingsCase.resx">
       <DependentUpon>FormEditSettingsCase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormErrorDetail.resx">
-      <DependentUpon>FormErrorDetail.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormErrorParams.resx">
-      <DependentUpon>FormErrorParams.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormErrorsList.resx">
-      <DependentUpon>FormErrorsList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>

@@ -130,6 +130,48 @@
   <data name="CNV_ADDDCHAR_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_ADDDCHAR_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_ADD_WRONG_PARAMETER_EXCEPTION" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cnv_add_wrong_parameter_exception.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_FIO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_FIO.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_FIRSTSALDOISNOTNULL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_FIRSTSALDOISNOTNULL.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_LSHETLENGTH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_LSHETLENGTH.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_NACHNOTFOUNDINNACHOPL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cc\cnv_cc_nachnotfoundinnachopl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_NACHOPLNACHMISMATCH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cc\cnv_cc_nachoplnachmismatch.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_NACHOPLNACHNOTFOUND" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cc\cnv_cc_nachoplnachnotfound.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_NACHOPLOPLATAMISMATCH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cc\cnv_cc_nachoploplatamismatch.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_NACHOPLOPLATANOTFOUND" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cc\cnv_cc_nachoploplatanotfound.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_NOTUNIQUELSHET" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_NOTUNIQUELSHET.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_NOTUNIQUENACHOPLSALDO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_NOTUNIQUENACHOPLSALDO.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_OLDNEWSALDOMISMATCH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_OLDNEWSALDOMISMATCH.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_OPLATANOTFOUNDINNACHOPL" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cc\cnv_cc_oplatanotfoundinnachopl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_SALDOHISTORYGAP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_SALDOHISTORYGAP.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_CHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -154,11 +196,59 @@
   <data name="CNV_CNTRSIND_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_cntrsind_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CNV_00100_REGIONDISTRICTS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00100_REGIONDISTRICTS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00200_PUNKT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00200_PUNKT.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00300_STREET" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00300_STREET.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00400_DISTRICT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00400_DISTRICT.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00500_INFORMATIONOWNERS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00500_INFORMATIONOWNERS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00600_HOUSES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00600_HOUSES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00700_ABONENTS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00700_ABONENTS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00800_CHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00800_CHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00900_LCHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00900_LCHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00950_COUNTERSTYPES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00950_COUNTERSTYPES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_01000_COUNTERS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_01000_COUNTERS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_DOCUMENTNUMERATOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cnv\cnv_cnv_documentnumerator.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_COUNTERS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_counters.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_COUNTERS_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_counters_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_DOCUMENTNUMERATORTABLE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_DOCUMENTNUMERATORTABLE.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_DOCUMENTNUMERATORTABLE1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cnv_documentnumeratortable.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_DOCUMENTNUMERATORTABLE_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_DOCUMENTNUMERATORTABLE_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_DOCUMENTNUMERATORTABLE_d1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cnv_documentnumeratortable_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_DOGOVOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_dogovor.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
@@ -219,32 +309,5 @@
   </data>
   <data name="CNV_SUPPLNET_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_supplnet_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="DeleteOplataExcessRowCorrectionCase" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\correctioncasequeries\deleteoplataexcessrowcorrectioncase.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="NachoplOplataCheckCase1_NotFoundInOplata" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\checkcasequeries\nachoploplatacheckcase1_notfoundinoplata.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="NachoplOplataCheckCase2_OplataSummMismatch" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\checkcasequeries\nachoploplatacheckcase2_oplatasummmismatch.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="NachoplOplataCheckCase3_NotFoundInNachopl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\checkcasequeries\nachoploplatacheckcase3_notfoundinnachopl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="NachoplOplataCorrectionCase" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\correctioncasequeries\nachoploplatacorrectioncase.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="NachoplOplataSetNullCorrectionCase" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\correctioncasequeries\nachoploplatasetnullcorrectioncase.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="NachoplOplataSummaMismatchErrorStatistic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\statisticqueries\nachoploplatasummamismatcherrorstatistic.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="NachoplSummaNotFoundInOplataStatistic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\statisticqueries\nachoplsummanotfoundinoplatastatistic.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="OplataSummaNotFoundInNachoplStatistic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\statisticqueries\oplatasummanotfoundinnachoplstatistic.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

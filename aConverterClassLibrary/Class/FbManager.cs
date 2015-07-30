@@ -1,5 +1,9 @@
-﻿using FirebirdSql.Data.FirebirdClient;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using FirebirdSql.Data.FirebirdClient;
 using System.Data;
+using FirebirdSql.Data.Isql;
 
 namespace aConverterClassLibrary.Class
 {
@@ -71,10 +75,16 @@ namespace aConverterClassLibrary.Class
             using (var connection = new FbConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = connection.CreateCommand())
+                using (var transaction = connection.BeginTransaction())
                 {
-                    command.CommandText = aQuery;
-                    return command.ExecuteNonQuery();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = aQuery;
+                        command.Transaction = transaction;
+                        int result = command.ExecuteNonQuery();
+                        command.Transaction.Commit();
+                        return result;
+                    }
                 }
             }
         }
@@ -92,5 +102,94 @@ namespace aConverterClassLibrary.Class
             }
         }
 
+        /// <summary>
+        /// Выполняет скрипт
+        /// </summary>
+        /// <param name="script"></param>
+        /// <param name="ignoreerror"></param>
+        public void ExecuteScript(string script, bool ignoreerror = false)
+        {
+            if (script == null) throw new ArgumentNullException("script");
+            var fs = new FbScript(script);
+            fs.Parse();
+            using (var connection = new FbConnection(ConnectionString))
+            {
+                connection.Open();
+                foreach (var result in fs.Results)
+                {
+                    var fbc = new FbCommand(result, connection);
+                    if (!ignoreerror)
+                        fbc.ExecuteNonQuery();
+                    else
+                    {
+                        try
+                        {
+                            fbc.ExecuteNonQuery();
+                        }
+                        catch (FbException)
+                        {
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Возвращает элементы схемы
+        /// </summary>
+        /// <param name="collectionName"></param>
+        /// <param name="restrictionValues"></param>
+        /// <returns></returns>
+        public DataTable GetSchema(string collectionName, string[] restrictionValues)
+        {
+            using (var fc = new FbConnection(ConnectionString))
+            {
+                fc.Open();
+                return fc.GetSchema(collectionName, restrictionValues);
+            }
+        }
+
+        /// <summary>
+        /// Возвращает элементы схемы
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetSchema()
+        {
+            using (var fc = new FbConnection(ConnectionString))
+            {
+                fc.Open();
+                return fc.GetSchema();
+            }
+        }
+
+        /// <summary>
+        /// Возвращает элементы схемы
+        /// </summary>
+        /// <param name="collectionName"></param>
+        /// <returns></returns>
+        public DataTable GetSchema(string collectionName)
+        {
+            using (var fc = new FbConnection(ConnectionString))
+            {
+                fc.Open();
+                return fc.GetSchema(collectionName);
+            }
+        }
+
+        public void ExecuteProcedure(string procedureName, string[] parameters = null )
+        {
+            string addstring = "";
+            if (parameters != null)
+            {
+                foreach (var p in parameters)
+                {
+                    if (addstring != "") addstring += ", ";
+                    addstring += p;
+                }
+                addstring = "(" + addstring + ")";
+            }
+            string query = "EXECUTE PROCEDURE " + procedureName + addstring;
+            ExecuteNonQuery(query);
+        }
     }
 }

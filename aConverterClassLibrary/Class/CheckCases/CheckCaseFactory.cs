@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace aConverterClassLibrary
 {
@@ -11,30 +9,161 @@ namespace aConverterClassLibrary
         {
             var checkCaseList = new List<CheckCase>();
 
-            //TablePresentCheckCase tpcc = new TablePresentCheckCase();
-            //checkCaseList.Add(tpcc);
+            var ccLshetlength = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_LSHETLENGTH",
+                Description =
+                    "Проверка соответствия формата лицевого счета (является ли лицевой счет в таблице ABONENT строкой одинаковой длины)",
+                NormalRows = 1,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = false
+            };
+            checkCaseList.Add(ccLshetlength);
 
-            //CodePageCheckCase cpcc = new CodePageCheckCase();
-            //checkCaseList.Add(cpcc);
+            var ccNotUniqueLshet = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_NOTUNIQUELSHET",
+                Description = "Проверка на уникальность лицевых счетов в таблице CNV$ABONENT",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = false,
+                DependOn = ccLshetlength
+            };
+            checkCaseList.Add(ccNotUniqueLshet);
 
-            //StructureCheckCase scc1 = new StructureCheckCase();
-            //checkCaseList.Add(scc1);
+            var ccFio = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_FIO",
+                Description = "Проверяется, заполнены ли надлежащим образом поля F, I и O",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = false
+            };
+            checkCaseList.Add(ccFio);
 
+            var ccNotUniqueNachoplSaldo = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_NOTUNIQUENACHOPLSALDO",
+                Description = "Проверка, встречаются ли в таблице CNV$NACHOPL несколько записей по одному лицевому счету в одном месяце по одной услуге",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = ccNotUniqueLshet
+            };
+            checkCaseList.Add(ccNotUniqueNachoplSaldo);
 
-            //var clfcc = new CheckLshetFormatCheckCase();
-            //checkCaseList.Add(clfcc);
+            var ccSaldoHistoryGap = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_SALDOHISTORYGAP",
+                Description = "Проверка на \"пропуски\" в истории оплат/начислений",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = ccNotUniqueNachoplSaldo
+            };
+            checkCaseList.Add(ccSaldoHistoryGap);
 
-            //var nulcc = new NotUniqueLshetCheckCase();
-            //checkCaseList.Add(nulcc);
+            var ccOldNewSaldoMesmatch = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_OLDNEWSALDOMISMATCH",
+                Description = "Проверка, что для всех записей в истории оплат/начислений сальдо на конец месяца предыдущего равно сальдо на начало следующего",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = ccSaldoHistoryGap
+            };
+            checkCaseList.Add(ccOldNewSaldoMesmatch);
 
-            //var fiocc = new FioCheckCase();
-            //checkCaseList.Add(fiocc);
+            var ccFirstSaldoIsNotNull = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_FIRSTSALDOISNOTNULL",
+                Description = "Проверка, что сальдо первой строки в истории оплат/начислений равно 0",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = false,
+                DependOn = ccNotUniqueNachoplSaldo
+            };
+            checkCaseList.Add(ccFirstSaldoIsNotNull);
 
-            //var nunscc = new NotUniqueNachoplSaldoCheckCase();
-            //checkCaseList.Add(nunscc);
+            var ccNachoplOplataNotFound = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_NACHOPLOPLATANOTFOUND",
+                Description = "Проверка, что все суммы оплат в таблице CNV$NACHOPL расшифровываются в CNV$OPLATA",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = null
+            };
+            checkCaseList.Add(ccNachoplOplataNotFound);
 
-            //var nscc = new NachoplSaldoCheckCase();
-            //checkCaseList.Add(nscc);
+            var ccNachoplOplataMismatch = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_NACHOPLOPLATAMISMATCH",
+                Description = "Проверка, что суммы оплат в таблице CNV$NACHOPL и CNV$OPLATA совпадают",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = null
+            };
+            checkCaseList.Add(ccNachoplOplataMismatch);
+
+            var ccOplataNotFoundInNachopl = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_OPLATANOTFOUNDINNACHOPL",
+                Description = "Проверка, что суммы оплат из таблицы CNV$OPLATA присутствуют в CNV$NACHOPL",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = null
+            };
+            checkCaseList.Add(ccOplataNotFoundInNachopl);
+
+            var ccNachoplNachMismatch = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_NACHOPLNACHMISMATCH",
+                Description = "Проверка, что суммы начислений и перерасчетов в таблицах CNV$NACHOPL и CNV$NACH совпадают",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = null
+            };
+            checkCaseList.Add(ccNachoplNachMismatch);
+
+            var ccNachoplNachNotFound = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_NACHOPLNACHNOTFOUND",
+                Description = "Проверка, что ненулевые суммы начислений и перерасчетов в таблице CNV$NACHOPL расшифровываются в таблице CNV$NACH",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = null
+            };
+            checkCaseList.Add(ccNachoplNachNotFound);
+
+            var ccNachNotFoundInNachopl = new CheckCase()
+            {
+                StoredProcName = "CNV$CC_NACHNOTFOUNDINNACHOPL",
+                Description = "Проверка, что суммы оплат из таблицы CNV$NACH присутствуют в CNV$NACHOPL",
+                NormalRows = 0,
+                CanTest = true,
+                CanAnalyze = true,
+                CanFix = true,
+                DependOn = null
+            };
+            checkCaseList.Add(ccNachNotFoundInNachopl);
+
 
             //var nocc = new NachoplOplataCheckCase();
             //checkCaseList.Add(nocc);

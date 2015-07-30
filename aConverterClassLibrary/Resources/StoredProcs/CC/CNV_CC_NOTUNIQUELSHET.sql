@@ -1,4 +1,6 @@
-create procedure CNV$CC_NOTUNIQUELSHET (
+SET TERM ^ ;
+
+create or alter procedure CNV$CC_NOTUNIQUELSHET (
     ACTIONTYPE smallint = 0)
 returns (
     LSHET varchar(10),
@@ -15,4 +17,10 @@ begin
   end
   else
      EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0 или 1 не поддерживается процедурой';
-end
+end^
+
+SET TERM ; ^
+
+GRANT SELECT ON CNV$ABONENT TO PROCEDURE CNV$CC_NOTUNIQUELSHET;
+
+GRANT EXECUTE ON PROCEDURE CNV$CC_NOTUNIQUELSHET TO SYSDBA;

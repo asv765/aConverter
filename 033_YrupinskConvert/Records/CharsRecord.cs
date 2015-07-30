@@ -26,7 +26,7 @@ namespace _033_Yrupinsk.Records
         public Int64 Charcd
         {
             get { return charcd; }
-            set { CheckIntegerData("Charcd", value, 3); charcd = value; }
+            set { CheckIntegerData("Cd", value, 3); charcd = value; }
         }
 
         private string charname;

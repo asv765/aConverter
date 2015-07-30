@@ -106,7 +106,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 REGIMCD = defaultNachRecord.REGIMCD,
                 REGIMNAME = defaultNachRecord.REGIMNAME,
                 SERVICECD = defaultNachRecord.SERVICECD,
-                SERVICENAM = defaultNachRecord.SERVICENAM,
+                SERVICENAME = defaultNachRecord.SERVICENAME,
                 LSHET = lshet,
                 FNATH = fnath,
                 PROCHL = prochl,
@@ -127,7 +127,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 nachRecord.DATE_VV.Month,
                 nachRecord.DATE_VV.Year,
                 nachRecord.SERVICECD,
-                nachRecord.SERVICENAM);
+                nachRecord.SERVICENAME);
 
             nr.FNATH += nachRecord.FNATH;
             nr.PROCHL += nachRecord.PROCHL;
@@ -146,7 +146,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             var or = new CNV_OPLATA
             {
                 SERVICECD = defaultOplataRecord.SERVICECD,
-                SERVICENAM = defaultOplataRecord.SERVICENAM,
+                SERVICENAME = defaultOplataRecord.SERVICENAME,
                 SOURCECD = defaultOplataRecord.SOURCECD,
                 SOURCENAME = defaultOplataRecord.SOURCENAME,
                 LSHET = lshet,
@@ -167,7 +167,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 oplataRecord.DATE_VV.Month,
                 oplataRecord.DATE_VV.Year,
                 oplataRecord.SERVICECD,
-                oplataRecord.SERVICENAM);
+                oplataRecord.SERVICENAME);
 
             nr.OPLATA += oplataRecord.SUMMA;
             if (_saldoCorrectionType == NachoplCorrectionType.Пересчитать_сальдо_на_конец)

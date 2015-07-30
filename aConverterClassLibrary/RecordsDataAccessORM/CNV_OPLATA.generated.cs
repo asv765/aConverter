@@ -179,19 +179,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private string _sERVICENAM;
-		public virtual string SERVICENAM
-		{
-			get
-			{
-				return this._sERVICENAM;
-			}
-			set
-			{
-				this._sERVICENAM = value;
-			}
-		}
-		
 		private string _pRIM_;
 		public virtual string PRIM_
 		{
@@ -202,6 +189,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			set
 			{
 				this._pRIM_ = value;
+			}
+		}
+		
+		private string _sERVICENAME;
+		public virtual string SERVICENAME
+		{
+			get
+			{
+				return this._sERVICENAME;
+			}
+			set
+			{
+				this._sERVICENAME = value;
 			}
 		}
 		

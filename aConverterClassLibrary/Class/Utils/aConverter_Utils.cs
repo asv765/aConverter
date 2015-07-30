@@ -138,9 +138,9 @@ namespace aConverterClassLibrary
         public static string[] SplitFio(string fio)
         {
             string[] fioa = new string[3];
-            fioa[0] = Regex.Match(fio, @"^\w*").Value;
-            fioa[1] = Regex.Match(fio, @"(?<=^\w+\s+)\w*").Value;
-            fioa[2] = Regex.Match(fio, @"(?<=^\w+\s+\w+\s+)\w*").Value;
+            fioa[0] = Regex.Match(fio, @"\w+").Value;
+            fioa[1] = Regex.Match(fio, @"(?<=\w+\s+)\w+").Value;
+            fioa[2] = Regex.Match(fio, @"(?<=\w+\s+\w+\s+)\w+").Value;
             return fioa;
         }
 

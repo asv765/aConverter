@@ -127,19 +127,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private string _pLACE;
-		public virtual string PLACE
-		{
-			get
-			{
-				return this._pLACE;
-			}
-			set
-			{
-				this._pLACE = value;
-			}
-		}
-		
 		private DateTime? _pLOMBDATE;
 		public virtual DateTime? PLOMBDATE
 		{

@@ -166,32 +166,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private string _kVARTIRA;
-		public virtual string KVARTIRA
-		{
-			get
-			{
-				return this._kVARTIRA;
-			}
-			set
-			{
-				this._kVARTIRA = value;
-			}
-		}
-		
-		private int? _kOMNATA;
-		public virtual int? KOMNATA
-		{
-			get
-			{
-				return this._kOMNATA;
-			}
-			set
-			{
-				this._kOMNATA = value;
-			}
-		}
-		
 		private string _f;
 		public virtual string F
 		{
@@ -384,6 +358,45 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			set
 			{
 				this._hOUSENO = value;
+			}
+		}
+		
+		private short? _rOOMNO;
+		public virtual short? ROOMNO
+		{
+			get
+			{
+				return this._rOOMNO;
+			}
+			set
+			{
+				this._rOOMNO = value;
+			}
+		}
+		
+		private string _fLATPOSTFIX;
+		public virtual string FLATPOSTFIX
+		{
+			get
+			{
+				return this._fLATPOSTFIX;
+			}
+			set
+			{
+				this._fLATPOSTFIX = value;
+			}
+		}
+		
+		private int? _fLATNO;
+		public virtual int? FLATNO
+		{
+			get
+			{
+				return this._fLATNO;
+			}
+			set
+			{
+				this._fLATNO = value;
 			}
 		}
 		

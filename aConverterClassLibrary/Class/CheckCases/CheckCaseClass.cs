@@ -1,48 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using aConverterClassLibrary.Class;
 
 namespace aConverterClassLibrary
 {
-    public abstract class CheckCase
+    public class CheckCase
     {
-        private string checkCaseName;
         /// <summary>
-        /// Наименование варианта проверки
+        /// Наименование хранимой процедуры, выполняющей проверку
         /// </summary>
-        public string CheckCaseName
+        public string StoredProcName { get; set; }
+
+        /// <summary>
+        /// "Укороченное" название процедуры (без префикса CNV$)
+        /// </summary>
+        public string ShortStoredProcName
         {
-            get { return checkCaseName; }
-            set { checkCaseName = value; }
+            get
+            {
+                Match m = Regex.Match(StoredProcName, @"(?<=CNV\$).*");
+                return m.Value;
+            }
         }
 
-        //private CheckCaseClass checkCaseClass;
-        ///// <summary>
-        ///// Класс варианта проверки
-        ///// </summary>
-        //public CheckCaseClass CheckCaseClass
-        //{
-        //    get { return checkCaseClass; }
-        //    set { checkCaseClass = value; }
-        //}
+        /// <summary>
+        /// Описание варианта проверки
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
-        /// Наименование класса варианта проверки
+        /// Ссылка на вариант проверки, от которого зависит данная. Служит для определения последовательноси и 
+        /// выявления терминальных проверок.
         /// </summary>
-        //public string CheckCaseClassName
-        //{
-        //    get { return checkCaseClass.ToString().Replace('_', ' '); }
-        //}
+        public CheckCase DependOn { get; set; }
 
-        private CheckCaseStatus result = CheckCaseStatus.Анализ_не_проводился;
+        private CheckCaseStatus _result = CheckCaseStatus.Анализ_не_проводился;
         /// <summary>
         /// Результаты анализа
         /// </summary>
         public CheckCaseStatus Result
         {
-            get { return result; }
-            set { result = value; }
+            get { return _result; }
+            set { _result = value; }
         }
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace aConverterClassLibrary
         {
             get 
             {
-                string rs = result.ToString().Replace('_', ' ');
+                string rs = _result.ToString().Replace('_', ' ');
                 if (Result == CheckCaseStatus.Выполняется_анализ)
                 {
                     rs += "...";
@@ -61,41 +64,67 @@ namespace aConverterClassLibrary
             }
         }
 
-        private bool needAnalize = true;
+        private bool _needTest = true;
         /// <summary>
         /// Необходимо анализировать
         /// </summary>
-        public bool NeedAnalize
+        public bool NeedTest
         {
-            get { return needAnalize; }
-            set { needAnalize = value; }
-        }
-
-
-        private List<ErrorClass> errorList = new List<ErrorClass>();
-        /// <summary>
-        /// Список ошибок
-        /// </summary>
-        public List<ErrorClass> ErrorList
-        {
-          get { return errorList; }
-          set { errorList = value; }
-        }
-
-        private Dictionary<string, object> checkCaseParams = new Dictionary<string, object>();
-        /// <summary>
-        /// Параметры варианта проверки. Используются для генерации ошибки
-        /// </summary>
-        public Dictionary<string, object> CheckCaseParams
-        {
-            get { return checkCaseParams; }
-            set { checkCaseParams = value; }
+            get { return _needTest; }
+            set { _needTest = value; }
         }
 
         /// <summary>
-        /// Генерирует список ошибок
+        /// Количество строк, возвращаемых хранимой процедурой, которые можно считать нормальной ситуацией (ошибки не найдены)
         /// </summary>
-        public abstract void Analize();
+        public int NormalRows { get; set; }
+
+        /// <summary>
+        /// Может выдавать тестовую информацию
+        /// </summary>
+        public bool CanTest { get; set; }
+
+        /// <summary>
+        /// Может выполнять анализ
+        /// </summary>
+        public bool CanAnalyze { get; set; }
+
+        /// <summary>
+        /// Может корректировать причины, приведшие к ошибкам
+        /// </summary>
+        public bool CanFix { get; set; }
+
+        /// <summary>
+        /// Проверяет на наличие ошибок
+        /// </summary>
+        /// <returns>true - есть ошибки</returns>
+        public bool Test()
+        {
+            Result = CheckCaseStatus.Выполняется_анализ;
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            string query = String.Format("SELECT * FROM {0}({1})", StoredProcName, 0);
+            DataTable dt = fbm.ExecuteQuery(query);
+            bool testResult = dt.Rows.Count > NormalRows;
+            Result = testResult ? CheckCaseStatus.Выявлена_ошибка : CheckCaseStatus.Ошибок_не_выявлено;
+            return testResult;
+        }
+
+        public DataTable Analize()
+        {
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            string query = String.Format("SELECT * FROM {0}({1})", StoredProcName, 1);
+            DataTable dt = fbm.ExecuteQuery(query);
+            return dt;
+        }
+
+        public void Fix()
+        {
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            string query = String.Format("EXECUTE PROCEDURE {0}({1})", StoredProcName, 2);
+            fbm.ExecuteNonQuery(query);
+            Result = CheckCaseStatus.Ошибок_не_выявлено;
+        }
+
     }
 
     public enum CheckCaseStatus
