@@ -136,12 +136,6 @@
   <data name="CNV_CC_FIO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CC\CNV_CC_FIO.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
-  <data name="CNV_CC_FIRSTSALDOISNOTNULL" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\StoredProcs\CC\CNV_CC_FIRSTSALDOISNOTNULL.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="CNV_CC_LSHETLENGTH" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\StoredProcs\CC\CNV_CC_LSHETLENGTH.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
   <data name="CNV_CC_NACHNOTFOUNDINNACHOPL" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cc\cnv_cc_nachnotfoundinnachopl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -156,9 +150,6 @@
   </data>
   <data name="CNV_CC_NACHOPLOPLATANOTFOUND" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cc\cnv_cc_nachoploplatanotfound.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="CNV_CC_NOTUNIQUELSHET" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\StoredProcs\CC\CNV_CC_NOTUNIQUELSHET.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_CC_NOTUNIQUENACHOPLSALDO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CC\CNV_CC_NOTUNIQUENACHOPLSALDO.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

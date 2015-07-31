@@ -28,7 +28,7 @@ BEGIN
         n.servicecd = nc.servicecd AND
         n.year_ = EXTRACT(YEAR FROM nc.date_vv) AND
         n.month_ = EXTRACT(MONTH FROM nc.date_vv)
-    GROUP BY n.lshet, n.servicecd, n.servicenam, n.month_, n.year_, n.fnath, n.prochl
+    GROUP BY n.lshet, n.servicecd, n.servicename, n.month_, n.year_, n.fnath, n.prochl
     HAVING n.fnath <> SUM(nc.fnath) OR n.prochl <> SUM(nc.prochl)
     INTO :lshet, :servicecd, :year_, :month_, :nachopl_fnath, :nach_fnath, :nachopl_prochl, :nach_prochl
     DO BEGIN

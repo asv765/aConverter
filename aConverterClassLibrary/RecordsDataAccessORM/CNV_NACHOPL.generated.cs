@@ -179,16 +179,16 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private string _sERVICENAM;
-		public virtual string SERVICENAM
+		private string _sERVICENAME;
+		public virtual string SERVICENAME
 		{
 			get
 			{
-				return this._sERVICENAM;
+				return this._sERVICENAME;
 			}
 			set
 			{
-				this._sERVICENAM = value;
+				this._sERVICENAME = value;
 			}
 		}
 		

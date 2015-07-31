@@ -174,60 +174,6 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
-        ///create or alter procedure CNV$CC_FIRSTSALDOISNOTNULL (
-        ///    ACTIONTYPE smallint = 0)
-        ///returns (
-        ///    LSHET varchar(10),
-        ///    MONTH_ integer,
-        ///    YEAR_ integer,
-        ///    SERVICECD integer,
-        ///    BDEBET decimal(18,4))
-        ///as
-        ///BEGIN
-        ///  
-        ///  IF (actiontype = 0) THEN BEGIN
-        ///     FOR SELECT FIRST 1 lshet, servicecd, year_, month_,  bdebet
-        ///         FROM cnv$nachopl n1
-        ///         WHERE year_*100 + month_ = (SELECT MIN(year_*100+month_) FROM cnv$nachopl n2 WHERE n1.lshet = n2.lshet AND n1.servicecd = n2.serv [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string CNV_CC_FIRSTSALDOISNOTNULL {
-            get {
-                return ResourceManager.GetString("CNV_CC_FIRSTSALDOISNOTNULL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SET TERM ^ ;
-        ///
-        ///create or alter procedure CNV$CC_LSHETLENGTH (
-        ///    ACTIONTYPE smallint = 0)
-        ///returns (
-        ///    LSHETLENGTH integer,
-        ///    COUNT_ integer)
-        ///as
-        ///begin
-        ///  /* Тестирование, Диагностика */
-        ///  if (ACTIONTYPE = 0 or ACTIONTYPE = 1 ) then begin
-        ///     for SELECT CHAR_LENGTH(LSHET) AS LSHETLENGTH, COUNT(*) AS COUNT_
-        ///        FROM CNV$ABONENT
-        ///        GROUP BY CHAR_LENGTH(LSHET)
-        ///        ORDER BY CHAR_LENGTH(LSHET)
-        ///        into :LSHETLENGTH, :COUNT_
-        ///     do begin
-        ///        suspend;
-        ///     end
-        ///  end
-        ///  el [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string CNV_CC_LSHETLENGTH {
-            get {
-                return ResourceManager.GetString("CNV_CC_LSHETLENGTH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SET TERM ^ ;
-        ///
         ///create or alter procedure CNV$CC_NACHNOTFOUNDINNACHOPL (
         ///    ACTIONTYPE smallint)
         ///returns (
@@ -365,33 +311,6 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
-        ///create or alter procedure CNV$CC_NOTUNIQUELSHET (
-        ///    ACTIONTYPE smallint = 0)
-        ///returns (
-        ///    LSHET varchar(10),
-        ///    COUNT_ integer)
-        ///as
-        ///begin
-        ///  /* Тестирование, Диагностика */
-        ///  if (ACTIONTYPE = 0 or ACTIONTYPE = 1 ) then begin
-        ///     for select lshet, count(*) as count_ from cnv$abonent group by lshet having count(*) &gt; 1
-        ///         into :LSHET, :COUNT_
-        ///     do begin
-        ///         suspend;
-        ///     end
-        ///  end
-        ///  else
-        ///     EXCEPTION cnv$wrong_paramater_value &apos;Значение ACTIONTYPE отличное от 0 [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string CNV_CC_NOTUNIQUELSHET {
-            get {
-                return ResourceManager.GetString("CNV_CC_NOTUNIQUELSHET", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SET TERM ^ ;
-        ///
         ///create or alter procedure CNV$CC_NOTUNIQUENACHOPLSALDO (
         ///    ACTIONTYPE smallint = 0)
         ///returns (
@@ -406,12 +325,12 @@ namespace aConverterClassLibrary.Properties {
         ///    OPLATA numeric(18,2),
         ///    EDEBET numeric(18,4),
         ///    SERVICECD integer,
-        ///    SERVICENAM varchar(50))
+        ///    SERVICENAME varchar(50))
         ///as
         ///begin
         ///  /* Тестирование, Диагностика */
         ///  if (ACTIONTYPE = 0 or ACTIONTYPE = 1 ) then begin
-        ///      [rest of string was truncated]&quot;;.
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_CC_NOTUNIQUENACHOPLSALDO {
             get {
@@ -492,8 +411,7 @@ namespace aConverterClassLibrary.Properties {
         ///declare variable QUERYMONTH integer;
         ///declare variable QUERYYEAR integer;
         ///declare variable EDEBET decimal(18,4);
-        ///declare variable SERVICENAM varchar(50);
-        /// [rest of string was truncated]&quot;;.
+        ///declare variable SERVICENAME varchar(50);        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_CC_SALDOHISTORYGAP {
             get {
@@ -1328,11 +1246,11 @@ namespace aConverterClassLibrary.Properties {
         ///  OPLATA NUMERIC(18,2) NOT NULL,
         ///  EDEBET NUMERIC(18,4) NOT NULL,
         ///  SERVICECD INTEGER NOT NULL,
-        ///  SERVICENAM varchar(50) NOT NULL,
+        ///  SERVICENAME varchar(50) NOT NULL,
         ///  PRIMARY KEY (ID)
         ///);
         ///CREATE INDEX CNV$NACHOPL_IDX1 ON CNV$NACHOPL (LSHET);
-        ///CREA [rest of string was truncated]&quot;;.
+        ///CRE [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_NACHOPL {
             get {
@@ -1365,7 +1283,6 @@ namespace aConverterClassLibrary.Properties {
         ///  SUMMA NUMERIC(18,2) NOT NULL,
         ///  DATE_ timestamp NOT NULL,
         ///  DATE_VV timestamp NOT NULL,
-        ///  DATETIND timestamp DEFAULT NULL,
         ///  SOURCECD INTEGER NOT NULL,
         ///  SOURCENAME varchar(50) NOT NULL,
         ///  SERVICECD INTEGER NOT NULL,
@@ -1373,7 +1290,7 @@ namespace aConverterClassLibrary.Properties {
         ///  PRIM_ varchar(100) DEFAULT NULL,
         ///  PRIMARY KEY (ID)
         ///);
-        ///CREATE INDEX CNV [rest of string was truncated]&quot;;.
+        ///CREATE INDEX CNV$OPLATA_IDX1 ON CNV$OPLATA (LSHET);        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_OPLATA {
             get {

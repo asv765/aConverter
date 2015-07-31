@@ -127,19 +127,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private DateTime? _dATETIND;
-		public virtual DateTime? DATETIND
-		{
-			get
-			{
-				return this._dATETIND;
-			}
-			set
-			{
-				this._dATETIND = value;
-			}
-		}
-		
 		private int _sOURCECD;
 		public virtual int SOURCECD
 		{

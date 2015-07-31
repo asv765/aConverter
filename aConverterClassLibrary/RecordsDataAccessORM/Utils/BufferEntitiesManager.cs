@@ -137,7 +137,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {
                 var checkCaseList = CheckCaseFactory.GenerateCheckCases();
-                l.AddRange(checkCaseList.Select(checkCase => checkCase.ShortStoredProcName));
+                l.AddRange(checkCaseList.Where(checkCase => !String.IsNullOrEmpty(checkCase.StoredProcName)).Select(checkCase => checkCase.ShortStoredProcName));
             }
 
             return l;

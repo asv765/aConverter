@@ -26,7 +26,7 @@ BEGIN
         n.servicecd = o.servicecd AND
         n.year_ = EXTRACT(YEAR FROM o.date_vv) AND
         n.month_ = EXTRACT(MONTH FROM o.date_vv)
-    GROUP BY n.lshet, n.servicecd, n.servicenam, n.month_, n.year_, n.oplata
+    GROUP BY n.lshet, n.servicecd, n.servicename, n.month_, n.year_, n.oplata
     HAVING n.oplata <> SUM(o.summa)
     INTO :lshet, :servicecd, :year_, :month_, :nachopl_oplata, :oplata_sum
     DO BEGIN

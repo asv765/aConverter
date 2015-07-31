@@ -14,13 +14,13 @@ returns (
     OPLATA numeric(18,2),
     EDEBET numeric(18,4),
     SERVICECD integer,
-    SERVICENAM varchar(50))
+    SERVICENAME varchar(50))
 as
 begin
   /* Тестирование, Диагностика */
   if (ACTIONTYPE = 0 or ACTIONTYPE = 1 ) then begin
      for select no1.LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH,
-          PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAM
+          PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME
         from cnv$nachopl no1
         where exists
         (select lshet from cnv$nachopl no2
@@ -30,7 +30,7 @@ begin
             no1.servicecd = no2.servicecd and
             no1.rdb$db_key != no2.rdb$db_key)
      into :LSHET, :MONTH_, :YEAR_, :MONTH2, :YEAR2, :BDEBET, :FNATH,
-          :PROCHL, :OPLATA, :EDEBET, :SERVICECD, :SERVICENAM
+          :PROCHL, :OPLATA, :EDEBET, :SERVICECD, :SERVICENAME
      do begin
          suspend;
      end

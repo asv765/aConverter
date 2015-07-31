@@ -30,12 +30,8 @@ namespace aConverter.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.NeedAnalize = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.checkCaseNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.resultDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.проверитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.анализToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +40,9 @@ namespace aConverter.Forms
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
+            this.NeedAnalize = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.resultDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.checkCaseClassBindingSource)).BeginInit();
@@ -59,7 +58,6 @@ namespace aConverter.Forms
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.NeedAnalize,
-            this.checkCaseNameDataGridViewTextBoxColumn,
             this.Description,
             this.resultDataGridViewTextBoxColumn});
             this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
@@ -72,43 +70,6 @@ namespace aConverter.Forms
             this.dataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView1_DataError);
             this.dataGridView1.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dataGridView1_RowPrePaint);
             // 
-            // NeedAnalize
-            // 
-            this.NeedAnalize.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.NeedAnalize.DataPropertyName = "NeedTest";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.NullValue = false;
-            this.NeedAnalize.DefaultCellStyle = dataGridViewCellStyle2;
-            this.NeedAnalize.FalseValue = "";
-            this.NeedAnalize.HeaderText = "";
-            this.NeedAnalize.Name = "NeedAnalize";
-            this.NeedAnalize.Width = 20;
-            // 
-            // checkCaseNameDataGridViewTextBoxColumn
-            // 
-            this.checkCaseNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.checkCaseNameDataGridViewTextBoxColumn.DataPropertyName = "StoredProcName";
-            this.checkCaseNameDataGridViewTextBoxColumn.HeaderText = "Процедура";
-            this.checkCaseNameDataGridViewTextBoxColumn.Name = "checkCaseNameDataGridViewTextBoxColumn";
-            this.checkCaseNameDataGridViewTextBoxColumn.ReadOnly = true;
-            this.checkCaseNameDataGridViewTextBoxColumn.Width = 87;
-            // 
-            // Description
-            // 
-            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Description.DataPropertyName = "Description";
-            this.Description.HeaderText = "Описание";
-            this.Description.Name = "Description";
-            // 
-            // resultDataGridViewTextBoxColumn
-            // 
-            this.resultDataGridViewTextBoxColumn.DataPropertyName = "ResultString";
-            this.resultDataGridViewTextBoxColumn.FillWeight = 200F;
-            this.resultDataGridViewTextBoxColumn.HeaderText = "Результат";
-            this.resultDataGridViewTextBoxColumn.Name = "resultDataGridViewTextBoxColumn";
-            this.resultDataGridViewTextBoxColumn.ReadOnly = true;
-            this.resultDataGridViewTextBoxColumn.Width = 200;
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -116,26 +77,26 @@ namespace aConverter.Forms
             this.анализToolStripMenuItem,
             this.исправлениеToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(152, 70);
             // 
             // проверитьToolStripMenuItem
             // 
             this.проверитьToolStripMenuItem.Name = "проверитьToolStripMenuItem";
-            this.проверитьToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.проверитьToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.проверитьToolStripMenuItem.Text = "Тестирование";
             this.проверитьToolStripMenuItem.Click += new System.EventHandler(this.тестироватьToolStripMenuItem_Click);
             // 
             // анализToolStripMenuItem
             // 
             this.анализToolStripMenuItem.Name = "анализToolStripMenuItem";
-            this.анализToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.анализToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.анализToolStripMenuItem.Text = "Анализ";
             this.анализToolStripMenuItem.Click += new System.EventHandler(this.анализToolStripMenuItem_Click);
             // 
             // исправлениеToolStripMenuItem
             // 
             this.исправлениеToolStripMenuItem.Name = "исправлениеToolStripMenuItem";
-            this.исправлениеToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.исправлениеToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.исправлениеToolStripMenuItem.Text = "Исправление";
             this.исправлениеToolStripMenuItem.Click += new System.EventHandler(this.исправлениеToolStripMenuItem_Click);
             // 
@@ -174,6 +135,34 @@ namespace aConverter.Forms
             this.toolStripMain.TabIndex = 1;
             this.toolStripMain.Text = "toolStrip1";
             // 
+            // NeedAnalize
+            // 
+            this.NeedAnalize.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.NeedAnalize.DataPropertyName = "NeedTest";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.NullValue = false;
+            this.NeedAnalize.DefaultCellStyle = dataGridViewCellStyle1;
+            this.NeedAnalize.FalseValue = "";
+            this.NeedAnalize.HeaderText = "";
+            this.NeedAnalize.Name = "NeedAnalize";
+            this.NeedAnalize.Width = 20;
+            // 
+            // Description
+            // 
+            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Description.DataPropertyName = "Description";
+            this.Description.HeaderText = "Описание";
+            this.Description.Name = "Description";
+            // 
+            // resultDataGridViewTextBoxColumn
+            // 
+            this.resultDataGridViewTextBoxColumn.DataPropertyName = "ResultString";
+            this.resultDataGridViewTextBoxColumn.FillWeight = 200F;
+            this.resultDataGridViewTextBoxColumn.HeaderText = "Результат";
+            this.resultDataGridViewTextBoxColumn.Name = "resultDataGridViewTextBoxColumn";
+            this.resultDataGridViewTextBoxColumn.ReadOnly = true;
+            this.resultDataGridViewTextBoxColumn.Width = 200;
+            // 
             // FormCheckCasesList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -201,14 +190,13 @@ namespace aConverter.Forms
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem проверитьToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn checkCaseClassNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn NeedAnalize;
-        private System.Windows.Forms.DataGridViewTextBoxColumn checkCaseNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
-        private System.Windows.Forms.DataGridViewTextBoxColumn resultDataGridViewTextBoxColumn;
         private System.Windows.Forms.ToolStripMenuItem анализToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem исправлениеToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStrip toolStripMain;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn NeedAnalize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+        private System.Windows.Forms.DataGridViewTextBoxColumn resultDataGridViewTextBoxColumn;
     }
 }

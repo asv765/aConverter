@@ -37,7 +37,7 @@ namespace aConverter.Forms
             int errorsCount = 0;
             foreach (var ccc in _checkCaseList)
             {
-                if (!ccc.NeedTest || !ccc.CanTest) continue;
+                if (!ccc.NeedTest) continue;
                 ccc.Result = CheckCaseStatus.Выполняется_анализ;
                 dataGridView1.Refresh();
                 bool errorsPresent = ccc.Test();
@@ -72,13 +72,6 @@ namespace aConverter.Forms
             if (dataGridView1.CurrentRow != null)
             {
                 var ccc = (CheckCase)dataGridView1.CurrentRow.DataBoundItem;
-                if (!ccc.CanTest)
-                {
-                    MessageBox.Show(@"Вариант не может быть вызван для тестирования", @"Внимание!", 
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                    return;
-                }
                 var errorsPresent = ccc.Test();
                 if (errorsPresent)
                 {
@@ -142,8 +135,10 @@ namespace aConverter.Forms
                     return;
                 }
                 DataTable dt = ccc.Analize();
-                var fdt = new FormDataTable("Результаты проверки " + ccc.StoredProcName, dt);
-                fdt.ShowDialog();
+                var fsr = new FormStatisticResult("Результаты проверки " + ccc.StoredProcName, dt, null);
+                fsr.ShowDialog();
+                //var fdt = new FormDataTable("Результаты проверки " + ccc.StoredProcName, dt);
+                //fdt.ShowDialog();
             }
         }
 

@@ -33,7 +33,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
                 YEAR_ = (Int32)noks.Year,
                 YEAR2 = (Int32)noks.Year,
                 SERVICECD = (Int32)noks.Servicecd,
-                SERVICENAM = String.Format("Услуга с кодом {0}", noks.Servicecd)
+                SERVICENAME = String.Format("Услуга с кодом {0}", noks.Servicecd)
             };
             return nor;
         }

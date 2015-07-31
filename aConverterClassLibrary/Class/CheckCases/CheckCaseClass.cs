@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary.Class;
 
@@ -75,24 +72,53 @@ namespace aConverterClassLibrary
         }
 
         /// <summary>
-        /// Количество строк, возвращаемых хранимой процедурой, которые можно считать нормальной ситуацией (ошибки не найдены)
+        /// Количество строк, возвращаемых запросом, которые можно считать нормальной ситуацией (ошибки не найдены)
         /// </summary>
         public int NormalRows { get; set; }
 
         /// <summary>
-        /// Может выдавать тестовую информацию
+        /// Запрос для анализа ошибок
         /// </summary>
-        public bool CanTest { get; set; }
+        public string AnalyzeQuery { get; set; }
+
+
+        private string testQuery;
+
+        /// <summary>
+        /// Запрос для тестирования на наличие ошибок
+        /// </summary>
+        public string TestQuery
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(testQuery) && AnalyzeQuery.ToUpper().StartsWith("SELECT "))
+                   return "SELECT FIRST 1 " + AnalyzeQuery.Substring(7);
+                return testQuery;
+            }
+            set { testQuery = value; }
+        }
 
         /// <summary>
         /// Может выполнять анализ
         /// </summary>
-        public bool CanAnalyze { get; set; }
+        public bool CanAnalyze
+        {
+            get { return !String.IsNullOrEmpty(AnalyzeQuery); }
+        }
+
+        /// <summary>
+        /// Команда для исправления ошибок
+        /// </summary>
+        public string FixCommand { get; set; }
 
         /// <summary>
         /// Может корректировать причины, приведшие к ошибкам
         /// </summary>
-        public bool CanFix { get; set; }
+        public bool CanFix
+        {
+            get { return !String.IsNullOrEmpty(FixCommand); }
+        }
+
 
         /// <summary>
         /// Проверяет на наличие ошибок
@@ -102,26 +128,27 @@ namespace aConverterClassLibrary
         {
             Result = CheckCaseStatus.Выполняется_анализ;
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            string query = String.Format("SELECT * FROM {0}({1})", StoredProcName, 0);
-            DataTable dt = fbm.ExecuteQuery(query);
+            if (String.IsNullOrEmpty(AnalyzeQuery)) throw new Exception("На задан запрос для анализа");
+            DataTable dt = fbm.ExecuteQuery(TestQuery);
             bool testResult = dt.Rows.Count > NormalRows;
             Result = testResult ? CheckCaseStatus.Выявлена_ошибка : CheckCaseStatus.Ошибок_не_выявлено;
             return testResult;
         }
 
+
         public DataTable Analize()
         {
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            string query = String.Format("SELECT * FROM {0}({1})", StoredProcName, 1);
-            DataTable dt = fbm.ExecuteQuery(query);
+            if (String.IsNullOrEmpty(AnalyzeQuery)) throw new Exception("На задан запрос для анализа");
+            DataTable dt = fbm.ExecuteQuery(AnalyzeQuery);
             return dt;
         }
 
         public void Fix()
         {
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            string query = String.Format("EXECUTE PROCEDURE {0}({1})", StoredProcName, 2);
-            fbm.ExecuteNonQuery(query);
+            if (String.IsNullOrEmpty(FixCommand)) throw new Exception("На задана команда для исправления данных");
+            fbm.ExecuteNonQuery(FixCommand);
             Result = CheckCaseStatus.Ошибок_не_выявлено;
         }
 

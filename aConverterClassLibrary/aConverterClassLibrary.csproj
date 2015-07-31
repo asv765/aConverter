@@ -111,6 +111,11 @@
     <Compile Include="Class\Statistic\FdbStatistic.cs" />
     <Compile Include="Class\Statistic\Statistic.cs" />
     <Compile Include="Class\Utils\aConverter_Utils.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RecordsDataAccessORM\ABONENT.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
@@ -186,11 +191,6 @@
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
     <Compile Include="RecordsDataAccessORM\PartialSUPPLNETRecord.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="RecordsDataAccessORM\PartialNACHOPLRecord.cs" />
     <Compile Include="RecordsDataAccessORM\STREET.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
@@ -229,8 +229,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -296,9 +296,6 @@
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_00800_CHARS.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_00900_LCHARS.sql" />
     <None Include="Resources\StoredProcs\CC\CNV_CC_FIO.sql" />
-    <None Include="Resources\StoredProcs\CC\CNV_CC_FIRSTSALDOISNOTNULL.sql" />
-    <None Include="Resources\StoredProcs\CC\CNV_CC_LSHETLENGTH.sql" />
-    <None Include="Resources\StoredProcs\CC\CNV_CC_NOTUNIQUELSHET.sql" />
     <None Include="Resources\StoredProcs\CC\CNV_CC_NOTUNIQUENACHOPLSALDO.sql" />
     <None Include="Resources\StoredProcs\CC\CNV_CC_OLDNEWSALDOMISMATCH.sql" />
     <None Include="Resources\StoredProcs\CC\CNV_CC_SALDOHISTORYGAP.sql" />

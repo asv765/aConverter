@@ -15,7 +15,7 @@ declare variable CURRYEAR integer;
 declare variable QUERYMONTH integer;
 declare variable QUERYYEAR integer;
 declare variable EDEBET decimal(18,4);
-declare variable SERVICENAM varchar(50);
+declare variable SERVICENAME varchar(50);
 BEGIN
   /* Тестирование, Диагностика */
   IF (actiontype = 0 OR actiontype = 1 ) THEN BEGIN
@@ -68,11 +68,11 @@ BEGIN
             currmonth = querymonth - 1;
             curryear = queryyear;
         END
-        SELECT FIRST 1 n.EDEBET, n.SERVICENAM
+        SELECT FIRST 1 n.EDEBET, n.SERVICENAME
         FROM cnv$nachopl n
         WHERE n.LSHET = :lshet AND MONTH_ = :currmonth and YEAR_ = :curryear AND servicecd = :servicecd
-        INTO :edebet, :servicenam;
-        INSERT INTO CNV$NACHOPL (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAM) VALUES (:lshet, :querymonth, :queryyear, :querymonth, :queryyear, :edebet, 0, 0, 0, :edebet, :servicecd, :servicenam);
+        INTO :edebet, :servicename;
+        INSERT INTO CNV$NACHOPL (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME) VALUES (:lshet, :querymonth, :queryyear, :querymonth, :queryyear, :edebet, 0, 0, 0, :edebet, :servicecd, :servicename);
      END
   END
   ELSE

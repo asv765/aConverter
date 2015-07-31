@@ -101,7 +101,7 @@ namespace _001_Test
                 MONTH2 = 7,
                 YEAR2 = 2015,
                 SERVICECD = 10,
-                SERVICENAM = "Для тестирования",
+                SERVICENAME = "Для тестирования",
                 OPLATA = 100
             };
 
@@ -113,7 +113,7 @@ namespace _001_Test
                 MONTH2 = 7,
                 YEAR2 = 2015,
                 SERVICECD = 10,
-                SERVICENAM = "Для тестирования",
+                SERVICENAME = "Для тестирования",
                 OPLATA = 200
             };
 
@@ -200,7 +200,7 @@ namespace _001_Test
                 MONTH2 = 7,
                 YEAR2 = 2015,
                 SERVICECD = 10,
-                SERVICENAM = "Для тестирования",
+                SERVICENAME = "Для тестирования",
                 FNATH = 100,
                 PROCHL = 0
             };
@@ -214,7 +214,7 @@ namespace _001_Test
                 MONTH2 = 7,
                 YEAR2 = 2015,
                 SERVICECD = 10,
-                SERVICENAM = "Для тестирования",
+                SERVICENAME = "Для тестирования",
                 FNATH = 0,
                 PROCHL = 150
             };
@@ -228,7 +228,7 @@ namespace _001_Test
                 MONTH2 = 7,
                 YEAR2 = 2015,
                 SERVICECD = 10,
-                SERVICENAM = "Для тестирования",
+                SERVICENAME = "Для тестирования",
                 FNATH = 200,
                 PROCHL = 250
             };
@@ -242,7 +242,7 @@ namespace _001_Test
                 MONTH2 = 7,
                 YEAR2 = 2015,
                 SERVICECD = 10,
-                SERVICENAM = "Для тестирования",
+                SERVICENAME = "Для тестирования",
                 FNATH = 300,
                 PROCHL = 0
             };
@@ -256,7 +256,7 @@ namespace _001_Test
                 MONTH2 = 7,
                 YEAR2 = 2015,
                 SERVICECD = 10,
-                SERVICENAM = "Для тестирования",
+                SERVICENAME = "Для тестирования",
                 FNATH = 0,
                 PROCHL = 350
             };
@@ -319,6 +319,118 @@ namespace _001_Test
                 acem.Add(nc1);
                 acem.Add(nc2);
                 acem.Add(nc3);
+                acem.SaveChanges();
+            }
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TestCcOplataYearMonth : ConvertCase
+    {
+        public TestCcOplataYearMonth()
+        {
+            ConvertCaseName = "Добавляем данные для тестирования CC_OPLATAYEARMONTH";
+            Position = 40;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+
+            var co1 = new CNV_OPLATA()
+            {
+                LSHET = "000000002",
+                MONTH_ = 7,
+                YEAR_ = 1999,
+                SERVICECD = 10,
+                SERVICENAME = "Для тестирования",
+                SUMMA = 100,
+                DATE_ = new DateTime(2015, 7, 10),
+                DATE_VV = new DateTime(2015, 7, 10),
+                SOURCECD = 1,
+                SOURCENAME = "Тестирование",
+                DOCUMENTCD = "1"
+            };
+
+            var co2 = new CNV_OPLATA()
+            {
+                LSHET = "000000002",
+                MONTH_ = 0,
+                YEAR_ = 2015,
+                SERVICECD = 10,
+                SERVICENAME = "Для тестирования",
+                SUMMA = 100,
+                DATE_ = new DateTime(2015, 7, 10),
+                DATE_VV = new DateTime(2015, 7, 10),
+                SOURCECD = 1,
+                SOURCENAME = "Тестирование",
+                DOCUMENTCD = "1"
+            };
+
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                acem.Add(co1);
+                acem.Add(co2);
+                acem.SaveChanges();
+            }
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TestCcNachYearMonth : ConvertCase
+    {
+        public TestCcNachYearMonth()
+        {
+            ConvertCaseName = "Добавляем данные для тестирования CC_NACHYEARMONTH";
+            Position = 50;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+
+            // Не совпадают данные по FNATH
+            var nc1 = new CNV_NACH()
+            {
+                LSHET = "000000013",
+                MONTH_ = 7,
+                YEAR_ = 1999,
+                SERVICECD = 10,
+                SERVICENAME = "Для тестирования",
+                FNATH = 301,
+                PROCHL = 0,
+                DATE_VV = new DateTime(2015, 7, 10),
+                DOCUMENTCD = "4",
+                REGIMCD = 10,
+                REGIMNAME = "Неизвестен"
+            };
+
+            // Не совпадают данные по PROCHL
+            var nc2 = new CNV_NACH()
+            {
+                LSHET = "000000014",
+                MONTH_ = 13,
+                YEAR_ = 2015,
+                SERVICECD = 10,
+                SERVICENAME = "Для тестирования",
+                FNATH = 0,
+                PROCHL = 351,
+                DATE_VV = new DateTime(2015, 7, 10),
+                DOCUMENTCD = "4",
+                REGIMCD = 10,
+                REGIMNAME = "Неизвестен"
+            };
+
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                acem.Add(nc1);
+                acem.Add(nc2);
                 acem.SaveChanges();
             }
             Iterate();

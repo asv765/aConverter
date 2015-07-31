@@ -107,9 +107,6 @@
         <orm:field name="_dATE_VV" property="DATE_VV" behavior="readwrite" uniqueId="f284ac92-f3e7-4ad3-9706-70826394134c" type="System.DateTime">
           <orm:column name="DATE_VV" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
         </orm:field>
-        <orm:field name="_dATETIND" property="DATETIND" behavior="readwrite" uniqueId="a34a2267-25e1-4ab4-9d7c-664eb625e5fe" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="DATETIND" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" has-default-value="true" ado-type="DateTime" />
-        </orm:field>
         <orm:field name="_sOURCECD" property="SOURCECD" behavior="readwrite" uniqueId="371ed806-2fea-427f-b646-4b298b05287c" type="System.Int32">
           <orm:column name="SOURCECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
@@ -176,8 +173,8 @@
         <orm:field name="_sERVICECD" property="SERVICECD" behavior="readwrite" uniqueId="52b7b290-5b24-4e57-babe-b6d7513730ec" type="System.Int32">
           <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
-        <orm:field name="_sERVICENAM" property="SERVICENAM" behavior="readwrite" uniqueId="d9dba0e6-c7da-4307-a918-1ef41ecd3c5e" type="System.String">
-          <orm:column name="SERVICENAM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:field name="_sERVICENAME" property="SERVICENAME" behavior="readwrite" uniqueId="192978bc-f8cb-45d4-84a9-5e1390a3df8c" type="System.String">
+          <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:index name="CNV$NACHOPL_IDX1">
           <orm:columnMapping>
@@ -1367,7 +1364,6 @@
         <orm:column name="SUMMA" sql-type="NUMERIC" nullable="false" length="18" scale="2" ado-type="Numeric" />
         <orm:column name="DATE_" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="DATE_VV" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
-        <orm:column name="DATETIND" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" has-default-value="true" ado-type="DateTime" />
         <orm:column name="SOURCECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         <orm:column name="SOURCENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
@@ -1392,7 +1388,7 @@
         <orm:column name="OPLATA" sql-type="NUMERIC" nullable="false" length="18" scale="2" ado-type="Numeric" />
         <orm:column name="EDEBET" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
         <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="SERVICENAM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         <orm:index name="CNV$NACHOPL_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
@@ -1821,7 +1817,7 @@
   </orm:orm>
   <ModelSettings xmlns="">
     <AppConfigConnectionPropertyName>FirebirdConnectionString</AppConfigConnectionPropertyName>
-    <AppConfigConnectionString>user=SYSDBA;password=masterkey;database=C:\Work\aConverter_Data\033_Yrupinsk\Database\ABONENT.FDB;datasource=localhost;dialect=3;character set=WIN1251;pooling=true;minpoolsize=0;maxpoolsize=50;packet size=8192;servertype=0</AppConfigConnectionString>
+    <AppConfigConnectionString>user=SYSDBA;password=masterkey;database=C:\Work\aConverter_Data\001_Test\Database\ABONENT.FDB;datasource=localhost;dialect=3;character set=WIN1251;pooling=true;minpoolsize=0;maxpoolsize=50;packet size=8192;servertype=0</AppConfigConnectionString>
     <NamingSettings>
       <ClassRules>
         <CaseMode>PascalCase</CaseMode>
@@ -1870,7 +1866,6 @@
       <Property Id="0794addb-1a06-4bf6-a3b3-7e7fdb8896fd" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
       <Property Id="9be46259-19a0-430b-abe6-d7958e9c8531" name="DATE_" type="DateTime" label="DATE_ : DateTime" kind="Persistent" fieldName="_dATE_" />
       <Property Id="f284ac92-f3e7-4ad3-9706-70826394134c" name="DATE_VV" type="DateTime" label="DATE_VV : DateTime" kind="Persistent" fieldName="_dATE_VV" />
-      <Property Id="a34a2267-25e1-4ab4-9d7c-664eb625e5fe" name="DATETIND" type="DateTime" label="DATETIND : DateTime" nullable="true" kind="Persistent" fieldName="_dATETIND" />
       <Property Id="026df90e-2557-4b1a-a478-e8793a714e4c" name="DOCUMENTCD" label="DOCUMENTCD : String" kind="Persistent" fieldName="_dOCUMENTCD" />
       <Property Id="aea252fe-c0c1-404d-b3ee-208c0ecd70bd" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
       <Property Id="2417b11d-c70b-4429-9cfe-a8b2e2b130e9" name="MONTH_" type="Int32" label="MONTH_ : Int32" kind="Persistent" fieldName="_mONTH_" />
@@ -1893,9 +1888,9 @@
       <Property Id="cf064624-60c3-4542-8bea-4f7ccd3def05" name="OPLATA" type="Decimal" label="OPLATA : Decimal" kind="Persistent" fieldName="_oPLATA" />
       <Property Id="18e7e2cc-b632-4d5a-b760-668d82b49f5d" name="PROCHL" type="Decimal" label="PROCHL : Decimal" kind="Persistent" fieldName="_pROCHL" />
       <Property Id="52b7b290-5b24-4e57-babe-b6d7513730ec" name="SERVICECD" type="Int32" label="SERVICECD : Int32" kind="Persistent" fieldName="_sERVICECD" />
-      <Property Id="d9dba0e6-c7da-4307-a918-1ef41ecd3c5e" name="SERVICENAM" label="SERVICENAM : String" kind="Persistent" fieldName="_sERVICENAM" />
       <Property Id="8be68392-c4fe-4b43-8235-3f097bb6e8ed" name="YEAR_" type="Int32" label="YEAR_ : Int32" kind="Persistent" fieldName="_yEAR_" />
       <Property Id="79d72ea6-4f7b-4469-98cb-8b9c3dcfecbd" name="YEAR2" type="Int32" label="YEAR2 : Int32" kind="Persistent" fieldName="_yEAR2" />
+      <Property Id="192978bc-f8cb-45d4-84a9-5e1390a3df8c" name="SERVICENAME" label="SERVICENAME : String" kind="Persistent" fieldName="_sERVICENAME" />
     </DomainClass>
     <DomainClass Id="fda91d2c-9b5b-4496-a8bc-4cdc68dd64ce" name="CNV_NACH" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="df18351b-b06f-4c7d-a627-08d9a9eb5887" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />

@@ -85,7 +85,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             if (!NachoplRecords.TryGetValue(noks, out nr))
             {
                 nr = CNV_NACHOPL.CreateFromKeySet(noks);
-                nr.SERVICENAM = servicename;
+                nr.SERVICENAME = servicename;
                 NachoplRecords.Add(noks, nr);
             }
 
