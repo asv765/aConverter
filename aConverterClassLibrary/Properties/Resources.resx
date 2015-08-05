@@ -118,17 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CNV_AADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cnv_aaddchar.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_AADDCHAR_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cnv_aaddchar_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_ABONENT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_ABONENT.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_ABONENT_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_ABONENT_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="CNV_ADDDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CNV_ADDDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="CNV_ADDDCHAR_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CNV_ADDDCHAR_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_ADD_WRONG_PARAMETER_EXCEPTION" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv_add_wrong_parameter_exception.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
@@ -162,6 +162,12 @@
   </data>
   <data name="CNV_CC_SALDOHISTORYGAP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CC\CNV_CC_SALDOHISTORYGAP.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CHARLST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cnv_charlst.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CHARLST_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cnv_charlst_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_CHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_CHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

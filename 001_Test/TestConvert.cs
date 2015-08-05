@@ -40,28 +40,6 @@ namespace _001_Test
         }
     }
 
-    public class ReCreateProcedures : ConvertCase
-    {
-        public ReCreateProcedures()
-        {
-            ConvertCaseName = "Пересоздать хранимые процедуры";
-            Position = 15;
-            IsChecked = false;
-        }
-
-        public override void DoConvert()
-        {
-            SetStepsCount(1);
-            StepStart(1);
-
-            BufferEntitiesManager.DropAllProcedures();
-            BufferEntitiesManager.CreateAllProcedures();
-
-            Result = ConvertCaseStatus.Шаг_выполнен_успешно;
-            Iterate();
-        }
-    }
-
     public class ClearTables : ConvertCase
     {
         public ClearTables()
@@ -438,4 +416,199 @@ namespace _001_Test
         }
     }
 
+    public class TestCcNotUniqueCounterId : ConvertCase
+    {
+        public TestCcNotUniqueCounterId()
+        {
+            ConvertCaseName = "Данные для проверки на уникальность поля COUNTERID в таблице CNV$COUNTERS";
+            Position = 60;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+
+            BufferEntitiesManager.DropTableData("CNV$COUNTERS");
+
+            var c1 = new CNV_COUNTER()
+            {
+                COUNTERID = "00001",
+                LSHET = "00000001",
+                CNTTYPE = 1,
+                CNTNAME = "Неизвестен"
+            };
+
+            var c2 = new CNV_COUNTER()
+            {
+                COUNTERID = "00001",
+                LSHET = "00000002",
+                CNTTYPE = 1,
+                CNTNAME = "Неизвестен"
+            };
+
+
+            var c3 = new CNV_COUNTER()
+            {
+                COUNTERID = "00010",
+                LSHET = "00000003",
+                CNTTYPE = 1,
+                CNTNAME = "Неизвестен"
+            };
+
+
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                acem.Add(c1);
+                acem.Add(c2);
+                acem.Add(c3);
+                acem.SaveChanges();
+            }
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TestCcUncertaintyAbonentUlicakodUlicaname : ConvertCase
+    {
+        public TestCcUncertaintyAbonentUlicakodUlicaname()
+        {
+            ConvertCaseName =
+                "Добавляем записи для проверки тестов кодов и расшифровок для CNV$ABONENT.ULICAKOD, CNV$ABONENT.ULICANME";
+            Position = 70;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+
+            BufferEntitiesManager.DropTableData("CNV$ABONENT");
+
+            var a1 = new CNV_ABONENT()
+            {
+                LSHET = "00000001",
+                HOUSECD = 1,
+                TOWNSKOD = 1,
+                RAYONKOD = 1,
+                ULICAKOD = 1,
+                ULICANAME = "Солнечная",
+                HOUSENO = "10",
+                KORPUSNO = 1,
+                ISDELETED = 0,
+                DUCD = 1,
+                DUNAME = "МП Водоканал г.Рязани",
+            };
+
+            var a2 = new CNV_ABONENT()
+            {
+                LSHET = "00000002",
+                HOUSECD = 1,
+                TOWNSKOD = 1,
+                RAYONKOD = 1,
+                ULICAKOD = 1,
+                ULICANAME = "Ягодная",
+                HOUSENO = "10",
+                KORPUSNO = 1,
+                ISDELETED = 0,
+                DUCD = 1,
+                DUNAME = "МП Водоканал г.Рязани"
+            };
+
+            var a3 = new CNV_ABONENT()
+            {
+                LSHET = "00000003",
+                HOUSECD = 1,
+                TOWNSKOD = 1,
+                RAYONKOD = 1,
+                ULICAKOD = 2,
+                ULICANAME = "Ветренная",
+                HOUSENO = "10",
+                KORPUSNO = 2,
+                ISDELETED = 0,
+                DUCD = 1,
+                DUNAME = "МП Водоканал г.Рязани"
+            };
+
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                acem.Add(a1);
+                acem.Add(a2);
+                acem.Add(a3);
+                acem.SaveChanges();
+            }
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TestLcharsUncertainty : ConvertCase
+    {
+        public TestLcharsUncertainty()
+        {
+            ConvertCaseName =
+                "Добавляет записи в CNV$LCHARS для тестирования полей LCHARCD, LOGICVALUES и расшифровки их сочетаний в SIGNIFICANCE";
+            Position = 80;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+
+            BufferEntitiesManager.DropTableData("CNV$LCHARS");
+
+            var clc1 = new CNV_LCHAR
+            {
+                LSHET = "000000001",
+                DATE_ = new DateTime(2015, 7, 2),
+                LCHARCD = 1,
+                LCHARNAME = "Признак наличия чего-либо",
+                VALUE_ = 1,
+                VALUEDESC = "Есть"
+            };
+            var clc2 = new CNV_LCHAR
+            {
+                LSHET = "000000001",
+                DATE_ = new DateTime(2015, 7, 2),
+                LCHARCD = 1,
+                LCHARNAME = "Признак наличия чего-либо",
+                VALUE_ = 0,
+                VALUEDESC = "Нет"
+            };
+            var clc3 = new CNV_LCHAR
+            {
+                LSHET = "000000001",
+                DATE_ = new DateTime(2015, 7, 2),
+                LCHARCD = 1,
+                LCHARNAME = "Признак наличия чего-либо",
+                VALUE_ = 0,
+                VALUEDESC = "Есть"
+            };
+            var clc4 = new CNV_LCHAR
+            {
+                LSHET = "000000002",
+                DATE_ = new DateTime(2015, 7, 2),
+                LCHARCD = 2,
+                LCHARNAME = "Признак наличия чего-либо",
+                VALUE_ = 1,
+                VALUEDESC = "Есть"
+            };
+
+
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                acem.Add(clc1);
+                acem.Add(clc2);
+                acem.Add(clc3);
+                acem.Add(clc4);
+                acem.SaveChanges();
+            }
+            Iterate();
+            StepFinish();
+        }
+    }
 }

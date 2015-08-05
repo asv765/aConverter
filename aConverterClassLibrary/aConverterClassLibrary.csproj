@@ -125,10 +125,10 @@
     <Compile Include="RecordsDataAccessORM\CCHARSLIST.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\CNV_ABONENT.generated.cs">
+    <Compile Include="RecordsDataAccessORM\CNV_AADDCHAR.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
-    <Compile Include="RecordsDataAccessORM\CNV_ADDDCHAR.generated.cs">
+    <Compile Include="RecordsDataAccessORM\CNV_ABONENT.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
     <Compile Include="RecordsDataAccessORM\CNV_CHAR.generated.cs">
@@ -240,12 +240,6 @@
     <None Include="Resources\CNV_ABONENT.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CNV_ADDDCHAR.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CNV_ADDDCHAR_d.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\CNV_CHARS.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -258,6 +252,10 @@
     <None Include="Resources\CNV_LCHARS_d.sql" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\CNV_AADDCHAR.sql" />
+    <Content Include="Resources\CNV_AADDCHAR_d.sql" />
+    <Content Include="Resources\CNV_CHARLST.sql" />
+    <Content Include="Resources\CNV_CHARLST_d.sql" />
     <Content Include="Resources\CNV_CHARVALS.sql" />
     <Content Include="Resources\CNV_CHARVALS_d.sql" />
     <Content Include="Resources\CNV_CITIZENS.sql" />

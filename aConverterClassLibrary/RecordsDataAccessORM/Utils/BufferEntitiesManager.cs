@@ -29,8 +29,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         {
             var l = new List<string>
             {
-                "ADDDCHAR",
+                "AADDCHAR",
                 "ABONENT",
+                "CHARLST",
                 "CHARS",
                 "CHARVALS",
                 "CITIZENS",

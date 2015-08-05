@@ -80,7 +80,7 @@ namespace aConverter.Forms
                     if (dr == DialogResult.Yes)
                     {
                         DataTable dt = ccc.Analize();
-                        var fdt = new FormDataTable("Результаты проверки " + ccc.StoredProcName, dt);
+                        var fdt = new FormDataTable(ccc.AnalyzeResultDescription, dt);
                         fdt.ShowDialog();
                     }
                 }
@@ -135,7 +135,7 @@ namespace aConverter.Forms
                     return;
                 }
                 DataTable dt = ccc.Analize();
-                var fsr = new FormStatisticResult("Результаты проверки " + ccc.StoredProcName, dt, null);
+                var fsr = new FormStatisticResult(ccc.AnalyzeResultDescription, dt, null);
                 fsr.ShowDialog();
                 //var fdt = new FormDataTable("Результаты проверки " + ccc.StoredProcName, dt);
                 //fdt.ShowDialog();

@@ -672,33 +672,6 @@
           </orm:columnMapping>
         </orm:index>
       </orm:class>
-      <orm:class name="CNV_ADDDCHAR" uniqueId="ba96681a-c4b5-45fe-a9fe-cd8981a10064">
-        <orm:table name="CNV$ADDDCHAR" />
-        <orm:identity>
-          <orm:key-generator name="autoinc">
-            <orm:key-generator-member property-name="ID" />
-          </orm:key-generator>
-          <orm:single-field field-name="_iD" />
-        </orm:identity>
-        <orm:concurrency strategy="changed" />
-        <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="4069e8d6-8a3f-4763-886a-14033e5589f3" type="System.Int32">
-          <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
-        </orm:field>
-        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="ef8c1045-9881-4b99-8262-49e6f167ca8c" type="System.String">
-          <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        </orm:field>
-        <orm:field name="_aDDCHARCD" property="ADDCHARCD" behavior="readwrite" uniqueId="ed5d847b-f12d-4eb4-ad03-7ace7b90d52d" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="ADDCHARCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        </orm:field>
-        <orm:field name="_vALUE" property="VALUE" behavior="readwrite" uniqueId="46a181e2-ae92-4bfd-9d00-b0d2af79e041" type="System.String">
-          <orm:column name="VALUE" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
-        </orm:field>
-        <orm:index name="CNV$ADDDCHAR_IDX1">
-          <orm:columnMapping>
-            <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-          </orm:columnMapping>
-        </orm:index>
-      </orm:class>
       <orm:class name="CNV_ABONENT" uniqueId="49163223-8709-4285-904e-11dce3130f91">
         <orm:table name="CNV$ABONENT" />
         <orm:identity>
@@ -1325,6 +1298,33 @@
           </orm:columnMapping>
         </orm:index>
       </orm:class>
+      <orm:class name="CNV_AADDCHAR" uniqueId="18e92dd3-df69-46d8-8275-6cb52d5e463e">
+        <orm:table name="CNV$AADDCHAR" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="ID" />
+          </orm:key-generator>
+          <orm:single-field field-name="_iD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="a09c6860-3a55-49bb-af43-aa6da5549c3f" type="System.Int32">
+          <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="0491f64d-393d-42fc-a8d8-47a13f81e41f" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_aDDCHARCD" property="ADDCHARCD" behavior="readwrite" uniqueId="ef607992-3b8e-49a2-9769-76f56667a306" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ADDCHARCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_vALUE" property="VALUE" behavior="readwrite" uniqueId="aac2f9c8-718c-4d0d-8927-84ff8f5194a3" type="System.String">
+          <orm:column name="VALUE" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:index name="CNV$AADDCHAR_IDX1">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
     </orm:namespace>
     <orm:schema schema="">
       <orm:table name="CNV$SUPPLNET">
@@ -1809,6 +1809,17 @@
           </orm:columnMapping>
         </orm:index>
       </orm:table>
+      <orm:table name="CNV$AADDCHAR">
+        <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ADDCHARCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="VALUE" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="CNV$AADDCHAR_IDX1">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
     </orm:schema>
     <orm:relational-naming-settings>
       <orm:source-strategy>Property</orm:source-strategy>
@@ -2023,12 +2034,6 @@
       <Property Id="ca0f92f8-4efb-438c-9411-7d9cd82c0e1e" name="DATE_" type="DateTime" label="DATE_ : DateTime" nullable="true" kind="Persistent" fieldName="_dATE_" />
       <Property Id="31c50742-2813-47b8-a620-6f3b16804832" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
       <Property Id="a9fff3eb-039c-4641-a4b0-bf367b4025e1" name="VALUE_" type="Decimal" label="VALUE_ : Decimal" nullable="true" kind="Persistent" fieldName="_vALUE_" />
-    </DomainClass>
-    <DomainClass Id="ba96681a-c4b5-45fe-a9fe-cd8981a10064" name="CNV_ADDDCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
-      <Property Id="4069e8d6-8a3f-4763-886a-14033e5589f3" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
-      <Property Id="ed5d847b-f12d-4eb4-ad03-7ace7b90d52d" name="ADDCHARCD" type="Int32" label="ADDCHARCD : Int32" nullable="true" kind="Persistent" fieldName="_aDDCHARCD" />
-      <Property Id="ef8c1045-9881-4b99-8262-49e6f167ca8c" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
-      <Property Id="46a181e2-ae92-4bfd-9d00-b0d2af79e041" name="VALUE" label="VALUE : String" kind="Persistent" fieldName="_vALUE" />
     </DomainClass>
     <DomainClass Id="49163223-8709-4285-904e-11dce3130f91" name="CNV_ABONENT" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="4d5514e1-5202-4062-ac7b-dbdeabc2f796" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
@@ -2346,6 +2351,12 @@
       <Property Id="7227e9a2-0ae0-44c2-936f-462b1a72a455" name="SOCR" label="SOCR : String" kind="Persistent" fieldName="_sOCR" />
       <Property Id="6f62986b-f44c-41bc-8acb-1da2c09153c0" name="STREETNM" label="STREETNM : String" kind="Persistent" fieldName="_sTREETNM" />
     </DomainClass>
+    <DomainClass Id="18e92dd3-df69-46d8-8275-6cb52d5e463e" name="CNV_AADDCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
+      <Property Id="a09c6860-3a55-49bb-af43-aa6da5549c3f" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
+      <Property Id="ef607992-3b8e-49a2-9769-76f56667a306" name="ADDCHARCD" type="Int32" label="ADDCHARCD : Int32" nullable="true" kind="Persistent" fieldName="_aDDCHARCD" />
+      <Property Id="0491f64d-393d-42fc-a8d8-47a13f81e41f" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
+      <Property Id="aac2f9c8-718c-4d0d-8927-84ff8f5194a3" name="VALUE" label="VALUE : String" kind="Persistent" fieldName="_vALUE" />
+    </DomainClass>
   </Types>
   <domainContext>
     <domainModelHasDomainContext Id="45252271-1885-496c-bfb7-6169c8a416fe">
@@ -2365,7 +2376,6 @@
         <entitySetProperty name="CNV_CITIZENs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CITIZEN" label="CNV_CITIZENs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CITIZEN&gt;" />
         <entitySetProperty name="CNV_CHARVALs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CHARVAL" label="CNV_CHARVALs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CHARVAL&gt;" />
         <entitySetProperty name="CNV_CHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CHAR" label="CNV_CHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CHAR&gt;" />
-        <entitySetProperty name="CNV_ADDDCHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_ADDDCHAR" label="CNV_ADDDCHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_ADDDCHAR&gt;" />
         <entitySetProperty name="CNV_ABONENTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_ABONENT" label="CNV_ABONENTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_ABONENT&gt;" />
         <entitySetProperty name="EXTORGSTREETs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="EXTORGSTREET" label="EXTORGSTREETs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.EXTORGSTREET&gt;" />
         <entitySetProperty name="LCHARSLISTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="LCHARSLIST" label="LCHARSLISTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.LCHARSLIST&gt;" />
@@ -2374,6 +2384,7 @@
         <entitySetProperty name="BALANCESLISTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="BALANCESLIST" label="BALANCESLISTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.BALANCESLIST&gt;" />
         <entitySetProperty name="ABONENTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="ABONENT" label="ABONENTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.ABONENT&gt;" />
         <entitySetProperty name="STREETs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="STREET" label="STREETs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.STREET&gt;" />
+        <entitySetProperty name="CNV_AADDCHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_AADDCHAR" label="CNV_AADDCHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_AADDCHAR&gt;" />
       </domainContainer>
     </domainModelHasDomainContext>
   </domainContext>

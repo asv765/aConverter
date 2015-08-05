@@ -21,7 +21,7 @@ using Telerik.OpenAccess.Metadata.Fluent.Advanced;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM	
 {
-	public partial class CNV_ADDDCHAR
+	public partial class CNV_AADDCHAR
 	{
 		private int _iD;
 		public virtual int ID

@@ -170,14 +170,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		public IQueryable<CNV_ADDDCHAR> CNV_ADDDCHARs 
-		{
-			get
-			{
-				return this.GetAll<CNV_ADDDCHAR>();
-			}
-		}
-		
 		public IQueryable<CNV_ABONENT> CNV_ABONENTs 
 		{
 			get
@@ -239,6 +231,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			get
 			{
 				return this.GetAll<STREET>();
+			}
+		}
+		
+		public IQueryable<CNV_AADDCHAR> CNV_AADDCHARs 
+		{
+			get
+			{
+				return this.GetAll<CNV_AADDCHAR>();
 			}
 		}
 		
@@ -323,10 +323,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 		{
 			get;
 		}
-		IQueryable<CNV_ADDDCHAR> CNV_ADDDCHARs
-		{
-			get;
-		}
 		IQueryable<CNV_ABONENT> CNV_ABONENTs
 		{
 			get;
@@ -356,6 +352,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			get;
 		}
 		IQueryable<STREET> STREETs
+		{
+			get;
+		}
+		IQueryable<CNV_AADDCHAR> CNV_AADDCHARs
 		{
 			get;
 		}

@@ -81,8 +81,12 @@ namespace aConverterClassLibrary
         /// </summary>
         public string AnalyzeQuery { get; set; }
 
+        /// <summary>
+        /// Результат анализа данных
+        /// </summary>
+        public string AnalyzeResultDescription { get; set; }
 
-        private string testQuery;
+        private string _testQuery;
 
         /// <summary>
         /// Запрос для тестирования на наличие ошибок
@@ -91,11 +95,11 @@ namespace aConverterClassLibrary
         {
             get
             {
-                if (String.IsNullOrEmpty(testQuery) && AnalyzeQuery.ToUpper().StartsWith("SELECT "))
+                if (String.IsNullOrEmpty(_testQuery) && AnalyzeQuery.ToUpper().StartsWith("SELECT "))
                    return "SELECT FIRST 1 " + AnalyzeQuery.Substring(7);
-                return testQuery;
+                return _testQuery;
             }
-            set { testQuery = value; }
+            set { _testQuery = value; }
         }
 
         /// <summary>
@@ -110,6 +114,11 @@ namespace aConverterClassLibrary
         /// Команда для исправления ошибок
         /// </summary>
         public string FixCommand { get; set; }
+
+        /// <summary>
+        /// Описания алгоритма исправления ошибки
+        /// </summary>
+        public string FixDescription { get; set; }
 
         /// <summary>
         /// Может корректировать причины, приведшие к ошибкам
@@ -130,7 +139,7 @@ namespace aConverterClassLibrary
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             if (String.IsNullOrEmpty(AnalyzeQuery)) throw new Exception("На задан запрос для анализа");
             DataTable dt = fbm.ExecuteQuery(TestQuery);
-            bool testResult = dt.Rows.Count > NormalRows;
+            bool testResult = dt.Rows.Count != NormalRows;
             Result = testResult ? CheckCaseStatus.Выявлена_ошибка : CheckCaseStatus.Ошибок_не_выявлено;
             return testResult;
         }
