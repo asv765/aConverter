@@ -85,21 +85,8 @@
     <Compile Include="Class\CheckCases\CheckCaseClass.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class\CorrectionCases\CorrectionCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Class\Errors\ErrorClass.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Class\Errors\ErrorParam.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Class\FbManager.cs" />
-    <Compile Include="Class\AbonentCover\AbonentCover.cs" />
-    <Compile Include="Class\AbonentCover\CitizenScriptGenerator.cs" />
-    <Compile Include="Class\AbonentCover\Document.cs" />
     <Compile Include="Class\aConverter_Settings.cs" />
-    <Compile Include="Class\AbonentCover\Citizen.cs" />
     <Compile Include="Class\CheckCases\CheckCaseFactory.cs" />
     <Compile Include="Class\ClassFileStatisticBuilder.cs" />
     <Compile Include="Class\ConvertCases\ConvertCase.cs" />
@@ -214,15 +201,11 @@
     <None Include="RecordsDataAccessORM\EntitiesModel.rlinq.diagram">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RecordsEDM\Utils\" />
-    <Folder Include="Records\Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
