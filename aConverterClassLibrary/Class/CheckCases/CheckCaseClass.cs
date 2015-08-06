@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Text.RegularExpressions;
+using System.Threading;
 using aConverterClassLibrary.Class;
 
 namespace aConverterClassLibrary
@@ -141,6 +142,7 @@ namespace aConverterClassLibrary
             DataTable dt = fbm.ExecuteQuery(TestQuery);
             bool testResult = dt.Rows.Count != NormalRows;
             Result = testResult ? CheckCaseStatus.Выявлена_ошибка : CheckCaseStatus.Ошибок_не_выявлено;
+            // Thread.Sleep(3000);
             return testResult;
         }
 

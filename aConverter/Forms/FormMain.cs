@@ -304,10 +304,8 @@ namespace aConverter
 
         private void проверкаЦелостностиДанныхToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormCheckCasesList fccl = new FormCheckCasesList();
-            fccl.MdiParent = this;
-            fccl.WindowState = FormWindowState.Maximized;
-            fccl.Show();
+            var fccle = new FormCheckCasesListExtended {MdiParent = this, WindowState = FormWindowState.Maximized};
+            fccle.Show();
         }
 
         private void файлcsПеречисленияПараметровГражданToolStripMenuItem_Click(object sender, EventArgs e)

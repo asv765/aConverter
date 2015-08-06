@@ -364,7 +364,7 @@ namespace aConverterClassLibrary
                 NormalRows = 0,
                 AnalyzeQuery = String.Format("select t1.* from {0} t1 where (select t2.{3} from {2} t2 where t1.{1} = t2.{3}) is null", fkTable, fkField, pkTable, pkField),
                 AnalyzeResultDescription = String.Format("Записи из {0}, поле {1} в которых не расшифровывается в {2}.{3}", fkTable, fkField, pkTable, pkField),
-                FixCommand = String.Format("delete from {0} t1 where (select t2.{3} from {2} t2 a where t1.{1} = t2.{3}) is null", fkTable, fkField, pkTable, pkField),
+                FixCommand = String.Format("delete from {0} t1 where (select t2.{3} from {2} t2 where t1.{1} = t2.{3}) is null", fkTable, fkField, pkTable, pkField),
                 FixDescription = String.Format("Из таблицы {0} удалить все записи, поле {1} в которых не расшифровывается в {2}.{3}", fkTable, fkField, pkTable, pkField),
                 DependOn = dependOn
             };
