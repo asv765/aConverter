@@ -139,8 +139,8 @@ namespace aConverterClassLibrary
         {
             string[] fioa = new string[3];
             fioa[0] = Regex.Match(fio, @"\w+").Value;
-            fioa[1] = Regex.Match(fio, @"(?<=\w+\s+)\w+").Value;
-            fioa[2] = Regex.Match(fio, @"(?<=\w+\s+\w+\s+)\w+").Value;
+            fioa[1] = Regex.Match(fio, @"(?<=\w+\W+)\w+").Value;
+            fioa[2] = Regex.Match(fio, @"(?<=\w+\W+\w+\W+)\w+").Value;
             return fioa;
         }
 

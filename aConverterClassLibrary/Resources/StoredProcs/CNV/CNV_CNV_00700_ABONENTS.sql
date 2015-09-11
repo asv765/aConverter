@@ -20,9 +20,13 @@ BEGIN
     ORDER BY lshet
     INTO :lshet, :ducd, :housecd, :flatno, :flatpostfix, :roomno, :f, :i, :o, :phonenum, :prim_, :isdeleted
     DO BEGIN
-        UPDATE OR INSERT INTO abonents (lshet, ownerid, housecd, flatno, flatpostfix, roomno, fio, name, second_name, tel, note, deleted)
-        VALUES (:lshet, :ducd, :housecd, :flatno, :flatpostfix, :roomno, :f, :i, :o, :phonenum, :prim_, :isdeleted)
+        UPDATE OR INSERT INTO abonents (lshet, ownerid, housecd, flatno, flatpostfix, roomno, fio, name, second_name, note, deleted)
+        VALUES (:lshet, :ducd, :housecd, :flatno, :flatpostfix, :roomno, :f, :i, :o, :prim_, :isdeleted)
         MATCHING (lshet);
+        IF (phonenum IS NOT NULL) THEN BEGIN
+           DELETE FROM abonentphones WHERE LSHET = :lshet;
+           INSERT INTO ABONENTPHONES (LSHET, PHONETYPEID, PHONENUMBER) VALUES (:lshet, 0, :phonenum);
+        END
     END
 END^
 

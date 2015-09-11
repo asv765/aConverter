@@ -90,12 +90,6 @@
     <Compile Include="Forms\FormCheckCasesListExtended.Designer.cs">
       <DependentUpon>FormCheckCasesListExtended.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormCheckCasesList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormCheckCasesList.Designer.cs">
-      <DependentUpon>FormCheckCasesList.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormConvert.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,9 +173,6 @@
     <Compile Include="Utils\DateGridViewPrinter.cs" />
     <EmbeddedResource Include="Forms\FormCheckCasesListExtended.resx">
       <DependentUpon>FormCheckCasesListExtended.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormCheckCasesList.resx">
-      <DependentUpon>FormCheckCasesList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormConvert.resx">
       <DependentUpon>FormConvert.cs</DependentUpon>

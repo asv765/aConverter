@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aConverter", "aConverter\aConverter.csproj", "{4E2D1A8E-E351-4F1A-A8DC-85FAD77B5216}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EAB17325-D5BE-4CD9-9538-CF40DD091F95} = {EAB17325-D5BE-4CD9-9538-CF40DD091F95}
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB} = {F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}
 		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E} = {D40A66D9-B336-4A27-A2A6-DBC54DD6E53E}
 	EndProjectSection
 EndProject
@@ -28,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "033_YrupinskConvert", "033_
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "001_Test", "001_Test\001_Test.csproj", "{EAB17325-D5BE-4CD9-9538-CF40DD091F95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "036_Izhevskoe", "036_Izhevskoe\036_Izhevskoe.csproj", "{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +111,18 @@ Global
 		{EAB17325-D5BE-4CD9-9538-CF40DD091F95}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EAB17325-D5BE-4CD9-9538-CF40DD091F95}.Release|x64.ActiveCfg = Release|Any CPU
 		{EAB17325-D5BE-4CD9-9538-CF40DD091F95}.Release|x86.ActiveCfg = Release|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Release|x64.ActiveCfg = Release|Any CPU
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +130,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{EAB17325-D5BE-4CD9-9538-CF40DD091F95} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
+		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

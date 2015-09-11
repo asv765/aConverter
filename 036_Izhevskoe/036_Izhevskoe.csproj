@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>_036_Izhevskoe</RootNamespace>
+    <AssemblyName>036_Izhevskoe</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DbfClassLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\DbfClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.OpenAccess, Version=2015.1.225.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\Data Access\bin\Telerik.OpenAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.OpenAccess.35.Extensions, Version=2015.1.225.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IzhevskoeConvert.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Records\Arx_fktRecord.cs" />
+    <Compile Include="Records\Arx_ostRecord.cs" />
+    <Compile Include="Records\Arx_pl98Record.cs" />
+    <Compile Include="Records\Arx_planRecord.cs" />
+    <Compile Include="Records\Chet_sRecord.cs" />
+    <Compile Include="Records\Dat_otRecord.cs" />
+    <Compile Include="Records\Fkt2Record.cs" />
+    <Compile Include="Records\Fkt3Record.cs" />
+    <Compile Include="Records\FktRecord.cs" />
+    <Compile Include="Records\Fkt_98Record.cs" />
+    <Compile Include="Records\FplanRecord.cs" />
+    <Compile Include="Records\Fpla_nRecord.cs" />
+    <Compile Include="Records\F_litsRecord.cs" />
+    <Compile Include="Records\LgotRecord.cs" />
+    <Compile Include="Records\LgtnRecord.cs" />
+    <Compile Include="Records\Lgtn_fRecord.cs" />
+    <Compile Include="Records\OstkRecord.cs" />
+    <Compile Include="Records\Ostn1Record.cs" />
+    <Compile Include="Records\OstnRecord.cs" />
+    <Compile Include="Records\Promeg1Record.cs" />
+    <Compile Include="Records\PromegRecord.cs" />
+    <Compile Include="Records\Street1Record.cs" />
+    <Compile Include="Records\StreetRecord.cs" />
+    <Compile Include="Records\SubsidRecord.cs" />
+    <Compile Include="Records\TarifRecord.cs" />
+    <Compile Include="Records\Usluga1Record.cs" />
+    <Compile Include="Records\Usluga2Record.cs" />
+    <Compile Include="Records\Usluga3Record.cs" />
+    <Compile Include="Records\Usluga4Record.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\aConverterClassLibrary\aConverterClassLibrary.csproj">
+      <Project>{4dd34293-327e-4229-99bb-4952206592ec}</Project>
+      <Name>aConverterClassLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
