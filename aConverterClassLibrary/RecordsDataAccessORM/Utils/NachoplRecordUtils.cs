@@ -206,8 +206,11 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         {
             using (var context = new AbonentConvertationEntitiesModel(connectionString))
             {
-                context.Add(NachoplRecords.Values);
-                context.SaveChanges();
+                foreach (CNV_NACHOPL no in NachoplRecords.Values)
+                {
+                    context.Add(no);
+                    context.SaveChanges();
+                }
             }
         }
 

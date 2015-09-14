@@ -96,8 +96,8 @@ namespace aConverterClassLibrary
                 StoredProcName = "CNV$CC_OLDNEWSALDOMISMATCH",
                 Description = "Проверка, что для всех записей в истории оплат/начислений сальдо на конец месяца предыдущего равно сальдо на начало следующего",
                 NormalRows = 0,
-                AnalyzeQuery = "SELECT * FROM CNV$CC_OLDNEWSALDOMISMATCH(1)",
-                FixCommand = "EXECUTE PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH(2)",
+                AnalyzeQuery = "SELECT * FROM CNV$CC_OLDNEWSALDOMISMATCH(1,0)",
+                FixCommand = "EXECUTE PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH(2,1)", // Корректируем с конца истории
                 DependOn = ccSaldoHistoryGap
             };
             checkCaseList.Add(ccOldNewSaldoMesmatch);
@@ -277,7 +277,8 @@ namespace aConverterClassLibrary
                                "group by clc2.lcharcd, clc2.value_, clc2.lcharname, clc2.valuedesc) " +
                                "group by lcharcd, value_ " +
                                "having count(*) > 1) clc3 " +
-                               "on clc1.lcharcd = clc3.lcharcd and clc1.value_ = clc3.value_",
+                               "on clc1.lcharcd = clc3.lcharcd and clc1.value_ = clc3.value_ " +
+                               "order by clc1.lshet, clc1.lcharcd,  clc1.lcharname, clc1.value_, clc1.valuedesc",
                 AnalyzeResultDescription = "Записи из CNV$LCHARS в которых для комбинации значений в полях LCHARCD, VALUE_ встречаются более одного варианта расшифровки в полях LCHARNAME, VALUEDESC",
                 DependOn = ccNotUniqueLshet                
             };
@@ -288,7 +289,7 @@ namespace aConverterClassLibrary
                 Description = "Проверка в CNV$CHARS, существуют ли записи с повторяющимися сочетанием LSHET, CHARCD, DATE_",
                 NormalRows = 0,
                 AnalyzeQuery = "select cc1.* " +
-                               "from cnv$chars cc1 left join " +
+                               "from cnv$chars cc1 inner join " +
                                "(select cc2.lshet, cc2.charcd, cc2.date_ " +
                                "from cnv$chars cc2 " +
                                "group by cc2.lshet, cc2.charcd, cc2.date_ " +
@@ -305,12 +306,13 @@ namespace aConverterClassLibrary
                 Description = "Проверка в CNV$LCHARS, существуют ли записи с повторяющимися сочетанием LSHET, LCHARCD, DATE_",
                 NormalRows = 0,
                 AnalyzeQuery = "select lc1.* " +
-                               "from cnv$lchars lc1 left join " +
+                               "from cnv$lchars lc1 inner join " +
                                "(select lc2.lshet, lc2.lcharcd, lc2.date_ " +
                                "from cnv$lchars lc2 " +
                                "group by lc2.lshet, lc2.lcharcd, lc2.date_ " +
                                "having count(*) > 1) lc3 " +
-                               "on lc1.lshet = lc3.lshet and lc1.lcharcd = lc3.lcharcd and lc1.date_ = lc3.date_",
+                               "on lc1.lshet = lc3.lshet and lc1.lcharcd = lc3.lcharcd and lc1.date_ = lc3.date_ "+
+                               "order by lc1.lshet,  lc1.lcharcd, lc1.date_",
                 AnalyzeResultDescription = "Записи из CNV$LCHARS c повторяющимся сочетанием LSHET, LCHARCD, DATE_",
                 DependOn = ccNotUniqueLshet
             };
@@ -320,14 +322,12 @@ namespace aConverterClassLibrary
             {
                 Description = "Проверка в CNV$ABONENT уникальность значений HOUSECD для домов",
                 NormalRows = 0,
-                AnalyzeQuery = "select a1.* " +
-                               "from cnv$abonent a1 left join " +
-                               "(select a4.housecd " +
-                               "from (select a3.HOUSECD, a3.TOWNSKOD, a3.RAYONKOD, a3.ULICAKOD, a3.houseno, a3.housepostfix, a3.korpusno, a3.korpuspostfix " +
-                               "    from cnv$abonent a3 " +
-                               "     group by a3.HOUSECD, a3.TOWNSKOD, a3.RAYONKOD, a3.ULICAKOD, a3.houseno, a3.housepostfix, a3.korpusno, a3.korpuspostfix) a4 " +
-                               "group by a4.housecd having count(*) > 1) a2 " +
-                               "on a1.housecd = a2.housecd " +
+                AnalyzeQuery = "select a1.* from cnv$abonent a1 " +
+                               "where housecd in (select a4.housecd " +
+                               "from (select a3.HOUSECD, a3.TOWNSKOD, a3.RAYONKOD, a3.ULICAKOD, a3.houseno, a3.housepostfix, a3.korpusno, a3.korpuspostfix, COUNT(*) as cnt " +
+                               "from cnv$abonent a3 " +
+                               "group by a3.HOUSECD, a3.TOWNSKOD, a3.RAYONKOD, a3.ULICAKOD, a3.houseno, a3.housepostfix, a3.korpusno, a3.korpuspostfix) a4 " +
+                               "group by a4.housecd having count(*) > 1) " +
                                "order by a1.HOUSECD, a1.TOWNSKOD, a1.RAYONKOD, a1.ULICAKOD, a1.houseno, a1.housepostfix, a1.korpusno, a1.korpuspostfix",
                 AnalyzeResultDescription = "Абоненты, у которых для разных домов (TOWNSKOD, RAYONKOD, ULICAKOD, HOUSENO, HOUSEPOSTFIX, KORPUSNO, KORPUSPOSTFIX) встречаются одинаковые значения в поле HOUSECD",
                 DependOn = ccNotUniqueLshet

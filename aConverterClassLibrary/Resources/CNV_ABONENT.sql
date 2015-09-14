@@ -63,6 +63,7 @@ ALTER TABLE CNV$ABONENT ADD PRIMARY KEY (ID);
 /******************************************************************************/
 
 CREATE INDEX CNV$ABONENT_IDX1 ON CNV$ABONENT (LSHET);
+CREATE INDEX CNV$ABONENT_IDX2 ON CNV$ABONENT (HOUSECD);
 
 
 /******************************************************************************/

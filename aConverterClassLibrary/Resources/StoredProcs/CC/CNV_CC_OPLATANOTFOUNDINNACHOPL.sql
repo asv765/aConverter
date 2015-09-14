@@ -31,8 +31,8 @@ BEGIN
            (SELECT lshet FROM cnv$nachopl n
             WHERE n.lshet = o.lshet AND
                n.servicecd = o.servicecd AND
-               n.year_ = o.year_ AND
-               n.month_ = o.month_)
+               n.year_ = EXTRACT(YEAR FROM o.Date_Vv) AND
+               n.month_ = EXTRACT(MONTH FROM o.Date_Vv))
          INTO :lshet, :documentcd, :month_, :year_, :summa, :date_, :date_vv, :sourcecd, :sourcename, :servicecd, :servicename
     DO BEGIN
         SUSPEND;
@@ -44,8 +44,8 @@ BEGIN
           (SELECT lshet FROM cnv$nachopl n
            WHERE n.lshet = o.lshet AND
                  n.servicecd = o.servicecd AND
-                 n.year_ = o.year_ AND
-                 n.month_ = o.month_);
+                 n.year_ = EXTRACT(YEAR FROM o.Date_Vv) AND
+                 n.month_ = EXTRACT(MONTH FROM o.Date_Vv));
   END
   ELSE
      EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0, 1 или 2 не поддерживается процедурой';

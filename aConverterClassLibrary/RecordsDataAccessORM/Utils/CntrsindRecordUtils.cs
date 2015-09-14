@@ -72,6 +72,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                     //}
                     //cir.Indication = cir.Oldind + cir.Ob_em;
                 }
+                else if (restoreHistoryType == RestoreHistoryType.Рассчитать_показания_на_начало_как_конечные_минус_объем)
+                {
+                    cir.OLDIND = cir.INDICATION - cir.OB_EM;
+                }
+                else if (restoreHistoryType == RestoreHistoryType.Рассчитать_показания_на_конец_как_начальные_плюс_объем)
+                {
+                    cir.INDICATION = cir.OLDIND + cir.OB_EM;
+                }
                 else
                 {
                     throw new ArgumentException("Неверный тип восстановления истории показаний");
@@ -106,6 +114,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
     {
         С_конца_по_конечным_показаниям,
         С_конца_по_объемам,
-        С_начала_по_объемам
+        С_начала_по_объемам,
+        Рассчитать_показания_на_начало_как_конечные_минус_объем,
+        Рассчитать_показания_на_конец_как_начальные_плюс_объем
     }
 }
