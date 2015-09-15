@@ -1,0 +1,1 @@
+call restore.bat abonent.fbk abonent.fdb
