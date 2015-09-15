@@ -288,6 +288,7 @@
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLOPLATAMISMATCH.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLOPLATANOTFOUND.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_OPLATANOTFOUNDINNACHOPL.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_01300_SOURCEDOC.sql" />
     <Content Include="Resources\StoredProcs\CNV\cnv_cnv_documentnumerator.sql" />
     <Content Include="Resources\StoredProcs\CNV_ADD_WRONG_PARAMETER_EXCEPTION.sql" />
   </ItemGroup>

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Net.Sockets;
 using System.Runtime.Versioning;
 using aConverterClassLibrary;
+using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using DbfClassLibrary;
@@ -714,4 +715,129 @@ namespace _036_Izhevskoe
             public int Code;
         }
     }
+
+    public class TransferAddressObjects : ConvertCase
+    {
+        public TransferAddressObjects()
+        {
+            ConvertCaseName = "Перенос данных об адресных объектах";
+            Position = 1000;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(6);
+
+            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
+                Iterate();
+                fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
+                Iterate();
+                fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
+                Iterate();
+                fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
+                Iterate();
+                fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
+                Iterate();
+                fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
+                Iterate();
+            }
+            StepFinish();
+        }
+    }
+
+    public class TransferAbonents : ConvertCase
+    {
+        public TransferAbonents()
+        {
+            ConvertCaseName = "Перенос данных об абонентах";
+            Position = 1010;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
+                Iterate();
+            }
+            StepFinish();
+        }
+    }
+
+    public class TransferChars : ConvertCase
+    {
+        public TransferChars()
+        {
+            ConvertCaseName = "Перенос данных о количественных характеристиках";
+            Position = 1020;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "1" });
+                Iterate();
+            }
+            StepFinish();
+        }
+    }
+
+    public class TransferLchars : ConvertCase
+    {
+        public TransferLchars()
+        {
+            ConvertCaseName = "Перенос данных о качественных характеристиках";
+            Position = 1030;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "1" });
+                Iterate();
+            }
+            StepFinish();
+        }
+    }
+
+    public class TransferCounters : ConvertCase
+    {
+        public TransferCounters()
+        {
+            ConvertCaseName = "Перенос данных о счетчиках";
+            Position = 1040;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
+                Iterate();
+                fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
+                Iterate();
+            }
+            StepFinish();
+        }
+    }
+
 }

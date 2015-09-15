@@ -134,6 +134,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_00900_LCHARS");
                 l.Add("CNV_00950_COUNTERSTYPES");
                 l.Add("CNV_01000_COUNTERS");
+                l.Add("CNV_01300_SOURCEDOC");
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {

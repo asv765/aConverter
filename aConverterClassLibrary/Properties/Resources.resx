@@ -226,6 +226,9 @@
   <data name="CNV_CNV_01000_COUNTERS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_01000_COUNTERS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CNV_01300_SOURCEDOC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_01300_SOURCEDOC.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CNV_DOCUMENTNUMERATOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_documentnumerator.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>

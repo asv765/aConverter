@@ -7,7 +7,7 @@ using FirebirdSql.Data.Isql;
 
 namespace aConverterClassLibrary.Class
 {
-    public class FbManager
+    public class FbManager : IDisposable
     {
         private string ConnectionString { get; set; }
 
@@ -88,6 +88,7 @@ namespace aConverterClassLibrary.Class
                 }
             }
         }
+
 
         public FbDataReader ExecuteReader(string aQuery)
         {
@@ -175,6 +176,7 @@ namespace aConverterClassLibrary.Class
                 return fc.GetSchema(collectionName);
             }
         }
+
 
         public void ExecuteProcedure(string procedureName, string[] parameters = null )
         {
