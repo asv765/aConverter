@@ -762,11 +762,9 @@ namespace _036_Izhevskoe
         {
             SetStepsCount(1);
             StepStart(1);
-            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
-                Iterate();
-            }
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
+            Iterate();
             StepFinish();
         }
     }
@@ -784,11 +782,9 @@ namespace _036_Izhevskoe
         {
             SetStepsCount(1);
             StepStart(1);
-            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "1" });
-                Iterate();
-            }
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "1" });
+            Iterate();
             StepFinish();
         }
     }
@@ -806,11 +802,9 @@ namespace _036_Izhevskoe
         {
             SetStepsCount(1);
             StepStart(1);
-            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "1" });
-                Iterate();
-            }
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "1" });
+            Iterate();
             StepFinish();
         }
     }
@@ -829,14 +823,11 @@ namespace _036_Izhevskoe
         {
             SetStepsCount(1);
             StepStart(2);
-            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
-                Iterate();
-                fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
-                Iterate();
-            }
-            StepFinish();
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
+            Iterate();
         }
     }
 
