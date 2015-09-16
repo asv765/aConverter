@@ -831,4 +831,26 @@ namespace _036_Izhevskoe
         }
     }
 
+    public class TransferOplata : ConvertCase
+    {
+        public TransferOplata()
+        {
+            ConvertCaseName = "Перенос данных об оплате";
+            Position = 1050;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01300_SOURCEDOC");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01400_OPLATA");
+            Iterate();
+        }
+    }
+
 }
