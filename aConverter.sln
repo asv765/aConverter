@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aConverter", "aConverter\aConverter.csproj", "{4E2D1A8E-E351-4F1A-A8DC-85FAD77B5216}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -131,9 +131,6 @@ Global
 		{D40A66D9-B336-4A27-A2A6-DBC54DD6E53E} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{EAB17325-D5BE-4CD9-9538-CF40DD091F95} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = aConverter.vsmdi
