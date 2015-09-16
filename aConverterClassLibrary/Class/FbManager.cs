@@ -7,7 +7,7 @@ using FirebirdSql.Data.Isql;
 
 namespace aConverterClassLibrary.Class
 {
-    public class FbManager : IDisposable
+    public class FbManager 
     {
         private string ConnectionString { get; set; }
 

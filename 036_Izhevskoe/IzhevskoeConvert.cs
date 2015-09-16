@@ -730,21 +730,21 @@ namespace _036_Izhevskoe
             SetStepsCount(1);
             StepStart(6);
 
-            using (var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
-                Iterate();
-                fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
-                Iterate();
-                fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
-                Iterate();
-                fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
-                Iterate();
-                fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
-                Iterate();
-                fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
-                Iterate();
-            }
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+
+            fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
+            Iterate();
+
             StepFinish();
         }
     }
