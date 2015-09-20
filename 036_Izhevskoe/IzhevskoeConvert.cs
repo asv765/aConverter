@@ -32,6 +32,8 @@ namespace _036_Izhevskoe
         public static readonly bool FullHistory = true;
 
         public static readonly string RecodeTableFileName = @"C:\Work\aConverter_Data\036_Izhevskoe\Service\Таблица перекодировки.xls";
+
+        public static readonly int RecodeTableOffset = 1;
     }
 
     /// <summary>
@@ -236,14 +238,14 @@ namespace _036_Izhevskoe
 
             foreach (DataRow recodeDataRow in rcTable.Rows)
             {
-                int tarCode = Convert.ToInt32(recodeDataRow[0]); // N_LGT
+                int tarCode = Convert.ToInt32(recodeDataRow[0 + Consts.RecodeTableOffset]); // N_LGT
                 // string tarName = Convert.ToString(recodeDataRow["NASV"]);
-                if (!(recodeDataRow[3] is DBNull))
+                if (!(recodeDataRow[3 + Consts.RecodeTableOffset] is DBNull))
                 {
-                    int lcharcd = Convert.ToInt32(recodeDataRow[3]); // LCHARCD
-                    string lcharName = Convert.ToString(recodeDataRow[4]); // LCHARNAME
-                    int lcharvalue = Convert.ToInt32(recodeDataRow[5]); // LCHARVALUE
-                    string lcharValueDesc = Convert.ToString(recodeDataRow[6]); // LCHARVALUEDESC
+                    int lcharcd = Convert.ToInt32(recodeDataRow[3 + Consts.RecodeTableOffset]); // LCHARCD
+                    string lcharName = Convert.ToString(recodeDataRow[4 + Consts.RecodeTableOffset]); // LCHARNAME
+                    int lcharvalue = Convert.ToInt32(recodeDataRow[5 + Consts.RecodeTableOffset]); // LCHARVALUE
+                    string lcharValueDesc = Convert.ToString(recodeDataRow[6 + Consts.RecodeTableOffset]); // LCHARVALUEDESC
 
                     var lc = new CNV_LCHAR()
                     {
@@ -346,7 +348,7 @@ namespace _036_Izhevskoe
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
-            SetStepsCount(11);
+            SetStepsCount(Consts.FullHistory ? 11 : 9);
 
             BufferEntitiesManager.DropTableData("CNV$NACHOPL");
             BufferEntitiesManager.DropTableData("CNV$OPLATA");
@@ -541,12 +543,16 @@ namespace _036_Izhevskoe
                     DateTime za = Convert.ToDateTime("01 " + mesPl + " " + currentYear);
                     if (sKvart != 0)
                     {
+                        ndef.REGIMCD = 31;
+                        ndef.REGIMNAME = "Содержание жилья, конвертация";
                         ndef.SERVICECD = 2;
                         ndef.SERVICENAME = "Содержание жилья";
                         nom.RegisterNach(ndef, lshet, za.Month, currentYear, sKvart, 0, za, tableName + "_" + recno);
                     }
                     if ((sWater + korov) != 0)
                     {
+                        ndef.REGIMCD = 32;
+                        ndef.REGIMNAME = "Холодная вода, конвертация";
                         ndef.SERVICECD = 4;
                         ndef.SERVICENAME = "Водоснабжение";
                         nom.RegisterNach(ndef, lshet, za.Month, currentYear, sWater + korov, 0, za,
@@ -554,12 +560,16 @@ namespace _036_Izhevskoe
                     }
                     if (sKanal != 0)
                     {
+                        ndef.REGIMCD = 29;
+                        ndef.REGIMNAME = "Водоотведение, конвертация";
                         ndef.SERVICECD = 6;
                         ndef.SERVICENAME = "Водоотведение";
                         nom.RegisterNach(ndef, lshet, za.Month, currentYear, sKanal, 0, za, tableName + "_" + recno);
                     }
                     if (sMusor != 0)
                     {
+                        ndef.REGIMCD = 30;
+                        ndef.REGIMNAME = "Вывоз ТБО, конвертация";
                         ndef.SERVICECD = 8;
                         ndef.SERVICENAME = "Вывоз ТБО";
                         nom.RegisterNach(ndef, lshet, za.Month, currentYear, sMusor, 0, za, tableName + "_" + recno);
@@ -831,4 +841,70 @@ namespace _036_Izhevskoe
         }
     }
 
+    public class TransferOplata : ConvertCase
+    {
+        public TransferOplata()
+        {
+            ConvertCaseName = "Перенос данных об оплате";
+            Position = 1050;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01300_SOURCEDOC");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01400_OPLATA");
+            Iterate();
+        }
+    }
+
+    public class TransferSaldo : ConvertCase
+    {
+        public TransferSaldo()
+        {
+            ConvertCaseName = "Перенос данных о сальдо";
+            Position = 1060;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
+            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] { Consts.CurrentYear.ToString(),
+                Consts.CurrentMonth.ToString() });
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active"); 
+            Iterate();
+        }
+    }
+
+    public class TransferNachisl : ConvertCase
+    {
+        public TransferNachisl()
+        {
+            ConvertCaseName = "Перенос данных о начислениях";
+            Position = 1070;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
+            Iterate();
+        }
+    }
 }

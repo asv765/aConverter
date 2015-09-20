@@ -229,6 +229,15 @@
   <data name="CNV_CNV_01300_SOURCEDOC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_01300_SOURCEDOC.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CNV_01400_OPLATA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cnv\cnv_cnv_01400_oplata.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_01500_SALDO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cnv\cnv_cnv_01500_saldo.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_01600_NACHISLIMPORT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cnv\cnv_cnv_01600_nachislimport.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CNV_DOCUMENTNUMERATOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_documentnumerator.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>

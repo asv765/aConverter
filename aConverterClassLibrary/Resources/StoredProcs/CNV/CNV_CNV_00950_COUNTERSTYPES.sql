@@ -12,7 +12,7 @@ BEGIN
         INTO :cnttype, :cntname, :cnt
     DO BEGIN
         UPDATE OR INSERT INTO counterstypes (kod, equipmenttypeid, periodkod, name, coefficient, digitcount, equipmentgroupid, extorgcd, dimensiontype, minconsumption, maxconsumption, mintemperature, maxtemperature, countermarkmoduleid, servicelifeid)
-            VALUES (:cnttype, 12, 4, :cntname, 1, 8, 29, NULL, NULL, 0, 0, 0, 0, NULL, NULL);
+            VALUES (:cnttype, 12, 4, :cntname, 1, 8, 32, NULL, NULL, 0, 0, 0, 0, NULL, NULL);
     END
     EXECUTE STATEMENT 'ALTER SEQUENCE COUNTERSTYPES_G RESTART WITH 0';
     SELECT FIRST 1 GEN_ID(counterstypes_g, (SELECT MAX(kod) + 1 FROM counterstypes) )
