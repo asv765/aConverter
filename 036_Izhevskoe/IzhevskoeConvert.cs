@@ -34,6 +34,8 @@ namespace _036_Izhevskoe
         public static readonly string RecodeTableFileName = @"C:\Work\aConverter_Data\036_Izhevskoe\Service\Таблица перекодировки.xls";
 
         public static readonly int RecodeTableOffset = 1;
+
+        public static readonly int CommitStep = 100;
     }
 
     /// <summary>
@@ -348,7 +350,7 @@ namespace _036_Izhevskoe
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
-            SetStepsCount(Consts.FullHistory ? 11 : 9);
+            SetStepsCount(Consts.FullHistory ? 10 : 8);
 
             BufferEntitiesManager.DropTableData("CNV$NACHOPL");
             BufferEntitiesManager.DropTableData("CNV$OPLATA");
@@ -409,8 +411,11 @@ namespace _036_Izhevskoe
                 foreach (CNV_NACHOPL no in nom.NachoplRecords.Values)
                 {
                     context.Add(no);
-                    if ((i++ % 1000) == 0)
+                    if ((i++ % Consts.CommitStep) == 0)
+                    {
                         context.SaveChanges();
+                        context.ClearChanges();
+                    }
                     Iterate();
                 }
                 context.SaveChanges();
@@ -426,8 +431,11 @@ namespace _036_Izhevskoe
                 foreach (CNV_NACH n in nom.NachRecords)
                 {
                     context.Add(n);
-                    if ((i++ % 1000) == 0)
+                    if ((i++ % Consts.CommitStep) == 0)
+                    {
                         context.SaveChanges();
+                        context.ClearChanges();
+                    }
                     Iterate();
                 }
                 context.SaveChanges();
@@ -443,8 +451,11 @@ namespace _036_Izhevskoe
                 foreach (CNV_OPLATA o in nom.OplataRecords)
                 {
                     context.Add(o);
-                    if ((i++ % 1000) == 0)
+                    if ((i++ % Consts.CommitStep) == 0)
+                    {
                         context.SaveChanges();
+                        context.ClearChanges();
+                    }
                     Iterate();
                 }
                 context.SaveChanges();
@@ -649,23 +660,41 @@ namespace _036_Izhevskoe
 
             CntrsindRecordUtils.RestoreHistory(ref _globalCntrsinds, RestoreHistoryType.Рассчитать_показания_на_начало_как_конечные_минус_объем);
 
-            StepStart(1);
+            StepStart(_globalCntrsinds.Count);
             using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
-                acem.Add(_globalCntrsinds);
+                int i = 0;
+                foreach (CNV_CNTRSIND ci in _globalCntrsinds)
+                {
+                    acem.Add(ci);
+                    if ((i++ % Consts.CommitStep) == 0)
+                    {
+                        acem.SaveChanges();
+                        acem.ClearChanges();
+                    }
+                    Iterate();
+                }
                 acem.SaveChanges();
             }
             StepFinish();
 
-            StepStart(1);
+            StepStart(_globalCountersDic.Values.Count);
             using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
-                acem.Add(_globalCountersDic.Values);
+                int i = 0;
+                foreach (CNV_COUNTER c in _globalCountersDic.Values)
+                {
+                    acem.Add(c);
+                    if ((i++ % Consts.CommitStep) == 0)
+                    {
+                        acem.SaveChanges();
+                        acem.ClearChanges();
+                    }
+                    Iterate();
+                }
                 acem.SaveChanges();
             }
             StepFinish();
-
-            
         }
 
         private void ProcessCounterIndication(string tableName)
