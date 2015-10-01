@@ -925,7 +925,7 @@ namespace _036_Izhevskoe
             Position = 1070;
             IsChecked = false;
 
-        }
+    }
 
         public override void DoConvert()
         {
