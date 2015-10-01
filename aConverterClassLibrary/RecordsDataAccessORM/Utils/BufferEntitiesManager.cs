@@ -135,6 +135,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_00950_COUNTERSTYPES");
                 l.Add("CNV_01000_COUNTERS");
                 l.Add("CNV_01300_SOURCEDOC");
+                l.Add("CNV_01400_OPLATA");
+                l.Add("CNV_01500_SALDO");
+                l.Add("CNV_01600_NACHISLIMPORT");
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {
