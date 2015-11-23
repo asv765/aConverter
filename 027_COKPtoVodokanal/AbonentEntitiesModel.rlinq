@@ -1,0 +1,1607 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DomainModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="2.0.0.0" name="AbonentEntitiesModel" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" xmlns="http://www.telerik.com/ORM">
+  <orm:orm name="AbonentEntitiesModel" backend="firebird" xmlns:orm="http://tempuri.org/ORM">
+    <orm:namespace name="_027_COKPToVodokanal" default="true">
+      <orm:class name="STREET" uniqueId="930315ff-59ad-4be4-8fc4-18b961fda43d">
+        <orm:table name="STREET" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="STREETCD" />
+          </orm:key-generator>
+          <orm:multiple-field>
+            <orm:single-field field-name="_sTREETCD" />
+            <orm:single-field field-name="_pUNKTCD" />
+          </orm:multiple-field>
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_sTREETCD" property="STREETCD" behavior="readwrite" uniqueId="0f67d7ce-5bc9-4aa8-af1a-86821c63fc75" type="System.Int32">
+          <orm:column name="STREETCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_pUNKTCD" property="PUNKTCD" behavior="readwrite" uniqueId="d630d94c-1fe1-412d-904c-2432e1bcf42b" type="System.Int32">
+          <orm:column name="PUNKTCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sTREETNM" property="STREETNM" behavior="readwrite" uniqueId="f57ea4cd-3c89-4504-b643-296feb00f94f" type="System.String">
+          <orm:column name="STREETNM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_nOTE" property="NOTE" behavior="readwrite" uniqueId="9df8de22-44d3-4669-8d5b-a82d752bfa2e" type="System.String">
+          <orm:column name="NOTE" sql-type="VARCHAR" nullable="true" length="2500" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_kLADR" property="KLADR" behavior="readwrite" uniqueId="a8a64d0d-b03b-46a1-854e-c7a036046b94" type="System.String">
+          <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_oKATO" property="OKATO" behavior="readwrite" uniqueId="08ced3c5-06df-4e6f-81cd-ac4700bf7911" type="System.String">
+          <orm:column name="OKATO" sql-type="VARCHAR" nullable="true" length="11" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sOCR" property="SOCR" behavior="readwrite" uniqueId="9aed9d7e-8911-49ee-a1f5-95de3358e42f" type="System.String">
+          <orm:column name="SOCR" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_hOUSEs" property="HOUSEs" behavior="readwrite" uniqueId="fa886542-e7c4-468c-ab1e-ce6713c066c7" type="_027_COKPToVodokanal.HOUSE">
+          <orm:collection element-class="_027_COKPToVodokanal.HOUSE" inverse-field="_sTREET" order-by="" uniqueId="0dcb5bd6-97de-41f2-99b6-7b3889a9841a" />
+        </orm:field>
+        <orm:index name="XIE1STREET">
+          <orm:columnMapping>
+            <orm:column name="STREETNM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:index name="XIESTREETKLADR">
+          <orm:columnMapping>
+            <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="LCHARSLIST" uniqueId="b904f832-6f4c-4b0f-aacf-c0bba6bc1234">
+        <orm:table name="LCHARSLIST" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="KOD" />
+          </orm:key-generator>
+          <orm:single-field field-name="_kOD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_kOD" property="KOD" behavior="readwrite" uniqueId="72618c1e-91a6-4f33-ad6d-4715f1d84c55" type="System.Int32">
+          <orm:column name="KOD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_bALANCE_KOD" property="BALANCE_KOD" behavior="readwrite" uniqueId="280bd057-89e4-4fe0-8c50-dbedd05983d9" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="BALANCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_kODGROUPSLCHARSLIST" property="KODGROUPSLCHARSLIST" behavior="readwrite" uniqueId="27ea8e0a-3329-46c2-b4f1-8e1c7712f7b2" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="KODGROUPSLCHARSLIST" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_nAME" property="NAME" behavior="readwrite" uniqueId="5c652257-c3b4-4cbb-9e81-cb0ad7a31e16" type="System.String">
+          <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sHORTNAME" property="SHORTNAME" behavior="readwrite" uniqueId="9211d290-b02b-4f68-862a-23bcbbd0183b" type="System.String">
+          <orm:column name="SHORTNAME" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_vISIBLE" property="VISIBLE" behavior="readwrite" uniqueId="71c47e66-0567-4f1e-81df-928a5367cba2" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="VISIBLE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_dOCTYPEID" property="DOCTYPEID" behavior="readwrite" uniqueId="7f14d796-c938-47c6-b652-c2cb22a7c74f" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DOCTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_rEADONLY" property="READONLY" behavior="readwrite" uniqueId="ef5031f0-0d07-4653-abce-c9657f498b98" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="READONLY" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_rEASONID" property="REASONID" behavior="readwrite" uniqueId="810e1efc-c26e-4b9c-846e-6e5c2f7499e5" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="REASONID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_iSCALCULATED" property="ISCALCULATED" behavior="readwrite" uniqueId="7f41902e-7a81-4450-926c-8ac39c5ff3ce" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISCALCULATED" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_mODULEID" property="MODULEID" behavior="readwrite" uniqueId="66e12bb6-8f93-48fc-bdbb-9f3b3b4de64b" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MODULEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cHARTYPE" property="CHARTYPE" behavior="readwrite" uniqueId="ee068cd2-5871-4e47-9030-3151cf1033f6" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="CHARTYPE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_fIXCHANGES4PAYSYSTEM" property="FIXCHANGES4PAYSYSTEM" behavior="readwrite" uniqueId="a7fa202d-9435-49c7-a1f1-4f67cf84cde8" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="FIXCHANGES4PAYSYSTEM" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_lCHARSABONENTLISTs" property="LCHARSABONENTLISTs" behavior="readwrite" uniqueId="6bde15c0-2a00-4f71-afe3-2a5ad280a8cb" type="_027_COKPToVodokanal.LCHARSABONENTLIST">
+          <orm:collection element-class="_027_COKPToVodokanal.LCHARSABONENTLIST" inverse-field="_lCHARSLIST" order-by="" uniqueId="93bd1ad8-8468-48fb-b374-1be59cd0458b" />
+        </orm:field>
+      </orm:class>
+      <orm:class name="LCHARSABONENTLIST" uniqueId="b13a24d9-5fac-480d-8c56-1a9beb3ec076">
+        <orm:table name="LCHARSABONENTLIST" />
+        <orm:identity>
+          <orm:multiple-field>
+            <orm:single-field field-name="_lSHET" />
+            <orm:single-field field-name="_kODLCHARSLIST" />
+            <orm:single-field field-name="_aBONENTLCHARDATE" />
+          </orm:multiple-field>
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="1294afac-1230-4918-9360-29cebcb43375" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_kODLCHARSLIST" property="KODLCHARSLIST" behavior="readwrite" uniqueId="2b1a3497-11ac-49c0-8107-0a5caf0e778e" type="System.Int32">
+          <orm:column name="KODLCHARSLIST" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_aBONENTLCHARDATE" property="ABONENTLCHARDATE" behavior="readwrite" uniqueId="b4a28869-e43a-4148-892c-fd0dea365bf9" type="System.DateTime">
+          <orm:column name="ABONENTLCHARDATE" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" primary-key="true" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_dOCUMENTCD" property="DOCUMENTCD" behavior="readwrite" uniqueId="57d03762-5164-4ad7-9a3b-e7ff28d6d49d" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DOCUMENTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sIGNIFICANCE" property="SIGNIFICANCE" behavior="readwrite" uniqueId="ba55fb49-e9db-4a2f-b37d-0073d243ab91" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="SIGNIFICANCE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_aBONENT" property="ABONENT" behavior="readwrite" uniqueId="7aa16263-4c58-4790-9970-0a6a48d98449" type="_027_COKPToVodokanal.ABONENT">
+          <orm:reference uniqueId="9948cf5f-2ceb-4fc4-9487-3a6a14236759" association-name="LCHARSABONENTLISTHasABONENT">
+            <orm:sharedfield name="_lSHET" target-class="_027_COKPToVodokanal.ABONENT" target-field="_lSHET" />
+            <orm:constraint name="R_453" delete-action="dbdefaultrule" destination-table="ABONENTS" />
+          </orm:reference>
+        </orm:field>
+        <orm:field name="_lCHARSLIST" property="LCHARSLIST" behavior="readwrite" uniqueId="d5003ea2-180b-48e8-aaff-150618831569" type="_027_COKPToVodokanal.LCHARSLIST">
+          <orm:reference uniqueId="93bd1ad8-8468-48fb-b374-1be59cd0458b" association-name="LCHARSABONENTLISTHasLCHARSLIST">
+            <orm:sharedfield name="_kODLCHARSLIST" target-class="_027_COKPToVodokanal.LCHARSLIST" target-field="_kOD" />
+            <orm:constraint name="R_488" delete-action="dbdefaultrule" destination-table="LCHARSLIST" />
+          </orm:reference>
+        </orm:field>
+      </orm:class>
+      <orm:class name="HOUSE" uniqueId="06ae99cf-3777-4684-b5cd-8e2fe6dbd59b">
+        <orm:table name="HOUSES" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="HOUSECD" />
+          </orm:key-generator>
+          <orm:single-field field-name="_hOUSECD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_hOUSECD" property="HOUSECD" behavior="readwrite" uniqueId="0a4eb1ec-969f-4c8c-b3e2-813ffab8ddfa" type="System.Int32">
+          <orm:column name="HOUSECD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_mASTERID" property="MASTERID" behavior="readwrite" uniqueId="80a860f3-f290-445c-bd3f-aa5d41547be0" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MASTERID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dISTCD" property="DISTCD" behavior="readwrite" uniqueId="e5e9c3ae-11f2-44e5-bc30-72f6f51a408f" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DISTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dU_CD" property="DU_CD" behavior="readwrite" uniqueId="645334c3-7d87-4481-8d6d-8f8587b04ddf" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DU_CD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sTREETCD" property="STREETCD" behavior="readwrite" uniqueId="465ec214-9518-49c4-84e8-b4c521178bc6" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="STREETCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_pUNKTCD" property="PUNKTCD" behavior="readwrite" uniqueId="20b66a04-367a-40a8-bdb7-84b143fec3ab" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="PUNKTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_k_REMOTECD" property="K_REMOTECD" behavior="readwrite" uniqueId="eeda8c19-765f-4061-8cbd-f88463eb7e4d" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="K_REMOTECD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cAPACITYCD" property="CAPACITYCD" behavior="readwrite" uniqueId="c29cd68d-5d3f-40ba-94b1-343404a62662" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="CAPACITYCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_hOUSENO" property="HOUSENO" behavior="readwrite" uniqueId="9c2411f3-bc48-470d-98c7-be2d1eb1fd7f" type="System.String">
+          <orm:column name="HOUSENO" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_iSHOTWATER" property="ISHOTWATER" behavior="readwrite" uniqueId="c7938e23-9556-4403-8a43-21494adca641" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISHOTWATER" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_kADASTRCD" property="KADASTRCD" behavior="readwrite" uniqueId="3329ffb3-d4d2-40c2-b6d5-8213ca77f2b3" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="KADASTRCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_nUMBEROFKVART" property="NUMBEROFKVART" behavior="readwrite" uniqueId="7571f68d-6c17-4f33-af8b-51dc785fe9b5" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="NUMBEROFKVART" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_pOSTINDEX" property="POSTINDEX" behavior="readwrite" uniqueId="cfd19390-1ca6-4b63-8aa3-ac26497475af" type="System.String">
+          <orm:column name="POSTINDEX" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_hOUSEPOSTFIX" property="HOUSEPOSTFIX" behavior="readwrite" uniqueId="50ec92be-a92c-420b-acc2-c9a6e778e6a1" type="System.String">
+          <orm:column name="HOUSEPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_kORPUSNO" property="KORPUSNO" behavior="readwrite" uniqueId="5733f182-7f5a-452e-9471-acc98a1918e8" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="KORPUSNO" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_kORPUSPOSTFIX" property="KORPUSPOSTFIX" behavior="readwrite" uniqueId="b211ec3e-d433-4b0b-b8f2-672c9531b023" type="System.String">
+          <orm:column name="KORPUSPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_eNTRANCCOUNT" property="ENTRANCCOUNT" behavior="readwrite" uniqueId="042c92db-6f59-4a8c-919c-e3a066c771d3" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ENTRANCCOUNT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_fLOORCOUNT" property="FLOORCOUNT" behavior="readwrite" uniqueId="c74935af-cd46-47e7-b28d-160c6831e9d5" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="FLOORCOUNT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_bUILDINGYEAR" property="BUILDINGYEAR" behavior="readwrite" uniqueId="53b8621a-7260-4ee8-b3ac-a804bfdbc78d" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="BUILDINGYEAR" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_nOTE" property="NOTE" behavior="readwrite" uniqueId="3c2728b7-0d87-40c5-a0e4-f61890f41c81" type="System.String">
+          <orm:column name="NOTE" sql-type="BLOB SUB_TYPE 1" nullable="true" length="0" scale="0" ado-type="StringInfiniteLength" />
+        </orm:field>
+        <orm:field name="_rOUTEID" property="ROUTEID" behavior="readwrite" uniqueId="0ff63db7-4c6e-42c4-8fd2-778fb7fe1978" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ROUTEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_iSMANYKVART" property="ISMANYKVART" behavior="readwrite" uniqueId="5b2f9ad9-008d-4cbc-9401-4f67023e75ff" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISMANYKVART" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_kLADR" property="KLADR" behavior="readwrite" uniqueId="501b238e-2e9b-41a0-8039-d4d6b68bb7ef" type="System.String">
+          <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_oKATO" property="OKATO" behavior="readwrite" uniqueId="0cdb9b47-dc1b-4b9e-96fd-1162277c65ee" type="System.String">
+          <orm:column name="OKATO" sql-type="VARCHAR" nullable="true" length="11" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sOCR" property="SOCR" behavior="readwrite" uniqueId="7179796b-929e-454b-9672-c0eb33234a60" type="System.String">
+          <orm:column name="SOCR" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sTREET" property="STREET" behavior="readwrite" uniqueId="42f878f6-1332-454d-8f2b-eb213b68f500" type="_027_COKPToVodokanal.STREET">
+          <orm:reference uniqueId="0dcb5bd6-97de-41f2-99b6-7b3889a9841a" association-name="HOUSEHasSTREET">
+            <orm:sharedfield name="_sTREETCD" target-class="_027_COKPToVodokanal.STREET" target-field="_sTREETCD" />
+            <orm:sharedfield name="_pUNKTCD" target-class="_027_COKPToVodokanal.STREET" target-field="_pUNKTCD" />
+            <orm:constraint name="R_415" delete-action="dbdefaultrule" destination-table="STREET" />
+          </orm:reference>
+        </orm:field>
+        <orm:field name="_dU" property="DU" behavior="readwrite" uniqueId="bf0d28fb-75d7-460e-996a-8801f0ade094" type="_027_COKPToVodokanal.DU">
+          <orm:reference uniqueId="742fa2ea-ab1c-48b5-842f-4d7a36c196d6" association-name="HOUSEHasDU">
+            <orm:sharedfield name="_dU_CD" target-class="_027_COKPToVodokanal.DU" target-field="_dU_CD" />
+            <orm:constraint name="R_416" delete-action="dbdefaultrule" destination-table="DU" />
+          </orm:reference>
+        </orm:field>
+        <orm:field name="_aBONENTs" property="ABONENTs" behavior="readwrite" uniqueId="14b751c6-95c2-466a-8a3c-5aaa900bb3bc" type="_027_COKPToVodokanal.ABONENT">
+          <orm:collection element-class="_027_COKPToVodokanal.ABONENT" inverse-field="_hOUSE" order-by="" uniqueId="387bea27-510c-4f10-9e3e-006235a3071a" />
+        </orm:field>
+        <orm:index name="XIEHOUSENOHOUSES">
+          <orm:columnMapping>
+            <orm:column name="HOUSENO" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:index name="XIEHOUSESKLADR">
+          <orm:columnMapping>
+            <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="GT_COUNTER" uniqueId="238be194-56bf-44a4-bb3b-f05a6f289939">
+        <orm:table name="GT_COUNTERS" />
+        <orm:identity>
+          <orm:multiple-field>
+            <orm:single-field field-name="_lSHET" />
+            <orm:single-field field-name="_eQUIPMENTIDENTIFIER" />
+          </orm:multiple-field>
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="308d6fef-723f-4b2b-95c6-c119c9212972" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_eQUIPMENTIDENTIFIER" property="EQUIPMENTIDENTIFIER" behavior="readwrite" uniqueId="b43725c1-6f33-48c1-b411-25bce3217d11" type="System.String">
+          <orm:column name="EQUIPMENTIDENTIFIER" sql-type="VARCHAR" nullable="false" length="45" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_cOUNTERCD" property="COUNTERCD" behavior="readwrite" uniqueId="60f75ecf-9366-4df8-9377-a7daf52c2984" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="COUNTERCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cOUNTERNAME" property="COUNTERNAME" behavior="readwrite" uniqueId="6746d7cf-9082-4889-9c52-3878c53b560a" type="System.String">
+          <orm:column name="COUNTERNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sERIALNUMBER" property="SERIALNUMBER" behavior="readwrite" uniqueId="4daf8b74-8366-4e5f-85d4-5271b1b79e58" type="System.String">
+          <orm:column name="SERIALNUMBER" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_rELEASEDATE" property="RELEASEDATE" behavior="readwrite" uniqueId="9756464e-3d9f-4cef-9077-a59e7912105a" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="RELEASEDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_sALEDATE" property="SALEDATE" behavior="readwrite" uniqueId="8815d5e8-59d4-4992-9433-7aba8211d287" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="SALEDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_sETUPDATE" property="SETUPDATE" behavior="readwrite" uniqueId="de4bf4a8-331a-40ef-bb2f-0f0303463bf8" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="SETUPDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_gUARANTEEENDDATE" property="GUARANTEEENDDATE" behavior="readwrite" uniqueId="e1e7c0ad-7ca6-4b7a-be73-ef9ca65a5597" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="GUARANTEEENDDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_mAXGUARANTEEPERIOD" property="MAXGUARANTEEPERIOD" behavior="readwrite" uniqueId="9a9411d8-c648-4363-b036-20693f0bdd84" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MAXGUARANTEEPERIOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_mARKCD" property="MARKCD" behavior="readwrite" uniqueId="33a040d3-680a-4589-977b-412ade5922ef" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MARKCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_mARKNAME" property="MARKNAME" behavior="readwrite" uniqueId="ea0dc7b2-0bbe-45ef-a582-704ecfcd7c1d" type="System.String">
+          <orm:column name="MARKNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_cOUNTER_LEVEL" property="COUNTER_LEVEL" behavior="readwrite" uniqueId="0dd17b80-7b29-4d32-8046-0660bcddcab9" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="COUNTER_LEVEL" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dIGITCOUNT" property="DIGITCOUNT" behavior="readwrite" uniqueId="fcfa218e-6a2c-41b7-afa5-281c8c6a1be8" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DIGITCOUNT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dIMENSIONTYPE" property="DIMENSIONTYPE" behavior="readwrite" uniqueId="7b0105da-f2cb-4466-bb19-a6304a1c46cd" type="System.String">
+          <orm:column name="DIMENSIONTYPE" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_mINCONSUMPTION" property="MINCONSUMPTION" behavior="readwrite" uniqueId="9a3a068f-f3a3-4a10-b99d-2c7405b5d1d0" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MINCONSUMPTION" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_mAXCONSUMPTION" property="MAXCONSUMPTION" behavior="readwrite" uniqueId="56f9c096-8de5-4458-9bd4-800055786891" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MAXCONSUMPTION" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_mINTEMPERATURE" property="MINTEMPERATURE" behavior="readwrite" uniqueId="df70b508-9582-449a-94d7-ba8ab9dbc775" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MINTEMPERATURE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_mAXTEMPERATURE" property="MAXTEMPERATURE" behavior="readwrite" uniqueId="7d386cdf-bbf3-4ae0-a58f-712f45ea15a4" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MAXTEMPERATURE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_pERIODPPRCD" property="PERIODPPRCD" behavior="readwrite" uniqueId="b9ccf665-34fc-45b8-a0fa-1431f4f4c6c0" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="PERIODPPRCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_pERIODPPRNAME" property="PERIODPPRNAME" behavior="readwrite" uniqueId="ef431bf2-f348-4a7d-bfa0-3c53cccd0eb1" type="System.String">
+          <orm:column name="PERIODPPRNAME" sql-type="VARCHAR" nullable="true" length="200" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_pERIODPPRYEAR" property="PERIODPPRYEAR" behavior="readwrite" uniqueId="06a1a3e0-138e-430e-ad93-19f99a897879" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="PERIODPPRYEAR" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_pERIODPPRMONTH" property="PERIODPPRMONTH" behavior="readwrite" uniqueId="4e8dde88-5633-4035-adc5-2cabc5c80138" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="PERIODPPRMONTH" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_pERIODPPRDAY" property="PERIODPPRDAY" behavior="readwrite" uniqueId="0e963601-41e7-433c-9791-fb77aa0e327b" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="PERIODPPRDAY" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dATEPPR" property="DATEPPR" behavior="readwrite" uniqueId="a1dae852-5f7d-41ca-8ce2-9b65a657d06d" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DATEPPR" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_pLOMBDATE" property="PLOMBDATE" behavior="readwrite" uniqueId="6398d43d-27c4-41eb-9870-cc2d116e1aa7" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="PLOMBDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_pLOMBNUMBER" property="PLOMBNUMBER" behavior="readwrite" uniqueId="f0b7b156-aea2-484f-97bf-46fc1c98a289" type="System.String">
+          <orm:column name="PLOMBNUMBER" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_rECOUNTKOEFFICIENT" property="RECOUNTKOEFFICIENT" behavior="readwrite" uniqueId="5f8fa01b-c027-43e4-af8f-8a7768254bac" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="RECOUNTKOEFFICIENT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_sTATUSCD" property="STATUSCD" behavior="readwrite" uniqueId="6601e3f5-d05c-4b23-9954-c573146ab40e" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="STATUSCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sTATUSDATE" property="STATUSDATE" behavior="readwrite" uniqueId="c3d44377-fd56-4b23-95d9-c6a20186d07f" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="STATUSDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_sTATUSNAME" property="STATUSNAME" behavior="readwrite" uniqueId="ec65e45c-edde-4781-a61a-2f464d6b5ee8" type="System.String">
+          <orm:column name="STATUSNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_iSDEFAULT" property="ISDEFAULT" behavior="readwrite" uniqueId="9eb85d26-c565-477f-86f3-03a4ec8dee88" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISDEFAULT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_iNDICATIONDATE" property="INDICATIONDATE" behavior="readwrite" uniqueId="e1b573cb-7388-4ac5-8d57-3ef79afbc670" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="INDICATIONDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_iNDICATIONVALUE" property="INDICATIONVALUE" behavior="readwrite" uniqueId="7888d1f1-a449-429f-bc52-cbe723708e4d" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="INDICATIONVALUE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_iNDICATIONCD" property="INDICATIONCD" behavior="readwrite" uniqueId="b0ce7dd3-b537-4ba2-92a3-45c9d867db03" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="INDICATIONCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sERVICEMASTERID" property="SERVICEMASTERID" behavior="readwrite" uniqueId="c6d234da-7023-4e36-bfe0-418f1b2be0be" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="SERVICEMASTERID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sERVICEID" property="SERVICEID" behavior="readwrite" uniqueId="0ff0eee5-755a-4394-a10a-aea8c83ffe5f" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="SERVICEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_nOTE" property="NOTE" behavior="readwrite" uniqueId="ffa79faa-8e6b-4b82-971a-ed89db237390" type="System.String">
+          <orm:column name="NOTE" sql-type="VARCHAR" nullable="true" length="8000" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_cONTROL_INDICATIONDATE" property="CONTROL_INDICATIONDATE" behavior="readwrite" uniqueId="289b6c30-3793-49e3-b752-53da4ca4cfe3" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="CONTROL_INDICATIONDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_cONTROL_INDICATIONVALUE" property="CONTROL_INDICATIONVALUE" behavior="readwrite" uniqueId="c55a2cf4-26b8-4c8d-85a4-6d71c4360685" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="CONTROL_INDICATIONVALUE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_cONTROL_INDICATIONCD" property="CONTROL_INDICATIONCD" behavior="readwrite" uniqueId="80ffea8a-7754-435e-8606-5e367adb193a" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="CONTROL_INDICATIONCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_nON_CONTROL_INDICATIONDATE" property="NON_CONTROL_INDICATIONDATE" behavior="readwrite" uniqueId="95c0fe1e-4f3f-48d4-9b15-97886311e5ac" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="NON_CONTROL_INDICATIONDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_nON_CONTROL_INDICATIONVALUE" property="NON_CONTROL_INDICATIONVALUE" behavior="readwrite" uniqueId="090f4fe5-ac40-47ad-abcd-5b532e6b7984" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="NON_CONTROL_INDICATIONVALUE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_nON_CONTROL_INDICATIONCD" property="NON_CONTROL_INDICATIONCD" behavior="readwrite" uniqueId="79b5d3c2-6366-4174-9ba4-aea71d2b6f34" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="NON_CONTROL_INDICATIONCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_nEXTDATEPPR" property="NEXTDATEPPR" behavior="readwrite" uniqueId="3e60935d-d1ac-427d-bb17-ae72119cbd75" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="NEXTDATEPPR" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        </orm:field>
+        <orm:field name="_rESOURCE_KOD" property="RESOURCE_KOD" behavior="readwrite" uniqueId="e039c111-92fa-44f4-bd61-62b53cdb6ef9" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="RESOURCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_tYPEKOD" property="TYPEKOD" behavior="readwrite" uniqueId="846e8d12-3695-4601-9b63-e8f0c6f7b163" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="TYPEKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_eXTORGCD" property="EXTORGCD" behavior="readwrite" uniqueId="6ba58578-3db3-471e-976a-5efa27531895" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_eQUIPMENTGROUPID" property="EQUIPMENTGROUPID" behavior="readwrite" uniqueId="3a7ff145-a2b6-45f9-8a82-d7ac24f472f1" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="EQUIPMENTGROUPID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_eQUIPMENTGROUPNAME" property="EQUIPMENTGROUPNAME" behavior="readwrite" uniqueId="cf208010-cf11-4b84-8125-e2d4dacdd093" type="System.String">
+          <orm:column name="EQUIPMENTGROUPNAME" sql-type="VARCHAR" nullable="true" length="200" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_cOUNTERPLACE" property="COUNTERPLACE" behavior="readwrite" uniqueId="34762a1c-ab91-413d-9993-7cd024914202" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="COUNTERPLACE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_iNSPECTMODE" property="INSPECTMODE" behavior="readwrite" uniqueId="9b837cca-b7ba-45f4-bec4-4bbe7b21fa62" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="INSPECTMODE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_tARGETBALANCE_KOD" property="TARGETBALANCE_KOD" behavior="readwrite" uniqueId="0ea4ee0c-f584-4f58-807f-9af0c9e8f9cf" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="TARGETBALANCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_uNITINGID" property="UNITINGID" behavior="readwrite" uniqueId="86c5a1bb-f8f2-4fa8-99d5-c103f374d5df" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="UNITINGID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_iSMULTISCALE" property="ISMULTISCALE" behavior="readwrite" uniqueId="2e3bdbbe-e611-45d1-8d6f-b6b16aaef1d3" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISMULTISCALE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_iSMAINMULTISCALE" property="ISMAINMULTISCALE" behavior="readwrite" uniqueId="b02ce5aa-6ccf-4f04-a3cb-064d38c235cc" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISMAINMULTISCALE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_oLDCOUNTERCD" property="OLDCOUNTERCD" behavior="readwrite" uniqueId="849a76ca-3c00-48c3-be90-f5a222d2a77d" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="OLDCOUNTERCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:index name="PK_LSHET_GT_COUNTERS">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="EXTORGACCOUNT" uniqueId="f3621779-9702-496f-b5cd-7ec3cf78386f">
+        <orm:table name="EXTORGACCOUNTS" />
+        <orm:identity>
+          <orm:multiple-field>
+            <orm:single-field field-name="_eXTORGCD" />
+            <orm:single-field field-name="_lSHET" />
+          </orm:multiple-field>
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_eXTORGCD" property="EXTORGCD" behavior="readwrite" uniqueId="27aaec25-b7b4-48b7-9535-61f2a42d6a02" type="System.Int32">
+          <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="d1d5de14-9e3f-4cfc-b93c-f1affe829aae" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_eXTLSHET" property="EXTLSHET" behavior="readwrite" uniqueId="31c7900c-6f94-4d24-a9ce-e960bd12940a" type="System.String">
+          <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_aBONENT" property="ABONENT" behavior="readwrite" uniqueId="850edb3d-b11d-495a-9d3c-78a45c8a58e9" type="_027_COKPToVodokanal.ABONENT">
+          <orm:reference uniqueId="bcfb3f9b-d37d-47fb-abe7-c319f5d1d2f3" association-name="EXTORGACCOUNTHasABONENT">
+            <orm:sharedfield name="_lSHET" target-class="_027_COKPToVodokanal.ABONENT" target-field="_lSHET" />
+            <orm:constraint name="R_843" delete-action="dbdefaultrule" destination-table="ABONENTS" />
+          </orm:reference>
+        </orm:field>
+        <orm:index name="XAKEXTORGACCOUNTS">
+          <orm:columnMapping>
+            <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+          <orm:columnMapping>
+            <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="DU" uniqueId="0e527567-e21a-4b0a-8329-d187d97a0479">
+        <orm:table name="DU" />
+        <orm:identity>
+          <orm:single-field field-name="_dU_CD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_dU_CD" property="DU_CD" behavior="readwrite" uniqueId="13329fa0-552b-4bba-97ee-ae37ecd417e5" type="System.Int32">
+          <orm:column name="DU_CD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dU_NM" property="DU_NM" behavior="readwrite" uniqueId="8970d17c-c0fb-4321-902e-f25b6dc7c819" type="System.String">
+          <orm:column name="DU_NM" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_dU_TEL" property="DU_TEL" behavior="readwrite" uniqueId="7c6b2838-3c24-440e-ac72-4cbe95ab4a49" type="System.String">
+          <orm:column name="DU_TEL" sql-type="VARCHAR" nullable="true" length="15" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_hOUSEs" property="HOUSEs" behavior="readwrite" uniqueId="0cacf144-b421-4da7-9316-617fd27fc69f" type="_027_COKPToVodokanal.HOUSE">
+          <orm:collection element-class="_027_COKPToVodokanal.HOUSE" inverse-field="_dU" order-by="" uniqueId="742fa2ea-ab1c-48b5-842f-4d7a36c196d6" />
+        </orm:field>
+        <orm:index name="XIE1DU">
+          <orm:columnMapping>
+            <orm:column name="DU_NM" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="CCHARSLIST" uniqueId="c61cddb2-44d9-4b46-a792-8301a45a22d9">
+        <orm:table name="CCHARSLIST" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="KOD" />
+          </orm:key-generator>
+          <orm:single-field field-name="_kOD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_kOD" property="KOD" behavior="readwrite" uniqueId="58d71bcf-91d5-4cb2-bc4f-28fb8224c8f0" type="System.Int32">
+          <orm:column name="KOD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_bALANCE_KOD" property="BALANCE_KOD" behavior="readwrite" uniqueId="7122498c-711c-44b4-9ca7-1738e1a14ff7" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="BALANCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_kODGROUPSCCHARSLIST" property="KODGROUPSCCHARSLIST" behavior="readwrite" uniqueId="d9f17727-d64f-41aa-8cc6-2452cf5bac7d" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="KODGROUPSCCHARSLIST" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_nAME" property="NAME" behavior="readwrite" uniqueId="6fad4c18-dec4-4e68-ade5-78802af5c85d" type="System.String">
+          <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sHORTNAME" property="SHORTNAME" behavior="readwrite" uniqueId="8f647e96-5153-4303-9777-dab53f056d20" type="System.String">
+          <orm:column name="SHORTNAME" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_vISIBLE" property="VISIBLE" behavior="readwrite" uniqueId="89aeb6d7-735c-41af-ad48-980add0ea1ee" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="VISIBLE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_iSCALCULATED" property="ISCALCULATED" behavior="readwrite" uniqueId="99fb8c1e-705a-4074-b78b-a12dfa69aa84" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISCALCULATED" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_cALCULATEFORMULA" property="CALCULATEFORMULA" behavior="readwrite" uniqueId="1be89d85-5307-453a-ae62-fdc74c96aca1" type="System.String">
+          <orm:column name="CALCULATEFORMULA" sql-type="VARCHAR" nullable="true" length="200" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_dOCTYPEID" property="DOCTYPEID" behavior="readwrite" uniqueId="a683b617-d0df-4367-8606-d3b4b5f5c24d" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DOCTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_mODULEID" property="MODULEID" behavior="readwrite" uniqueId="fcad5187-f9b4-40fd-a5aa-673a0abcf5eb" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="MODULEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_rEADONLY" property="READONLY" behavior="readwrite" uniqueId="ce73b29a-88cc-48fb-98df-89a9d69e3220" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="READONLY" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_rEASONID" property="REASONID" behavior="readwrite" uniqueId="c82279ab-d258-4d86-abaf-f8406b440e68" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="REASONID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cHARTYPE" property="CHARTYPE" behavior="readwrite" uniqueId="98273dc5-4e21-4f61-a9ba-5cc74ea0d3a9" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="CHARTYPE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_fIXCHANGES4PAYSYSTEM" property="FIXCHANGES4PAYSYSTEM" behavior="readwrite" uniqueId="5b7a2c79-985d-44ae-9aef-b59de5f53873" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="FIXCHANGES4PAYSYSTEM" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_cCHARSABONENTLISTs" property="CCHARSABONENTLISTs" behavior="readwrite" uniqueId="9196a80b-8716-4833-9074-7e28f1c1bcfa" type="_027_COKPToVodokanal.CCHARSABONENTLIST">
+          <orm:collection element-class="_027_COKPToVodokanal.CCHARSABONENTLIST" inverse-field="_cCHARSLIST" order-by="" uniqueId="8c34dc28-2bd4-4e73-a15f-f206dc446b81" />
+        </orm:field>
+      </orm:class>
+      <orm:class name="CCHARSABONENTLIST" uniqueId="2f3546af-ea45-4a74-aa69-44e3681f0742">
+        <orm:table name="CCHARSABONENTLIST" />
+        <orm:identity>
+          <orm:multiple-field>
+            <orm:single-field field-name="_lSHET" />
+            <orm:single-field field-name="_kODCCHARSLIST" />
+            <orm:single-field field-name="_aBONENTCCHARDATE" />
+          </orm:multiple-field>
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="4463ae27-3da5-4b90-ac11-f888d7a2f554" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_kODCCHARSLIST" property="KODCCHARSLIST" behavior="readwrite" uniqueId="761730b2-b189-4a59-898e-f02ed7d403d2" type="System.Int32">
+          <orm:column name="KODCCHARSLIST" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_aBONENTCCHARDATE" property="ABONENTCCHARDATE" behavior="readwrite" uniqueId="1ce9d29b-d32d-4d76-a00a-13cd4214fd32" type="System.DateTime">
+          <orm:column name="ABONENTCCHARDATE" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" primary-key="true" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_dOCUMENTCD" property="DOCUMENTCD" behavior="readwrite" uniqueId="c83262fc-a6c9-4e70-9e7b-f22963ff787e" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DOCUMENTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sIGNIFICANCE" property="SIGNIFICANCE" behavior="readwrite" uniqueId="36d35b66-e525-4f18-aad8-f9a43e258419" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="SIGNIFICANCE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_aBONENT" property="ABONENT" behavior="readwrite" uniqueId="28daf922-9534-4fbb-a0a3-c51fa6d48cf1" type="_027_COKPToVodokanal.ABONENT">
+          <orm:reference uniqueId="2c0ce87e-6e43-4e7b-8ab1-a17d73ece2bd" association-name="CCHARSABONENTLISTHasABONENT">
+            <orm:sharedfield name="_lSHET" target-class="_027_COKPToVodokanal.ABONENT" target-field="_lSHET" />
+            <orm:constraint name="R_451" delete-action="dbdefaultrule" destination-table="ABONENTS" />
+          </orm:reference>
+        </orm:field>
+        <orm:field name="_cCHARSLIST" property="CCHARSLIST" behavior="readwrite" uniqueId="00a7f62b-b2bd-41c6-b295-c62b05e19d1e" type="_027_COKPToVodokanal.CCHARSLIST">
+          <orm:reference uniqueId="8c34dc28-2bd4-4e73-a15f-f206dc446b81" association-name="CCHARSABONENTLISTHasCCHARSLIST">
+            <orm:sharedfield name="_kODCCHARSLIST" target-class="_027_COKPToVodokanal.CCHARSLIST" target-field="_kOD" />
+            <orm:constraint name="R_489" delete-action="dbdefaultrule" destination-table="CCHARSLIST" />
+          </orm:reference>
+        </orm:field>
+      </orm:class>
+      <orm:class name="ABONENT" uniqueId="51f0c7d0-e789-419b-b5e2-1e4271138fc2">
+        <orm:table name="ABONENTS" />
+        <orm:identity>
+          <orm:single-field field-name="_lSHET" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="c74fcddf-11d5-44b9-897a-542d4854f624" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_oWNERID" property="OWNERID" behavior="readwrite" uniqueId="b1b679ee-c360-4366-81fb-77a9cb900574" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="OWNERID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_iSDELETED" property="ISDELETED" behavior="readwrite" uniqueId="be9e3ec8-56d3-4fa6-a5d1-b74d781f7b72" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISDELETED" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dOGOVORDT" property="DOGOVORDT" behavior="readwrite" uniqueId="4eeaa9d9-bf09-4634-b9a6-7f00205a9dd5" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DOGOVORDT" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_hOUSECD" property="HOUSECD" behavior="readwrite" uniqueId="60af0270-c1f4-444c-8a5f-7eb776e329d7" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="HOUSECD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_fLATNO" property="FLATNO" behavior="readwrite" uniqueId="90ead026-ae0e-432f-ad2d-0e529c986d5f" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="FLATNO" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_rOOMNO" property="ROOMNO" behavior="readwrite" uniqueId="b64ec8a0-5ce3-49cc-9153-439edb3afb7f" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ROOMNO" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_fIO" property="FIO" behavior="readwrite" uniqueId="7213dc9e-b2dd-4b5d-affe-92447dcc13b8" type="System.String">
+          <orm:column name="FIO" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_nAME" property="NAME" behavior="readwrite" uniqueId="a74973e5-e2a6-49f6-a388-6df75c1a1a25" type="System.String">
+          <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sECOND_NAME" property="SECOND_NAME" behavior="readwrite" uniqueId="e34d1df0-9078-45af-a98a-143ab55997cd" type="System.String">
+          <orm:column name="SECOND_NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_tEL" property="TEL" behavior="readwrite" uniqueId="9291f6fa-a064-4b51-8973-8e468d1cad9b" type="System.String">
+          <orm:column name="TEL" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_nOTE" property="NOTE" behavior="readwrite" uniqueId="a8ce0285-35ce-44c3-811c-ba673eab5d4c" type="System.String">
+          <orm:column name="NOTE" sql-type="BLOB SUB_TYPE 1" nullable="true" length="0" scale="0" ado-type="StringInfiniteLength" />
+        </orm:field>
+        <orm:field name="_dELETED" property="DELETED" behavior="readwrite" uniqueId="92e9a181-5aaf-406d-8853-6b379c3de4ec" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DELETED" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_nEEDMONTHDOLGRECOUNT" property="NEEDMONTHDOLGRECOUNT" behavior="readwrite" uniqueId="c2821f24-e21f-4d93-aa37-2719644f2ffa" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="NEEDMONTHDOLGRECOUNT" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_cHANGEDOCUMENTCD" property="CHANGEDOCUMENTCD" behavior="readwrite" uniqueId="962640a0-e4c7-4f62-bd47-65bcfa51bb1b" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="CHANGEDOCUMENTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_aDDDOCUMENTCD" property="ADDDOCUMENTCD" behavior="readwrite" uniqueId="ef28e80c-8266-47a8-bce3-12fed38f5b2e" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ADDDOCUMENTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_rEMINDING" property="REMINDING" behavior="readwrite" uniqueId="6d76d595-1807-4f22-93e5-f10c461e4c2d" type="System.String">
+          <orm:column name="REMINDING" sql-type="BLOB SUB_TYPE 1" nullable="true" length="0" scale="0" ado-type="StringInfiniteLength" />
+        </orm:field>
+        <orm:field name="_fLATPOSTFIX" property="FLATPOSTFIX" behavior="readwrite" uniqueId="14a7edb4-9233-4bd8-9795-6af16e3e47cb" type="System.String">
+          <orm:column name="FLATPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_dELETE_DATE" property="DELETE_DATE" behavior="readwrite" uniqueId="3c0ea861-adb0-480d-82f6-6e020929efe5" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DELETE_DATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_rOOMPOSTFIX" property="ROOMPOSTFIX" behavior="readwrite" uniqueId="89c31e29-f936-4ade-83c1-ca0022c76b0f" type="System.String">
+          <orm:column name="ROOMPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_kR" property="KR" behavior="readwrite" uniqueId="2d424bf4-dd83-4e4a-b589-10e071485aec" type="System.String">
+          <orm:column name="KR" sql-type="VARCHAR" nullable="true" length="2" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_rEMINDINGUSERCD" property="REMINDINGUSERCD" behavior="readwrite" uniqueId="1d4f5540-b934-449d-9467-02f7c3879c4e" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="REMINDINGUSERCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lASTUSER" property="LASTUSER" behavior="readwrite" uniqueId="798df710-b294-43ee-ad36-d007234a6086" type="System.String">
+          <orm:column name="LASTUSER" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_tABNUMBER" property="TABNUMBER" behavior="readwrite" uniqueId="9caff39e-af72-4d3f-bc09-752a4559a08a" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="TABNUMBER" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_gUID" property="GUID" behavior="readwrite" uniqueId="dc8f3c27-ad16-402f-8e13-b04eaec7fc29" type="System.String">
+          <orm:column name="GUID" sql-type="VARCHAR" nullable="true" length="45" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_kLADR" property="KLADR" behavior="readwrite" uniqueId="752808bf-d1ac-425d-a7de-8a6ff118af36" type="System.String">
+          <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="25" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_pCLOGIN" property="PCLOGIN" behavior="readwrite" uniqueId="40814baa-1f59-46fc-bad4-46ea6f407bc8" type="System.String">
+          <orm:column name="PCLOGIN" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_hOUSE" property="HOUSE" behavior="readwrite" uniqueId="cc46368c-4c2d-47e3-835a-6ab280aa4372" type="_027_COKPToVodokanal.HOUSE">
+          <orm:reference uniqueId="387bea27-510c-4f10-9e3e-006235a3071a" association-name="ABONENTHasHOUSE">
+            <orm:sharedfield name="_hOUSECD" target-class="_027_COKPToVodokanal.HOUSE" target-field="_hOUSECD" />
+            <orm:constraint name="R_58" delete-action="dbdefaultrule" destination-table="HOUSES" />
+          </orm:reference>
+        </orm:field>
+        <orm:field name="_lCHARSABONENTLISTs" property="LCHARSABONENTLISTs" behavior="readwrite" uniqueId="1f095248-44e7-4270-8be0-32c047bf0b78" type="_027_COKPToVodokanal.LCHARSABONENTLIST">
+          <orm:collection element-class="_027_COKPToVodokanal.LCHARSABONENTLIST" inverse-field="_aBONENT" order-by="" uniqueId="9948cf5f-2ceb-4fc4-9487-3a6a14236759" />
+        </orm:field>
+        <orm:field name="_eXTORGACCOUNTs" property="EXTORGACCOUNTs" behavior="readwrite" uniqueId="358065b3-6ed9-40c8-a5ed-db1be1f460cf" type="_027_COKPToVodokanal.EXTORGACCOUNT">
+          <orm:collection element-class="_027_COKPToVodokanal.EXTORGACCOUNT" inverse-field="_aBONENT" order-by="" uniqueId="bcfb3f9b-d37d-47fb-abe7-c319f5d1d2f3" />
+        </orm:field>
+        <orm:field name="_cCHARSABONENTLISTs" property="CCHARSABONENTLISTs" behavior="readwrite" uniqueId="439a94da-a7cd-4414-885f-d52131b8a08f" type="_027_COKPToVodokanal.CCHARSABONENTLIST">
+          <orm:collection element-class="_027_COKPToVodokanal.CCHARSABONENTLIST" inverse-field="_aBONENT" order-by="" uniqueId="2c0ce87e-6e43-4e7b-8ab1-a17d73ece2bd" />
+        </orm:field>
+        <orm:index name="XIEFIOABONENTS">
+          <orm:columnMapping>
+            <orm:column name="FIO" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:index name="XIETELABONENTS">
+          <orm:columnMapping>
+            <orm:column name="TEL" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="ABNUF_1" uniqueId="9e6efc1f-367f-4430-8445-b1dd09f075e2">
+        <orm:table name="ABN$UF_1" />
+        <orm:identity>
+          <orm:single-field field-name="_lSHET" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="1c908f65-7741-4fc7-bbc3-f1408bd64e6a" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_iSACTIVE" property="ISACTIVE" behavior="readwrite" uniqueId="a803e489-ea26-4563-b019-f43a34ace853" type="System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ISACTIVE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        </orm:field>
+        <orm:index name="DUALIDX_FOR_ABN$UF_1">
+          <orm:columnMapping>
+            <orm:column name="ISACTIVE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+          </orm:columnMapping>
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="GT_LCHARSABONENT" uniqueId="a360314b-f06f-4ae2-8f8f-c8febd000c31">
+        <orm:table name="GT_LCHARSABONENT" />
+        <orm:identity>
+          <orm:multiple-field>
+            <orm:single-field field-name="_lSHET" />
+            <orm:single-field field-name="_kODLCHARSLIST" />
+            <orm:single-field field-name="_aBONENTLCHARDATE" />
+          </orm:multiple-field>
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="d681e390-d790-46d7-92b5-1ea1e173b195" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_kODLCHARSLIST" property="KODLCHARSLIST" behavior="readwrite" uniqueId="02b432cc-719f-450f-88fd-ce3379e8404c" type="System.Int32">
+          <orm:column name="KODLCHARSLIST" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sIGNIFICANCE" property="SIGNIFICANCE" behavior="readwrite" uniqueId="a22b1161-3ee7-4c73-9755-78441047d1ba" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="SIGNIFICANCE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_lCHARSNAME" property="LCHARSNAME" behavior="readwrite" uniqueId="2e2d0d77-a272-45b8-9740-2247efdc289b" type="System.String">
+          <orm:column name="LCHARSNAME" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sHORTNAME" property="SHORTNAME" behavior="readwrite" uniqueId="bc857cf2-4bbb-478c-91cc-c0ba1f0c50ea" type="System.String">
+          <orm:column name="SHORTNAME" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_lOGICSIGNIFICANCE" property="LOGICSIGNIFICANCE" behavior="readwrite" uniqueId="720a68b8-a0c6-4d74-85b5-85b3d86fda3c" type="System.String">
+          <orm:column name="LOGICSIGNIFICANCE" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_aBONENTLCHARDATE" property="ABONENTLCHARDATE" behavior="readwrite" uniqueId="8d71ac7d-e389-4747-8c8a-8c71c31cf8da" type="System.DateTime">
+          <orm:column name="ABONENTLCHARDATE" sql-type="DATE" nullable="false" length="0" scale="0" primary-key="true" ado-type="Date" />
+        </orm:field>
+        <orm:index name="PK_LSHET_GT_LCHARSABONENT">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="GT_SALDO_ITOG" uniqueId="672aa4ee-b36e-44be-93e8-7e537f9c8f05">
+        <orm:table name="GT_SALDO_ITOG" />
+        <orm:identity>
+          <orm:multiple-field>
+            <orm:single-field field-name="_lSHET" />
+            <orm:single-field field-name="_nMONTH" />
+            <orm:single-field field-name="_nYEAR" />
+            <orm:single-field field-name="_bALANCE_KOD" />
+          </orm:multiple-field>
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="4a3b768a-6da8-4202-8b28-c92885946f34" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_bEGSALDO" property="BEGSALDO" behavior="readwrite" uniqueId="63e46902-2a09-440f-95ee-71646516db42" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="BEGSALDO" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_eNDSALDO" property="ENDSALDO" behavior="readwrite" uniqueId="5645cb99-46d2-49f9-82f2-e57651fd5458" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ENDSALDO" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_nMONTH" property="NMONTH" behavior="readwrite" uniqueId="dae59aaf-232a-4012-8fe2-89437d89ada1" type="System.Int16">
+          <orm:column name="NMONTH" sql-type="SMALLINT" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_nYEAR" property="NYEAR" behavior="readwrite" uniqueId="f1567c25-4ba7-425f-86bf-3084d7b9d706" type="System.Int16">
+          <orm:column name="NYEAR" sql-type="SMALLINT" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int16" />
+        </orm:field>
+        <orm:field name="_bALANCE_KOD" property="BALANCE_KOD" behavior="readwrite" uniqueId="4994cb90-d94b-4109-8a9a-bb6820db7ec4" type="System.Int32">
+          <orm:column name="BALANCE_KOD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_bALANCENM" property="BALANCENM" behavior="readwrite" uniqueId="1a076842-bb59-4b5b-9a00-65212ee91848" type="System.String">
+          <orm:column name="BALANCENM" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_pROVIDERCD" property="PROVIDERCD" behavior="readwrite" uniqueId="99f4a4a5-131f-4434-99fd-9fc8adad8ff2" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="PROVIDERCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_bEG_DEBET" property="BEG_DEBET" behavior="readwrite" uniqueId="cc50ee19-eb47-4841-b7ac-2a166c05d134" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="BEG_DEBET" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_bEG_KREDIT" property="BEG_KREDIT" behavior="readwrite" uniqueId="c337cee6-b92c-4f0d-b67e-f22755ce4cef" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="BEG_KREDIT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_eND_DEBET" property="END_DEBET" behavior="readwrite" uniqueId="1b34df4b-ff13-42e5-9343-9945f2989eea" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="END_DEBET" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_eND_KREDIT" property="END_KREDIT" behavior="readwrite" uniqueId="9a473298-c64e-421c-bf63-96eb39bca380" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="END_KREDIT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_fIRST_BEGSALDO" property="FIRST_BEGSALDO" behavior="readwrite" uniqueId="6aef0784-a884-4d53-ab13-c7b69ede53ec" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="FIRST_BEGSALDO" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_fIRST_BEG_DEBET" property="FIRST_BEG_DEBET" behavior="readwrite" uniqueId="10e1fa49-e10e-4a11-9daa-05d98c437999" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="FIRST_BEG_DEBET" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_fIRST_BEG_KREDIT" property="FIRST_BEG_KREDIT" behavior="readwrite" uniqueId="b0f62f81-8a58-4351-8197-1d910e43c781" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="FIRST_BEG_KREDIT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_lAST_ENDSALDO" property="LAST_ENDSALDO" behavior="readwrite" uniqueId="9ff9b2ab-6a84-41f0-bae8-082456d217db" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="LAST_ENDSALDO" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_lAST_END_DEBET" property="LAST_END_DEBET" behavior="readwrite" uniqueId="93efde61-077b-4aa6-a6cf-ef161aac41f9" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="LAST_END_DEBET" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_lAST_END_KREDIT" property="LAST_END_KREDIT" behavior="readwrite" uniqueId="06182f7a-47e8-40dd-be61-4b281aaee052" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="LAST_END_KREDIT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_rESOURCE_KOD" property="RESOURCE_KOD" behavior="readwrite" uniqueId="0d1e4b1e-038f-436a-9882-a384b873c9fe" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="RESOURCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_rESOURCE_NAME" property="RESOURCE_NAME" behavior="readwrite" uniqueId="2c25681b-6c27-4693-90bd-60e6b2703373" type="System.String">
+          <orm:column name="RESOURCE_NAME" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:index name="PK_LSHET_GT_SALDO_ITOG">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+    </orm:namespace>
+    <orm:schema schema="">
+      <orm:table name="STREET">
+        <orm:column name="STREETCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="PUNKTCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        <orm:column name="STREETNM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="NOTE" sql-type="VARCHAR" nullable="true" length="2500" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="OKATO" sql-type="VARCHAR" nullable="true" length="11" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SOCR" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="XIE1STREET">
+          <orm:columnMapping>
+            <orm:column name="STREETNM" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:index name="XIESTREETKLADR">
+          <orm:columnMapping>
+            <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
+      <orm:table name="LCHARSLIST">
+        <orm:column name="KOD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="BALANCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="KODGROUPSLCHARSLIST" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SHORTNAME" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="VISIBLE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="DOCTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="READONLY" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="REASONID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ISCALCULATED" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="MODULEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="CHARTYPE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="FIXCHANGES4PAYSYSTEM" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+      </orm:table>
+      <orm:table name="LCHARSABONENTLIST">
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="KODLCHARSLIST" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        <orm:column name="ABONENTLCHARDATE" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" primary-key="true" ado-type="DateTime" />
+        <orm:column name="DOCUMENTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="SIGNIFICANCE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:constraint name="R_453" delete-action="dbdefaultrule" destination-table="ABONENTS">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:constraint>
+        <orm:constraint name="R_488" delete-action="dbdefaultrule" destination-table="LCHARSLIST">
+          <orm:column name="KODLCHARSLIST" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:constraint>
+      </orm:table>
+      <orm:table name="HOUSES">
+        <orm:column name="HOUSECD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="MASTERID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DISTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DU_CD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="STREETCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="PUNKTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="K_REMOTECD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="CAPACITYCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="HOUSENO" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ISHOTWATER" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="KADASTRCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="NUMBEROFKVART" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="POSTINDEX" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="HOUSEPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="KORPUSNO" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="KORPUSPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ENTRANCCOUNT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="FLOORCOUNT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="BUILDINGYEAR" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="NOTE" sql-type="BLOB SUB_TYPE 1" nullable="true" length="0" scale="0" ado-type="StringInfiniteLength" />
+        <orm:column name="ROUTEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ISMANYKVART" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="OKATO" sql-type="VARCHAR" nullable="true" length="11" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SOCR" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="XIEHOUSENOHOUSES">
+          <orm:columnMapping>
+            <orm:column name="HOUSENO" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:index name="XIEHOUSESKLADR">
+          <orm:columnMapping>
+            <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:constraint name="R_415" delete-action="dbdefaultrule" destination-table="STREET">
+          <orm:column name="STREETCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="PUNKTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:constraint>
+        <orm:constraint name="R_416" delete-action="dbdefaultrule" destination-table="DU">
+          <orm:column name="DU_CD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:constraint>
+      </orm:table>
+      <orm:table name="GT_COUNTERS">
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="EQUIPMENTIDENTIFIER" sql-type="VARCHAR" nullable="false" length="45" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="COUNTERCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="COUNTERNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SERIALNUMBER" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="RELEASEDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="SALEDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="SETUPDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="GUARANTEEENDDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="MAXGUARANTEEPERIOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="MARKCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="MARKNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="COUNTER_LEVEL" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DIGITCOUNT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DIMENSIONTYPE" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="MINCONSUMPTION" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="MAXCONSUMPTION" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="MINTEMPERATURE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="MAXTEMPERATURE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="PERIODPPRCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="PERIODPPRNAME" sql-type="VARCHAR" nullable="true" length="200" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="PERIODPPRYEAR" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="PERIODPPRMONTH" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="PERIODPPRDAY" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DATEPPR" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="PLOMBDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="PLOMBNUMBER" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="RECOUNTKOEFFICIENT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="STATUSCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="STATUSDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="STATUSNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ISDEFAULT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="INDICATIONDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="INDICATIONVALUE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="INDICATIONCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="SERVICEMASTERID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="SERVICEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="NOTE" sql-type="VARCHAR" nullable="true" length="8000" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="CONTROL_INDICATIONDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="CONTROL_INDICATIONVALUE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="CONTROL_INDICATIONCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="NON_CONTROL_INDICATIONDATE" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="NON_CONTROL_INDICATIONVALUE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="NON_CONTROL_INDICATIONCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="NEXTDATEPPR" sql-type="DATE" nullable="true" length="0" scale="0" ado-type="Date" />
+        <orm:column name="RESOURCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="TYPEKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="EQUIPMENTGROUPID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="EQUIPMENTGROUPNAME" sql-type="VARCHAR" nullable="true" length="200" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="COUNTERPLACE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="INSPECTMODE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="TARGETBALANCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="UNITINGID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ISMULTISCALE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="ISMAINMULTISCALE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="OLDCOUNTERCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:index name="PK_LSHET_GT_COUNTERS">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
+      <orm:table name="EXTORGACCOUNTS">
+        <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="XAKEXTORGACCOUNTS">
+          <orm:columnMapping>
+            <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+          <orm:columnMapping>
+            <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:constraint name="R_843" delete-action="dbdefaultrule" destination-table="ABONENTS">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:constraint>
+      </orm:table>
+      <orm:table name="DU">
+        <orm:column name="DU_CD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        <orm:column name="DU_NM" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DU_TEL" sql-type="VARCHAR" nullable="true" length="15" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="XIE1DU">
+          <orm:columnMapping>
+            <orm:column name="DU_NM" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
+      <orm:table name="CCHARSLIST">
+        <orm:column name="KOD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="BALANCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="KODGROUPSCCHARSLIST" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SHORTNAME" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="VISIBLE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="ISCALCULATED" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="CALCULATEFORMULA" sql-type="VARCHAR" nullable="true" length="200" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOCTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="MODULEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="READONLY" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="REASONID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="CHARTYPE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="FIXCHANGES4PAYSYSTEM" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+      </orm:table>
+      <orm:table name="CCHARSABONENTLIST">
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="KODCCHARSLIST" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        <orm:column name="ABONENTCCHARDATE" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" primary-key="true" ado-type="DateTime" />
+        <orm:column name="DOCUMENTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="SIGNIFICANCE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:constraint name="R_451" delete-action="dbdefaultrule" destination-table="ABONENTS">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:constraint>
+        <orm:constraint name="R_489" delete-action="dbdefaultrule" destination-table="CCHARSLIST">
+          <orm:column name="KODCCHARSLIST" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:constraint>
+      </orm:table>
+      <orm:table name="ABONENTS">
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="OWNERID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ISDELETED" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DOGOVORDT" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="HOUSECD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="FLATNO" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="ROOMNO" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="FIO" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SECOND_NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="TEL" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="NOTE" sql-type="BLOB SUB_TYPE 1" nullable="true" length="0" scale="0" ado-type="StringInfiniteLength" />
+        <orm:column name="DELETED" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="NEEDMONTHDOLGRECOUNT" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="CHANGEDOCUMENTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ADDDOCUMENTCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="REMINDING" sql-type="BLOB SUB_TYPE 1" nullable="true" length="0" scale="0" ado-type="StringInfiniteLength" />
+        <orm:column name="FLATPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DELETE_DATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="ROOMPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="KR" sql-type="VARCHAR" nullable="true" length="2" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="REMINDINGUSERCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="LASTUSER" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="TABNUMBER" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="GUID" sql-type="VARCHAR" nullable="true" length="45" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="KLADR" sql-type="VARCHAR" nullable="true" length="25" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="PCLOGIN" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="XIEFIOABONENTS">
+          <orm:columnMapping>
+            <orm:column name="FIO" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:index name="XIETELABONENTS">
+          <orm:columnMapping>
+            <orm:column name="TEL" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:constraint name="R_58" delete-action="dbdefaultrule" destination-table="HOUSES">
+          <orm:column name="HOUSECD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:constraint>
+      </orm:table>
+      <orm:table name="ABN$UF_1">
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="ISACTIVE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:index name="DUALIDX_FOR_ABN$UF_1">
+          <orm:columnMapping>
+            <orm:column name="ISACTIVE" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
+          </orm:columnMapping>
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
+      <orm:table name="GT_LCHARSABONENT">
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="KODLCHARSLIST" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        <orm:column name="SIGNIFICANCE" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="LCHARSNAME" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SHORTNAME" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="LOGICSIGNIFICANCE" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ABONENTLCHARDATE" sql-type="DATE" nullable="false" length="0" scale="0" primary-key="true" ado-type="Date" />
+        <orm:index name="PK_LSHET_GT_LCHARSABONENT">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
+      <orm:table name="GT_SALDO_ITOG">
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="BEGSALDO" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="ENDSALDO" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="NMONTH" sql-type="SMALLINT" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int16" />
+        <orm:column name="NYEAR" sql-type="SMALLINT" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int16" />
+        <orm:column name="BALANCE_KOD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        <orm:column name="BALANCENM" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="PROVIDERCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="BEG_DEBET" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="BEG_KREDIT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="END_DEBET" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="END_KREDIT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="FIRST_BEGSALDO" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="FIRST_BEG_DEBET" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="FIRST_BEG_KREDIT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="LAST_ENDSALDO" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="LAST_END_DEBET" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="LAST_END_KREDIT" sql-type="NUMERIC" nullable="true" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="RESOURCE_KOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="RESOURCE_NAME" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="PK_LSHET_GT_SALDO_ITOG">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
+      <orm:procedure name="REP_GT_COUNTERS">
+        <orm:procedure-parameter name="P_USERID" sql-type="integer" nullable="true" length="4" scale="0" ado-type="Int32" mode="in" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+        <orm:procedure-parameter name="STATEDATE" sql-type="date" nullable="true" length="4" scale="0" ado-type="Date" mode="in" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+        <orm:procedure-parameter name="INPUT_LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" mode="in" type="System.String" />
+        <orm:procedure-parameter name="INPUT_NOTIFICATIONFACTID" sql-type="integer" nullable="true" length="4" scale="0" ado-type="Int32" mode="in" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+        <orm:result-sets />
+      </orm:procedure>
+      <orm:procedure name="REP_GT_LCHARSABONENT">
+        <orm:procedure-parameter name="P_USERID" sql-type="integer" nullable="true" length="4" scale="0" ado-type="Int32" mode="in" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+        <orm:procedure-parameter name="STATEDATE" sql-type="date" nullable="true" length="4" scale="0" ado-type="Date" mode="in" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+        <orm:procedure-parameter name="INPUT_LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" mode="in" type="System.String" />
+        <orm:procedure-parameter name="INPUT_NOTIFICATIONFACTID" sql-type="integer" nullable="true" length="4" scale="0" ado-type="Int32" mode="in" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
+        <orm:result-sets />
+      </orm:procedure>
+    </orm:schema>
+    <orm:relational-naming-settings>
+      <orm:source-strategy>Property</orm:source-strategy>
+      <orm:remove-camel-case>False</orm:remove-camel-case>
+    </orm:relational-naming-settings>
+  </orm:orm>
+  <ModelSettings xmlns="">
+    <AppConfigConnectionPropertyName>Connection</AppConfigConnectionPropertyName>
+    <AppConfigConnectionString>character set=WIN1251;data source=localhost;initial catalog=C:\Work\aConverter_Data\027_COKPToVodokanal\Database\Cokp\ABONENT.FDB;user id=SYSDBA;password=masterkey</AppConfigConnectionString>
+    <NamingSettings>
+      <ClassRules>
+        <CaseMode>PascalCase</CaseMode>
+        <PluralizationMode>Singularize</PluralizationMode>
+      </ClassRules>
+      <FieldRules>
+        <AddPrefix>_</AddPrefix>
+        <CaseMode>CamelCase</CaseMode>
+      </FieldRules>
+      <PropertyRules>
+        <CaseMode>PascalCase</CaseMode>
+      </PropertyRules>
+      <NavigationPropertyRules />
+    </NamingSettings>
+    <CodeGenerationSettings>
+      <MappingDefinitionType>Xml</MappingDefinitionType>
+    </CodeGenerationSettings>
+    <SchemaUpdateSettings />
+    <BackendConfigurationSettings>
+      <BackendConfiguration>
+        <Backend>Firebird</Backend>
+        <ProviderName>FirebirdSql.Data.FirebirdClient</ProviderName>
+      </BackendConfiguration>
+    </BackendConfigurationSettings>
+  </ModelSettings>
+  <Types>
+    <DomainClass Id="930315ff-59ad-4be4-8fc4-18b961fda43d" name="STREET" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="STREETCD">
+      <Property Id="d630d94c-1fe1-412d-904c-2432e1bcf42b" name="PUNKTCD" type="Int32" label="PUNKTCD : Int32" kind="Persistent" identity="true" fieldName="_pUNKTCD" />
+      <Property Id="0f67d7ce-5bc9-4aa8-af1a-86821c63fc75" name="STREETCD" type="Int32" label="STREETCD : Int32" kind="Persistent" identity="true" fieldName="_sTREETCD" />
+      <Property Id="a8a64d0d-b03b-46a1-854e-c7a036046b94" name="KLADR" label="KLADR : String" kind="Persistent" fieldName="_kLADR" />
+      <Property Id="9df8de22-44d3-4669-8d5b-a82d752bfa2e" name="NOTE" label="NOTE : String" kind="Persistent" fieldName="_nOTE" />
+      <Property Id="08ced3c5-06df-4e6f-81cd-ac4700bf7911" name="OKATO" label="OKATO : String" kind="Persistent" fieldName="_oKATO" />
+      <Property Id="9aed9d7e-8911-49ee-a1f5-95de3358e42f" name="SOCR" label="SOCR : String" kind="Persistent" fieldName="_sOCR" />
+      <Property Id="f57ea4cd-3c89-4504-b643-296feb00f94f" name="STREETNM" label="STREETNM : String" kind="Persistent" fieldName="_sTREETNM" />
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="d9aa9add-c3e5-4e0b-ac20-1c1ad09893e7">
+          <NavigationalProperty Id="fa886542-e7c4-468c-ab1e-ce6713c066c7" name="HOUSEs" type="IList&lt;HOUSE&gt;" label="HOUSEs : IList&lt;HOUSE&gt;" nullable="true" kind="Persistent" fieldName="_hOUSEs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="b904f832-6f4c-4b0f-aacf-c0bba6bc1234" name="LCHARSLIST" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="KOD">
+      <Property Id="72618c1e-91a6-4f33-ad6d-4715f1d84c55" name="KOD" type="Int32" label="KOD : Int32" kind="Persistent" identity="true" fieldName="_kOD" />
+      <Property Id="280bd057-89e4-4fe0-8c50-dbedd05983d9" name="BALANCE_KOD" type="Int32" label="BALANCE_KOD : Int32" nullable="true" kind="Persistent" fieldName="_bALANCE_KOD" />
+      <Property Id="ee068cd2-5871-4e47-9030-3151cf1033f6" name="CHARTYPE" type="Int16" label="CHARTYPE : Int16" nullable="true" kind="Persistent" fieldName="_cHARTYPE" />
+      <Property Id="7f14d796-c938-47c6-b652-c2cb22a7c74f" name="DOCTYPEID" type="Int32" label="DOCTYPEID : Int32" nullable="true" kind="Persistent" fieldName="_dOCTYPEID" />
+      <Property Id="a7fa202d-9435-49c7-a1f1-4f67cf84cde8" name="FIXCHANGES4PAYSYSTEM" type="Int16" label="FIXCHANGES4PAYSYSTEM : Int16" nullable="true" kind="Persistent" fieldName="_fIXCHANGES4PAYSYSTEM" />
+      <Property Id="7f41902e-7a81-4450-926c-8ac39c5ff3ce" name="ISCALCULATED" type="Int16" label="ISCALCULATED : Int16" nullable="true" kind="Persistent" fieldName="_iSCALCULATED" />
+      <Property Id="27ea8e0a-3329-46c2-b4f1-8e1c7712f7b2" name="KODGROUPSLCHARSLIST" type="Int32" label="KODGROUPSLCHARSLIST : Int32" nullable="true" kind="Persistent" fieldName="_kODGROUPSLCHARSLIST" />
+      <Property Id="66e12bb6-8f93-48fc-bdbb-9f3b3b4de64b" name="MODULEID" type="Int32" label="MODULEID : Int32" nullable="true" kind="Persistent" fieldName="_mODULEID" />
+      <Property Id="5c652257-c3b4-4cbb-9e81-cb0ad7a31e16" name="NAME" label="NAME : String" kind="Persistent" fieldName="_nAME" />
+      <Property Id="ef5031f0-0d07-4653-abce-c9657f498b98" name="READONLY" type="Int16" label="READONLY : Int16" nullable="true" kind="Persistent" fieldName="_rEADONLY" />
+      <Property Id="810e1efc-c26e-4b9c-846e-6e5c2f7499e5" name="REASONID" type="Int32" label="REASONID : Int32" nullable="true" kind="Persistent" fieldName="_rEASONID" />
+      <Property Id="9211d290-b02b-4f68-862a-23bcbbd0183b" name="SHORTNAME" label="SHORTNAME : String" kind="Persistent" fieldName="_sHORTNAME" />
+      <Property Id="71c47e66-0567-4f1e-81df-928a5367cba2" name="VISIBLE" type="Int16" label="VISIBLE : Int16" nullable="true" kind="Persistent" fieldName="_vISIBLE" />
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="d279833e-7158-4392-81a6-23db691a78f0">
+          <NavigationalProperty Id="6bde15c0-2a00-4f71-afe3-2a5ad280a8cb" name="LCHARSABONENTLISTs" type="IList&lt;LCHARSABONENTLIST&gt;" label="LCHARSABONENTLISTs : IList&lt;LCHARSABONENTLIST&gt;" nullable="true" kind="Persistent" fieldName="_lCHARSABONENTLISTs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="b13a24d9-5fac-480d-8c56-1a9beb3ec076" name="LCHARSABONENTLIST" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="b4a28869-e43a-4148-892c-fd0dea365bf9" name="ABONENTLCHARDATE" type="DateTime" label="ABONENTLCHARDATE : DateTime" kind="Persistent" identity="true" fieldName="_aBONENTLCHARDATE" />
+      <Property Id="2b1a3497-11ac-49c0-8107-0a5caf0e778e" name="KODLCHARSLIST" type="Int32" label="KODLCHARSLIST : Int32" kind="Persistent" identity="true" fieldName="_kODLCHARSLIST" />
+      <Property Id="1294afac-1230-4918-9360-29cebcb43375" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+      <Property Id="57d03762-5164-4ad7-9a3b-e7ff28d6d49d" name="DOCUMENTCD" type="Int32" label="DOCUMENTCD : Int32" nullable="true" kind="Persistent" fieldName="_dOCUMENTCD" />
+      <Property Id="ba55fb49-e9db-4a2f-b37d-0073d243ab91" name="SIGNIFICANCE" type="Int32" label="SIGNIFICANCE : Int32" nullable="true" kind="Persistent" fieldName="_sIGNIFICANCE" />
+      <AssociationTargets>
+        <Association Id="9948cf5f-2ceb-4fc4-9487-3a6a14236759" SourceMultiplicity="One" name="LCHARSABONENTLISTHasABONENT">
+          <DomainClassMoniker name="/AbonentEntitiesModel/ABONENT" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="6eda8c4b-c4d8-4c4a-a51e-adc2da0bfd89">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/ABONENT/LCHARSABONENTLISTs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="fb332e28-6c37-4f7e-acdc-b51b575d790d">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/LCHARSABONENTLIST/ABONENT" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+        <Association Id="93bd1ad8-8468-48fb-b374-1be59cd0458b" SourceMultiplicity="One" name="LCHARSABONENTLISTHasLCHARSLIST">
+          <DomainClassMoniker name="/AbonentEntitiesModel/LCHARSLIST" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="b5bc1f8f-26d2-4a55-b2ac-f5f26304517b">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/LCHARSLIST/LCHARSABONENTLISTs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="135ab79f-f9cf-46d5-a685-b7a5e94681ff">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/LCHARSABONENTLIST/LCHARSLIST" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+      </AssociationTargets>
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="e43feb22-8c62-4d80-a749-66c02a82843d">
+          <NavigationalProperty Id="7aa16263-4c58-4790-9970-0a6a48d98449" name="ABONENT" type="ABONENT" label="ABONENT : ABONENT" nullable="true" kind="Persistent" fieldName="_aBONENT" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+        <classHasNavigationalProperties Id="e48477eb-5f03-47a0-b068-3d48e0136160">
+          <NavigationalProperty Id="d5003ea2-180b-48e8-aaff-150618831569" name="LCHARSLIST" type="LCHARSLIST" label="LCHARSLIST : LCHARSLIST" nullable="true" kind="Persistent" fieldName="_lCHARSLIST" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="06ae99cf-3777-4684-b5cd-8e2fe6dbd59b" name="HOUSE" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="HOUSECD">
+      <Property Id="0a4eb1ec-969f-4c8c-b3e2-813ffab8ddfa" name="HOUSECD" type="Int32" label="HOUSECD : Int32" kind="Persistent" identity="true" fieldName="_hOUSECD" />
+      <Property Id="53b8621a-7260-4ee8-b3ac-a804bfdbc78d" name="BUILDINGYEAR" type="Int16" label="BUILDINGYEAR : Int16" nullable="true" kind="Persistent" fieldName="_bUILDINGYEAR" />
+      <Property Id="c29cd68d-5d3f-40ba-94b1-343404a62662" name="CAPACITYCD" type="Int32" label="CAPACITYCD : Int32" nullable="true" kind="Persistent" fieldName="_cAPACITYCD" />
+      <Property Id="e5e9c3ae-11f2-44e5-bc30-72f6f51a408f" name="DISTCD" type="Int32" label="DISTCD : Int32" nullable="true" kind="Persistent" fieldName="_dISTCD" />
+      <Property Id="645334c3-7d87-4481-8d6d-8f8587b04ddf" name="DU_CD" type="Int32" label="DU_CD : Int32" nullable="true" kind="Persistent" fieldName="_dU_CD" />
+      <Property Id="042c92db-6f59-4a8c-919c-e3a066c771d3" name="ENTRANCCOUNT" type="Int32" label="ENTRANCCOUNT : Int32" nullable="true" kind="Persistent" fieldName="_eNTRANCCOUNT" />
+      <Property Id="c74935af-cd46-47e7-b28d-160c6831e9d5" name="FLOORCOUNT" type="Int32" label="FLOORCOUNT : Int32" nullable="true" kind="Persistent" fieldName="_fLOORCOUNT" />
+      <Property Id="9c2411f3-bc48-470d-98c7-be2d1eb1fd7f" name="HOUSENO" label="HOUSENO : String" kind="Persistent" fieldName="_hOUSENO" />
+      <Property Id="50ec92be-a92c-420b-acc2-c9a6e778e6a1" name="HOUSEPOSTFIX" label="HOUSEPOSTFIX : String" kind="Persistent" fieldName="_hOUSEPOSTFIX" />
+      <Property Id="c7938e23-9556-4403-8a43-21494adca641" name="ISHOTWATER" type="Int16" label="ISHOTWATER : Int16" nullable="true" kind="Persistent" fieldName="_iSHOTWATER" />
+      <Property Id="5b2f9ad9-008d-4cbc-9401-4f67023e75ff" name="ISMANYKVART" type="Int16" label="ISMANYKVART : Int16" nullable="true" kind="Persistent" fieldName="_iSMANYKVART" />
+      <Property Id="eeda8c19-765f-4061-8cbd-f88463eb7e4d" name="K_REMOTECD" type="Int32" label="K_REMOTECD : Int32" nullable="true" kind="Persistent" fieldName="_k_REMOTECD" />
+      <Property Id="3329ffb3-d4d2-40c2-b6d5-8213ca77f2b3" name="KADASTRCD" type="Int32" label="KADASTRCD : Int32" nullable="true" kind="Persistent" fieldName="_kADASTRCD" />
+      <Property Id="501b238e-2e9b-41a0-8039-d4d6b68bb7ef" name="KLADR" label="KLADR : String" kind="Persistent" fieldName="_kLADR" />
+      <Property Id="5733f182-7f5a-452e-9471-acc98a1918e8" name="KORPUSNO" type="Int32" label="KORPUSNO : Int32" nullable="true" kind="Persistent" fieldName="_kORPUSNO" />
+      <Property Id="b211ec3e-d433-4b0b-b8f2-672c9531b023" name="KORPUSPOSTFIX" label="KORPUSPOSTFIX : String" kind="Persistent" fieldName="_kORPUSPOSTFIX" />
+      <Property Id="80a860f3-f290-445c-bd3f-aa5d41547be0" name="MASTERID" type="Int32" label="MASTERID : Int32" nullable="true" kind="Persistent" fieldName="_mASTERID" />
+      <Property Id="3c2728b7-0d87-40c5-a0e4-f61890f41c81" name="NOTE" label="NOTE : String" kind="Persistent" fieldName="_nOTE" />
+      <Property Id="7571f68d-6c17-4f33-af8b-51dc785fe9b5" name="NUMBEROFKVART" type="Int32" label="NUMBEROFKVART : Int32" nullable="true" kind="Persistent" fieldName="_nUMBEROFKVART" />
+      <Property Id="0cdb9b47-dc1b-4b9e-96fd-1162277c65ee" name="OKATO" label="OKATO : String" kind="Persistent" fieldName="_oKATO" />
+      <Property Id="cfd19390-1ca6-4b63-8aa3-ac26497475af" name="POSTINDEX" label="POSTINDEX : String" kind="Persistent" fieldName="_pOSTINDEX" />
+      <Property Id="20b66a04-367a-40a8-bdb7-84b143fec3ab" name="PUNKTCD" type="Int32" label="PUNKTCD : Int32" nullable="true" kind="Persistent" fieldName="_pUNKTCD" />
+      <Property Id="0ff63db7-4c6e-42c4-8fd2-778fb7fe1978" name="ROUTEID" type="Int32" label="ROUTEID : Int32" nullable="true" kind="Persistent" fieldName="_rOUTEID" />
+      <Property Id="7179796b-929e-454b-9672-c0eb33234a60" name="SOCR" label="SOCR : String" kind="Persistent" fieldName="_sOCR" />
+      <Property Id="465ec214-9518-49c4-84e8-b4c521178bc6" name="STREETCD" type="Int32" label="STREETCD : Int32" nullable="true" kind="Persistent" fieldName="_sTREETCD" />
+      <AssociationTargets>
+        <Association Id="0dcb5bd6-97de-41f2-99b6-7b3889a9841a" SourceMultiplicity="ZeroOne" name="HOUSEHasSTREET">
+          <DomainClassMoniker name="/AbonentEntitiesModel/STREET" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="f4315ec0-414a-46d8-97f9-b31c51a41468">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/STREET/HOUSEs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="12860db4-b9ea-4096-a862-db8ba55fde54">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/HOUSE/STREET" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+        <Association Id="742fa2ea-ab1c-48b5-842f-4d7a36c196d6" SourceMultiplicity="ZeroOne" name="HOUSEHasDU">
+          <DomainClassMoniker name="/AbonentEntitiesModel/DU" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="88eff990-79ac-4d88-a409-183fd200476b">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/DU/HOUSEs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="6fb22dde-2867-4159-ae01-dc424702284e">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/HOUSE/DU" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+      </AssociationTargets>
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="253a84cc-1bad-4978-96d2-27868ea9a528">
+          <NavigationalProperty Id="42f878f6-1332-454d-8f2b-eb213b68f500" name="STREET" type="STREET" label="STREET : STREET" nullable="true" kind="Persistent" fieldName="_sTREET" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+        <classHasNavigationalProperties Id="a4173a29-5c6e-40b0-9689-55a7ba12325e">
+          <NavigationalProperty Id="bf0d28fb-75d7-460e-996a-8801f0ade094" name="DU" type="DU" label="DU : DU" nullable="true" kind="Persistent" fieldName="_dU" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+        <classHasNavigationalProperties Id="8fdf1d88-bc33-4ec5-be41-fe73c3cd9e88">
+          <NavigationalProperty Id="14b751c6-95c2-466a-8a3c-5aaa900bb3bc" name="ABONENTs" type="IList&lt;ABONENT&gt;" label="ABONENTs : IList&lt;ABONENT&gt;" nullable="true" kind="Persistent" fieldName="_aBONENTs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="238be194-56bf-44a4-bb3b-f05a6f289939" name="GT_COUNTER" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="80ffea8a-7754-435e-8606-5e367adb193a" name="CONTROL_INDICATIONCD" type="Int32" label="CONTROL_INDICATIONCD : Int32" nullable="true" kind="Persistent" fieldName="_cONTROL_INDICATIONCD" />
+      <Property Id="289b6c30-3793-49e3-b752-53da4ca4cfe3" name="CONTROL_INDICATIONDATE" type="DateTime" label="CONTROL_INDICATIONDATE : DateTime" nullable="true" kind="Persistent" fieldName="_cONTROL_INDICATIONDATE" />
+      <Property Id="c55a2cf4-26b8-4c8d-85a4-6d71c4360685" name="CONTROL_INDICATIONVALUE" type="Decimal" label="CONTROL_INDICATIONVALUE : Decimal" nullable="true" kind="Persistent" fieldName="_cONTROL_INDICATIONVALUE" />
+      <Property Id="0dd17b80-7b29-4d32-8046-0660bcddcab9" name="COUNTER_LEVEL" type="Int32" label="COUNTER_LEVEL : Int32" nullable="true" kind="Persistent" fieldName="_cOUNTER_LEVEL" />
+      <Property Id="60f75ecf-9366-4df8-9377-a7daf52c2984" name="COUNTERCD" type="Int32" label="COUNTERCD : Int32" nullable="true" kind="Persistent" fieldName="_cOUNTERCD" />
+      <Property Id="6746d7cf-9082-4889-9c52-3878c53b560a" name="COUNTERNAME" label="COUNTERNAME : String" kind="Persistent" fieldName="_cOUNTERNAME" />
+      <Property Id="34762a1c-ab91-413d-9993-7cd024914202" name="COUNTERPLACE" type="Int32" label="COUNTERPLACE : Int32" nullable="true" kind="Persistent" fieldName="_cOUNTERPLACE" />
+      <Property Id="a1dae852-5f7d-41ca-8ce2-9b65a657d06d" name="DATEPPR" type="DateTime" label="DATEPPR : DateTime" nullable="true" kind="Persistent" fieldName="_dATEPPR" />
+      <Property Id="fcfa218e-6a2c-41b7-afa5-281c8c6a1be8" name="DIGITCOUNT" type="Int32" label="DIGITCOUNT : Int32" nullable="true" kind="Persistent" fieldName="_dIGITCOUNT" />
+      <Property Id="7b0105da-f2cb-4466-bb19-a6304a1c46cd" name="DIMENSIONTYPE" label="DIMENSIONTYPE : String" kind="Persistent" fieldName="_dIMENSIONTYPE" />
+      <Property Id="3a7ff145-a2b6-45f9-8a82-d7ac24f472f1" name="EQUIPMENTGROUPID" type="Int32" label="EQUIPMENTGROUPID : Int32" nullable="true" kind="Persistent" fieldName="_eQUIPMENTGROUPID" />
+      <Property Id="cf208010-cf11-4b84-8125-e2d4dacdd093" name="EQUIPMENTGROUPNAME" label="EQUIPMENTGROUPNAME : String" kind="Persistent" fieldName="_eQUIPMENTGROUPNAME" />
+      <Property Id="b43725c1-6f33-48c1-b411-25bce3217d11" name="EQUIPMENTIDENTIFIER" label="EQUIPMENTIDENTIFIER : String" kind="Persistent" identity="true" fieldName="_eQUIPMENTIDENTIFIER" />
+      <Property Id="6ba58578-3db3-471e-976a-5efa27531895" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" nullable="true" kind="Persistent" fieldName="_eXTORGCD" />
+      <Property Id="e1e7c0ad-7ca6-4b7a-be73-ef9ca65a5597" name="GUARANTEEENDDATE" type="DateTime" label="GUARANTEEENDDATE : DateTime" nullable="true" kind="Persistent" fieldName="_gUARANTEEENDDATE" />
+      <Property Id="b0ce7dd3-b537-4ba2-92a3-45c9d867db03" name="INDICATIONCD" type="Int32" label="INDICATIONCD : Int32" nullable="true" kind="Persistent" fieldName="_iNDICATIONCD" />
+      <Property Id="e1b573cb-7388-4ac5-8d57-3ef79afbc670" name="INDICATIONDATE" type="DateTime" label="INDICATIONDATE : DateTime" nullable="true" kind="Persistent" fieldName="_iNDICATIONDATE" />
+      <Property Id="7888d1f1-a449-429f-bc52-cbe723708e4d" name="INDICATIONVALUE" type="Decimal" label="INDICATIONVALUE : Decimal" nullable="true" kind="Persistent" fieldName="_iNDICATIONVALUE" />
+      <Property Id="9b837cca-b7ba-45f4-bec4-4bbe7b21fa62" name="INSPECTMODE" type="Int32" label="INSPECTMODE : Int32" nullable="true" kind="Persistent" fieldName="_iNSPECTMODE" />
+      <Property Id="9eb85d26-c565-477f-86f3-03a4ec8dee88" name="ISDEFAULT" type="Int32" label="ISDEFAULT : Int32" nullable="true" kind="Persistent" fieldName="_iSDEFAULT" />
+      <Property Id="b02ce5aa-6ccf-4f04-a3cb-064d38c235cc" name="ISMAINMULTISCALE" type="Int16" label="ISMAINMULTISCALE : Int16" nullable="true" kind="Persistent" fieldName="_iSMAINMULTISCALE" />
+      <Property Id="2e3bdbbe-e611-45d1-8d6f-b6b16aaef1d3" name="ISMULTISCALE" type="Int16" label="ISMULTISCALE : Int16" nullable="true" kind="Persistent" fieldName="_iSMULTISCALE" />
+      <Property Id="308d6fef-723f-4b2b-95c6-c119c9212972" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+      <Property Id="33a040d3-680a-4589-977b-412ade5922ef" name="MARKCD" type="Int32" label="MARKCD : Int32" nullable="true" kind="Persistent" fieldName="_mARKCD" />
+      <Property Id="ea0dc7b2-0bbe-45ef-a582-704ecfcd7c1d" name="MARKNAME" label="MARKNAME : String" kind="Persistent" fieldName="_mARKNAME" />
+      <Property Id="56f9c096-8de5-4458-9bd4-800055786891" name="MAXCONSUMPTION" type="Decimal" label="MAXCONSUMPTION : Decimal" nullable="true" kind="Persistent" fieldName="_mAXCONSUMPTION" />
+      <Property Id="9a9411d8-c648-4363-b036-20693f0bdd84" name="MAXGUARANTEEPERIOD" type="Int32" label="MAXGUARANTEEPERIOD : Int32" nullable="true" kind="Persistent" fieldName="_mAXGUARANTEEPERIOD" />
+      <Property Id="7d386cdf-bbf3-4ae0-a58f-712f45ea15a4" name="MAXTEMPERATURE" type="Decimal" label="MAXTEMPERATURE : Decimal" nullable="true" kind="Persistent" fieldName="_mAXTEMPERATURE" />
+      <Property Id="9a3a068f-f3a3-4a10-b99d-2c7405b5d1d0" name="MINCONSUMPTION" type="Decimal" label="MINCONSUMPTION : Decimal" nullable="true" kind="Persistent" fieldName="_mINCONSUMPTION" />
+      <Property Id="df70b508-9582-449a-94d7-ba8ab9dbc775" name="MINTEMPERATURE" type="Decimal" label="MINTEMPERATURE : Decimal" nullable="true" kind="Persistent" fieldName="_mINTEMPERATURE" />
+      <Property Id="3e60935d-d1ac-427d-bb17-ae72119cbd75" name="NEXTDATEPPR" type="DateTime" label="NEXTDATEPPR : DateTime" nullable="true" kind="Persistent" fieldName="_nEXTDATEPPR" />
+      <Property Id="79b5d3c2-6366-4174-9ba4-aea71d2b6f34" name="NON_CONTROL_INDICATIONCD" type="Int32" label="NON_CONTROL_INDICATIONCD : Int32" nullable="true" kind="Persistent" fieldName="_nON_CONTROL_INDICATIONCD" />
+      <Property Id="95c0fe1e-4f3f-48d4-9b15-97886311e5ac" name="NON_CONTROL_INDICATIONDATE" type="DateTime" label="NON_CONTROL_INDICATIONDATE : DateTime" nullable="true" kind="Persistent" fieldName="_nON_CONTROL_INDICATIONDATE" />
+      <Property Id="090f4fe5-ac40-47ad-abcd-5b532e6b7984" name="NON_CONTROL_INDICATIONVALUE" type="Decimal" label="NON_CONTROL_INDICATIONVALUE : Decimal" nullable="true" kind="Persistent" fieldName="_nON_CONTROL_INDICATIONVALUE" />
+      <Property Id="ffa79faa-8e6b-4b82-971a-ed89db237390" name="NOTE" label="NOTE : String" kind="Persistent" fieldName="_nOTE" />
+      <Property Id="849a76ca-3c00-48c3-be90-f5a222d2a77d" name="OLDCOUNTERCD" type="Int32" label="OLDCOUNTERCD : Int32" nullable="true" kind="Persistent" fieldName="_oLDCOUNTERCD" />
+      <Property Id="b9ccf665-34fc-45b8-a0fa-1431f4f4c6c0" name="PERIODPPRCD" type="Int32" label="PERIODPPRCD : Int32" nullable="true" kind="Persistent" fieldName="_pERIODPPRCD" />
+      <Property Id="0e963601-41e7-433c-9791-fb77aa0e327b" name="PERIODPPRDAY" type="Int32" label="PERIODPPRDAY : Int32" nullable="true" kind="Persistent" fieldName="_pERIODPPRDAY" />
+      <Property Id="4e8dde88-5633-4035-adc5-2cabc5c80138" name="PERIODPPRMONTH" type="Int32" label="PERIODPPRMONTH : Int32" nullable="true" kind="Persistent" fieldName="_pERIODPPRMONTH" />
+      <Property Id="ef431bf2-f348-4a7d-bfa0-3c53cccd0eb1" name="PERIODPPRNAME" label="PERIODPPRNAME : String" kind="Persistent" fieldName="_pERIODPPRNAME" />
+      <Property Id="06a1a3e0-138e-430e-ad93-19f99a897879" name="PERIODPPRYEAR" type="Int32" label="PERIODPPRYEAR : Int32" nullable="true" kind="Persistent" fieldName="_pERIODPPRYEAR" />
+      <Property Id="6398d43d-27c4-41eb-9870-cc2d116e1aa7" name="PLOMBDATE" type="DateTime" label="PLOMBDATE : DateTime" nullable="true" kind="Persistent" fieldName="_pLOMBDATE" />
+      <Property Id="f0b7b156-aea2-484f-97bf-46fc1c98a289" name="PLOMBNUMBER" label="PLOMBNUMBER : String" kind="Persistent" fieldName="_pLOMBNUMBER" />
+      <Property Id="5f8fa01b-c027-43e4-af8f-8a7768254bac" name="RECOUNTKOEFFICIENT" type="Decimal" label="RECOUNTKOEFFICIENT : Decimal" nullable="true" kind="Persistent" fieldName="_rECOUNTKOEFFICIENT" />
+      <Property Id="9756464e-3d9f-4cef-9077-a59e7912105a" name="RELEASEDATE" type="DateTime" label="RELEASEDATE : DateTime" nullable="true" kind="Persistent" fieldName="_rELEASEDATE" />
+      <Property Id="e039c111-92fa-44f4-bd61-62b53cdb6ef9" name="RESOURCE_KOD" type="Int32" label="RESOURCE_KOD : Int32" nullable="true" kind="Persistent" fieldName="_rESOURCE_KOD" />
+      <Property Id="8815d5e8-59d4-4992-9433-7aba8211d287" name="SALEDATE" type="DateTime" label="SALEDATE : DateTime" nullable="true" kind="Persistent" fieldName="_sALEDATE" />
+      <Property Id="4daf8b74-8366-4e5f-85d4-5271b1b79e58" name="SERIALNUMBER" label="SERIALNUMBER : String" kind="Persistent" fieldName="_sERIALNUMBER" />
+      <Property Id="0ff0eee5-755a-4394-a10a-aea8c83ffe5f" name="SERVICEID" type="Int32" label="SERVICEID : Int32" nullable="true" kind="Persistent" fieldName="_sERVICEID" />
+      <Property Id="c6d234da-7023-4e36-bfe0-418f1b2be0be" name="SERVICEMASTERID" type="Int32" label="SERVICEMASTERID : Int32" nullable="true" kind="Persistent" fieldName="_sERVICEMASTERID" />
+      <Property Id="de4bf4a8-331a-40ef-bb2f-0f0303463bf8" name="SETUPDATE" type="DateTime" label="SETUPDATE : DateTime" nullable="true" kind="Persistent" fieldName="_sETUPDATE" />
+      <Property Id="6601e3f5-d05c-4b23-9954-c573146ab40e" name="STATUSCD" type="Int32" label="STATUSCD : Int32" nullable="true" kind="Persistent" fieldName="_sTATUSCD" />
+      <Property Id="c3d44377-fd56-4b23-95d9-c6a20186d07f" name="STATUSDATE" type="DateTime" label="STATUSDATE : DateTime" nullable="true" kind="Persistent" fieldName="_sTATUSDATE" />
+      <Property Id="ec65e45c-edde-4781-a61a-2f464d6b5ee8" name="STATUSNAME" label="STATUSNAME : String" kind="Persistent" fieldName="_sTATUSNAME" />
+      <Property Id="0ea4ee0c-f584-4f58-807f-9af0c9e8f9cf" name="TARGETBALANCE_KOD" type="Int32" label="TARGETBALANCE_KOD : Int32" nullable="true" kind="Persistent" fieldName="_tARGETBALANCE_KOD" />
+      <Property Id="846e8d12-3695-4601-9b63-e8f0c6f7b163" name="TYPEKOD" type="Int32" label="TYPEKOD : Int32" nullable="true" kind="Persistent" fieldName="_tYPEKOD" />
+      <Property Id="86c5a1bb-f8f2-4fa8-99d5-c103f374d5df" name="UNITINGID" type="Int32" label="UNITINGID : Int32" nullable="true" kind="Persistent" fieldName="_uNITINGID" />
+    </DomainClass>
+    <DomainClass Id="f3621779-9702-496f-b5cd-7ec3cf78386f" name="EXTORGACCOUNT" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="27aaec25-b7b4-48b7-9535-61f2a42d6a02" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" kind="Persistent" identity="true" fieldName="_eXTORGCD" />
+      <Property Id="d1d5de14-9e3f-4cfc-b93c-f1affe829aae" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+      <Property Id="31c7900c-6f94-4d24-a9ce-e960bd12940a" name="EXTLSHET" label="EXTLSHET : String" kind="Persistent" fieldName="_eXTLSHET" />
+      <AssociationTargets>
+        <Association Id="bcfb3f9b-d37d-47fb-abe7-c319f5d1d2f3" SourceMultiplicity="One" name="EXTORGACCOUNTHasABONENT">
+          <DomainClassMoniker name="/AbonentEntitiesModel/ABONENT" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="9c994e5a-9c91-4029-a595-be3399aa21a9">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/ABONENT/EXTORGACCOUNTs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="43a8303a-c554-414f-9fc5-b761da636a9c">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/EXTORGACCOUNT/ABONENT" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+      </AssociationTargets>
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="c3780299-5990-4b6d-94c1-b45924457d10">
+          <NavigationalProperty Id="850edb3d-b11d-495a-9d3c-78a45c8a58e9" name="ABONENT" type="ABONENT" label="ABONENT : ABONENT" nullable="true" kind="Persistent" fieldName="_aBONENT" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="0e527567-e21a-4b0a-8329-d187d97a0479" name="DU" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="13329fa0-552b-4bba-97ee-ae37ecd417e5" name="DU_CD" type="Int32" label="DU_CD : Int32" kind="Persistent" identity="true" fieldName="_dU_CD" />
+      <Property Id="8970d17c-c0fb-4321-902e-f25b6dc7c819" name="DU_NM" label="DU_NM : String" kind="Persistent" fieldName="_dU_NM" />
+      <Property Id="7c6b2838-3c24-440e-ac72-4cbe95ab4a49" name="DU_TEL" label="DU_TEL : String" kind="Persistent" fieldName="_dU_TEL" />
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="db9ed1b9-3e2c-4a85-8cea-168df9851ad3">
+          <NavigationalProperty Id="0cacf144-b421-4da7-9316-617fd27fc69f" name="HOUSEs" type="IList&lt;HOUSE&gt;" label="HOUSEs : IList&lt;HOUSE&gt;" nullable="true" kind="Persistent" fieldName="_hOUSEs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="c61cddb2-44d9-4b46-a792-8301a45a22d9" name="CCHARSLIST" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="KOD">
+      <Property Id="58d71bcf-91d5-4cb2-bc4f-28fb8224c8f0" name="KOD" type="Int32" label="KOD : Int32" kind="Persistent" identity="true" fieldName="_kOD" />
+      <Property Id="7122498c-711c-44b4-9ca7-1738e1a14ff7" name="BALANCE_KOD" type="Int32" label="BALANCE_KOD : Int32" nullable="true" kind="Persistent" fieldName="_bALANCE_KOD" />
+      <Property Id="1be89d85-5307-453a-ae62-fdc74c96aca1" name="CALCULATEFORMULA" label="CALCULATEFORMULA : String" kind="Persistent" fieldName="_cALCULATEFORMULA" />
+      <Property Id="98273dc5-4e21-4f61-a9ba-5cc74ea0d3a9" name="CHARTYPE" type="Int16" label="CHARTYPE : Int16" nullable="true" kind="Persistent" fieldName="_cHARTYPE" />
+      <Property Id="a683b617-d0df-4367-8606-d3b4b5f5c24d" name="DOCTYPEID" type="Int32" label="DOCTYPEID : Int32" nullable="true" kind="Persistent" fieldName="_dOCTYPEID" />
+      <Property Id="5b7a2c79-985d-44ae-9aef-b59de5f53873" name="FIXCHANGES4PAYSYSTEM" type="Int16" label="FIXCHANGES4PAYSYSTEM : Int16" nullable="true" kind="Persistent" fieldName="_fIXCHANGES4PAYSYSTEM" />
+      <Property Id="99fb8c1e-705a-4074-b78b-a12dfa69aa84" name="ISCALCULATED" type="Int16" label="ISCALCULATED : Int16" nullable="true" kind="Persistent" fieldName="_iSCALCULATED" />
+      <Property Id="d9f17727-d64f-41aa-8cc6-2452cf5bac7d" name="KODGROUPSCCHARSLIST" type="Int32" label="KODGROUPSCCHARSLIST : Int32" nullable="true" kind="Persistent" fieldName="_kODGROUPSCCHARSLIST" />
+      <Property Id="fcad5187-f9b4-40fd-a5aa-673a0abcf5eb" name="MODULEID" type="Int32" label="MODULEID : Int32" nullable="true" kind="Persistent" fieldName="_mODULEID" />
+      <Property Id="6fad4c18-dec4-4e68-ade5-78802af5c85d" name="NAME" label="NAME : String" kind="Persistent" fieldName="_nAME" />
+      <Property Id="ce73b29a-88cc-48fb-98df-89a9d69e3220" name="READONLY" type="Int16" label="READONLY : Int16" nullable="true" kind="Persistent" fieldName="_rEADONLY" />
+      <Property Id="c82279ab-d258-4d86-abaf-f8406b440e68" name="REASONID" type="Int32" label="REASONID : Int32" nullable="true" kind="Persistent" fieldName="_rEASONID" />
+      <Property Id="8f647e96-5153-4303-9777-dab53f056d20" name="SHORTNAME" label="SHORTNAME : String" kind="Persistent" fieldName="_sHORTNAME" />
+      <Property Id="89aeb6d7-735c-41af-ad48-980add0ea1ee" name="VISIBLE" type="Int16" label="VISIBLE : Int16" nullable="true" kind="Persistent" fieldName="_vISIBLE" />
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="16308c1f-eed9-4b13-b6bf-05dc0c414df6">
+          <NavigationalProperty Id="9196a80b-8716-4833-9074-7e28f1c1bcfa" name="CCHARSABONENTLISTs" type="IList&lt;CCHARSABONENTLIST&gt;" label="CCHARSABONENTLISTs : IList&lt;CCHARSABONENTLIST&gt;" nullable="true" kind="Persistent" fieldName="_cCHARSABONENTLISTs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="2f3546af-ea45-4a74-aa69-44e3681f0742" name="CCHARSABONENTLIST" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="1ce9d29b-d32d-4d76-a00a-13cd4214fd32" name="ABONENTCCHARDATE" type="DateTime" label="ABONENTCCHARDATE : DateTime" kind="Persistent" identity="true" fieldName="_aBONENTCCHARDATE" />
+      <Property Id="761730b2-b189-4a59-898e-f02ed7d403d2" name="KODCCHARSLIST" type="Int32" label="KODCCHARSLIST : Int32" kind="Persistent" identity="true" fieldName="_kODCCHARSLIST" />
+      <Property Id="4463ae27-3da5-4b90-ac11-f888d7a2f554" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+      <Property Id="c83262fc-a6c9-4e70-9e7b-f22963ff787e" name="DOCUMENTCD" type="Int32" label="DOCUMENTCD : Int32" nullable="true" kind="Persistent" fieldName="_dOCUMENTCD" />
+      <Property Id="36d35b66-e525-4f18-aad8-f9a43e258419" name="SIGNIFICANCE" type="Decimal" label="SIGNIFICANCE : Decimal" nullable="true" kind="Persistent" fieldName="_sIGNIFICANCE" />
+      <AssociationTargets>
+        <Association Id="2c0ce87e-6e43-4e7b-8ab1-a17d73ece2bd" SourceMultiplicity="One" name="CCHARSABONENTLISTHasABONENT">
+          <DomainClassMoniker name="/AbonentEntitiesModel/ABONENT" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="ac2a6693-7d25-4b78-9cf1-956b709058d8">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/ABONENT/CCHARSABONENTLISTs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="3e2385c8-572b-4674-b321-5cab7e7f609c">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/CCHARSABONENTLIST/ABONENT" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+        <Association Id="8c34dc28-2bd4-4e73-a15f-f206dc446b81" SourceMultiplicity="One" name="CCHARSABONENTLISTHasCCHARSLIST">
+          <DomainClassMoniker name="/AbonentEntitiesModel/CCHARSLIST" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="30af4308-8cfd-45df-90ac-8090a522f5e9">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/CCHARSLIST/CCHARSABONENTLISTs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="93e3f154-7f16-4f0e-bc03-c2cc2f0124d9">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/CCHARSABONENTLIST/CCHARSLIST" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+      </AssociationTargets>
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="5f0252a4-7f37-425c-97bf-b81bd2f8ef9d">
+          <NavigationalProperty Id="28daf922-9534-4fbb-a0a3-c51fa6d48cf1" name="ABONENT" type="ABONENT" label="ABONENT : ABONENT" nullable="true" kind="Persistent" fieldName="_aBONENT" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+        <classHasNavigationalProperties Id="60f10c77-9faa-4f7c-9d97-9e42089fe6c0">
+          <NavigationalProperty Id="00a7f62b-b2bd-41c6-b295-c62b05e19d1e" name="CCHARSLIST" type="CCHARSLIST" label="CCHARSLIST : CCHARSLIST" nullable="true" kind="Persistent" fieldName="_cCHARSLIST" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="51f0c7d0-e789-419b-b5e2-1e4271138fc2" name="ABONENT" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="c74fcddf-11d5-44b9-897a-542d4854f624" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+      <Property Id="ef28e80c-8266-47a8-bce3-12fed38f5b2e" name="ADDDOCUMENTCD" type="Int32" label="ADDDOCUMENTCD : Int32" nullable="true" kind="Persistent" fieldName="_aDDDOCUMENTCD" />
+      <Property Id="962640a0-e4c7-4f62-bd47-65bcfa51bb1b" name="CHANGEDOCUMENTCD" type="Int32" label="CHANGEDOCUMENTCD : Int32" nullable="true" kind="Persistent" fieldName="_cHANGEDOCUMENTCD" />
+      <Property Id="3c0ea861-adb0-480d-82f6-6e020929efe5" name="DELETE_DATE" type="DateTime" label="DELETE_DATE : DateTime" nullable="true" kind="Persistent" fieldName="_dELETE_DATE" />
+      <Property Id="92e9a181-5aaf-406d-8853-6b379c3de4ec" name="DELETED" type="Int16" label="DELETED : Int16" nullable="true" kind="Persistent" fieldName="_dELETED" />
+      <Property Id="4eeaa9d9-bf09-4634-b9a6-7f00205a9dd5" name="DOGOVORDT" type="DateTime" label="DOGOVORDT : DateTime" nullable="true" kind="Persistent" fieldName="_dOGOVORDT" />
+      <Property Id="7213dc9e-b2dd-4b5d-affe-92447dcc13b8" name="FIO" label="FIO : String" kind="Persistent" fieldName="_fIO" />
+      <Property Id="90ead026-ae0e-432f-ad2d-0e529c986d5f" name="FLATNO" type="Int16" label="FLATNO : Int16" nullable="true" kind="Persistent" fieldName="_fLATNO" />
+      <Property Id="14a7edb4-9233-4bd8-9795-6af16e3e47cb" name="FLATPOSTFIX" label="FLATPOSTFIX : String" kind="Persistent" fieldName="_fLATPOSTFIX" />
+      <Property Id="dc8f3c27-ad16-402f-8e13-b04eaec7fc29" name="GUID" label="GUID : String" kind="Persistent" fieldName="_gUID" />
+      <Property Id="60af0270-c1f4-444c-8a5f-7eb776e329d7" name="HOUSECD" type="Int32" label="HOUSECD : Int32" nullable="true" kind="Persistent" fieldName="_hOUSECD" />
+      <Property Id="be9e3ec8-56d3-4fa6-a5d1-b74d781f7b72" name="ISDELETED" type="Int32" label="ISDELETED : Int32" nullable="true" kind="Persistent" fieldName="_iSDELETED" />
+      <Property Id="752808bf-d1ac-425d-a7de-8a6ff118af36" name="KLADR" label="KLADR : String" kind="Persistent" fieldName="_kLADR" />
+      <Property Id="2d424bf4-dd83-4e4a-b589-10e071485aec" name="KR" label="KR : String" kind="Persistent" fieldName="_kR" />
+      <Property Id="798df710-b294-43ee-ad36-d007234a6086" name="LASTUSER" label="LASTUSER : String" kind="Persistent" fieldName="_lASTUSER" />
+      <Property Id="a74973e5-e2a6-49f6-a388-6df75c1a1a25" name="NAME" label="NAME : String" kind="Persistent" fieldName="_nAME" />
+      <Property Id="c2821f24-e21f-4d93-aa37-2719644f2ffa" name="NEEDMONTHDOLGRECOUNT" type="Int16" label="NEEDMONTHDOLGRECOUNT : Int16" nullable="true" kind="Persistent" fieldName="_nEEDMONTHDOLGRECOUNT" />
+      <Property Id="a8ce0285-35ce-44c3-811c-ba673eab5d4c" name="NOTE" label="NOTE : String" kind="Persistent" fieldName="_nOTE" />
+      <Property Id="b1b679ee-c360-4366-81fb-77a9cb900574" name="OWNERID" type="Int32" label="OWNERID : Int32" nullable="true" kind="Persistent" fieldName="_oWNERID" />
+      <Property Id="40814baa-1f59-46fc-bad4-46ea6f407bc8" name="PCLOGIN" label="PCLOGIN : String" kind="Persistent" fieldName="_pCLOGIN" />
+      <Property Id="6d76d595-1807-4f22-93e5-f10c461e4c2d" name="REMINDING" label="REMINDING : String" kind="Persistent" fieldName="_rEMINDING" />
+      <Property Id="1d4f5540-b934-449d-9467-02f7c3879c4e" name="REMINDINGUSERCD" type="Int32" label="REMINDINGUSERCD : Int32" nullable="true" kind="Persistent" fieldName="_rEMINDINGUSERCD" />
+      <Property Id="b64ec8a0-5ce3-49cc-9153-439edb3afb7f" name="ROOMNO" type="Int16" label="ROOMNO : Int16" nullable="true" kind="Persistent" fieldName="_rOOMNO" />
+      <Property Id="89c31e29-f936-4ade-83c1-ca0022c76b0f" name="ROOMPOSTFIX" label="ROOMPOSTFIX : String" kind="Persistent" fieldName="_rOOMPOSTFIX" />
+      <Property Id="e34d1df0-9078-45af-a98a-143ab55997cd" name="SECOND_NAME" label="SECOND_NAME : String" kind="Persistent" fieldName="_sECOND_NAME" />
+      <Property Id="9caff39e-af72-4d3f-bc09-752a4559a08a" name="TABNUMBER" type="Int32" label="TABNUMBER : Int32" nullable="true" kind="Persistent" fieldName="_tABNUMBER" />
+      <Property Id="9291f6fa-a064-4b51-8973-8e468d1cad9b" name="TEL" label="TEL : String" kind="Persistent" fieldName="_tEL" />
+      <AssociationTargets>
+        <Association Id="387bea27-510c-4f10-9e3e-006235a3071a" SourceMultiplicity="ZeroOne" name="ABONENTHasHOUSE">
+          <DomainClassMoniker name="/AbonentEntitiesModel/HOUSE" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="3b260514-76ea-47b4-a5c7-befe589cc636">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/HOUSE/ABONENTs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="5b6b37c0-9e23-4611-a4c8-ac30a4cbdf41">
+              <NavigationalPropertyMoniker name="/AbonentEntitiesModel/ABONENT/HOUSE" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+      </AssociationTargets>
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="8b04ce78-e8ba-4e7d-909e-421e4142995b">
+          <NavigationalProperty Id="1f095248-44e7-4270-8be0-32c047bf0b78" name="LCHARSABONENTLISTs" type="IList&lt;LCHARSABONENTLIST&gt;" label="LCHARSABONENTLISTs : IList&lt;LCHARSABONENTLIST&gt;" nullable="true" kind="Persistent" fieldName="_lCHARSABONENTLISTs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+        <classHasNavigationalProperties Id="90f45d8c-f60b-4791-98fd-673cf63594d8">
+          <NavigationalProperty Id="358065b3-6ed9-40c8-a5ed-db1be1f460cf" name="EXTORGACCOUNTs" type="IList&lt;EXTORGACCOUNT&gt;" label="EXTORGACCOUNTs : IList&lt;EXTORGACCOUNT&gt;" nullable="true" kind="Persistent" fieldName="_eXTORGACCOUNTs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+        <classHasNavigationalProperties Id="d44562c5-1d2a-40bc-8f22-2810d1c4874c">
+          <NavigationalProperty Id="439a94da-a7cd-4414-885f-d52131b8a08f" name="CCHARSABONENTLISTs" type="IList&lt;CCHARSABONENTLIST&gt;" label="CCHARSABONENTLISTs : IList&lt;CCHARSABONENTLIST&gt;" nullable="true" kind="Persistent" fieldName="_cCHARSABONENTLISTs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+        <classHasNavigationalProperties Id="66a9f274-b9b9-43e3-9849-0b96394e5f76">
+          <NavigationalProperty Id="cc46368c-4c2d-47e3-835a-6ab280aa4372" name="HOUSE" type="HOUSE" label="HOUSE : HOUSE" nullable="true" kind="Persistent" fieldName="_hOUSE" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
+    </DomainClass>
+    <DomainClass Id="9e6efc1f-367f-4430-8445-b1dd09f075e2" name="ABNUF_1" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="a803e489-ea26-4563-b019-f43a34ace853" name="ISACTIVE" type="Int16" label="ISACTIVE : Int16" nullable="true" kind="Persistent" fieldName="_iSACTIVE" />
+      <Property Id="1c908f65-7741-4fc7-bbc3-f1408bd64e6a" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+    </DomainClass>
+    <DomainClass Id="a360314b-f06f-4ae2-8f8f-c8febd000c31" name="GT_LCHARSABONENT" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="8d71ac7d-e389-4747-8c8a-8c71c31cf8da" name="ABONENTLCHARDATE" type="DateTime" label="ABONENTLCHARDATE : DateTime" kind="Persistent" identity="true" fieldName="_aBONENTLCHARDATE" />
+      <Property Id="02b432cc-719f-450f-88fd-ce3379e8404c" name="KODLCHARSLIST" type="Int32" label="KODLCHARSLIST : Int32" kind="Persistent" identity="true" fieldName="_kODLCHARSLIST" />
+      <Property Id="2e2d0d77-a272-45b8-9740-2247efdc289b" name="LCHARSNAME" label="LCHARSNAME : String" kind="Persistent" fieldName="_lCHARSNAME" />
+      <Property Id="720a68b8-a0c6-4d74-85b5-85b3d86fda3c" name="LOGICSIGNIFICANCE" label="LOGICSIGNIFICANCE : String" kind="Persistent" fieldName="_lOGICSIGNIFICANCE" />
+      <Property Id="d681e390-d790-46d7-92b5-1ea1e173b195" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+      <Property Id="bc857cf2-4bbb-478c-91cc-c0ba1f0c50ea" name="SHORTNAME" label="SHORTNAME : String" kind="Persistent" fieldName="_sHORTNAME" />
+      <Property Id="a22b1161-3ee7-4c73-9755-78441047d1ba" name="SIGNIFICANCE" type="Decimal" label="SIGNIFICANCE : Decimal" nullable="true" kind="Persistent" fieldName="_sIGNIFICANCE" />
+    </DomainClass>
+    <DomainClass Id="672aa4ee-b36e-44be-93e8-7e537f9c8f05" name="GT_SALDO_ITOG" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="4994cb90-d94b-4109-8a9a-bb6820db7ec4" name="BALANCE_KOD" type="Int32" label="BALANCE_KOD : Int32" kind="Persistent" identity="true" fieldName="_bALANCE_KOD" />
+      <Property Id="1a076842-bb59-4b5b-9a00-65212ee91848" name="BALANCENM" label="BALANCENM : String" kind="Persistent" fieldName="_bALANCENM" />
+      <Property Id="cc50ee19-eb47-4841-b7ac-2a166c05d134" name="BEG_DEBET" type="Decimal" label="BEG_DEBET : Decimal" nullable="true" kind="Persistent" fieldName="_bEG_DEBET" />
+      <Property Id="c337cee6-b92c-4f0d-b67e-f22755ce4cef" name="BEG_KREDIT" type="Decimal" label="BEG_KREDIT : Decimal" nullable="true" kind="Persistent" fieldName="_bEG_KREDIT" />
+      <Property Id="63e46902-2a09-440f-95ee-71646516db42" name="BEGSALDO" type="Decimal" label="BEGSALDO : Decimal" nullable="true" kind="Persistent" fieldName="_bEGSALDO" />
+      <Property Id="1b34df4b-ff13-42e5-9343-9945f2989eea" name="END_DEBET" type="Decimal" label="END_DEBET : Decimal" nullable="true" kind="Persistent" fieldName="_eND_DEBET" />
+      <Property Id="9a473298-c64e-421c-bf63-96eb39bca380" name="END_KREDIT" type="Decimal" label="END_KREDIT : Decimal" nullable="true" kind="Persistent" fieldName="_eND_KREDIT" />
+      <Property Id="5645cb99-46d2-49f9-82f2-e57651fd5458" name="ENDSALDO" type="Decimal" label="ENDSALDO : Decimal" nullable="true" kind="Persistent" fieldName="_eNDSALDO" />
+      <Property Id="10e1fa49-e10e-4a11-9daa-05d98c437999" name="FIRST_BEG_DEBET" type="Decimal" label="FIRST_BEG_DEBET : Decimal" nullable="true" kind="Persistent" fieldName="_fIRST_BEG_DEBET" />
+      <Property Id="b0f62f81-8a58-4351-8197-1d910e43c781" name="FIRST_BEG_KREDIT" type="Decimal" label="FIRST_BEG_KREDIT : Decimal" nullable="true" kind="Persistent" fieldName="_fIRST_BEG_KREDIT" />
+      <Property Id="6aef0784-a884-4d53-ab13-c7b69ede53ec" name="FIRST_BEGSALDO" type="Decimal" label="FIRST_BEGSALDO : Decimal" nullable="true" kind="Persistent" fieldName="_fIRST_BEGSALDO" />
+      <Property Id="93efde61-077b-4aa6-a6cf-ef161aac41f9" name="LAST_END_DEBET" type="Decimal" label="LAST_END_DEBET : Decimal" nullable="true" kind="Persistent" fieldName="_lAST_END_DEBET" />
+      <Property Id="06182f7a-47e8-40dd-be61-4b281aaee052" name="LAST_END_KREDIT" type="Decimal" label="LAST_END_KREDIT : Decimal" nullable="true" kind="Persistent" fieldName="_lAST_END_KREDIT" />
+      <Property Id="9ff9b2ab-6a84-41f0-bae8-082456d217db" name="LAST_ENDSALDO" type="Decimal" label="LAST_ENDSALDO : Decimal" nullable="true" kind="Persistent" fieldName="_lAST_ENDSALDO" />
+      <Property Id="4a3b768a-6da8-4202-8b28-c92885946f34" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+      <Property Id="dae59aaf-232a-4012-8fe2-89437d89ada1" name="NMONTH" type="Int16" label="NMONTH : Int16" kind="Persistent" identity="true" fieldName="_nMONTH" />
+      <Property Id="f1567c25-4ba7-425f-86bf-3084d7b9d706" name="NYEAR" type="Int16" label="NYEAR : Int16" kind="Persistent" identity="true" fieldName="_nYEAR" />
+      <Property Id="99f4a4a5-131f-4434-99fd-9fc8adad8ff2" name="PROVIDERCD" type="Int32" label="PROVIDERCD : Int32" nullable="true" kind="Persistent" fieldName="_pROVIDERCD" />
+      <Property Id="0d1e4b1e-038f-436a-9882-a384b873c9fe" name="RESOURCE_KOD" type="Int32" label="RESOURCE_KOD : Int32" nullable="true" kind="Persistent" fieldName="_rESOURCE_KOD" />
+      <Property Id="2c25681b-6c27-4693-90bd-60e6b2703373" name="RESOURCE_NAME" label="RESOURCE_NAME : String" kind="Persistent" fieldName="_rESOURCE_NAME" />
+    </DomainClass>
+  </Types>
+  <domainContext>
+    <domainModelHasDomainContext Id="2d6073d4-f056-4a46-893e-55898a21d763">
+      <domainContainer name="AbonentEntitiesModel" namespace="_027_COKPToVodokanal" showPropertiesCompartment="true">
+        <entitySetProperty name="STREETs" namespace="_027_COKPToVodokanal" type="STREET" label="STREETs : IQueryable&lt;_027_COKPToVodokanal.STREET&gt;" />
+        <entitySetProperty name="LCHARSLISTs" namespace="_027_COKPToVodokanal" type="LCHARSLIST" label="LCHARSLISTs : IQueryable&lt;_027_COKPToVodokanal.LCHARSLIST&gt;" />
+        <entitySetProperty name="LCHARSABONENTLISTs" namespace="_027_COKPToVodokanal" type="LCHARSABONENTLIST" label="LCHARSABONENTLISTs : IQueryable&lt;_027_COKPToVodokanal.LCHARSABONENTLIST&gt;" />
+        <entitySetProperty name="HOUSEs" namespace="_027_COKPToVodokanal" type="HOUSE" label="HOUSEs : IQueryable&lt;_027_COKPToVodokanal.HOUSE&gt;" />
+        <entitySetProperty name="GT_COUNTERs" namespace="_027_COKPToVodokanal" type="GT_COUNTER" label="GT_COUNTERs : IQueryable&lt;_027_COKPToVodokanal.GT_COUNTER&gt;" />
+        <entitySetProperty name="EXTORGACCOUNTs" namespace="_027_COKPToVodokanal" type="EXTORGACCOUNT" label="EXTORGACCOUNTs : IQueryable&lt;_027_COKPToVodokanal.EXTORGACCOUNT&gt;" />
+        <entitySetProperty name="DUs" namespace="_027_COKPToVodokanal" type="DU" label="DUs : IQueryable&lt;_027_COKPToVodokanal.DU&gt;" />
+        <entitySetProperty name="CCHARSLISTs" namespace="_027_COKPToVodokanal" type="CCHARSLIST" label="CCHARSLISTs : IQueryable&lt;_027_COKPToVodokanal.CCHARSLIST&gt;" />
+        <entitySetProperty name="CCHARSABONENTLISTs" namespace="_027_COKPToVodokanal" type="CCHARSABONENTLIST" label="CCHARSABONENTLISTs : IQueryable&lt;_027_COKPToVodokanal.CCHARSABONENTLIST&gt;" />
+        <entitySetProperty name="ABONENTs" namespace="_027_COKPToVodokanal" type="ABONENT" label="ABONENTs : IQueryable&lt;_027_COKPToVodokanal.ABONENT&gt;" />
+        <entitySetProperty name="ABNUF_1" namespace="_027_COKPToVodokanal" type="ABNUF_1" label="ABNUF_1 : IQueryable&lt;_027_COKPToVodokanal.ABNUF_1&gt;" />
+        <entitySetProperty name="GT_LCHARSABONENTs" namespace="_027_COKPToVodokanal" type="GT_LCHARSABONENT" label="GT_LCHARSABONENTs : IQueryable&lt;_027_COKPToVodokanal.GT_LCHARSABONENT&gt;" />
+        <entitySetProperty name="GT_SALDO_ITOGs" namespace="_027_COKPToVodokanal" type="GT_SALDO_ITOG" label="GT_SALDO_ITOGs : IQueryable&lt;_027_COKPToVodokanal.GT_SALDO_ITOG&gt;" />
+      </domainContainer>
+    </domainModelHasDomainContext>
+  </domainContext>
+</DomainModel>

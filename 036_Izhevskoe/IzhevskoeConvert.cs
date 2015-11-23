@@ -2,6 +2,7 @@
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.Versioning;
 using aConverterClassLibrary;
@@ -19,13 +20,14 @@ namespace _036_Izhevskoe
     {
         public static readonly DateTime StartDate = new DateTime(2005, 1, 1);
 
-        public static readonly int CurrentMonth = 7;
+        public static readonly int CurrentMonth = 10;
 
         public static readonly int CurrentYear = 2015;
 
         public static string GetLs(long intls)
         {
             return String.Format("82{0:D6}", intls);
+            // return String.Format("84{0:D6}", intls);
         }
 
         // public static readonly int StartYear = 2014;
@@ -35,7 +37,7 @@ namespace _036_Izhevskoe
 
         public static readonly int RecodeTableOffset = 1;
 
-        public static readonly int CommitStep = 100;
+        public static readonly int CommitStep = 1000;
     }
 
     /// <summary>
@@ -330,8 +332,7 @@ namespace _036_Izhevskoe
             return currentList;
         }
     }
-
-    
+   
 
     /// <summary>
     /// Конвертация истории оплат-начислений
@@ -359,33 +360,34 @@ namespace _036_Izhevskoe
             var nom = new NachoplManager(NachoplCorrectionType.Пересчитать_сальдо_на_конец);
 
             #region Сальдо
-            DataTable dt = Tmsource.GetDataTable("OSTN");
+            // DataTable dt = Tmsource.GetDataTable("OSTN");
+            DataTable dt = Tmsource.ExecuteQuery("SELECT DISTINCT * FROM OSTN");
             StepStart(dt.Rows.Count);
             var ostn = new OstnRecord();
             foreach (DataRow dataRow in dt.Rows)
             {
                 ostn.ReadDataRow(dataRow);
                 string lshet = Consts.GetLs(ostn.N_lits);
-                if (ostn.S_kvart != 0)
-                {
+                //if (ostn.S_kvart != 0)
+                //{
                     nom.RegisterBeginSaldo(lshet, Consts.CurrentMonth,
                         Consts.CurrentYear, 2, "Содержание жилья", ostn.S_kvart);
-                }
-                if ((ostn.S_water + ostn.Korov) != 0)
-                {
+                //}
+                //if ((ostn.S_water + ostn.Korov) != 0)
+                //{
                     nom.RegisterBeginSaldo(lshet, Consts.CurrentMonth,
                         Consts.CurrentYear, 4, "Водоснабжение", (ostn.S_water + ostn.Korov));
-                }
-                if (ostn.S_kanal != 0)
-                {
+                //}
+                //if (ostn.S_kanal != 0)
+                //{
                     nom.RegisterBeginSaldo(lshet, Consts.CurrentMonth,
-                        Consts.CurrentYear, 6, "Водоотведение", ostn.S_kanal);
-                }
-                if (ostn.S_musor != 0)
-                {
+                        Consts.CurrentYear, 8, "Водоотведение", ostn.S_kanal);
+                //}
+                //if (ostn.S_musor != 0)
+                //{
                     nom.RegisterBeginSaldo(lshet, Consts.CurrentMonth,
-                        Consts.CurrentYear, 8, "Вывоз ТБО", ostn.S_musor);
-                }
+                        Consts.CurrentYear, 6, "Вывоз ТБО", ostn.S_musor);
+                //}
                 Iterate();
             }
             StepFinish();
@@ -404,64 +406,91 @@ namespace _036_Izhevskoe
             #endregion
 
             #region Сохраняем сальдо
-            StepStart(nom.NachoplRecords.Values.Count);
-            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                int i = 0;
-                foreach (CNV_NACHOPL no in nom.NachoplRecords.Values)
-                {
-                    context.Add(no);
-                    if ((i++ % Consts.CommitStep) == 0)
-                    {
-                        context.SaveChanges();
-                        context.ClearChanges();
-                    }
-                    Iterate();
-                }
-                context.SaveChanges();
-            }
-            StepFinish();
+                SaveList(nom.NachoplRecords.Values);
+            //var list = nom.NachoplRecords.Values.ToList();
+            //int stepsCount = (list.Count / Consts.CommitStep) + 1;
+            //StepStart(stepsCount);
+            //while (list.Count > 0)
+            //{
+            //    int count = Math.Min(Consts.CommitStep, list.Count);
+            //    var sublist = list.GetRange(0, count);
+            //    list.RemoveRange(0, count);
+            //    SaveContextPart(sublist);
+            //    Iterate();
+            //}
+            //StepFinish();
             #endregion
 
             #region Сохраняем начисления
-            StepStart(nom.NachRecords.Count);
-            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                int i = 0;
-                foreach (CNV_NACH n in nom.NachRecords)
-                {
-                    context.Add(n);
-                    if ((i++ % Consts.CommitStep) == 0)
-                    {
-                        context.SaveChanges();
-                        context.ClearChanges();
-                    }
-                    Iterate();
-                }
-                context.SaveChanges();
-            }
-            StepFinish();
+            SaveList(nom.NachRecords);
+            //StepStart(nom.NachRecords.Count);
+            //using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            //{
+            //    int i = 0;
+            //    foreach (CNV_NACH n in nom.NachRecords)
+            //    {
+            //        context.Add(n);
+            //        if ((i++ % Consts.CommitStep) == 0)
+            //        {
+            //            context.SaveChanges();
+            //            context.ClearChanges();
+            //        }
+            //        Iterate();
+            //    }
+            //    context.SaveChanges();
+            //}
+            //StepFinish();
             #endregion
 
             #region Сохраняем оплату
-            StepStart(nom.OplataRecords.Count);
+            SaveList(nom.OplataRecords);
+            //StepStart(nom.OplataRecords.Count);
+            //using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            //{
+            //    int i = 0;
+            //    foreach (CNV_OPLATA o in nom.OplataRecords)
+            //    {
+            //        context.Add(o);
+            //        if ((i++ % Consts.CommitStep) == 0)
+            //        {
+            //            context.SaveChanges();
+            //            context.ClearChanges();
+            //        }
+            //        Iterate();
+            //    }
+            //    context.SaveChanges();
+            //}
+            //StepFinish();
+            #endregion
+        }
+
+        private void SaveList<T>(IEnumerable<T> listToSave)
+        {
+            var list = listToSave.ToList();
+            int stepsCount = (list.Count / Consts.CommitStep) + 1;
+            StepStart(stepsCount);
+            while (list.Count > 0)
+            {
+                int count = Math.Min(Consts.CommitStep, list.Count);
+                var sublist = new List<object>();
+                for (int i = 0; i < count; i++)
+                {
+                    sublist.Add(list[i]);
+                }
+                list.RemoveRange(0, count);
+                SaveContextPart(sublist);
+                Iterate();
+            }
+            StepFinish();            
+        }
+
+        private void SaveContextPart(IEnumerable<object> entitiesList)
+        {
             using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
-                int i = 0;
-                foreach (CNV_OPLATA o in nom.OplataRecords)
-                {
-                    context.Add(o);
-                    if ((i++ % Consts.CommitStep) == 0)
-                    {
-                        context.SaveChanges();
-                        context.ClearChanges();
-                    }
-                    Iterate();
-                }
+                context.Add(entitiesList);
                 context.SaveChanges();
             }
-            StepFinish();
-            #endregion
         }
 
         private void ProcessOplata(NachoplManager nom, string tableName)
@@ -472,7 +501,7 @@ namespace _036_Izhevskoe
                 SOURCENAME = "Касса"
             };
 
-            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar("SELECT COUNT(*) FROM " + tableName)));
+            StepStart(1);
             using (var dr = Tmsource.ExecuteQueryToReader("SELECT RECNO() AS RECNO, * FROM " + tableName))
             {
                 while (dr.Read())
@@ -505,13 +534,13 @@ namespace _036_Izhevskoe
                     }
                     if (sKanal != 0)
                     {
-                        odef.SERVICECD = 6;
+                        odef.SERVICECD = 8;
                         odef.SERVICENAME = "Водоотведение";
                         nom.RegisterOplata(odef, lshet, za.Month, zayear, sKanal, dat, dat, tableName + "_" + recno);
                     }
                     if (sMusor != 0)
                     {
-                        odef.SERVICECD = 8;
+                        odef.SERVICECD = 6;
                         odef.SERVICENAME = "Вывоз ТБО";
                         nom.RegisterOplata(odef, lshet, za.Month, zayear, sMusor, dat, dat, tableName + "_" + recno);
                     }
@@ -573,7 +602,7 @@ namespace _036_Izhevskoe
                     {
                         ndef.REGIMCD = 29;
                         ndef.REGIMNAME = "Водоотведение, конвертация";
-                        ndef.SERVICECD = 6;
+                        ndef.SERVICECD = 8;
                         ndef.SERVICENAME = "Водоотведение";
                         nom.RegisterNach(ndef, lshet, za.Month, currentYear, sKanal, 0, za, tableName + "_" + recno);
                     }
@@ -581,7 +610,7 @@ namespace _036_Izhevskoe
                     {
                         ndef.REGIMCD = 30;
                         ndef.REGIMNAME = "Вывоз ТБО, конвертация";
-                        ndef.SERVICECD = 8;
+                        ndef.SERVICECD = 6;
                         ndef.SERVICENAME = "Вывоз ТБО";
                         nom.RegisterNach(ndef, lshet, za.Month, currentYear, sMusor, 0, za, tableName + "_" + recno);
                     }
@@ -615,39 +644,69 @@ namespace _036_Izhevskoe
             BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
 
             #region Формируем словаь с данными о счетчиках
-            DataTable dt = Tmsource.GetDataTable("F_LITS");
+            DataTable dt = Tmsource.ExecuteQuery("SELECT *, RECNO() AS RECNO FROM F_LITS");
             StepStart(dt.Rows.Count);
             
             foreach (DataRow dataRow in dt.Rows)
             {
                 var fLits = new F_litsRecord();
+                int recno = Convert.ToInt32(dataRow["RECNO"]);
+                var dat = new DateTime(Consts.CurrentYear, Consts.CurrentMonth, 1);
                 fLits.ReadDataRow(dataRow);
                 string lshet = Consts.GetLs(fLits.N_lits);
                 if (!String.IsNullOrWhiteSpace(fLits.N_shet4))
                 {
+                    string counterid = lshet + "_1";
                     var c = new CNV_COUNTER()
                     {
                         LSHET = lshet,
                         CNTNAME = "Счетчик холодной воды",
                         CNTTYPE = 106,
-                        COUNTERID = lshet + "_1",
+                        COUNTERID = counterid,
                         NAME = fLits.N_shet4,
                         SERIALNUM = fLits.N_shet4
                     };
                     _globalCountersDic.Add(new CounterKey() { Lshet = lshet, Code = 1 }, c);
+                    if (fLits.Shet_4 != 0)
+                    {
+                        var ci = new CNV_CNTRSIND()
+                        {
+                            COUNTERID = counterid,
+                            DOCUMENTCD = "F_LITS_" + recno,
+                            INDDATE = dat,
+                            INDICATION = fLits.Shet_4,
+                            OB_EM = 0,
+                            INDTYPE = 1
+                        };
+                        _globalCntrsinds.Add(ci);
+                    }
                 }
                 if (!String.IsNullOrWhiteSpace(fLits.N_shet3))
                 {
+                    string counterid = lshet + "_2";
                     var c = new CNV_COUNTER()
                     {
                         LSHET = lshet,
                         CNTNAME = "Счетчик холодной воды",
                         CNTTYPE = 106,
-                        COUNTERID = lshet + "_2",
+                        COUNTERID = counterid,
                         NAME = fLits.N_shet3,
                         SERIALNUM = fLits.N_shet3
                     };
                     _globalCountersDic.Add(new CounterKey() { Lshet = lshet, Code = 2 }, c);
+                    if (fLits.Shet_3 != 0)
+                    {
+                        var ci = new CNV_CNTRSIND()
+                        {
+                            COUNTERID = counterid,
+                            DOCUMENTCD = "F_LITS_" + recno,
+                            INDDATE = dat,
+                            INDICATION = fLits.Shet_3,
+                            OB_EM = 0,
+                            INDTYPE = 1
+                        };
+                        _globalCntrsinds.Add(ci);
+                    }
                 }
                 Iterate();
             }

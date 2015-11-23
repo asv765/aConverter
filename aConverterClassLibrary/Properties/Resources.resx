@@ -238,6 +238,12 @@
   <data name="CNV_CNV_01600_NACHISLIMPORT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_01600_nachislimport.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CNV_01700_PERERASHETIMPORT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cnv\cnv_cnv_01700_pererashetimport.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_02100_EXTLSHETS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\storedprocs\cnv\cnv_cnv_02100_extlshets.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CNV_DOCUMENTNUMERATOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_documentnumerator.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>

@@ -138,6 +138,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_01400_OPLATA");
                 l.Add("CNV_01500_SALDO");
                 l.Add("CNV_01600_NACHISLIMPORT");
+                l.Add("CNV_01700_PERERASHETIMPORT");
+                l.Add("CNV_02100_EXTLSHETS");
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {

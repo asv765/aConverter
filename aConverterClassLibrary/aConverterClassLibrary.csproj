@@ -168,6 +168,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\EXTORGACCOUNT.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
     <Compile Include="RecordsDataAccessORM\EXTORGSTREET.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
@@ -292,6 +295,8 @@
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01400_OPLATA.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01500_SALDO.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01600_NACHISLIMPORT.sql" />
+    <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01700_PERERASHETIMPORT.sql" />
+    <Content Include="Resources\StoredProcs\CNV\CNV_CNV_02100_EXTLSHETS.sql" />
     <Content Include="Resources\StoredProcs\CNV\cnv_cnv_documentnumerator.sql" />
     <Content Include="Resources\StoredProcs\CNV_ADD_WRONG_PARAMETER_EXCEPTION.sql" />
   </ItemGroup>

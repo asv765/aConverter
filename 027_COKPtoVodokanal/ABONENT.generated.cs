@@ -18,9 +18,9 @@ using Telerik.OpenAccess.Metadata;
 using Telerik.OpenAccess.Data.Common;
 using Telerik.OpenAccess.Metadata.Fluent;
 using Telerik.OpenAccess.Metadata.Fluent.Advanced;
-using aConverterClassLibrary.RecordsDataAccessORM;
+using _027_COKPToVodokanal;
 
-namespace aConverterClassLibrary.RecordsDataAccessORM	
+namespace _027_COKPToVodokanal	
 {
 	public partial class ABONENT
 	{
@@ -375,32 +375,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private short? _rESTRICT_LOAD_CHANGES_FROM_PS;
-		public virtual short? RESTRICT_LOAD_CHANGES_FROM_PS
-		{
-			get
-			{
-				return this._rESTRICT_LOAD_CHANGES_FROM_PS;
-			}
-			set
-			{
-				this._rESTRICT_LOAD_CHANGES_FROM_PS = value;
-			}
-		}
-		
-		private short? _rESTRICT_SEND_CHANGES_TO_PS;
-		public virtual short? RESTRICT_SEND_CHANGES_TO_PS
-		{
-			get
-			{
-				return this._rESTRICT_SEND_CHANGES_TO_PS;
-			}
-			set
-			{
-				this._rESTRICT_SEND_CHANGES_TO_PS = value;
-			}
-		}
-		
 		private HOUSE _hOUSE;
 		public virtual HOUSE HOUSE
 		{
@@ -414,12 +388,30 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		private IList<LCHARSABONENTLIST> _lCHARSABONENTLISTs = new List<LCHARSABONENTLIST>();
+		public virtual IList<LCHARSABONENTLIST> LCHARSABONENTLISTs
+		{
+			get
+			{
+				return this._lCHARSABONENTLISTs;
+			}
+		}
+		
 		private IList<EXTORGACCOUNT> _eXTORGACCOUNTs = new List<EXTORGACCOUNT>();
 		public virtual IList<EXTORGACCOUNT> EXTORGACCOUNTs
 		{
 			get
 			{
 				return this._eXTORGACCOUNTs;
+			}
+		}
+		
+		private IList<CCHARSABONENTLIST> _cCHARSABONENTLISTs = new List<CCHARSABONENTLIST>();
+		public virtual IList<CCHARSABONENTLIST> CCHARSABONENTLISTs
+		{
+			get
+			{
+				return this._cCHARSABONENTLISTs;
 			}
 		}
 		

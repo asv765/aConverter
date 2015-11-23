@@ -1,6 +1,6 @@
 SET TERM ^ ;
 
-create or alter procedure CNV$CNV_01000_COUNTERS (
+CREATE OR ALTER procedure CNV$CNV_01000_COUNTERS (
     NEEDDELETE smallint)
 as
 declare variable LSHET varchar(10);
@@ -27,10 +27,7 @@ declare variable INDTYPE integer;
 declare variable NEWDOCUMENTCD integer;
 declare variable BASEORG integer;
 BEGIN
-    /*
-    needdelete = 1 - удал€ютс€ счетчики, коды которых присутствовуют в таблице cnv$counters;
-    needdelete = 2 - удал€ютс€ счетчики по всем импортируемым абонентам
-    */
+    
     IF (needdelete = 1) THEN BEGIN
        DELETE FROM counterindication ci
             WHERE kod IN (SELECT equipmentid FROM parentequipment pe WHERE pe.importtag IN (SELECT counterid FROM cnv$counters));
@@ -88,7 +85,6 @@ BEGIN
     SELECT extorgcd FROM extorgspr eos WHERE eos.isbaseorganization = 1 INTO :baseorg;
     FOR SELECT pe.equipmentid, ci.oldind, ci.ob_em, ci.indication, ci.inddate, ci.documentcd, ci.indtype
     FROM cnv$cntrsind ci INNER JOIN parentequipment pe ON ci.counterid = pe.importtag
-    WHERE (ci.oldind <> 0 OR ci.ob_em<>0 OR ci.indication<>0)
         INTO :equipmentid, :oldind, :ob_em, :indication, :inddate, :documentcd, :indtype
     DO BEGIN
         SELECT documentcd
@@ -97,32 +93,8 @@ BEGIN
         INSERT INTO counterindication (counterindicationfactid, kod, indicationdate, documentcd, indicationvalue, previousindication, volume, indicationtype, dependfromcntindicationfactid)
         VALUES (NULL, :equipmentid, :inddate, :newdocumentcd, :indication, :oldind, :ob_em, :indtype, NULL);
     END
-END^
+END
+^
 
 SET TERM ; ^
 
-GRANT SELECT,INSERT,DELETE ON COUNTERINDICATION TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT SELECT,INSERT,DELETE ON PARENTEQUIPMENT TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT SELECT ON CNV$COUNTERS TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT SELECT,INSERT ON ABONENTSEQUIPMENT TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT SELECT ON CNV$ABONENT TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT SELECT ON SYSTEMVARIABLES TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT INSERT ON RESOURCECOUNTERS TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT SELECT,INSERT,UPDATE ON EQSTATUSES TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT INSERT ON EQUIPMENTPLOMBS TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT SELECT ON EXTORGSPR TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT SELECT ON CNV$CNTRSIND TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT EXECUTE ON PROCEDURE CNV$CNV_DOCUMENTNUMERATOR TO PROCEDURE CNV$CNV_01000_COUNTERS;
-
-GRANT EXECUTE ON PROCEDURE CNV$CNV_01000_COUNTERS TO SYSDBA;

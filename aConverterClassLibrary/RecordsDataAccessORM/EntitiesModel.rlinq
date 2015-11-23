@@ -1243,6 +1243,9 @@
             <orm:constraint name="R_58" delete-action="dbdefaultrule" destination-table="HOUSES" />
           </orm:reference>
         </orm:field>
+        <orm:field name="_eXTORGACCOUNTs" property="EXTORGACCOUNTs" behavior="readwrite" uniqueId="c02867e2-8aae-4899-9cbc-b8508b564682" type="aConverterClassLibrary.RecordsDataAccessORM.EXTORGACCOUNT">
+          <orm:collection element-class="aConverterClassLibrary.RecordsDataAccessORM.EXTORGACCOUNT" inverse-field="_aBONENT" order-by="" uniqueId="b6b0504c-17e6-42d1-ac54-fa3d6450fc6b" />
+        </orm:field>
         <orm:index name="XIETELABONENTS">
           <orm:columnMapping>
             <orm:column name="TEL" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
@@ -1322,6 +1325,39 @@
         <orm:index name="CNV$AADDCHAR_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="EXTORGACCOUNT" uniqueId="f42eb915-cf7d-4add-90fc-62867862d986">
+        <orm:table name="EXTORGACCOUNTS" />
+        <orm:identity>
+          <orm:multiple-field>
+            <orm:single-field field-name="_eXTORGCD" />
+            <orm:single-field field-name="_lSHET" />
+          </orm:multiple-field>
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_eXTORGCD" property="EXTORGCD" behavior="readwrite" uniqueId="32276667-c672-40f0-8df8-57c0c44764bb" type="System.Int32">
+          <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="bfe9d8a4-9f7b-4b64-ad41-10659717a81d" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_eXTLSHET" property="EXTLSHET" behavior="readwrite" uniqueId="cde5cddf-38c6-4e33-b379-c104e686a2dd" type="System.String">
+          <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_aBONENT" property="ABONENT" behavior="readwrite" uniqueId="d24410cd-91f5-4536-b22c-ce90c55b701c" type="aConverterClassLibrary.RecordsDataAccessORM.ABONENT">
+          <orm:reference uniqueId="b6b0504c-17e6-42d1-ac54-fa3d6450fc6b" association-name="EXTORGACCOUNTHasABONENT">
+            <orm:sharedfield name="_lSHET" target-class="aConverterClassLibrary.RecordsDataAccessORM.ABONENT" target-field="_lSHET" />
+            <orm:constraint name="R_843" delete-action="dbdefaultrule" destination-table="ABONENTS" />
+          </orm:reference>
+        </orm:field>
+        <orm:index name="XAKEXTORGACCOUNTS">
+          <orm:columnMapping>
+            <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+          <orm:columnMapping>
+            <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
           </orm:columnMapping>
         </orm:index>
       </orm:class>
@@ -1819,6 +1855,22 @@
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
+      </orm:table>
+      <orm:table name="EXTORGACCOUNTS">
+        <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="XAKEXTORGACCOUNTS">
+          <orm:columnMapping>
+            <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+          <orm:columnMapping>
+            <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
+          </orm:columnMapping>
+        </orm:index>
+        <orm:constraint name="R_843" delete-action="dbdefaultrule" destination-table="ABONENTS">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
+        </orm:constraint>
       </orm:table>
     </orm:schema>
     <orm:relational-naming-settings>
@@ -2340,6 +2392,9 @@
         <classHasNavigationalProperties Id="c41c48f3-0f75-4512-a73d-a7802f2eaa0e">
           <NavigationalProperty Id="cd3584a9-0e67-408a-955d-66f923ac5d52" name="HOUSE" type="HOUSE" label="HOUSE : HOUSE" nullable="true" kind="Persistent" fieldName="_hOUSE" isDependent="false" isManaged="false" />
         </classHasNavigationalProperties>
+        <classHasNavigationalProperties Id="2ecf8609-641e-45e1-88b7-ea952c76e5b2">
+          <NavigationalProperty Id="c02867e2-8aae-4899-9cbc-b8508b564682" name="EXTORGACCOUNTs" type="IList&lt;EXTORGACCOUNT&gt;" label="EXTORGACCOUNTs : IList&lt;EXTORGACCOUNT&gt;" nullable="true" kind="Persistent" fieldName="_eXTORGACCOUNTs" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
       </navigationalProperties>
     </DomainClass>
     <DomainClass Id="503da74b-db7e-48eb-9b2f-0b9aed5bb8cf" name="STREET" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="STREETCD">
@@ -2356,6 +2411,31 @@
       <Property Id="ef607992-3b8e-49a2-9769-76f56667a306" name="ADDCHARCD" type="Int32" label="ADDCHARCD : Int32" nullable="true" kind="Persistent" fieldName="_aDDCHARCD" />
       <Property Id="0491f64d-393d-42fc-a8d8-47a13f81e41f" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
       <Property Id="aac2f9c8-718c-4d0d-8927-84ff8f5194a3" name="VALUE" label="VALUE : String" kind="Persistent" fieldName="_vALUE" />
+    </DomainClass>
+    <DomainClass Id="f42eb915-cf7d-4add-90fc-62867862d986" name="EXTORGACCOUNT" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="32276667-c672-40f0-8df8-57c0c44764bb" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" kind="Persistent" identity="true" fieldName="_eXTORGCD" />
+      <Property Id="bfe9d8a4-9f7b-4b64-ad41-10659717a81d" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
+      <Property Id="cde5cddf-38c6-4e33-b379-c104e686a2dd" name="EXTLSHET" label="EXTLSHET : String" kind="Persistent" fieldName="_eXTLSHET" />
+      <AssociationTargets>
+        <Association Id="b6b0504c-17e6-42d1-ac54-fa3d6450fc6b" SourceMultiplicity="One" name="EXTORGACCOUNTHasABONENT">
+          <DomainClassMoniker name="/AbonentConvertationEntitiesModel/ABONENT" />
+          <targetNavigationalProperty>
+            <associationDefinesTargetProperty Id="03b890f9-f927-4e88-807e-de3073b5fe60">
+              <NavigationalPropertyMoniker name="/AbonentConvertationEntitiesModel/ABONENT/EXTORGACCOUNTs" />
+            </associationDefinesTargetProperty>
+          </targetNavigationalProperty>
+          <sourceNavigationalProperty>
+            <associationDefinesSourceProperty Id="fefe393b-f2c6-4257-bf49-0455ab53b3fb">
+              <NavigationalPropertyMoniker name="/AbonentConvertationEntitiesModel/EXTORGACCOUNT/ABONENT" />
+            </associationDefinesSourceProperty>
+          </sourceNavigationalProperty>
+        </Association>
+      </AssociationTargets>
+      <navigationalProperties>
+        <classHasNavigationalProperties Id="d8677b65-98b9-42db-82a6-5a26a89a39b4">
+          <NavigationalProperty Id="d24410cd-91f5-4536-b22c-ce90c55b701c" name="ABONENT" type="ABONENT" label="ABONENT : ABONENT" nullable="true" kind="Persistent" fieldName="_aBONENT" isDependent="false" isManaged="false" />
+        </classHasNavigationalProperties>
+      </navigationalProperties>
     </DomainClass>
   </Types>
   <domainContext>
@@ -2385,6 +2465,7 @@
         <entitySetProperty name="ABONENTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="ABONENT" label="ABONENTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.ABONENT&gt;" />
         <entitySetProperty name="STREETs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="STREET" label="STREETs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.STREET&gt;" />
         <entitySetProperty name="CNV_AADDCHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_AADDCHAR" label="CNV_AADDCHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_AADDCHAR&gt;" />
+        <entitySetProperty name="EXTORGACCOUNTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="EXTORGACCOUNT" label="EXTORGACCOUNTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.EXTORGACCOUNT&gt;" />
       </domainContainer>
     </domainModelHasDomainContext>
   </domainContext>

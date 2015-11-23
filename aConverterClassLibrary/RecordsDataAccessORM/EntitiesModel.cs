@@ -242,6 +242,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		public IQueryable<EXTORGACCOUNT> EXTORGACCOUNTs 
+		{
+			get
+			{
+				return this.GetAll<EXTORGACCOUNT>();
+			}
+		}
+		
 		public static BackendConfiguration GetBackendConfiguration()
 		{
 			BackendConfiguration backend = new BackendConfiguration();
@@ -356,6 +364,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			get;
 		}
 		IQueryable<CNV_AADDCHAR> CNV_AADDCHARs
+		{
+			get;
+		}
+		IQueryable<EXTORGACCOUNT> EXTORGACCOUNTs
 		{
 			get;
 		}

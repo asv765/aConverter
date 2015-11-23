@@ -18,9 +18,9 @@ using Telerik.OpenAccess.Metadata;
 using Telerik.OpenAccess.Data.Common;
 using Telerik.OpenAccess.Metadata.Fluent;
 using Telerik.OpenAccess.Metadata.Fluent.Advanced;
-using aConverterClassLibrary.RecordsDataAccessORM;
+using _037_COKPToVodokanal;
 
-namespace aConverterClassLibrary.RecordsDataAccessORM	
+namespace _037_COKPToVodokanal	
 {
 	public partial class ABONENT
 	{
@@ -151,19 +151,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			set
 			{
 				this._sECOND_NAME = value;
-			}
-		}
-		
-		private string _tEL;
-		public virtual string TEL
-		{
-			get
-			{
-				return this._tEL;
-			}
-			set
-			{
-				this._tEL = value;
 			}
 		}
 		
@@ -401,6 +388,45 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		private short? _aGREEMENTPERSONALINFO;
+		public virtual short? AGREEMENTPERSONALINFO
+		{
+			get
+			{
+				return this._aGREEMENTPERSONALINFO;
+			}
+			set
+			{
+				this._aGREEMENTPERSONALINFO = value;
+			}
+		}
+		
+		private string _uNIFIEDACCOUNT;
+		public virtual string UNIFIEDACCOUNT
+		{
+			get
+			{
+				return this._uNIFIEDACCOUNT;
+			}
+			set
+			{
+				this._uNIFIEDACCOUNT = value;
+			}
+		}
+		
+		private short? _cHANGE4PAYSYSTEM;
+		public virtual short? CHANGE4PAYSYSTEM
+		{
+			get
+			{
+				return this._cHANGE4PAYSYSTEM;
+			}
+			set
+			{
+				this._cHANGE4PAYSYSTEM = value;
+			}
+		}
+		
 		private HOUSE _hOUSE;
 		public virtual HOUSE HOUSE
 		{
@@ -414,12 +440,39 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		private IList<LCHARSABONENTLIST> _lCHARSABONENTLISTs = new List<LCHARSABONENTLIST>();
+		public virtual IList<LCHARSABONENTLIST> LCHARSABONENTLISTs
+		{
+			get
+			{
+				return this._lCHARSABONENTLISTs;
+			}
+		}
+		
 		private IList<EXTORGACCOUNT> _eXTORGACCOUNTs = new List<EXTORGACCOUNT>();
 		public virtual IList<EXTORGACCOUNT> EXTORGACCOUNTs
 		{
 			get
 			{
 				return this._eXTORGACCOUNTs;
+			}
+		}
+		
+		private IList<CCHARSABONENTLIST> _cCHARSABONENTLISTs = new List<CCHARSABONENTLIST>();
+		public virtual IList<CCHARSABONENTLIST> CCHARSABONENTLISTs
+		{
+			get
+			{
+				return this._cCHARSABONENTLISTs;
+			}
+		}
+		
+		private IList<ABONENTPHONE> _aBONENTPHONEs = new List<ABONENTPHONE>();
+		public virtual IList<ABONENTPHONE> ABONENTPHONEs
+		{
+			get
+			{
+				return this._aBONENTPHONEs;
 			}
 		}
 		
