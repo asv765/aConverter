@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aConverter", "aConverter\aConverter.csproj", "{4E2D1A8E-E351-4F1A-A8DC-85FAD77B5216}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -36,6 +36,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "037_COKPToVodokanal", "037_COKPToVodokanal\037_COKPToVodokanal.csproj", "{D65D73F3-D774-48AF-978B-974281829B1D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "027_COKPToVodokanal", "027_COKPtoVodokanal\027_COKPToVodokanal.csproj", "{81F429FB-78D1-419D-B7C6-85F82D8CD1B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "038_Murmino", "038_Murmino\038_Murmino.csproj", "{E9E45836-C938-4C09-A4AC-E00375F02340}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,6 +154,18 @@ Global
 		{81F429FB-78D1-419D-B7C6-85F82D8CD1B3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{81F429FB-78D1-419D-B7C6-85F82D8CD1B3}.Release|x64.ActiveCfg = Release|Any CPU
 		{81F429FB-78D1-419D-B7C6-85F82D8CD1B3}.Release|x86.ActiveCfg = Release|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Release|x64.ActiveCfg = Release|Any CPU
+		{E9E45836-C938-4C09-A4AC-E00375F02340}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -162,9 +176,7 @@ Global
 		{F7AC8075-BBD4-48A0-ABE1-E9CCEB6481FB} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{D65D73F3-D774-48AF-978B-974281829B1D} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{81F429FB-78D1-419D-B7C6-85F82D8CD1B3} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
+		{E9E45836-C938-4C09-A4AC-E00375F02340} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = aConverter.vsmdi
