@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
 using aConverterClassLibrary.RecordsDataAccessORM;
@@ -12,6 +11,13 @@ namespace _038_Murmino
 {
     public static class Consts
     {
+        /// <summary>
+        /// Количество записей на каждый инсерт
+        /// </summary>
+        public const int InsertRecordCount = 1000;
+
+        public const string RecodeTableFileName =
+            @"D:\Work\C#\C#Projects\aConverter\038_Murmino\Source\Таблица перекодировки2.xls";
         public static string GetLs(long intls)
         {
             return String.Format("86{0:D6}", intls);
@@ -167,22 +173,186 @@ namespace _038_Murmino
             AbonentRecordUtils.SetUniqueHouseCd(lca, 0);
             StepFinish();
 
-            StepStart(1);
+            StepStart(lca.Count / Consts.InsertRecordCount + 1);
             using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
-                acem.Add(lca);
-                acem.SaveChanges();
+                for (int i = 0; i < lca.Count; i++)
+                {
+                    acem.Add(lca[i]);
+                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == lca.Count - 1)
+                    {
+                        acem.SaveChanges();
+                        Iterate();
+                    }
+                }
             }
-            Iterate();
             StepFinish();
         }
     }
 
+    /// <summary>
+    /// Конвертирует данные о количественных характеристиках
+    /// </summary>
+    public class ConvertChars : ConvertCase
+    {
+        public ConvertChars()
+        {
+            ConvertCaseName = "CHARS - данные о количественных характеристиках";
+            Position = 30;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(2);
+
+            BufferEntitiesManager.DropTableData("CNV$CHARS");
+            DataTable dt = Tmsource.GetDataTable("CHARS");
+            DataTable recodeTable = Utils.ReadExcelFile(Consts.RecodeTableFileName, "Cchars");
+            var lcc = new List<CNV_CHAR>();
+
+            StepStart(dt.Rows.Count);
+            var chars = new CharsRecord();
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                chars.ReadDataRow(dataRow);
+
+                int charCd = 0;
+                string charName = null;
+                foreach (DataRow row in recodeTable.Rows)
+                {
+                    if (Convert.ToInt64(row["FIELDVALUE"]) != chars.Charcd) continue;
+                    charCd = Convert.ToInt32(row["CCHARCD"]);
+                    charName = row["CCHARNAME"].ToString();
+                    break;
+                }
+
+                if (charCd == 0 || String.IsNullOrWhiteSpace(charName))
+                    throw new Exception("Неизвестный идентификатор количественной характеристики " + chars.Charcd);
+
+                var c = new CNV_CHAR
+                {
+                    LSHET = Consts.GetLs(Convert.ToInt64(chars.Lshet)),
+                    CHARCD = charCd,
+                    CHARNAME = charName,
+                    DATE_ = chars.Date,
+                    VALUE_ = chars.Value_
+                };
+
+                lcc.Add(c);
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(lcc.Count / Consts.InsertRecordCount + 1);
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = 0; i < lcc.Count; i++)
+                {
+                    acem.Add(lcc[i]);
+                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == lcc.Count - 1)
+                    {
+                        acem.SaveChanges();
+                        Iterate();
+                    }
+                }
+            }
+            StepFinish();
+        }
+    }
+
+    /// <summary>
+    /// Конвертация качественных характеристик
+    /// Данные в таблице кодировки должны быть отсортированы по исходному ID!
+    /// </summary>
+    public class ConvertLChars : ConvertCase
+    {
+        public ConvertLChars()
+        {
+            ConvertCaseName = "LCHARS - данные о параметрах потребления";
+            Position = 40;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(2);
+
+            BufferEntitiesManager.DropTableData("CNV$LCHARS");
+            DataTable dt = Tmsource.GetDataTable("ABTARIFS");
+            DataTable recodeTable = Utils.ReadExcelFile(Consts.RecodeTableFileName, "Lchars");
+            var llc = new List<CNV_LCHAR>();
+
+            StepStart(dt.Rows.Count);
+            var lchars = new AbtarifsRecord();
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                lchars.ReadDataRow(dataRow);
+
+                bool recodeFound = false;
+                foreach (DataRow row in recodeTable.Rows)
+                {
+                    if (Convert.ToInt64(row["FIELDVALUE"]) != lchars.Grtarifcd)
+                    {
+                        if (recodeFound) break;
+                        continue;
+                    }
+                    recodeFound = true;
+                    var lc = new CNV_LCHAR
+                    {
+                        LSHET = Consts.GetLs(Convert.ToInt64(lchars.Lshet)),
+                        LCHARCD = Convert.ToInt32(row["LCHARCD"]),
+                        LCHARNAME = row["LCHARNAME"].ToString(),
+                        VALUEDESC = row["LCHARVALUEDESC"].ToString(),
+                        VALUE_ = Convert.ToInt32(row["LCHARVALUE"]),
+                        DATE_ = new DateTime(2015, 1, 1)
+                    };
+                    llc.Add(lc);
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(llc.Count / Consts.InsertRecordCount + 1);
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = 0; i < llc.Count; i++)
+                {
+                    acem.Add(llc[i]);
+                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == llc.Count - 1)
+                    {
+                        acem.SaveChanges();
+                        Iterate();
+                    }
+                }
+            }
+            StepFinish();
+        }
+    }
+
+    /// <summary>
+    /// Представляет известный элемент адреса
+    /// </summary>
     public class KnownAddress
     {
+        /// <summary>
+        /// Список известных имен
+        /// </summary>
         public string[] ParsingNames;
 
+        /// <summary>
+        /// Используемое имя
+        /// </summary>
         public string TrueName;
+        /// <summary>
+        /// Используемый префикс
+        /// </summary>
         public string TruePrefix;
 
         #region Список известных городов
