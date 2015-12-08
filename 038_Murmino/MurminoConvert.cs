@@ -290,15 +290,15 @@ namespace _038_Murmino
             var llc = new List<CNV_LCHAR>();
 
             StepStart(dt.Rows.Count);
-            var lchars = new AbtarifsRecord();
+            var lchar = new AbtarifsRecord();
             foreach (DataRow dataRow in dt.Rows)
             {
-                lchars.ReadDataRow(dataRow);
+                lchar.ReadDataRow(dataRow);
 
                 bool recodeFound = false;
                 foreach (DataRow row in recodeTable.Rows)
                 {
-                    if (Convert.ToInt64(row["FIELDVALUE"]) != lchars.Grtarifcd)
+                    if (Convert.ToInt64(row["FIELDVALUE"]) != lchar.Grtarifcd)
                     {
                         if (recodeFound) break;
                         continue;
@@ -306,7 +306,7 @@ namespace _038_Murmino
                     recodeFound = true;
                     var lc = new CNV_LCHAR
                     {
-                        LSHET = Consts.GetLs(Convert.ToInt64(lchars.Lshet)),
+                        LSHET = Consts.GetLs(Convert.ToInt64(lchar.Lshet)),
                         LCHARCD = Convert.ToInt32(row["LCHARCD"]),
                         LCHARNAME = row["LCHARNAME"].ToString(),
                         VALUEDESC = row["LCHARVALUEDESC"].ToString(),
@@ -326,6 +326,138 @@ namespace _038_Murmino
                 {
                     acem.Add(llc[i]);
                     if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == llc.Count - 1)
+                    {
+                        acem.SaveChanges();
+                        Iterate();
+                    }
+                }
+            }
+            StepFinish();
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных о счетчиках
+    /// </summary>
+    public class ConvertCounters : ConvertCase
+    {
+        public ConvertCounters()
+        {
+            ConvertCaseName = "COUNTERS - данные о счетчиках";
+            Position = 50;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(2);
+
+            BufferEntitiesManager.DropTableData("CNV$COUNTERS");
+            DataTable dt = Tmsource.GetDataTable("COUNTERS");
+            var lcn = new List<CNV_COUNTER>();
+
+            StepStart(dt.Rows.Count);
+            var counter = new CountersRecord();
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                counter.ReadDataRow(dataRow);
+
+                var c = new CNV_COUNTER
+                {
+                    COUNTERID = counter.Lshet.Trim() + "_" + counter.Counterid.Trim(),
+                    LSHET = Consts.GetLs(Convert.ToInt64(counter.Lshet)),
+                    CNTTYPE = 106,
+                    CNTNAME = "Счетчик холодной воды",
+                    SETUPDATE = new DateTime(2014,1,1),
+                    //SERIALNUM = ,
+                    //SETUPPLACE = ,
+                    //PLOMBDATE = ,
+                    //PLOMBNAME = ,
+                    //LASTPOV = ,
+                    //NEXTPOV = ,
+                    //PRIM_ = ,
+                    //DEACTDATE = ,
+                    //TAG = ,
+                    NAME = counter.Name
+                };
+
+                lcn.Add(c);
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(lcn.Count / Consts.InsertRecordCount + 1);
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = 0; i < lcn.Count; i++)
+                {
+                    acem.Add(lcn[i]);
+                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == lcn.Count - 1)
+                    {
+                        acem.SaveChanges();
+                        Iterate();
+                    }
+                }
+            }
+            StepFinish();
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных о показаниях счетчиков
+    /// </summary>
+    public class ConvertCntrsind : ConvertCase
+    {
+        public ConvertCntrsind()
+        {
+            ConvertCaseName = "CNTRSIND - данные о показаниях счетчиках";
+            Position = 60;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(2);
+
+            BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
+            DataTable dt = Tmsource.GetDataTable("CNTRSIND");
+            var lci = new List<CNV_CNTRSIND>();
+
+            StepStart(dt.Rows.Count);
+            var counterind = new CntrsindRecord();
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                counterind.ReadDataRow(dataRow);
+
+                var c = new CNV_CNTRSIND
+                {
+                    COUNTERID = counterind.Lshet.Trim() + "_" + counterind.Counterid.Trim(),
+                    //DOCUMENTCD = ,
+                    //OLDIND = ,
+                    //OB_EM = ,
+                    INDICATION = counterind.Indication,
+                    INDDATE = counterind.Inddate,
+                    INDTYPE = 0,
+                };
+
+                lci.Add(c);
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(lci.Count / Consts.InsertRecordCount + 1);
+            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = 0; i < lci.Count; i++)
+                {
+                    acem.Add(lci[i]);
+                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == lci.Count - 1)
                     {
                         acem.SaveChanges();
                         Iterate();

@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,9 @@
     <Compile Include="Record\AbonentRecord.cs" />
     <Compile Include="Record\AbtarifsRecord.cs" />
     <Compile Include="Record\CharsRecord.cs" />
+    <Compile Include="Record\CntrsindRecord.cs" />
+    <Compile Include="Record\CountersRecord.cs" />
+    <Compile Include="Record\NachopRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\aConverterClassLibrary\aConverterClassLibrary.csproj">
