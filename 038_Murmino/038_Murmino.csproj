@@ -53,6 +53,8 @@
     <Compile Include="Record\CntrsindRecord.cs" />
     <Compile Include="Record\CountersRecord.cs" />
     <Compile Include="Record\NachopRecord.cs" />
+    <Compile Include="Record\NachRecord.cs" />
+    <Compile Include="Record\OplataRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\aConverterClassLibrary\aConverterClassLibrary.csproj">

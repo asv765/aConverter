@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
 using aConverterClassLibrary.RecordsDataAccessORM;
@@ -173,20 +174,7 @@ namespace _038_Murmino
             AbonentRecordUtils.SetUniqueHouseCd(lca, 0);
             StepFinish();
 
-            StepStart(lca.Count / Consts.InsertRecordCount + 1);
-            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                for (int i = 0; i < lca.Count; i++)
-                {
-                    acem.Add(lca[i]);
-                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == lca.Count - 1)
-                    {
-                        acem.SaveChanges();
-                        Iterate();
-                    }
-                }
-            }
-            StepFinish();
+            SaveList(lca, Consts.InsertRecordCount);
         }
     }
 
@@ -247,20 +235,8 @@ namespace _038_Murmino
             }
             StepFinish();
 
-            StepStart(lcc.Count / Consts.InsertRecordCount + 1);
-            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                for (int i = 0; i < lcc.Count; i++)
-                {
-                    acem.Add(lcc[i]);
-                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == lcc.Count - 1)
-                    {
-                        acem.SaveChanges();
-                        Iterate();
-                    }
-                }
-            }
-            StepFinish();
+            SaveList(lcc, Consts.InsertRecordCount);
+
         }
     }
 
@@ -319,20 +295,7 @@ namespace _038_Murmino
             }
             StepFinish();
 
-            StepStart(llc.Count / Consts.InsertRecordCount + 1);
-            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                for (int i = 0; i < llc.Count; i++)
-                {
-                    acem.Add(llc[i]);
-                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == llc.Count - 1)
-                    {
-                        acem.SaveChanges();
-                        Iterate();
-                    }
-                }
-            }
-            StepFinish();
+            SaveList(llc, Consts.InsertRecordCount);
         }
     }
 
@@ -365,12 +328,25 @@ namespace _038_Murmino
             {
                 counter.ReadDataRow(dataRow);
 
+                int cnttype;
+                string cntname;
+                if (counter.Name.Contains("гор.вода"))
+                {
+                    cnttype = 112;
+                    cntname = "Сч. гор. в";
+                }
+                else
+                {
+                    cnttype = 106;
+                    cntname = "Счетчик холодной воды";
+                }
+
                 var c = new CNV_COUNTER
                 {
                     COUNTERID = counter.Lshet.Trim() + "_" + counter.Counterid.Trim(),
                     LSHET = Consts.GetLs(Convert.ToInt64(counter.Lshet)),
-                    CNTTYPE = 106,
-                    CNTNAME = "Счетчик холодной воды",
+                    CNTTYPE = cnttype,
+                    CNTNAME = cntname,
                     SETUPDATE = new DateTime(2014,1,1),
                     //SERIALNUM = ,
                     //SETUPPLACE = ,
@@ -389,20 +365,7 @@ namespace _038_Murmino
             }
             StepFinish();
 
-            StepStart(lcn.Count / Consts.InsertRecordCount + 1);
-            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                for (int i = 0; i < lcn.Count; i++)
-                {
-                    acem.Add(lcn[i]);
-                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == lcn.Count - 1)
-                    {
-                        acem.SaveChanges();
-                        Iterate();
-                    }
-                }
-            }
-            StepFinish();
+            SaveList(lcn, Consts.InsertRecordCount);
         }
     }
 
@@ -426,7 +389,7 @@ namespace _038_Murmino
             SetStepsCount(2);
 
             BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
-            DataTable dt = Tmsource.GetDataTable("CNTRSIND");
+            DataTable dt = Tmsource.ExecuteQuery("SELECT *, RECNO() AS RECNO FROM CNTRSIND");
             var lci = new List<CNV_CNTRSIND>();
 
             StepStart(dt.Rows.Count);
@@ -438,7 +401,7 @@ namespace _038_Murmino
                 var c = new CNV_CNTRSIND
                 {
                     COUNTERID = counterind.Lshet.Trim() + "_" + counterind.Counterid.Trim(),
-                    //DOCUMENTCD = ,
+                    DOCUMENTCD = String.Format("{0}_{1}_", counterind.Counterid.Trim().TrimStart('0'), dataRow["RECNO"]),
                     //OLDIND = ,
                     //OB_EM = ,
                     INDICATION = counterind.Indication,
@@ -451,20 +414,234 @@ namespace _038_Murmino
             }
             StepFinish();
 
-            StepStart(lci.Count / Consts.InsertRecordCount + 1);
-            using (var acem = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            SaveList(lci, Consts.InsertRecordCount);
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных истории начислений
+    /// </summary>
+    public class ConvertNachopl : ConvertCase
+    {
+        public ConvertNachopl()
+        {
+            ConvertCaseName = "NACHOPL - данные истории начислений";
+            Position = 70;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(11);
+
+            BufferEntitiesManager.DropTableData("CNV$NACHOPL");
+            BufferEntitiesManager.DropTableData("CNV$OPLATA");
+            BufferEntitiesManager.DropTableData("CNV$NACH");
+
+            DataTable dtNach = Tmsource.ExecuteQuery("SELECT *, RECNO() AS RECNO FROM NACH");
+            DataTable dtOpl = Tmsource.ExecuteQuery("SELECT *, RECNO() AS RECNO FROM OPLATA");
+
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+
+            var nach = new NachRecord();
+            var oplata = new OplataRecord();
+
+            #region Начисления
+            StepStart(dtNach.Rows.Count);
+            foreach (DataRow dataRow in dtNach.Rows)
             {
-                for (int i = 0; i < lci.Count; i++)
+                nach.ReadDataRow(dataRow);
+
+                string documentcd = String.Format("{0}_{1}", nach.Lshet.Trim().TrimStart('0'), dataRow["RECNO"]);
+
+                int regimcd;
+                string regimname;
+                int servicecd;
+                string servicename;
+                DifineServiceType((int) nach.Servicecd, out regimcd, out regimname, out servicecd, out servicename);
+
+                var ndef = new CNV_NACH
                 {
-                    acem.Add(lci[i]);
-                    if ((i != 0 && i % Consts.InsertRecordCount == 0) || i == lci.Count - 1)
-                    {
-                        acem.SaveChanges();
-                        Iterate();
-                    }
-                }
+                    VOLUME = nach.Volume,
+                    REGIMCD = regimcd,
+                    REGIMNAME = regimname,
+                    SERVICECD = servicecd,
+                    SERVICENAME = servicename,
+                    TYPE_ = 0
+                };
+                nm.RegisterNach(ndef, Consts.GetLs(Convert.ToInt64(nach.Lshet)), (int) nach.Month, (int) nach.Year,
+                    nach.Fnath, nach.Prochl, nach.Date_vv, documentcd);
+
+                Iterate();
             }
             StepFinish();
+            #endregion
+
+            #region Оплаты
+            StepStart(dtOpl.Rows.Count);
+            foreach (DataRow dataRow in dtOpl.Rows)
+            {
+                oplata.ReadDataRow(dataRow);
+
+                string documentcd = String.Format("{0}_{1}", oplata.Lshet.Trim().TrimStart('0'), dataRow["RECNO"]);
+
+                int regimcd;
+                string regimname;
+                int servicecd;
+                string servicename;
+                DifineServiceType((int)oplata.Servicecd, out regimcd, out regimname, out servicecd, out servicename);
+
+                int sourcecd;
+                string sourcename;
+                switch (oplata.Sourcecd)
+                {
+                    case 1:
+                        sourcecd = 17;
+                        sourcename = "Касса";
+                        break;
+
+                    case 4:
+                        sourcecd = 19;
+                        sourcename = "Прочие";
+                        break;
+
+                    default:
+                        throw new Exception("Неизвестый источник оплат и сдентификатором " + oplata.Sourcecd);
+                }
+
+                var odef = new CNV_OPLATA
+                {
+                    SERVICECD = servicecd, 
+                    SERVICENAME = servicename,
+                    SOURCECD = sourcecd,
+                    SOURCENAME = sourcename
+                };
+                nm.RegisterOplata(odef, Consts.GetLs(Convert.ToInt64(oplata.Lshet)), (int) oplata.Month,
+                    (int) oplata.Year, oplata.Summa, oplata.Docdate, oplata.Date_vv, documentcd);
+
+                Iterate();
+            }
+            StepFinish();
+            #endregion
+
+            #region Сальдо
+            ConvertSaldoByServices(new[] { 1 }, 2, "Содержание жилья", nm);
+            ConvertSaldoByServices(new[] { 8, 9, 10, 11, 12, 17, 20, 21 }, 4, "Холодная вода", nm);
+            ConvertSaldoByServices(new[] { 6, 13, 14, 15 }, 8, "Водоотведение", nm);
+            ConvertSaldoByServices(new[] { 4 }, 6, "Вывоз ТБО", nm);
+            ConvertSaldoByServices(new[] { 2 }, 3, "Отопление", nm);
+            ConvertSaldoByServices(new[] { 5 }, 5, "Горячая вода", nm);
+            #endregion
+
+            SaveList(nm.NachRecords, Consts.InsertRecordCount);
+            SaveList(nm.OplataRecords, Consts.InsertRecordCount);
+            SaveList(nm.NachoplRecords.Values, Consts.InsertRecordCount);
+        }
+        
+        private void ConvertSaldoByServices(IEnumerable<int> originServices, int servicecd, string servicename, NachoplManager nm)
+        {
+            string services = "";
+            foreach (var originService in originServices)
+            {
+                services += originService + ",";
+            }
+            services = services.Substring(0, services.Length - 1);
+            DataTable dtNachopl =
+                Tmsource.ExecuteQuery(String.Format(@"SELECT
+                                                      n.LSHET,
+                                                      n.MONTH,
+                                                      n.YEAR,
+                                                      SUM(n.BDEBET) AS BDEBET,
+                                                      SUM(n.EDEBET) AS EDEBET,
+                                                      {0} AS SERVICECD,
+                                                      '{1}' AS SERVICENAM,
+                                                      RECNO() AS RECNO
+                                                    FROM NACHOPL n
+                                                    WHERE n.SERVICECD IN ({2})
+                                                    GROUP BY n.LSHET,
+                                                             n.MONTH,
+                                                             n.YEAR",
+                    servicecd, servicename, services));
+            var nachopl = new NachoplRecord();
+            StepStart(dtNachopl.Rows.Count);
+            foreach (DataRow dataRow in dtNachopl.Rows)
+            {
+                nachopl.ReadDataRow(dataRow);
+
+                string lshet = Consts.GetLs(Convert.ToInt64(nachopl.Lshet));
+                nm.RegisterBeginSaldo(lshet, (int)nachopl.Month, (int)nachopl.Year, servicecd, servicename,
+                    nachopl.Bdebet);
+                nm.RegisterEndSaldo(lshet, (int)nachopl.Month, (int)nachopl.Year, servicecd, servicename,
+                    nachopl.Edebet);
+
+                Iterate();
+            }
+            StepFinish();
+        }
+
+        private void DifineServiceType(int originServicecd, out int regimcd, out string regimname, out int servicecd,
+            out string servicename)
+        {
+            switch (originServicecd)
+            {
+                case 1:
+                    regimcd = 31;
+                    regimname = "Содержание жилья для конвертации";
+                    servicecd = 2;
+                    servicename = "Содержание жилья";
+                    break;
+
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 17:
+                case 20:
+                case 21:
+                    regimcd = 32;
+                    regimname = "Холодная вода для конвертации";
+                    servicecd = 4;
+                    servicename = "Холодная вода";
+                    break;
+
+                case 4:
+                    regimcd = 30;
+                    regimname = "Вывоз ТБО для конвертации";
+                    servicecd = 6;
+                    servicename = "Вывоз ТБО";
+                    break;
+
+                case 6:
+                case 13:
+                case 14:
+                case 15:
+                    regimcd = 29;
+                    regimname = "Водоотведение для конвертации";
+                    servicecd = 8;
+                    servicename = "Водоотведение";
+                    break;
+
+                case 2:
+                    regimcd = 36;
+                    regimname = "Отопление для конвертации";
+                    servicecd = 3;
+                    servicename = "Отопление";
+                    break;
+
+                case 5:
+                    regimcd = 35;
+                    regimname = "Горячая вода для конвертации";
+                    servicecd = 5;
+                    servicename = "Горячая вода";
+                    break;
+
+                default:
+                    throw new Exception(String.Format("Неизвестная услуга с идентификатором {0}", originServicecd));
+            }
         }
     }
 

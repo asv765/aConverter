@@ -250,6 +250,15 @@ namespace aConverter.Forms
                     }
                     catch (Exception ex)
                     {
+                        string errorMessage = ex.Message;
+                        var innerExeption = ex.InnerException;
+                        while (innerExeption != null)
+                        {
+                            errorMessage += "; " + innerExeption.Message;
+                            innerExeption = innerExeption.InnerException;
+                        }
+                        MessageBox.Show(ex.ToString(), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
+                            MessageBoxDefaultButton.Button1);
                         cc.Result = ConvertCaseStatus.Ошибка_при_выполнении_шага;
                         cc.ErrorMessage = ex.ToString();
                     }
