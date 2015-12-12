@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Security.Cryptography;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
+using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using DbfClassLibrary;
@@ -23,6 +24,13 @@ namespace _038_Murmino
         {
             return String.Format("86{0:D6}", intls);
         }
+
+        public static readonly int CurrentMonth = 12;
+
+        public static readonly int CurrentYear = 2015;
+
+        public const string UnknownTown = "Неизвестен";
+        public const string UnknownStreet = "Неизвестна";
     }
 
     /// <summary>
@@ -52,6 +60,7 @@ namespace _038_Murmino
         }
     }
 
+    #region Конвертация
     /// <summary>
     /// Конвертирует данные об абонентах
     /// </summary>
@@ -131,6 +140,8 @@ namespace _038_Murmino
                     }
                     if (addressFound) break;
                 }
+                if (String.IsNullOrWhiteSpace(a.TOWNSNAME))
+                    a.TOWNSNAME = Consts.UnknownTown;
 
                 // Парсинг улицы
                 addressFound = false;
@@ -147,6 +158,8 @@ namespace _038_Murmino
                     }
                     if (addressFound) break;
                 }
+                if (String.IsNullOrWhiteSpace(a.ULICANAME))
+                    a.ULICANAME = Consts.UnknownStreet;
 
                 regex = new Regex(@"([0-9]+)(-?([0-9а-яё]+))?[^0-9-]*([0-9]+)?");
                 var match = regex.Match(clearedAddress);
@@ -680,13 +693,14 @@ namespace _038_Murmino
 
         #region Список известных улиц
         public static readonly KnownAddress[] KnownStreets =
-        {
+        { 
             new KnownAddress{ParsingNames = new[] {"лесная"},  TrueName = "Лесная", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"верхне-Садовая"},  TrueName = "Верхне-Садовая", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"нижне-Садовая"},  TrueName = "Нижне-Садовая", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"садовая"},  TrueName = "Садовая", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"школьная"},  TrueName = "Школьная", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"советская пл"},  TrueName = "Советская", TruePrefix = SquarePrefix},  
+            new KnownAddress{ParsingNames = new[] {"советской армии"},  TrueName = "Советской Армии", TruePrefix = SquarePrefix},  
             new KnownAddress{ParsingNames = new[] {"советская","советсая"},  TrueName = "Советская", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"колхозная","колхлзная","кохозная"},  TrueName = "Колхозная", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"озерная","озёрная"},  TrueName = "Озёрная", TruePrefix =StreetPrefix},  
@@ -738,4 +752,209 @@ namespace _038_Murmino
         public const string SquarePrefix = "пл.";
         #endregion
     }
+    #endregion
+
+    #region Перенос данных из временных таблиц
+    public class TransferAddressObjects : ConvertCase
+    {
+        public TransferAddressObjects()
+        {
+            ConvertCaseName = "Перенос данных об адресных объектах";
+            Position = 1000;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(6);
+
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+
+            fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
+            Iterate();
+
+            StepFinish();
+        }
+    }
+
+    public class TransferAbonents : ConvertCase
+    {
+        public TransferAbonents()
+        {
+            ConvertCaseName = "Перенос данных об абонентах";
+            Position = 1010;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferChars : ConvertCase
+    {
+        public TransferChars()
+        {
+            ConvertCaseName = "Перенос данных о количественных характеристиках";
+            Position = 1020;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "0" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferLchars : ConvertCase
+    {
+        public TransferLchars()
+        {
+            ConvertCaseName = "Перенос данных о качественных характеристиках";
+            Position = 1030;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "0" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferCounters : ConvertCase
+    {
+        public TransferCounters()
+        {
+            ConvertCaseName = "Перенос данных о счетчиках";
+            Position = 1040;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0" });
+            Iterate();
+        }
+    }
+
+    public class TransferOplata : ConvertCase
+    {
+        public TransferOplata()
+        {
+            ConvertCaseName = "Перенос данных об оплате";
+            Position = 1050;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01300_SOURCEDOC");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01400_OPLATA");
+            Iterate();
+        }
+    }
+
+    public class TransferSaldo : ConvertCase
+    {
+        public TransferSaldo()
+        {
+            ConvertCaseName = "Перенос данных о сальдо";
+            Position = 1060;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
+            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] { Consts.CurrentYear.ToString(CultureInfo.InvariantCulture),
+                Consts.CurrentMonth.ToString(CultureInfo.InvariantCulture) });
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
+            Iterate();
+        }
+    }
+
+    public class TransferNachisl : ConvertCase
+    {
+        public TransferNachisl()
+        {
+            ConvertCaseName = "Перенос данных о начислениях";
+            Position = 1070;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
+            Iterate();
+        }
+    }
+
+    public class TransferPererashet : ConvertCase
+    {
+        public TransferPererashet()
+        {
+            ConvertCaseName = "Перерасчет";
+            Position = 1080;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01700_PERERASHETIMPORT");
+            Iterate();
+        }
+    }
+#endregion
 }
