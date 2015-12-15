@@ -399,7 +399,7 @@ namespace _038_Murmino
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
-            SetStepsCount(2);
+            SetStepsCount(3);
 
             BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
             DataTable dt = Tmsource.ExecuteQuery("SELECT *, RECNO() AS RECNO FROM CNTRSIND");
@@ -414,15 +414,38 @@ namespace _038_Murmino
                 var c = new CNV_CNTRSIND
                 {
                     COUNTERID = counterind.Lshet.Trim() + "_" + counterind.Counterid.Trim(),
-                    DOCUMENTCD = String.Format("{0}_{1}_", counterind.Counterid.Trim().TrimStart('0'), dataRow["RECNO"]),
-                    //OLDIND = ,
+                    DOCUMENTCD = String.Format("{0}_{1}", counterind.Counterid.Trim().TrimStart('0'), dataRow["RECNO"]),
                     //OB_EM = ,
-                    INDICATION = counterind.Indication,
                     INDDATE = counterind.Inddate,
                     INDTYPE = 0,
                 };
 
-                lci.Add(c);
+                var existedInd = lci.Find(cind =>
+                    cind.COUNTERID == c.COUNTERID && cind.INDDATE.Value.Year == c.INDDATE.Value.Year &&
+                    cind.INDDATE.Value.Month == c.INDDATE.Value.Month);
+                if (existedInd == null)
+                {
+                    existedInd = c;
+                    lci.Add(existedInd);
+                }
+
+                if (c.INDDATE.Value.Day == 1)
+                    existedInd.OLDIND = counterind.Indication;
+                else
+                    existedInd.INDICATION = counterind.Indication;
+                
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(lci.Count);
+            foreach (var cntrsind in lci)
+            {
+                if (cntrsind.OLDIND == null)
+                    cntrsind.OLDIND = cntrsind.INDICATION;
+                else if (cntrsind.INDICATION == null)
+                    cntrsind.INDICATION = cntrsind.OLDIND;
+
                 Iterate();
             }
             StepFinish();
@@ -543,8 +566,8 @@ namespace _038_Murmino
             #region Сальдо
             ConvertSaldoByServices(new[] { 1 }, 2, "Содержание жилья", nm);
             ConvertSaldoByServices(new[] { 8, 9, 10, 11, 12, 17, 20, 21 }, 4, "Холодная вода", nm);
-            ConvertSaldoByServices(new[] { 6, 13, 14, 15 }, 8, "Водоотведение", nm);
-            ConvertSaldoByServices(new[] { 4 }, 6, "Вывоз ТБО", nm);
+            ConvertSaldoByServices(new[] { 4, 13, 14, 15 }, 8, "Водоотведение", nm);
+            ConvertSaldoByServices(new[] { 6 }, 6, "Вывоз ТБО", nm);
             ConvertSaldoByServices(new[] { 2 }, 3, "Отопление", nm);
             ConvertSaldoByServices(new[] { 5 }, 5, "Горячая вода", nm);
             #endregion
@@ -621,14 +644,14 @@ namespace _038_Murmino
                     servicename = "Холодная вода";
                     break;
 
-                case 4:
+                case 6:
                     regimcd = 30;
                     regimname = "Вывоз ТБО для конвертации";
                     servicecd = 6;
                     servicename = "Вывоз ТБО";
                     break;
 
-                case 6:
+                case 4:
                 case 13:
                 case 14:
                 case 15:
