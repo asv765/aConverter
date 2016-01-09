@@ -249,7 +249,6 @@ namespace _038_Murmino
             StepFinish();
 
             SaveList(lcc, Consts.InsertRecordCount);
-
         }
     }
 
@@ -343,6 +342,8 @@ namespace _038_Murmino
 
                 int cnttype;
                 string cntname;
+                if (counter.Name.Contains("Канализация")) continue;
+                
                 if (counter.Name.Contains("гор.вода"))
                 {
                     cnttype = 112;
@@ -405,6 +406,8 @@ namespace _038_Murmino
             DataTable dt = Tmsource.ExecuteQuery("SELECT *, RECNO() AS RECNO FROM CNTRSIND");
             var lci = new List<CNV_CNTRSIND>();
 
+            DataTable badCounters = Tmsource.ExecuteQuery("SELECT COUNTERID, LSHET FROM COUNTERS WHERE NAME LIKE '%Канализация%'");
+
             StepStart(dt.Rows.Count);
             var counterind = new CntrsindRecord();
             foreach (DataRow dataRow in dt.Rows)
@@ -419,6 +422,10 @@ namespace _038_Murmino
                     INDDATE = counterind.Inddate,
                     INDTYPE = 0,
                 };
+
+                if (badCounters.Select(String.Format("COUNTERID = '{0}' AND LSHET = '{1}'", counterind.Counterid,
+                    counterind.Lshet)).Length > 0)
+                    continue;
 
                 var existedInd = lci.Find(cind =>
                     cind.COUNTERID == c.COUNTERID && cind.INDDATE.Value.Year == c.INDDATE.Value.Year &&
