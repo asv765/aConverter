@@ -725,8 +725,8 @@ namespace _038_Murmino
         public static readonly KnownAddress[] KnownStreets =
         { 
             new KnownAddress{ParsingNames = new[] {"лесная"},  TrueName = "Лесная", TruePrefix =StreetPrefix},  
-            new KnownAddress{ParsingNames = new[] {"верхне-Садовая"},  TrueName = "Верхне-Садовая", TruePrefix =StreetPrefix},  
-            new KnownAddress{ParsingNames = new[] {"нижне-Садовая"},  TrueName = "Нижне-Садовая", TruePrefix =StreetPrefix},  
+            new KnownAddress{ParsingNames = new[] {"верхне-садовая"},  TrueName = "Верхне-Садовая", TruePrefix =StreetPrefix},  
+            new KnownAddress{ParsingNames = new[] {"нижне-садовая"},  TrueName = "Нижне-Садовая", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"садовая"},  TrueName = "Садовая", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"школьная"},  TrueName = "Школьная", TruePrefix =StreetPrefix},  
             new KnownAddress{ParsingNames = new[] {"советская пл"},  TrueName = "Советская", TruePrefix = SquarePrefix},  
