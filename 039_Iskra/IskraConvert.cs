@@ -279,7 +279,7 @@ namespace _039_Iskra
 
             BufferEntitiesManager.DropTableData("CNV$LCHARS");
             DataTable dt = Tmsource.GetDataTable("LCHARS");
-            DataTable recodeTable = Utils.ReadExcelFile(Consts.RecodeTableFileName, "Лист1");
+            DataTable recodeTable = Utils.ReadExcelFile(Consts.RecodeTableFileName, "Лист2");
             var llc = new List<CNV_LCHAR>();
 
             StepStart(dt.Rows.Count);
