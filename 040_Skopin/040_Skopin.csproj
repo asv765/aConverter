@@ -47,6 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Records\AbonentRecord.cs" />
+    <Compile Include="Records\AbtarifsRecord.cs" />
+    <Compile Include="Records\CharsRecord.cs" />
+    <Compile Include="Records\CntrindRecord.cs" />
+    <Compile Include="Records\CounersRecord.cs" />
+    <Compile Include="Records\SummsRecord.cs" />
     <Compile Include="SkopinConvert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
