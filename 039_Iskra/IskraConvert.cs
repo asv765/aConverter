@@ -41,7 +41,7 @@ namespace _039_Iskra
         {
             ConvertCaseName = "Создать таблицы для конвертации";
             Position = 10;
-            IsChecked = true;
+            IsChecked = false;
         }
 
         public override void DoConvert()
@@ -69,7 +69,7 @@ namespace _039_Iskra
         {
             ConvertCaseName = "ABONENT - данные об абонентах";
             Position = 20;
-            IsChecked = true;
+            IsChecked = false;
         }
 
         public override void DoConvert()
@@ -82,6 +82,7 @@ namespace _039_Iskra
             var fioRegex = new Regex(@"([A-ЯA-Z]{1}[а-яa-z]+)[^А-ЯA-Z]*([А-ЯA-Z]{1}[а-яa-z]*)?[^А-ЯA-Z]*([А-ЯA-Z]{1}[а-яa-z]*)?");
             var postIndexRegex = new Regex("39[0-9]{4}");
             var houseFlatRegex = new Regex(@"([0-9]+)(-?([0-9а-яё]+))?[^0-9-]*([0-9]+)?");
+            var houseFromStateRege = new Regex(@".*дом (\d+).*");
 
             BufferEntitiesManager.DropTableData("CNV$ABONENT");
             DataTable dt = Tmsource.GetDataTable("ABONENT");
@@ -125,6 +126,7 @@ namespace _039_Iskra
                 string clearedAddress = abonent.Address.Trim().ToLower();
 
                 a.POSTINDEX = postIndexRegex.Match(clearedAddress).Value;
+                if (!String.IsNullOrWhiteSpace(a.POSTINDEX)) clearedAddress = clearedAddress.Replace(a.POSTINDEX, "");
 
                 // Парсинг населенного пункта
                 bool addressFound = false;
@@ -141,7 +143,21 @@ namespace _039_Iskra
                     }
                     if (addressFound) break;
                 }
-                if (!addressFound) a.TOWNSNAME = Consts.UnknownTown;
+                if (!addressFound)
+                {
+                    foreach (var knownTown in KnownAddress.KnownTowns)
+                    {
+                        foreach (var name in knownTown.ParsingNames)
+                        {
+                            if (!abonent.Sectorname.ToLower().Contains(name)) continue;
+                            a.TOWNSNAME = knownTown.TrueName + " " + knownTown.TruePrefix;
+                            addressFound = true;
+                            break;
+                        }
+                        if (addressFound) break;
+                    }
+                    if (!addressFound) a.TOWNSNAME = Consts.UnknownTown;
+                }
 
                 // Парсинг улицы
                 addressFound = false;
@@ -171,6 +187,14 @@ namespace _039_Iskra
                     if (flatno == 0) a.FLATNO = null;
                     else a.FLATNO = flatno;
                 }
+                else
+                {
+                    match = houseFromStateRege.Match(abonent.Sectorname);
+                    if (match.Groups.Count > 1)
+                        a.HOUSENO = match.Groups[1].Value;
+                    else if (abonent.Sectorname.Contains(@"Ч\Д"))
+                        a.HOUSEPOSTFIX = @"Ч\Д";
+                }
                 #endregion
 
                 lca.Add(a);
@@ -199,7 +223,7 @@ namespace _039_Iskra
         {
             ConvertCaseName = "CHARS - данные о количественных характеристиках";
             Position = 30;
-            IsChecked = true;
+            IsChecked = false;
         }
 
         public override void DoConvert()
@@ -267,7 +291,7 @@ namespace _039_Iskra
         {
             ConvertCaseName = "LCHARS - данные о параметрах потребления";
             Position = 40;
-            IsChecked = true;
+            IsChecked = false;
         }
 
         public override void DoConvert()
@@ -331,7 +355,7 @@ namespace _039_Iskra
         {
             ConvertCaseName = "COUNTERS - данные о счетчиках";
             Position = 50;
-            IsChecked = true;
+            IsChecked = false;
         }
 
         public override void DoConvert()
@@ -420,7 +444,7 @@ namespace _039_Iskra
             new KnownAddress {ParsingNames = new[] {"букрино"}, TrueName = "Букрино", TruePrefix = SeloPrefix},
             new KnownAddress {ParsingNames = new[] {"шевцово"}, TrueName = "Шевцово", TruePrefix = DerevPrefix},
             new KnownAddress {ParsingNames = new[] {"ялино"}, TrueName = "Ялино", TruePrefix = DerevPrefix},
-            new KnownAddress {ParsingNames = new[] {"госплемстанция", "госплемстанции"}, TrueName = "Госплемстанция", TruePrefix = PoselPrefix},
+            new KnownAddress {ParsingNames = new[] {"госплемстанция", "госплемстанции"}, TrueName = "Госплемстанции", TruePrefix = PoselPrefix},
             new KnownAddress {ParsingNames = new[] {"искра"}, TrueName = "Искра", TruePrefix = PoselPrefix},
         };
 

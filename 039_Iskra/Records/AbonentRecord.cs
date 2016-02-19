@@ -221,6 +221,17 @@ namespace _039_Iskra
             set { CheckStringData("Prim_", value, 250); prim_ = value; }
         }
 
+        private string phonenum;
+        // <summary>
+        // PHONENUM C(50)
+        // </summary>
+        [FieldName("PHONENUM"), FieldType('C'), FieldWidth(50)]
+        public string Phonenum
+        {
+            get { return phonenum; }
+            set { CheckStringData("Phonenum", value, 50); phonenum = value; }
+        }
+
         private string postindex;
         // <summary>
         // POSTINDEX C(6)
@@ -252,6 +263,39 @@ namespace _039_Iskra
         {
             get { return duname; }
             set { CheckStringData("Duname", value, 50); duname = value; }
+        }
+
+        private Int64 psectorcd;
+        // <summary>
+        // PSECTORCD N(6)
+        // </summary>
+        [FieldName("PSECTORCD"), FieldType('N'), FieldWidth(6)]
+        public Int64 Psectorcd
+        {
+            get { return psectorcd; }
+            set { CheckIntegerData("Psectorcd", value, 6); psectorcd = value; }
+        }
+
+        private Int64 sectorcd;
+        // <summary>
+        // SECTORCD N(6)
+        // </summary>
+        [FieldName("SECTORCD"), FieldType('N'), FieldWidth(6)]
+        public Int64 Sectorcd
+        {
+            get { return sectorcd; }
+            set { CheckIntegerData("Sectorcd", value, 6); sectorcd = value; }
+        }
+
+        private string sectorname;
+        // <summary>
+        // SECTORNAME C(25)
+        // </summary>
+        [FieldName("SECTORNAME"), FieldType('C'), FieldWidth(25)]
+        public string Sectorname
+        {
+            get { return sectorname; }
+            set { CheckStringData("Sectorname", value, 25); sectorname = value; }
         }
 
         private Int64 isdeleted;
@@ -286,9 +330,13 @@ namespace _039_Iskra
             if (ADataRow.Table.Columns.Contains("I")) I = ADataRow["I"].ToString(); else I = "";
             if (ADataRow.Table.Columns.Contains("O")) O = ADataRow["O"].ToString(); else O = "";
             if (ADataRow.Table.Columns.Contains("PRIM_")) Prim_ = ADataRow["PRIM_"].ToString(); else Prim_ = "";
+            if (ADataRow.Table.Columns.Contains("PHONENUM")) Phonenum = ADataRow["PHONENUM"].ToString(); else Phonenum = "";
             if (ADataRow.Table.Columns.Contains("POSTINDEX")) Postindex = ADataRow["POSTINDEX"].ToString(); else Postindex = "";
             if (ADataRow.Table.Columns.Contains("DUCD")) Ducd = Convert.ToInt64(ADataRow["DUCD"]); else Ducd = 0;
             if (ADataRow.Table.Columns.Contains("DUNAME")) Duname = ADataRow["DUNAME"].ToString(); else Duname = "";
+            if (ADataRow.Table.Columns.Contains("PSECTORCD")) Psectorcd = Convert.ToInt64(ADataRow["PSECTORCD"]); else Psectorcd = 0;
+            if (ADataRow.Table.Columns.Contains("SECTORCD")) Sectorcd = Convert.ToInt64(ADataRow["SECTORCD"]); else Sectorcd = 0;
+            if (ADataRow.Table.Columns.Contains("SECTORNAME")) Sectorname = ADataRow["SECTORNAME"].ToString(); else Sectorname = "";
             if (ADataRow.Table.Columns.Contains("ISDELETED")) Isdeleted = Convert.ToInt64(ADataRow["ISDELETED"]); else Isdeleted = 0;
         }
 
@@ -314,16 +362,20 @@ namespace _039_Iskra
             retValue.I = this.I;
             retValue.O = this.O;
             retValue.Prim_ = this.Prim_;
+            retValue.Phonenum = this.Phonenum;
             retValue.Postindex = this.Postindex;
             retValue.Ducd = this.Ducd;
             retValue.Duname = this.Duname;
+            retValue.Psectorcd = this.Psectorcd;
+            retValue.Sectorcd = this.Sectorcd;
+            retValue.Sectorname = this.Sectorname;
             retValue.Isdeleted = this.Isdeleted;
             return retValue;
         }
 
         public override string GetInsertScript()
         {
-            string rs = String.Format("INSERT INTO ABONENT (LSHET, ISINDIVID, ADDRESS, DISTKOD, DISTNAME, RAYONKOD, RAYONNAME, TOWNSKOD, TOWNSNAME, ULICAKOD, ULICANAME, NDOMA, KORPUS, KVARTIRA, FIO, F, I, O, PRIM_, POSTINDEX, DUCD, DUNAME, ISDELETED) VALUES ('{0}', {1}, '{2}', {3}, '{4}', {5}, '{6}', {7}, '{8}', {9}, '{10}', '{11}', {12}, '{13}', '{14}', '{15}', '{16}', '{17}', '{18}', '{19}', {20}, '{21}', {22})", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), Isindivid.ToString(), String.IsNullOrEmpty(Address) ? "" : Address.Trim(), Distkod.ToString(), String.IsNullOrEmpty(Distname) ? "" : Distname.Trim(), Rayonkod.ToString(), String.IsNullOrEmpty(Rayonname) ? "" : Rayonname.Trim(), Townskod.ToString(), String.IsNullOrEmpty(Townsname) ? "" : Townsname.Trim(), Ulicakod.ToString(), String.IsNullOrEmpty(Ulicaname) ? "" : Ulicaname.Trim(), String.IsNullOrEmpty(Ndoma) ? "" : Ndoma.Trim(), Korpus.ToString(), String.IsNullOrEmpty(Kvartira) ? "" : Kvartira.Trim(), String.IsNullOrEmpty(Fio) ? "" : Fio.Trim(), String.IsNullOrEmpty(F) ? "" : F.Trim(), String.IsNullOrEmpty(I) ? "" : I.Trim(), String.IsNullOrEmpty(O) ? "" : O.Trim(), String.IsNullOrEmpty(Prim_) ? "" : Prim_.Trim(), String.IsNullOrEmpty(Postindex) ? "" : Postindex.Trim(), Ducd.ToString(), String.IsNullOrEmpty(Duname) ? "" : Duname.Trim(), Isdeleted.ToString());
+            string rs = String.Format("INSERT INTO ABONENT (LSHET, ISINDIVID, ADDRESS, DISTKOD, DISTNAME, RAYONKOD, RAYONNAME, TOWNSKOD, TOWNSNAME, ULICAKOD, ULICANAME, NDOMA, KORPUS, KVARTIRA, FIO, F, I, O, PRIM_, PHONENUM, POSTINDEX, DUCD, DUNAME, PSECTORCD, SECTORCD, SECTORNAME, ISDELETED) VALUES ('{0}', {1}, '{2}', {3}, '{4}', {5}, '{6}', {7}, '{8}', {9}, '{10}', '{11}', {12}, '{13}', '{14}', '{15}', '{16}', '{17}', '{18}', '{19}', '{20}', {21}, '{22}', {23}, {24}, '{25}', {26})", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), Isindivid.ToString(), String.IsNullOrEmpty(Address) ? "" : Address.Trim(), Distkod.ToString(), String.IsNullOrEmpty(Distname) ? "" : Distname.Trim(), Rayonkod.ToString(), String.IsNullOrEmpty(Rayonname) ? "" : Rayonname.Trim(), Townskod.ToString(), String.IsNullOrEmpty(Townsname) ? "" : Townsname.Trim(), Ulicakod.ToString(), String.IsNullOrEmpty(Ulicaname) ? "" : Ulicaname.Trim(), String.IsNullOrEmpty(Ndoma) ? "" : Ndoma.Trim(), Korpus.ToString(), String.IsNullOrEmpty(Kvartira) ? "" : Kvartira.Trim(), String.IsNullOrEmpty(Fio) ? "" : Fio.Trim(), String.IsNullOrEmpty(F) ? "" : F.Trim(), String.IsNullOrEmpty(I) ? "" : I.Trim(), String.IsNullOrEmpty(O) ? "" : O.Trim(), String.IsNullOrEmpty(Prim_) ? "" : Prim_.Trim(), String.IsNullOrEmpty(Phonenum) ? "" : Phonenum.Trim(), String.IsNullOrEmpty(Postindex) ? "" : Postindex.Trim(), Ducd.ToString(), String.IsNullOrEmpty(Duname) ? "" : Duname.Trim(), Psectorcd.ToString(), Sectorcd.ToString(), String.IsNullOrEmpty(Sectorname) ? "" : Sectorname.Trim(), Isdeleted.ToString());
             return rs;
         }
     }
