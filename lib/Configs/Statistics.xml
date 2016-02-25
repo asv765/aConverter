@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<ArrayOfStatistic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select TownsKod, TownsName, UlicaKod, UlicaName, Count(*) as CNT from abonent group by TownsKod, TownsName, UlicaKod, UlicaName order by TownsKod, TownsName, UlicaKod, UlicaName</Sql>
+    <StatisticName>Улицы по населенным пунктам из файла ABONENT.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select lcharcd, lcharname, value, valuedesc, count(*) as cnt 
+from lchars 
+group by lcharcd, lcharname, value, valuedesc 
+order by lcharcd, lcharname, value, valuedesc</Sql>
+    <StatisticName>Качественные характеристик с их значениями из файла LCHARS.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>SELECT COUNT(*) AS CNT FROM ABONENTS</Sql>
+    <StatisticName>Количество абонентов в целевой базе</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>1</StatisticTypeId>
+    <Value>11176</Value>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select * 
+from cnv$abonent
+order by lshet
+</Sql>
+    <StatisticName>Абоненты из CNV$ABONENT с сортировкой по лицевому счету</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select MAX(LSHET)
+from cnv$abonent</Sql>
+    <StatisticName>Максимальный лицевой счет в целевой БД</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>1</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from BalancesList bl 
+order by bl.Balance_Kod, bl.Name</Sql>
+    <StatisticName>Список услуг в целевой БД</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select * from extorgspr</Sql>
+    <StatisticName>Справочник организаций (EXTORGSPR)</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select * 
+from INFORMATIONOWNERS
+ORDER BY OWNERID
+
+</Sql>
+    <StatisticName>Поставщики информации (INFORMATIONOWNERS)</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>Select a.OWNERID, i.OWNERNAME, COUNT(*) AS CNT
+from ABONENTS a INNER JOIN INFORMATIONOWNERS i ON a.OWNERID = i.OWNERID
+group by a.OWNERID, i.OWNERNAME</Sql>
+    <StatisticName>Таблица ABONENTS с группировкой по OWNERID</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select year_, month_, servicecd, servicename, count(*), 
+  sum(bdebet) as bdebet,
+  sum(fnath) as fnath,
+  sum(prochl) as prochl,
+  sum(oplata) as oplata,
+  sum(edebet) as edebet
+from cnv$nachopl
+where year_ = 2015 and month_ = 10
+group by year_, month_, servicecd, servicename
+order by servicecd, servicename, year_, month_ </Sql>
+    <StatisticName>История оплат/начислений - сводная ведомость по файлу NACHOPL.DBF в разрезе услуг и месяцев</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from nachopl
+where lshet not in (select lshet from abonent) and edebet &lt;&gt; 0</Sql>
+    <StatisticName>История оплат/начислений - записи NACHOPL.DBF отсутствущие в ABONENT.DBF и имеющие ненулевое сальдо на конец месяца</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select charcd, charname, count(*) 
+from cnv$chars
+group by charcd, charname</Sql>
+    <StatisticName>Количественные характеристики из таблицы CNV$CHARS</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select cl.kod, cl.name, cl.kodgroupsccharslist, gc.name
+from ccharslist cl inner join groupsccharslist gc on cl.kodgroupsccharslist = gc.kod
+order by cl.kod</Sql>
+    <StatisticName>Количественные характеристики в целевой базе</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select ll.kod, ll.name, lv.significance, lv.logicsignificance
+from lcharslist ll inner join logicvalues lv on ll.kod = lv.kod
+order by ll.kod, lv.significance</Sql>
+    <StatisticName>Качественные характеристики в целевой БД</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select ct.kod, ct.equipmenttypeid, et.name as typename, ct.name as countername
+from counterstypes ct inner join eqpmstypes et on ct.equipmenttypeid = et.kod
+order by ct.equipmenttypeid, ct.kod</Sql>
+    <StatisticName>Типы счетчиков в целевой базе</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select cnttype, cntname, count(*)
+from counters
+group by cnttype, cntname</Sql>
+    <StatisticName>Типы счетчиков в COUNTERS.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select servicecd, servicenam, count(*) as cnt
+from nachopl
+group by 1,2</Sql>
+    <StatisticName>Услуги по файлу NACHOPL.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select r.regiondistrictcd, r.regiondistrictnm, p.punktcd, p.punktnm, s.streetcd, s.streetnm
+from (street s inner join punkt p on s.punktcd = p.punktcd)
+  inner join regiondistricts r on p.regiondistrictcd = r.regiondistrictcd</Sql>
+    <StatisticName>Адресные данные в целевой БД (STREET, PUNKT, REGIONDISTRICT)</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select year, month, count(*), 
+  sum(bdebet) as bdebet,
+  sum(fnath) as fnath,
+  sum(prochl) as prochl,
+  sum(oplata) as oplata,
+  sum(edebet) as edebet
+from nachopl
+group by year, month
+order by year, month</Sql>
+    <StatisticName>История оплат/начислений - сводная ведомость по файлу NACHOPL.DBF в разрезе месяцев</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select year, month, count(*), 
+  sum(summa) as summa
+from oplata
+group by year, month
+order by year, month</Sql>
+    <StatisticName>Оплата с группировкой по месяцам из файла OPLATA.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select nyear, nmonth, sum(beginsumma) as beginsumma, sum(endsumma) as endsumma
+from saldo
+group by nyear, nmonth
+order by nyear, nmonth
+</Sql>
+    <StatisticName>Сводная ведомость по таблице SALDO в разрезе месяцев</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select servicecd, servicenam, year, month, count(*), 
+  sum(summa) as summa
+from oplata
+where month = 9 and year = 2012
+group by servicecd, servicenam, year, month
+order by servicecd, servicenam, year, month</Sql>
+    <StatisticName>Оплата с группировкой по услугам за месяц из файла OPLATA.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select * from cnv$chars order by lshet, charcd, date_</Sql>
+    <StatisticName>Количественные характеристики поабонентно из таблицы CNV$CHARS</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select lshet, lcharcd, date_, lcharname, value_, valuedesc
+from cnv$lchars 
+order by lshet, lcharcd, date_</Sql>
+    <StatisticName>Качественные характеристики из таблицы CNV$LCHARS</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select year, month, sourcecd, sourcename, count(*), 
+  sum(summa) as summa
+from oplata
+group by year, month, sourcecd, sourcename
+order by year, month, sourcecd, sourcename</Sql>
+    <StatisticName>Оплата с группировкой по месяцам и источникам из файла OPLATA.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select * from additionalchars order by additionalcharcd</Sql>
+    <StatisticName>Таблица дополнительных характеристик (ADDITIONALCHARS) в целевой БД</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select additionalchars.additionalcharcd, additionalchars.additionalcharname, additionalchars.additionalcharmode,
+  additionalcharsvalues.valuecd, additionalcharsvalues.avaliablevalue
+from additionalchars inner join additionalcharsvalues on additionalchars.additionalcharcd = additionalcharsvalues.additionalcharcd
+order by additionalchars.additionalcharcd, additionalcharsvalues.valuecd
+</Sql>
+    <StatisticName>Таблица значений качественных дополнительных характеристик (ADDITIONALCHARSVALUES) в целевой БД</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata, SUM(o.summa) as summa 
+from nachopl n inner join oplata o on 
+    n.lshet+STR(n.servicecd,5)+STR(n.year,4)+STR(n.month,2) =  
+    o.lshet+STR(o.servicecd,5)+STR(YEAR(o.date_vv),4)+STR(MONTH(o.date_vv),2)  
+group BY n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.oplata 
+HAVING n.oplata &lt;&gt; SUM(o.summa)
+</Sql>
+    <StatisticName>История оплат/начислений - записи из NACHOPL.DBF и OPLATA.DBF, сумма оплат которых не совпадает</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select * from charlst</Sql>
+    <StatisticName>Дополнительные характеристики (CHARLST.DBF)</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from cnv$cntrsind
+order by counterid, inddate</Sql>
+    <StatisticName>Показания счетчиков из CNV$CNTRSIND</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from oplata
+order by lshet, date_vv</Sql>
+    <StatisticName>Оплата из OPLATA.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>SELECT * FROM lchars WHERE (lshet+STR(lcharcd,5)+DTOS(Date)) IN ( 
+select (lshet+STR(lcharcd,5)+DTOS(Date)) from lchars group by 1 having count(*) &gt; 1) order by lshet, lcharcd, date
+</Sql>
+    <StatisticName>Качественные характеристики, задвоенные записи в LCHARS.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from nachopl
+where EDEBET &lt;&gt; (BDEBET + FNATH + PROCHL - OPLATA)</Sql>
+    <StatisticName>История оплат/начислений - записи NACHOPL.DBF, для которых не выполняется арифметика EDEBET = BDEBET + FNATH + PROCHL - OPLATA</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select LSHET, SUM(BDEBET) AS BDEBET, SUM(FNATH) AS FNATH, SUM(PROCHL) AS PROCHL, SUM(OPLATA) AS OPLATA, SUM(EDEBET) AS EDEBET
+from nachopl
+group by LSHET
+having SUM(EDEBET) &lt;&gt; (SUM(BDEBET) + SUM(FNATH) + SUM(PROCHL) - SUM(OPLATA))</Sql>
+    <StatisticName>История оплат/начислений - записи NACHOPL.DBF, для которых не выполняется арифметика EDEBET = (BDEBET + FNATH + PROCHL - OPLATA) по каждому лицевому счету (без разбивки по услугам)</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select isdeleted, count(*) as cnt
+from cnv$abonent
+group by isdeleted
+</Sql>
+    <StatisticName>Абоненты из CNV$ABONENT с группировкой по признаку удаления</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select year, month, count(*), 
+  sum(bdebet) as bdebet,
+  sum(fnath) as fnath,
+  sum(prochl) as prochl,
+  sum(oplata) as oplata,
+  sum(edebet) as edebet
+from nachopl
+where lshet in (select lshet from abonent where isdeleted = 0)
+group by year, month
+order by year, month</Sql>
+    <StatisticName>История оплат/начислений - сводная ведомость по файлу NACHOPL.DBF в разрезе месяцев только по неудаленным абонентам</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from nachopl
+order by lshet, servicecd, year, month</Sql>
+    <StatisticName>История оплат/начислений - записи NACHOPL.DBF по всем абонентам</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from cnv$nachopl
+where lshet = '82001642'
+order by servicecd, year_, month_</Sql>
+    <StatisticName>История оплат/начислений - записи NACHOPL.DBF по одному абоненту</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select year(date_vv), month(date_vv), servicecd, servicenam, count(*), 
+  sum(summa) as summa
+from oplata
+group by 1, 2, servicecd, servicenam
+order by 1, 2, servicecd, servicenam
+</Sql>
+    <StatisticName>Оплата с группировкой по месяцам и услугам из файла OPLATA.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>SELECT servicecd, servicenam, YEAR(date_vv) as Year, MONTH(date_vv) as Month, SUM(fnath) as fnath, SUM(prochl) as prochl, SUM(Volume) as Volume
+FROM nach
+GROUP BY 1,2,3,4
+</Sql>
+    <StatisticName>Начисления - записи NACH.DBF, сгруппированные по услуге, году и месяцу даты учета</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.fnath, SUM(nc.fnath) as ncfnath, n.fnath - SUM(nc.fnath) as Delta
+from nachopl n inner join nach nc on 
+    n.lshet+STR(n.servicecd,5)+STR(n.year,4)+STR(n.month,2) =  
+    nc.lshet+STR(nc.servicecd,5)+STR(YEAR(nc.date_vv),4)+STR(MONTH(nc.date_vv),2) 
+where n.year = 2013 and n.month = 2
+group BY n.lshet, n.servicecd, n.servicenam, n.month, n.year, n.fnath
+HAVING n.fnath &lt;&gt; SUM(nc.fnath)
+order BY n.lshet, n.servicecd, n.servicenam, n.month, n.year</Sql>
+    <StatisticName>Начисления - записи NACH.DBF, суммарное значение начислений за месяц в которых на совпадает со значением в NACHOPL,DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select n.*
+from nachopl n 
+where n.Fnath &lt;&gt; 0 AND n.Year = 2013 and n.Month = 2 and
+    n.lshet+STR(n.servicecd,5)+STR(n.year,4)+STR(n.month,2) not in 
+    (select nc.lshet+STR(nc.servicecd,5)+STR(YEAR(nc.date_vv),4)+STR(MONTH(nc.date_vv),2)  
+     from nach nc
+     where nc.Fnath &lt;&gt; 0)
+order BY n.lshet, n.servicecd, n.servicenam, n.month, n.year
+</Sql>
+    <StatisticName>История оплат/начислений - записи NACHOPL.DBF, значение в поле FNATH которых не равно нулю и не расшифровывается в NACH.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select nc.*
+from nach nc 
+where nc.Fnath &lt;&gt; 0 AND YEAR(nc.date_vv) = 2013 AND MONTH(nc.date_vv) = 2 AND
+nc.lshet+STR(nc.servicecd,5)+STR(YEAR(nc.date_vv),4)+STR(MONTH(nc.date_vv),2)  not in 
+    (select  n.lshet+STR(n.servicecd,5)+STR(n.year,4)+STR(n.month,2)
+     from nachopl n
+     where n.Fnath &lt;&gt; 0)
+order BY nc.lshet, nc.servicecd, nc.servicenam, nc.Date_Vv</Sql>
+    <StatisticName>Начисления - записи NACH.DBF, имеющие ненулевое значение в поле FNATH, которое не учитывается в поле FNATH файла NACHOPL.DBF</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select * 
+from nach
+order by lshet, year, month</Sql>
+    <StatisticName>Начисления - записи NACH.DBF по всем абонентам</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select date_vv, servicecd, servicenam, count(*), 
+  sum(summa) as summa
+from oplata
+group by 1, servicecd, servicenam
+order by 1, servicecd, servicenam</Sql>
+    <StatisticName>Оплата с группировкой по дате учета и услуге</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from sourcedoc
+order by sourcedoccd</Sql>
+    <StatisticName>Источники оплаты в целевой БД (SOURCEDOC)</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select a.ducd, a.duname, count(*), 
+  sum(iif(n.bdebet&gt;0,n.bdebet,0.00)) as dv,
+  sum(iif(n.bdebet&lt;0,-n.bdebet,0.00)) as kv,
+  sum(n.fnath) as fnath,
+  sum(n.prochl) as prochl,
+  sum(n.oplata) as oplata,
+  sum(iif(n.edebet&gt;0,n.edebet,0.00)) as di,
+  sum(iif(n.edebet&lt;0,-n.edebet,0.00)) as ki
+from nachopl n inner join abonent a on n.lshet = a.lshet
+where n.year = 2014 and n.month = 2
+group by a.ducd, a.duname
+order by a.ducd, a.duname</Sql>
+    <StatisticName>История оплат/начислений - сводная ведомость по заданному месяцу с группировкой по поставщикам информации</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+  <Statistic xsi:type="FdbStatistic">
+    <Sql>select *
+from systemvariables
+</Sql>
+    <StatisticName>Системные переменные</StatisticName>
+    <FieldRecodeList />
+    <StatisticTypeId>0</StatisticTypeId>
+  </Statistic>
+</ArrayOfStatistic>
