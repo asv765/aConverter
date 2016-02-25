@@ -280,9 +280,7 @@ namespace _039_Iskra
             lcc = CharsRecordUtils.ThinOutList(lcc);
             StepFinish();
 
-            StepStart(1);
             SaveList(lcc, Consts.InsertRecordCount);
-            StepFinish();
         }
     }
 
@@ -344,10 +342,7 @@ namespace _039_Iskra
             StepStart(1);
             llc = LcharsRecordUtils.ThinOutList(llc);
             StepFinish();
-
-            StepStart(1);
             SaveList(llc, Consts.InsertRecordCount);
-            StepFinish();
         }
     }
 
@@ -419,9 +414,7 @@ namespace _039_Iskra
             }
             StepFinish();
 
-            StepStart(1);
             SaveList(lcn, Consts.InsertRecordCount);
-            StepFinish();
         }
     }
 
@@ -509,13 +502,171 @@ namespace _039_Iskra
             }
             StepFinish();
 
-            StepStart(1);
             SaveList(lcc, Consts.InsertRecordCount);
-            StepFinish();
-
-            StepStart(1);
             SaveList(lci, Consts.InsertRecordCount);
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных истории начислений
+    /// </summary>
+    public class ConvertNachopl : ConvertCase
+    {
+        public ConvertNachopl()
+        {
+            ConvertCaseName = "NACHOPL - данные истории начислений";
+            Position = 70;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(7);
+
+            BufferEntitiesManager.DropTableData("CNV$NACHOPL");
+            BufferEntitiesManager.DropTableData("CNV$OPLATA");
+            BufferEntitiesManager.DropTableData("CNV$NACH");
+
+            DataTable dtNach = Tmsource.ExecuteQuery(
+                    @"select n.lshet, n.month, n.year, n.month2, n.year2, n.fnath, n.prochl, n.parentcd, n.tarifcd, n.tarifnm, iif(t.value = 0, t.value_c, t.value) as tarif, RECNO() as RECNO
+                                                        from Nachopl n
+                                                        left join tarifs t on t.parentcd = n.parentcd and t.tarifcd = n.tarifcd
+                                                        where (n.fnath <> 0 or n.prochl <> 0)
+                                                        and( n.parentcd <> 0 and n.tarifcd <> 0)");
+            DataTable dtOplata = Tmsource.ExecuteQuery(@"select lshet, month, year, oplata, parentcd, tarifcd, tarifnm, RECNO() as RECNO from Nachopl where oplata <> 0 and parentcd <> 0 and tarifcd <> 0");
+            DataTable dtNachopl = Tmsource.ExecuteQuery(@"select lshet, month, year, bdebet, edebet, parentcd, tarifcd, tarifnm from Nachopl where parentcd <> 0 and tarifcd <> 0");
+
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+
+            var nachopl = new NachoplRecord();
+
+            #region Начисления
+            StepStart(dtNach.Rows.Count);
+            foreach (DataRow dataRow in dtNach.Rows)
+            {
+                nachopl.ReadDataRow(dataRow);
+
+                string documentcd = String.Format("N{0}_{1}", nachopl.Lshet.Trim().TrimStart('0'), dataRow["RECNO"]);
+
+                int regimcd;
+                string regimname;
+                int servicecd;
+                string servicename;
+                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname);
+
+                //decimal tarif = (decimal)dataRow["tarif"];
+                var ndef = new CNV_NACH
+                {
+                    //VOLUME = tarif == 0 ? 0 : nachopl.Fnath / tarif,
+                    VOLUME = 0,
+                    REGIMCD = regimcd,
+                    REGIMNAME = regimname,
+                    SERVICECD = servicecd,
+                    SERVICENAME = servicename,
+                    TYPE_ = 0
+                };
+                nm.RegisterNach(ndef, Consts.GetLs(Convert.ToInt64(nachopl.Lshet)), (int) nachopl.Month,
+                    (int) nachopl.Year, nachopl.Fnath, nachopl.Prochl,
+                    new DateTime((int) nachopl.Year, (int) nachopl.Month, 1), documentcd);
+
+                Iterate();
+            }
             StepFinish();
+            #endregion 
+
+            #region Оплаты
+            StepStart(dtOplata.Rows.Count);
+            foreach (DataRow dataRow in dtOplata.Rows)
+            {
+                nachopl.ReadDataRow(dataRow);
+
+                string documentcd = String.Format("O{0}_{1}", nachopl.Lshet.Trim().TrimStart('0'), dataRow["RECNO"]);
+
+                int regimcd;
+                string regimname;
+                int servicecd;
+                string servicename;
+                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname);
+
+                var odef = new CNV_OPLATA
+                {
+                    SERVICECD = servicecd,
+                    SERVICENAME = servicename,
+                    SOURCECD = 17,
+                    SOURCENAME = "Касса"
+                };
+                nm.RegisterOplata(odef, Consts.GetLs(Convert.ToInt64(nachopl.Lshet)), (int) nachopl.Month,
+                    (int) nachopl.Year, nachopl.Oplata, new DateTime((int) nachopl.Year, (int) nachopl.Month, 1),
+                    new DateTime((int) nachopl.Year, (int) nachopl.Month, 1), documentcd);
+
+                Iterate();
+            }
+            StepFinish();
+            #endregion
+
+            #region Сальдо
+            StepStart(dtNachopl.Rows.Count);
+            foreach (DataRow dataRow in dtNachopl.Rows)
+            {
+                nachopl.ReadDataRow(dataRow);
+                string lshet = Consts.GetLs(Convert.ToInt64(nachopl.Lshet));
+                int regimcd;
+                string regimname;
+                int servicecd;
+                string servicename;
+                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname);
+                nm.RegisterBeginSaldo(lshet, (int) nachopl.Month, (int) nachopl.Year, servicecd, servicename,
+                    nachopl.Bdebet);
+                nm.RegisterEndSaldo(lshet, (int)nachopl.Month, (int)nachopl.Year, servicecd, servicename,
+                    nachopl.Edebet);
+                Iterate();
+            }
+            StepFinish();
+            #endregion
+
+            SaveList(nm.NachRecords, Consts.InsertRecordCount);
+            SaveList(nm.OplataRecords, Consts.InsertRecordCount);
+            SaveList(nm.NachoplRecords.Values, Consts.InsertRecordCount);
+        }
+
+        private void DefineServiceType(string tarifName, out int servicecd, out string servicename, out int regimcd,
+            out string regimname)
+        {
+            regimcd = 10;
+            regimname = "Неизвестен";
+            switch (tarifName.Trim())
+            {
+                case "Водоотведение":
+                    servicecd = 8;
+                    servicename = "Канализация";
+                    break;
+                case "Водоснабжение":
+                case "Уличные колонки":
+                    servicecd = 4;
+                    servicename = "Холодная вода";
+                    break;
+                case "Горячая вода":
+                    servicecd = 5;
+                    servicename = "Горячая вода";
+                    break;
+                case "Общедомовые нужды по ХВС":
+                    servicecd = 1014;
+                    servicename = "Хол. водоснабжение ОДН";
+                    break;
+                case "Отопление":
+                    servicecd = 3;
+                    servicename = "Отопление";
+                    break;
+                case "Содержание жилья":
+                    servicecd = 2;
+                    servicename = "Содержание жилья";
+                    break;
+                default:
+                    throw new Exception(String.Format("Неизвестное имя тарифа '{0}'", tarifName));
+            }
         }
     }
     #endregion
@@ -632,6 +783,46 @@ namespace _039_Iskra
             fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
             Iterate();
             fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0" });
+            Iterate();
+        }
+    }
+
+    public class TransferNachisl : ConvertCase
+    {
+        public TransferNachisl()
+        {
+            ConvertCaseName = "Перенос данных о начислениях";
+            Position = 1070;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
+            Iterate();
+        }
+    }
+
+    public class TransferPererashet : ConvertCase
+    {
+        public TransferPererashet()
+        {
+            ConvertCaseName = "Перерасчет";
+            Position = 1080;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01700_PERERASHETIMPORT");
             Iterate();
         }
     }

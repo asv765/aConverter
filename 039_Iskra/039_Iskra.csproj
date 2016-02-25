@@ -50,6 +50,7 @@
     <Compile Include="Records\CntrsindRecord.cs" />
     <Compile Include="Records\CountersRecord.cs" />
     <Compile Include="Records\LcharsRecord.cs" />
+    <Compile Include="Records\NachoplRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\aConverterClassLibrary\aConverterClassLibrary.csproj">
