@@ -113,6 +113,8 @@ namespace _039_Iskra
                 };
 
                 // Парсинг фио
+                if (a.F.Length > 50) a.F = a.F.Substring(0, 49);
+                
                 var match = fioRegex.Match(a.F);
                 if (a.F.ToLower().Contains("ооо") || a.F.ToLower().Contains("общество"))
                 {
@@ -462,23 +464,38 @@ namespace _039_Iskra
                 if (String.IsNullOrWhiteSpace(dataRow["counterid"].ToString()))
                 {
                     string lshet = Consts.GetLs(Convert.ToInt64(counterind.Lshet));
-                    var newCounter = lcc.SingleOrDefault(cnt => cnt.LSHET == lshet && cnt.CNTTYPE == 3);
-                    if (newCounter == null)
+
+                    var newCounter = new CNV_COUNTER
+                    {
+                        LSHET = lshet,
+                            SETUPDATE = new DateTime(2016, 1, 1),
+                    };
+
+                    switch (counterind.Tarifnm.Trim())
+                    {
+                        case "Водоснабжение":
+                            newCounter.NAME = "Водоснабжение";
+                            newCounter.CNTTYPE = 1;
+                            break;
+                        case "Горячая вода":
+                            newCounter.NAME = "Горячая вода";
+                            newCounter.CNTTYPE = 3;
+                            break;
+                        default:
+                            throw new Exception("Неизвестный тип счетчика " + counterind.Tarifnm);
+                    }
+
+                    var newExCounter =
+                        lcc.SingleOrDefault(cnt => cnt.LSHET == newCounter.LSHET && cnt.CNTTYPE == newCounter.CNTTYPE);
+
+                    if (newExCounter == null)
                     {
                         maxCounterId++;
-                        newCounter = new CNV_COUNTER
-                        {
-                            COUNTERID = maxCounterId.ToString(),
-                            LSHET = lshet,
-                            SETUPDATE = new DateTime(2016, 1, 1),
-                            NAME = "Горячая вода",
-                            CNTNAME = "сгв-15",
-                            CNTTYPE = 3
-                        };
+                        newCounter.COUNTERID = maxCounterId.ToString();
                         lcc.Add(newCounter);
                         counterid = newCounter.COUNTERID;
                     }
-                    else counterid = newCounter.COUNTERID;
+                    else counterid = newExCounter.COUNTERID;
                 }
                 else
                 {
@@ -535,9 +552,9 @@ namespace _039_Iskra
                                                         from Nachopl n
                                                         left join tarifs t on t.parentcd = n.parentcd and t.tarifcd = n.tarifcd
                                                         where (n.fnath <> 0 or n.prochl <> 0)
-                                                        and( n.parentcd <> 0 and n.tarifcd <> 0)");
-            DataTable dtOplata = Tmsource.ExecuteQuery(@"select lshet, month, year, oplata, parentcd, tarifcd, tarifnm, RECNO() as RECNO from Nachopl where oplata <> 0 and parentcd <> 0 and tarifcd <> 0");
-            DataTable dtNachopl = Tmsource.ExecuteQuery(@"select lshet, month, year, bdebet, edebet, parentcd, tarifcd, tarifnm from Nachopl where parentcd <> 0 and tarifcd <> 0");
+                                                        and( n.parentcd <> 0 and n.tarifcd <> 0) and year > 2012");
+            DataTable dtOplata = Tmsource.ExecuteQuery(@"select lshet, month, year, oplata, parentcd, tarifcd, tarifnm, RECNO() as RECNO from Nachopl where oplata <> 0 and parentcd <> 0 and tarifcd <> 0  and year > 2012");
+            DataTable dtNachopl = Tmsource.ExecuteQuery(@"select lshet, month, year, bdebet, edebet, parentcd, tarifcd, tarifnm from Nachopl where parentcd <> 0 and tarifcd <> 0  and year > 2012");
 
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
@@ -548,14 +565,14 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dtNach.Rows)
             {
                 nachopl.ReadDataRow(dataRow);
-
+                if (nachopl.Lshet.Trim() == "00001665") continue;
                 string documentcd = String.Format("N{0}_{1}", nachopl.Lshet.Trim().TrimStart('0'), dataRow["RECNO"]);
 
                 int regimcd;
                 string regimname;
                 int servicecd;
                 string servicename;
-                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname);
+                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname, (int)nachopl.Parentcd, (int)nachopl.Tarifcd);
 
                 //decimal tarif = (decimal)dataRow["tarif"];
                 var ndef = new CNV_NACH
@@ -582,14 +599,14 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dtOplata.Rows)
             {
                 nachopl.ReadDataRow(dataRow);
-
+                if (nachopl.Lshet.Trim() == "00001665") continue;
                 string documentcd = String.Format("O{0}_{1}", nachopl.Lshet.Trim().TrimStart('0'), dataRow["RECNO"]);
 
                 int regimcd;
                 string regimname;
                 int servicecd;
                 string servicename;
-                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname);
+                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname, (int)nachopl.Parentcd, (int)nachopl.Tarifcd);
 
                 var odef = new CNV_OPLATA
                 {
@@ -612,12 +629,13 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dtNachopl.Rows)
             {
                 nachopl.ReadDataRow(dataRow);
+                if (nachopl.Lshet.Trim() == "00001665") continue;
                 string lshet = Consts.GetLs(Convert.ToInt64(nachopl.Lshet));
                 int regimcd;
                 string regimname;
                 int servicecd;
                 string servicename;
-                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname);
+                DefineServiceType(nachopl.Tarifnm, out servicecd, out servicename, out regimcd, out regimname, (int)nachopl.Parentcd, (int)nachopl.Tarifcd);
                 nm.RegisterBeginSaldo(lshet, (int) nachopl.Month, (int) nachopl.Year, servicecd, servicename,
                     nachopl.Bdebet);
                 nm.RegisterEndSaldo(lshet, (int)nachopl.Month, (int)nachopl.Year, servicecd, servicename,
@@ -633,10 +651,16 @@ namespace _039_Iskra
         }
 
         private void DefineServiceType(string tarifName, out int servicecd, out string servicename, out int regimcd,
-            out string regimname)
+            out string regimname, int parentcd = 0, int tarifcd = 0)
         {
             regimcd = 10;
             regimname = "Неизвестен";
+            if ((parentcd == 203 && tarifcd == 204) || (parentcd == 232 && tarifcd == 2))
+            {
+                servicecd = 6;
+                servicename = "Вывоз отходов";
+                return;
+            }
             switch (tarifName.Trim())
             {
                 case "Водоотведение":
@@ -778,10 +802,10 @@ namespace _039_Iskra
         public override void DoConvert()
         {
             SetStepsCount(1);
-            StepStart(2);
+            StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
-            Iterate();
+            //fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
+            //Iterate();
             fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0" });
             Iterate();
         }
