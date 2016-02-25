@@ -105,7 +105,9 @@ namespace _040_Skopin
                     RAYONKOD = 1,
                     RAYONNAME = "Рязанский район",
                     TOWNSNAME = String.IsNullOrWhiteSpace(abonent.Townsname) ? Consts.UnknownTown : abonent.Townsname.Trim(),
+                    TOWNSKOD = (int)abonent.Townskod,
                     ULICANAME = abonent.Ulicaname.Trim().Replace(" ул.", ""),
+                    ULICAKOD = (int)abonent.Ulicakod,
                     F = abonent.F.Trim(),
                     I = abonent.I.Trim(),
                     O = abonent.O.Trim(),
@@ -146,11 +148,11 @@ namespace _040_Skopin
             }
             StepFinish();
 
-            StepStart(3);
-            AbonentRecordUtils.SetUniqueTownskod(lca, 0);
-            Iterate();
-            AbonentRecordUtils.SetUniqueUlicakod(lca, 0);
-            Iterate();
+            StepStart(1);
+            //AbonentRecordUtils.SetUniqueTownskod(lca, 0);
+            //Iterate();
+            //AbonentRecordUtils.SetUniqueUlicakod(lca, 0);
+            //Iterate();
             AbonentRecordUtils.SetUniqueHouseCd(lca, 0);
             StepFinish();
 
