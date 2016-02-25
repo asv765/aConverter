@@ -23,6 +23,17 @@ namespace _039_Iskra
             set { CheckStringData("Lshet", value, 10); lshet = value; }
         }
 
+        private Int64 parentcd;
+        // <summary>
+        // PARENTCD N(6)
+        // </summary>
+        [FieldName("PARENTCD"), FieldType('N'), FieldWidth(6)]
+        public Int64 Parentcd
+        {
+            get { return parentcd; }
+            set { CheckIntegerData("Parentcd", value, 6); parentcd = value; }
+        }
+
         private Int64 lcharcd;
         // <summary>
         // LCHARCD N(6)
@@ -81,6 +92,7 @@ namespace _039_Iskra
         public override void ReadDataRow(System.Data.DataRow ADataRow)
         {
             if (ADataRow.Table.Columns.Contains("LSHET")) Lshet = ADataRow["LSHET"].ToString(); else Lshet = "";
+            if (ADataRow.Table.Columns.Contains("PARENTCD")) Parentcd = Convert.ToInt64(ADataRow["PARENTCD"]); else Parentcd = 0;
             if (ADataRow.Table.Columns.Contains("LCHARCD")) Lcharcd = Convert.ToInt64(ADataRow["LCHARCD"]); else Lcharcd = 0;
             if (ADataRow.Table.Columns.Contains("LCHARNAME")) Lcharname = ADataRow["LCHARNAME"].ToString(); else Lcharname = "";
             if (ADataRow.Table.Columns.Contains("VALUE")) Value_ = Convert.ToInt64(ADataRow["VALUE"]); else Value_ = 0;
@@ -92,6 +104,7 @@ namespace _039_Iskra
         {
             LcharsRecord retValue = new LcharsRecord();
             retValue.Lshet = this.Lshet;
+            retValue.Parentcd = this.Parentcd;
             retValue.Lcharcd = this.Lcharcd;
             retValue.Lcharname = this.Lcharname;
             retValue.Value_ = this.Value_;
@@ -102,7 +115,7 @@ namespace _039_Iskra
 
         public override string GetInsertScript()
         {
-            string rs = String.Format("INSERT INTO LCHARS (LSHET, LCHARCD, LCHARNAME, VALUE, VALUEDESC, DATE) VALUES ('{0}', {1}, '{2}', {3}, '{4}', CTOD('{5}'))", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), Lcharcd.ToString(), String.IsNullOrEmpty(Lcharname) ? "" : Lcharname.Trim(), Value_.ToString(), String.IsNullOrEmpty(Valuedesc) ? "" : Valuedesc.Trim(), Date == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Date.Month, Date.Day, Date.Year));
+            string rs = String.Format("INSERT INTO LCHARS (LSHET, PARENTCD, LCHARCD, LCHARNAME, VALUE, VALUEDESC, DATE) VALUES ('{0}', {1}, {2}, '{3}', {4}, '{5}', CTOD('{6}'))", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), Parentcd.ToString(), Lcharcd.ToString(), String.IsNullOrEmpty(Lcharname) ? "" : Lcharname.Trim(), Value_.ToString(), String.IsNullOrEmpty(Valuedesc) ? "" : Valuedesc.Trim(), Date == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Date.Month, Date.Day, Date.Year));
             return rs;
         }
     }
