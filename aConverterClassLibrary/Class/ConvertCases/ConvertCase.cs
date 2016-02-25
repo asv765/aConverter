@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using aConverterClassLibrary.RecordsDataAccessORM;
 using DbfClassLibrary;
 
 namespace aConverterClassLibrary
@@ -142,6 +144,36 @@ namespace aConverterClassLibrary
         }
 
         public abstract void DoConvert();
+
+        public void SaveList<T>(IEnumerable<T> listToSave, int commitStep)
+        {
+            var list = listToSave.ToList();
+            int stepsCount = (list.Count / commitStep) + 1;
+            StepStart(stepsCount);
+            while (list.Count > 0)
+            {
+                int count = Math.Min(commitStep, list.Count);
+                var sublist = new List<object>();
+                for (int i = 0; i < count; i++)
+                {
+                    sublist.Add(list[i]);
+                }
+                list.RemoveRange(0, count);
+                SaveContextPart(sublist);
+                Iterate();
+            }
+            StepFinish();
+        }
+
+        public void SaveContextPart(IEnumerable<object> entitiesList)
+        {
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                context.Add(entitiesList);
+                context.SaveChanges();
+            }
+        }
+
 
         public void Dispose()
         {

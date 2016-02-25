@@ -36,5 +36,56 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 ar.HOUSECD = housecd;
             }
         }
-    }
+
+        /// <summary>
+        /// Заполняет уникальными значениями поле TOWNSKOD списка абонентов
+        /// </summary>
+        /// <param name="list"></param>
+        public static void SetUniqueTownskod(IEnumerable<CNV_ABONENT> list, int startValue)
+        {
+            int counter = 0;
+            var keysdic = new Dictionary<object, int>();
+            foreach (CNV_ABONENT ar in list.Where(p => p.TOWNSKOD == null))
+            {
+                object o = new
+                {
+                    RayonKod = ar.RAYONKOD,
+                    TownName = ar.TOWNSNAME
+                };
+                int townsKod;
+                if (!keysdic.TryGetValue(o, out townsKod))
+                {
+                    townsKod = startValue + (++counter);
+                    keysdic.Add(o, townsKod);
+                }
+                ar.TOWNSKOD = townsKod;
+            }
+        }
+
+        /// <summary>
+        /// Заполняет уникальными значениями поле ULICAKOD списка абонентов
+        /// </summary>
+        /// <param name="list"></param>
+        public static void SetUniqueUlicakod(IEnumerable<CNV_ABONENT> list, int startValue)
+        {
+            int counter = 0;
+            var keysdic = new Dictionary<object, int>();
+            foreach (CNV_ABONENT ar in list.Where(p => p.ULICAKOD == null))
+            {
+                object o = new
+                {
+                    RayonKod = ar.RAYONKOD,
+                    TownsKod = ar.TOWNSKOD,
+                    UlicaName = ar.ULICANAME
+                };
+                int ulicaKod;
+                if (!keysdic.TryGetValue(o, out ulicaKod))
+                {
+                    ulicaKod = startValue + (++counter);
+                    keysdic.Add(o, ulicaKod);
+                }
+                ar.ULICAKOD = ulicaKod;
+            }
+        }
+    } 
 }
