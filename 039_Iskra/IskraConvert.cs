@@ -475,6 +475,7 @@ namespace _039_Iskra
                     switch (counterind.Tarifnm.Trim())
                     {
                         case "Водоснабжение":
+                            if (counterind.Indication == 0) continue;
                             newCounter.NAME = "Водоснабжение";
                             newCounter.CNTTYPE = 1;
                             break;
@@ -807,7 +808,7 @@ namespace _039_Iskra
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             //fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
             //Iterate();
-            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0" });
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
             Iterate();
         }
     }
