@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
@@ -827,6 +828,53 @@ namespace _039_Iskra
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
+            Iterate();
+        }
+    }
+
+    public class TransferOplata : ConvertCase
+    {
+        public TransferOplata()
+        {
+            ConvertCaseName = "Перенос данных об оплате";
+            Position = 1050;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01300_SOURCEDOC");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01400_OPLATA");
+            Iterate();
+        }
+    }
+
+    public class TransferSaldo : ConvertCase
+    {
+        public TransferSaldo()
+        {
+            ConvertCaseName = "Перенос данных о сальдо";
+            Position = 1060;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
+            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] { Consts.CurrentYear.ToString(CultureInfo.InvariantCulture),
+                Consts.CurrentMonth.ToString(CultureInfo.InvariantCulture) });
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
             Iterate();
         }
     }
