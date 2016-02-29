@@ -513,7 +513,7 @@ namespace _039_Iskra
                     INDDATE = counterind.Inddate,
                     INDTYPE = 0,
                     OLDIND = lastInd == null ? 0 : lastInd.INDICATION,
-                    INDICATION = lastInd == null ? counterind.Indication : lastInd.INDICATION + counterind.Indication
+                    INDICATION = counterind.Indication
                 };
                 lci.Add(c);
 
