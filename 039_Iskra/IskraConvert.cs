@@ -96,7 +96,6 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dt.Rows)
             {
                 abonent.ReadDataRow(dataRow);
-                if (abonent.Lshet.Trim() == "00001665") continue;
 
                 var a = new CNV_ABONENT
                 {
@@ -249,7 +248,6 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dt.Rows)
             {
                 chars.ReadDataRow(dataRow);
-                if (chars.Lshet.Trim() == "00001665") continue;
 
                 var c = new CNV_CHAR
                 {
@@ -317,8 +315,11 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dt.Rows)
             {
                 lchar.ReadDataRow(dataRow);
-                if (lchar.Lshet.Trim() == "00001665") 
-                    continue;
+                // У абонента разные характеристики в исходной базе, но при перекодировке они сворачиваются в одну
+                if (lchar.Lshet.Trim() == "00001665" && lchar.Lcharcd == 2)
+                {
+                    lchar.Date = new DateTime(lchar.Date.Year, lchar.Date.Month, 2);
+                }
 
                 foreach (DataRow row in recodeTable.Rows)
                 {
@@ -348,7 +349,6 @@ namespace _039_Iskra
             SaveList(llc, Consts.InsertRecordCount);
         }
     }
-
 
     /// <summary>
     /// Конвертация данных о счетчиках
@@ -381,7 +381,6 @@ namespace _039_Iskra
             {
                 counter.ReadDataRow(dataRow);
 
-                if (counter.Lshet.Trim() == "00001665") continue;
                 var c = new CNV_COUNTER
                 {
                     COUNTERID = counter.Counterid.Trim(),
@@ -455,7 +454,6 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dt.Rows)
             {
                 counterind.ReadDataRow(dataRow);
-                if (counterind.Lshet.Trim() == "00001665") continue;
 
                 if (counterind.Tarifnm.Trim() == "Водоотведение" ||
                     dataRow["counterid"].ToString().Trim() == "000014742" ||
@@ -554,9 +552,9 @@ namespace _039_Iskra
                                                         from Nachopl n
                                                         left join tarifs t on t.parentcd = n.parentcd and t.tarifcd = n.tarifcd
                                                         where (n.fnath <> 0 or n.prochl <> 0)
-                                                        and( n.parentcd <> 0 and n.tarifcd <> 0) and year > 2012");
-            DataTable dtOplata = Tmsource.ExecuteQuery(@"select lshet, month, year, oplata, parentcd, tarifcd, tarifnm, RECNO() as RECNO from Nachopl where oplata <> 0 and parentcd <> 0 and tarifcd <> 0  and year > 2012");
-            DataTable dtNachopl = Tmsource.ExecuteQuery(@"select lshet, month, year, bdebet, edebet, parentcd, tarifcd, tarifnm from Nachopl where parentcd <> 0 and tarifcd <> 0  and year > 2012");
+                                                        and( n.parentcd <> 0 and n.tarifcd <> 0)");
+            DataTable dtOplata = Tmsource.ExecuteQuery(@"select lshet, month, year, oplata, parentcd, tarifcd, tarifnm, RECNO() as RECNO from Nachopl where oplata <> 0 and parentcd <> 0 and tarifcd <> 0");
+            DataTable dtNachopl = Tmsource.ExecuteQuery(@"select lshet, month, year, bdebet, edebet, parentcd, tarifcd, tarifnm from Nachopl where parentcd <> 0 and tarifcd <> 0");
 
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
@@ -567,7 +565,7 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dtNach.Rows)
             {
                 nachopl.ReadDataRow(dataRow);
-                if (nachopl.Lshet.Trim() == "00001665") continue;
+                if (nachopl.Tarifnm.Trim() == "Пени") continue;
                 string documentcd = String.Format("N{0}_{1}", nachopl.Lshet.Trim().TrimStart('0'), dataRow["RECNO"]);
 
                 int regimcd;
@@ -601,7 +599,7 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dtOplata.Rows)
             {
                 nachopl.ReadDataRow(dataRow);
-                if (nachopl.Lshet.Trim() == "00001665") continue;
+                if (nachopl.Tarifnm.Trim() == "Пени") continue;
                 string documentcd = String.Format("O{0}_{1}", nachopl.Lshet.Trim().TrimStart('0'), dataRow["RECNO"]);
 
                 int regimcd;
@@ -631,7 +629,7 @@ namespace _039_Iskra
             foreach (DataRow dataRow in dtNachopl.Rows)
             {
                 nachopl.ReadDataRow(dataRow);
-                if (nachopl.Lshet.Trim() == "00001665") continue;
+                if (nachopl.Tarifnm.Trim() == "Пени") continue;
                 string lshet = Consts.GetLs(Convert.ToInt64(nachopl.Lshet));
                 int regimcd;
                 string regimname;
@@ -693,6 +691,79 @@ namespace _039_Iskra
                 default:
                     throw new Exception(String.Format("Неизвестное имя тарифа '{0}'", tarifName));
             }
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных о характерстиках домов
+    /// </summary>
+    public class ConvertHChars : ConvertCase
+    {
+        public ConvertHChars()
+        {
+            ConvertCaseName = "HADDCHARS - характеристики домов";
+            Position = 80;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(2);
+
+            BufferEntitiesManager.DropTableData("CNV$HADDCHAR");
+            DataTable dt = Tmsource.GetDataTable("CHARS2");
+            var lch = new List<CNV_HADDCHAR>();
+
+            StepStart(dt.Rows.Count);
+            var hchar = new Chars2Record();
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                hchar.ReadDataRow(dataRow);
+
+                if (hchar.Isdeleted == 1 || hchar.Psectorcd == 0 || (hchar.Sectorcd == 26 && hchar.Psectorcd == 6))
+                    continue;
+
+                DataTable abonents = Tmsource.ExecuteQuery(
+                    String.Format("SELECT lshet FROM ABONENT where psectorcd = {0} and sectorcd = {1}",
+                        hchar.Psectorcd, hchar.Sectorcd));
+
+                var la = new List<string>();
+                foreach (DataRow abonent in abonents.Rows)
+                {
+                    la.Add(Consts.GetLs(Convert.ToInt64(abonent[0])));
+                }
+
+                var houses = new List<int?>();
+                using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+                {
+                    houses = context.CNV_ABONENTs.Where(a => la.Contains(a.LSHET)).Select(a => a.HOUSECD).ToList();
+                }
+
+                foreach (var housecd in houses)
+                {
+                    if (housecd == null || housecd == 0) continue;
+                    var haddchar1 = new CNV_HADDCHAR
+                    {
+                        HOUSECD = housecd,
+                        ADDCHARCD = 32001,
+                        VALUE_ = hchar.Livearea.ToString().Replace(',','.')
+                    };
+                    var haddchar2 = new CNV_HADDCHAR
+                    {
+                        HOUSECD = housecd,
+                        ADDCHARCD = 32010,
+                        VALUE_ = hchar.Comearea.ToString().Replace(',', '.')
+                    };
+                    lch.Add(haddchar1);
+                    lch.Add(haddchar2);
+                }
+                Iterate();
+            }
+            
+            SaveList(lch, Consts.InsertRecordCount);
         }
     }
     #endregion
@@ -886,6 +957,26 @@ namespace _039_Iskra
         {
             ConvertCaseName = "Перерасчет";
             Position = 1080;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01700_PERERASHETIMPORT");
+            Iterate();
+        }
+    }
+
+    public class TransferHchars : ConvertCase
+    {
+        public TransferHchars()
+        {
+            ConvertCaseName = "Характеристики домов";
+            Position = 1090;
             IsChecked = false;
 
         }
