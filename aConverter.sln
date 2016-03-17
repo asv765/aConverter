@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "040_Skopin", "040_Skopin\04
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "041_Sarai", "041_Sarai\041_Sarai.csproj", "{E460846E-5A22-4645-A6BA-A037ACD2112D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "042_Kirici", "042_Kirici\042_Kirici.csproj", "{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -205,6 +207,18 @@ Global
 		{E460846E-5A22-4645-A6BA-A037ACD2112D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E460846E-5A22-4645-A6BA-A037ACD2112D}.Release|x64.ActiveCfg = Release|Any CPU
 		{E460846E-5A22-4645-A6BA-A037ACD2112D}.Release|x86.ActiveCfg = Release|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Release|x64.ActiveCfg = Release|Any CPU
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,6 +233,7 @@ Global
 		{CE1FD047-3200-47BA-B125-56BD5744CE19} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{42E685CB-2CD8-4DEC-A1FE-7F1620AE153C} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{E460846E-5A22-4645-A6BA-A037ACD2112D} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
+		{4C65B11F-A23A-408D-AEDA-68C8CBF7F16A} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = aConverter.vsmdi
