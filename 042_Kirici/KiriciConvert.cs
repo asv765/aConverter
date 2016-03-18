@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
 using aConverterClassLibrary.RecordsDataAccessORM;
@@ -224,5 +225,78 @@ namespace _042_Kirici
             StepFinish();
         }
     }
+
+    /// <summary>
+    /// Конвертация данных о счетчиках
+    /// </summary>
+    public class ConvertCounters : ConvertCase
+    {
+        public ConvertCounters()
+        {
+            ConvertCaseName = "COUNTERS - данные о счетчиках";
+            Position = 50;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(2);
+
+            BufferEntitiesManager.DropTableData("CNV$COUNTERS");
+            DataTable dt = Tmsource.GetDataTable("COUNTERS");
+            
+            var lcn = new List<CNV_COUNTER>();
+             StepStart(dt.Rows.Count);
+            var counter = new CountersRecord();
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                counter.ReadDataRow(dataRow);
+                if (counter.Isdeleted == 1) continue;
+
+                int cnttype;
+                switch (counter.Servicecd)
+                {
+                    case 3:
+                        cnttype = 1;
+                        break;
+                    case 34:
+                        cnttype = 3;
+                        break;
+                    case 0:
+                    case 6:
+                        continue;
+                    default:
+                        throw new Exception(String.Format("Неизсветный тип стчетчика {0} {1}", counter.Serialnum,
+                            counter.Servicecd));
+                }
+
+                var c = new CNV_COUNTER
+                {
+                    LSHET = Consts.GetLs(Convert.ToInt64(counter.Lshet_kod)),
+                    CNTTYPE = cnttype,
+                    NAME = counter.Name.Trim(),
+                    COUNTERID = counter.Counterid.Trim(),
+                    DEACTDATE = counter.Deactdate.Year > 2000 ? (DateTime?)counter.Deactdate : null,
+                    SETUPDATE = counter.Setupdate.Year > 2000 ? counter.Setupdate : new DateTime(2016,1,1),
+                    SERIALNUM = counter.Serialnum.Trim()
+                };
+
+                if (lcn.Any(cnt => cnt.COUNTERID == c.COUNTERID))
+                    c.COUNTERID = (Convert.ToInt32(c.COUNTERID) + 2000).ToString();
+
+                lcn.Add(c);
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(1);
+            SaveList(lcn, Consts.InsertRecordCount);
+            StepFinish();
+        }
+    }
+
     #endregion
 }

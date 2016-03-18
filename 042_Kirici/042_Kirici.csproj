@@ -54,6 +54,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Records\AbonentRecord.cs" />
     <Compile Include="Records\CharsRecord.cs" />
+    <Compile Include="Records\LcharRecord.cs" />
+    <Compile Include="Records\CountersRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\aConverterClassLibrary\aConverterClassLibrary.csproj">
