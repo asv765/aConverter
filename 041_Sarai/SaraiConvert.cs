@@ -274,6 +274,14 @@ namespace _041_Sarai
                     cind.INDDATE = (DateTime) dataRow["ДатаПлатежа"];
                     cind.INDTYPE = 0;
                 }
+                else
+                {
+                    cind.OLDIND = cind.INDICATION;
+                    cind.DOCUMENTCD = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                    cind.INDDATE = new DateTime(2016,03,01);
+                    cind.INDTYPE = 0;
+                }
+                lci.Add(cind);
                 recno++;
                 Iterate();
             }
@@ -301,10 +309,10 @@ namespace _041_Sarai
                 {
                     COUNTERID = counter.COUNTERID,
                     DOCUMENTCD = String.Format("{0}_{1}", dataRow["АдресИД"], recno),
-                    INDDATE = (DateTime) dataRow["ДатаПлатежа"],
+                    INDDATE = (DateTime)dataRow["ДатаПлатежа"],
                     INDTYPE = 0,
                     OLDIND = lastInd == null ? 0 : lastInd.INDICATION,
-                    INDICATION = (decimal) dataRow[service.Name]
+                    INDICATION = (decimal)dataRow[service.Name]
                 };
                 lci.Add(cind);
                 recno++;
