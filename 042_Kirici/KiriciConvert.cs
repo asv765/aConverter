@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
+using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using DbfClassLibrary;
@@ -18,11 +20,11 @@ namespace _042_Kirici
         public const int InsertRecordCount = 1000;
 
         public const string RecodeTableFileName =
-            @"D:\Work\C#\C#Projects\aConverter\039_Iskra\Source\Таблица перекодировки.xls.xlsx";
+            @"D:\Work\C#\C#Projects\aConverter\042_Kirici\Sources\Таблица перекодировки.xlsx";
 
         public static string GetLs(long intls)
         {
-            return String.Format("88{0:D6}", intls);
+            return String.Format("90{0:D6}", intls);
         }
 
         public static readonly int CurrentMonth = 03;
@@ -227,6 +229,66 @@ namespace _042_Kirici
     }
 
     /// <summary>
+    /// Конвертация качественных характеристик
+    /// Данные в таблице кодировки должны быть отсортированы по исходному ID!
+    /// </summary>
+    public class ConvertLChars : ConvertCase
+    {
+        public ConvertLChars()
+        {
+            ConvertCaseName = "LCHARS - данные о параметрах потребления";
+            Position = 40;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(2);
+
+            BufferEntitiesManager.DropTableData("CNV$LCHARS");
+            DataTable dt = Tmsource.GetDataTable("LCHARS");
+            DataTable recodeTable = Utils.ReadExcelFile(Consts.RecodeTableFileName, "Лист2");
+            var llc = new List<CNV_LCHAR>();
+
+            StepStart(dt.Rows.Count);
+            var lchar = new LcharsRecord();
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                lchar.ReadDataRow(dataRow);
+
+                foreach (DataRow row in recodeTable.Rows)
+                {
+                    if (row["Value1"] == DBNull.Value || row["Value2"] == DBNull.Value) continue;
+
+                    if (Convert.ToInt32(row["Value1"]) != lchar.Lcharcd ||
+                        Convert.ToInt32(row["Value2"]) != lchar.Tarifcd) continue;
+
+                    var lc = new CNV_LCHAR
+                    {
+                        LSHET = Consts.GetLs(Convert.ToInt64(lchar.Lshet_kod)),
+                        LCHARCD = Convert.ToInt32(row["LCHARCD"]),
+                        LCHARNAME = row["LCHARNAME"].ToString(),
+                        VALUEDESC = row["LCHARVALUEDESC"].ToString(),
+                        VALUE_ = Convert.ToInt32(row["LCHARVALUE"]),
+                        DATE_ = lchar.Date
+                    };
+                    llc.Add(lc);
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(1);
+            llc = LcharsRecordUtils.ThinOutList(llc);
+            StepFinish();
+            SaveList(llc, Consts.InsertRecordCount);
+        }
+    }
+
+    /// <summary>
     /// Конвертация данных о счетчиках
     /// </summary>
     public class ConvertCounters : ConvertCase
@@ -240,6 +302,7 @@ namespace _042_Kirici
 
         public override void DoConvert()
         {
+            DoubledCID = new List<string>();
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
@@ -285,7 +348,10 @@ namespace _042_Kirici
                 };
 
                 if (lcn.Any(cnt => cnt.COUNTERID == c.COUNTERID))
-                    c.COUNTERID = (Convert.ToInt32(c.COUNTERID) + 2000).ToString();
+                {
+                    DoubledCID.Add(c.COUNTERID);
+                    c.COUNTERID = (Convert.ToInt32(c.COUNTERID) + 2000).ToString("D9");
+                }
 
                 lcn.Add(c);
                 Iterate();
@@ -296,7 +362,282 @@ namespace _042_Kirici
             SaveList(lcn, Consts.InsertRecordCount);
             StepFinish();
         }
+
+        public static List<string> DoubledCID;
     }
 
+    /// <summary>
+    /// Конвертация данных о показаниях счетчиков
+    /// </summary>
+    public class ConvertCntrsind : ConvertCase
+    {
+        public ConvertCntrsind()
+        {
+            ConvertCaseName = "CNTRSIND - данные о показаниях счетчиках";
+            Position = 60;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            SetStepsCount(3);
+
+            BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
+            DataTable dt = Tmsource.ExecuteQuery(@"SELECT i.*, RECNO() AS RECNO FROM CNTRSIND i where i.is_rn = 0
+                                                    and i.counterid not in (select c.counterid from counters c where c.servicecd = 0 or c.servicecd = 6)");
+            var lci = new List<CNV_CNTRSIND>();
+            StepStart(dt.Rows.Count);
+            var counterind = new CntrsindRecord();
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                counterind.ReadDataRow(dataRow);
+                
+                var c = new CNV_CNTRSIND
+                {
+                    COUNTERID = counterind.Counterid.Trim(),
+                    DOCUMENTCD = String.Format("{0}_{1}", counterind.Counterid.Trim().TrimStart('0'), dataRow["RECNO"]),
+                    INDDATE = counterind.Inddate,
+                    OLDIND = counterind.Previndic,
+                    INDICATION = counterind.Indication
+                };
+
+                lci.Add(c);
+
+                if (ConvertCounters.DoubledCID.Contains(c.COUNTERID))
+                {
+                    c.COUNTERID = (Convert.ToInt32(c.COUNTERID) + 2000).ToString("D9");
+                    lci.Add(c);
+                }
+
+                Iterate();
+            }
+            StepFinish();
+
+            SaveList(lci, Consts.InsertRecordCount);
+        }
+    }
+
+    public class ConvertNachisl : ConvertCase
+    {
+        public ConvertNachisl()
+        {
+            ConvertCaseName = "Nach - данные о начислениях";
+            Position = 70;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+            SetStepsCount(3);
+            BufferEntitiesManager.DropTableData("CNV$NACH");
+            DataTable dt = Tmsource.ExecuteQuery("select *, RECNO() as RECNO from SUMMS");
+
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+
+            var nach = new SummsRecord();
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                nach.ReadDataRow(dataRow);
+
+                string documentcd = String.Format("N{0}_{1}", nach.Lshet_kod.Trim().TrimStart('0'), dataRow["RECNO"]);
+                int regimcd = 10;
+                string regimname = "Неизвестен";
+                int servicecd;
+                string servicename;
+
+                switch (nach.Lcharcd)
+                {
+                    case 2:
+                    case 8:
+                    case 14:
+                    case 15:
+                        servicecd = 4;
+                        servicename = "Холодная вода";
+                        break;
+                    case 4:
+                    case 12:
+                        servicecd = 6;
+                        servicename = "Вывоз ТБО";
+                        break;
+                    case 3:
+                    case 13:
+                    case 16:
+                    case 7:
+                        servicecd = 8;
+                        servicename = "Канализация";
+                        break;
+                    case 17:
+                        servicecd = 5;
+                        servicename = "Горячая вода";
+                        break;
+                    case 1:
+                        continue;
+                    default:
+                        throw new Exception(String.Format("Неизвестная услуга {0} {1}", nach.Lcharname, nach.Lcharcd));
+                }
+
+                var ndef = new CNV_NACH
+                {
+                    VOLUME = nach.Serv_col,
+                    REGIMCD = regimcd,
+                    REGIMNAME = regimname,
+                    SERVICECD = servicecd,
+                    SERVICENAME = servicename,
+                    TYPE_ = 0
+                };
+                nm.RegisterNach(ndef, Consts.GetLs(Convert.ToInt64(nach.Lshet_kod)), nach.Date_rasch.Month,
+                    nach.Date_rasch.Year, nach.Summa, 0, nach.Date, documentcd);
+                Iterate();
+            }
+            StepFinish();
+
+            SaveList(nm.NachRecords, Consts.InsertRecordCount);
+            SaveList(nm.NachoplRecords.Values, Consts.InsertRecordCount);
+        }
+    }
+
+    #endregion
+
+    #region Перенос данных из временных таблиц
+    public class TransferAddressObjects : ConvertCase
+    {
+        public TransferAddressObjects()
+        {
+            ConvertCaseName = "Перенос данных об адресных объектах";
+            Position = 1000;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(6);
+
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+
+            fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
+            Iterate();
+
+            StepFinish();
+        }
+    }
+
+    public class TransferAbonents : ConvertCase
+    {
+        public TransferAbonents()
+        {
+            ConvertCaseName = "Перенос данных об абонентах";
+            Position = 1010;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferChars : ConvertCase
+    {
+        public TransferChars()
+        {
+            ConvertCaseName = "Перенос данных о количественных характеристиках";
+            Position = 1020;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "0" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferLchars : ConvertCase
+    {
+        public TransferLchars()
+        {
+            ConvertCaseName = "Перенос данных о качественных характеристиках";
+            Position = 1030;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "0" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferCounters : ConvertCase
+    {
+        public TransferCounters()
+        {
+            ConvertCaseName = "Перенос данных о счетчиках";
+            Position = 1040;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            //fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
+            //Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
+            Iterate();
+        }
+    }
+
+    public class TransferNachisl : ConvertCase
+    {
+        public TransferNachisl()
+        {
+            ConvertCaseName = "Перенос данных о начислениях";
+            Position = 1070;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
+            Iterate();
+        }
+    }
     #endregion
 }
