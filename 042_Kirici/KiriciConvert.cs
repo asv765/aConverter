@@ -491,8 +491,8 @@ namespace _042_Kirici
                     SERVICENAME = servicename,
                     TYPE_ = 0
                 };
-                nm.RegisterNach(ndef, Consts.GetLs(Convert.ToInt64(nach.Lshet_kod)), nach.Date_rasch.Month,
-                    nach.Date_rasch.Year, nach.Summa, 0, nach.Date, documentcd);
+                nm.RegisterNach(ndef, Consts.GetLs(Convert.ToInt64(nach.Lshet_kod)), nach.Date_deist.Month,
+                    nach.Date_deist.Year, nach.Summa, 0, nach.Date_deist, documentcd);
                 Iterate();
             }
             StepFinish();
