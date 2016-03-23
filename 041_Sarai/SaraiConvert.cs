@@ -33,6 +33,8 @@ namespace _041_Sarai
                                                 ON tblПункт.ПунктИД = tblАдрес.ПунктИД
                                                 ORDER BY tblАдрес.АдресИД;";
 
+        public const string SelectCChars = @"select АдресИД, КоличествоЖильцов, ОбщаяПлощадь, ЖилаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАдрес";
+
         public const string SelectCounterIndications = @"select p1.АдресИД, p1.ДатаПлатежа, p1.{{service}} from tblПлатежи p1
 	                                                    where p1.{{service}} <>0 and p1.НомерПлатежа <> (select max(p2.НомерПлатежа) from tblПлатежи p2 where p2.АдресИД = p1.АдресИД)
                                                         order by 1,2";
@@ -202,6 +204,67 @@ namespace _041_Sarai
     }
 
     /// <summary>
+    /// Конвертирует данные о количественных характеристиках
+    /// </summary>
+    public class ConvertChars : ConvertCase
+    {
+        public ConvertChars()
+        {
+            ConvertCaseName = "CHARS - данные о количественных характеристиках";
+            Position = 30;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(3);
+            BufferEntitiesManager.DropTableData("CNV$CHARS");
+            DataTable dt;
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectCChars, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+
+            dynamic[] chars =
+            {
+                new { CharName = "КоличествоЖильцов", Charcd = 1 },
+                new { CharName = "ОбщаяПлощадь", Charcd = 2 },
+                new { CharName = "ЖилаяПлощадь", Charcd = 14 },
+                new { CharName = "ОтапливаемаяПлощадь", Charcd = 4 },
+                new { CharName = "КоличествоСоток", Charcd = 15 }
+            };
+
+            var lcc = new List<CNV_CHAR>();
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                foreach (var value in chars)
+                {
+                    var c = new CNV_CHAR
+                    {
+                        LSHET = lshet,
+                        CHARCD = value.Charcd,
+                        VALUE_ = (decimal)dataRow[value.CharName],
+                        DATE_ = new DateTime(2016,1,1)
+                    };
+                    lcc.Add(c);
+                }
+                Iterate();
+            }
+            StepFinish();
+            SaveList(lcc, Consts.InsertRecordCount);
+        }
+    }
+
+    /// <summary>
     /// Конвертация данных о показаниях счетчиков
     /// </summary>
     public class ConvertCountersAndInd : ConvertCase
@@ -257,14 +320,14 @@ namespace _041_Sarai
                 {
                     LSHET = lshet,
                     SETUPDATE = new DateTime(2016,1,1),
-                    COUNTERID = maxCounterId.ToString(),
+                    COUNTERID = maxCounterId.ToString("D9"),
                     CNTTYPE = service.CNTTYPE
                 };
                 lcc.Add(counter);
 
                 var cind = new CNV_CNTRSIND
                 {
-                   COUNTERID = counter.COUNTERID,
+                    COUNTERID = counter.COUNTERID,
                    INDICATION = (decimal)dataRow[service.CNTNAME]
                 };
                 if (!dataRow.IsNull(service.Name))
@@ -273,6 +336,7 @@ namespace _041_Sarai
                     cind.DOCUMENTCD = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
                     cind.INDDATE = (DateTime) dataRow["ДатаПлатежа"];
                     cind.INDTYPE = 0;
+                    if (cind.OLDIND < 0) cind.OLDIND = 0;
                 }
                 else
                 {
@@ -303,17 +367,18 @@ namespace _041_Sarai
             {
                 string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
                 var counter = lcc.Single(cnt => cnt.LSHET == lshet && cnt.CNTTYPE == service.CNTTYPE);
-                var lastInd = lci.LastOrDefault(ci => ci.COUNTERID == counter.COUNTERID);
+                var lastInd = lci.Last(ci => ci.COUNTERID == counter.COUNTERID);
 
                 var cind = new CNV_CNTRSIND
                 {
                     COUNTERID = counter.COUNTERID,
                     DOCUMENTCD = String.Format("{0}_{1}", dataRow["АдресИД"], recno),
-                    INDDATE = (DateTime)dataRow["ДатаПлатежа"],
+                    INDDATE = (DateTime) dataRow["ДатаПлатежа"],
                     INDTYPE = 0,
-                    OLDIND = lastInd == null ? 0 : lastInd.INDICATION,
-                    INDICATION = (decimal)dataRow[service.Name]
+                    INDICATION = lastInd.OLDIND,
+                    OLDIND = lastInd.OLDIND - (decimal)dataRow[service.Name]
                 };
+                if (cind.OLDIND < 0) cind.OLDIND = 0;
                 lci.Add(cind);
                 recno++;
                 Iterate();
