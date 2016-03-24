@@ -33,7 +33,8 @@ namespace _041_Sarai
                                                 ON tblПункт.ПунктИД = tblАдрес.ПунктИД
                                                 ORDER BY tblАдрес.АдресИД;";
 
-        public const string SelectCChars = @"select АдресИД, КоличествоЖильцов, ОбщаяПлощадь, ЖилаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАдрес";
+        public const string SelectCChars = @"select АдресИД, Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАрхив 
+                                            union all (select АдресИД, '01.01.2016' as Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАдрес)";
 
         public const string SelectCounterIndications = @"select p1.АдресИД, p1.ДатаПлатежа, p1.{{service}} from tblПлатежи p1
 	                                                    where p1.{{service}} <>0 and p1.НомерПлатежа <> (select max(p2.НомерПлатежа) from tblПлатежи p2 where p2.АдресИД = p1.АдресИД)
@@ -217,9 +218,18 @@ namespace _041_Sarai
 
         public override void DoConvert()
         {
-            SetStepsCount(3);
+            SetStepsCount(99);
             BufferEntitiesManager.DropTableData("CNV$CHARS");
             DataTable dt;
+
+            dynamic[] chars =
+            {
+                new {CharName = "КоличествоЖильцов", Charcd = 1},
+                new {CharName = "ОбщаяПлощадь", Charcd = 2},
+                //new {CharName = "ЖилаяПлощадь", Charcd = 14},
+                new {CharName = "ОтапливаемаяПлощадь", Charcd = 4},
+                new {CharName = "КоличествоСоток", Charcd = 15}
+            };
 
             StepStart(1);
             using (var connection = new OleDbConnection(Consts.ConnectionString))
@@ -232,28 +242,20 @@ namespace _041_Sarai
             }
             StepFinish();
 
-            dynamic[] chars =
-            {
-                new { CharName = "КоличествоЖильцов", Charcd = 1 },
-                new { CharName = "ОбщаяПлощадь", Charcd = 2 },
-                new { CharName = "ЖилаяПлощадь", Charcd = 14 },
-                new { CharName = "ОтапливаемаяПлощадь", Charcd = 4 },
-                new { CharName = "КоличествоСоток", Charcd = 15 }
-            };
-
             var lcc = new List<CNV_CHAR>();
             StepStart(dt.Rows.Count);
             foreach (DataRow dataRow in dt.Rows)
             {
                 string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+
                 foreach (var value in chars)
                 {
                     var c = new CNV_CHAR
                     {
                         LSHET = lshet,
                         CHARCD = value.Charcd,
-                        VALUE_ = (decimal)dataRow[value.CharName],
-                        DATE_ = new DateTime(2016,1,1)
+                        VALUE_ = (decimal) dataRow[value.CharName],
+                        DATE_ = Convert.ToDateTime(dataRow["Месяц"])
                     };
                     lcc.Add(c);
                 }
@@ -388,6 +390,39 @@ namespace _041_Sarai
             SaveList(lcc, Consts.InsertRecordCount);
             SaveList(lci, Consts.InsertRecordCount);
             //}
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных истории начислений
+    /// </summary>
+    public class ConvertNachopl : ConvertCase
+    {
+        public ConvertNachopl()
+        {
+            ConvertCaseName = "NACHOPL - данные истории начислений";
+            Position = 70;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(99);
+
+            BufferEntitiesManager.DropTableData("CNV$NACHOPL");
+            BufferEntitiesManager.DropTableData("CNV$OPLATA");
+            BufferEntitiesManager.DropTableData("CNV$NACH");
+
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+            dynamic[] services =
+            {
+                new {OriginName = "", Servicecd = 0},
+                new {OriginName = "", Servicecd = 0},
+                new {OriginName = "", Servicecd = 0},
+                new {OriginName = "", Servicecd = 0},
+                new {OriginName = "", Servicecd = 0},
+                new {OriginName = "", Servicecd = 0},
+            };
         }
     }
 
