@@ -36,6 +36,8 @@ namespace _041_Sarai
         public const string SelectCChars = @"select АдресИД, Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАрхив 
                                             union all (select АдресИД, '01.01.2016' as Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАдрес)";
 
+        public const string SelectLChars = @"select АдресИД, МусорИД, ОтоплениеИД, ВодоснабжениеИД, КанализацияИД, ПоливИД from tblАдрес";
+
         public const string SelectCounterIndications = @"select p1.АдресИД, p1.ДатаПлатежа, p1.{{service}} from tblПлатежи p1
 	                                                    where p1.{{service}} <>0 and p1.НомерПлатежа <> (select max(p2.НомерПлатежа) from tblПлатежи p2 where p2.АдресИД = p1.АдресИД)
                                                         order by 1,2";
@@ -52,12 +54,18 @@ namespace _041_Sarai
                                                from tblПокСчОпл ind
                                                where ind.АдресИД is not null
                                                order by 1";
+
+        public const string SelectNachopl = @"select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ВодоснабжениеТариф,КанализацияТариф from tblАрхив
+                                            union all (select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ХолТариф,КанТариф from tblНачисления where datepart(""yyyy"",Месяц) > 2001)";
     }
     #endregion
 
     public static class Consts
     {
         public const string ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=D:\Work\C#\C#Projects\aConverter\041_Sarai\Sources\январь_2016.mdb";
+
+        public const string RecodeTableFileName =
+            @"D:\Work\C#\C#Projects\aConverter\041_Sarai\Sources\Таблица перекодировки.xlsx";
 
         public const int InsertRecordCount = 1000;
 
@@ -272,6 +280,80 @@ namespace _041_Sarai
     }
 
     /// <summary>
+    /// Конвертация качественных характеристик
+    /// Данные в таблице кодировки должны быть отсортированы по исходному ID!
+    /// </summary>
+    public class ConvertLChars : ConvertCase
+    {
+        public ConvertLChars()
+        {
+            ConvertCaseName = "LCHARS - данные о параметрах потребления";
+            Position = 40;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(4);
+            BufferEntitiesManager.DropTableData("CNV$LCHARS");
+            DataTable recodeTable = Utils.ReadExcelFile(Consts.RecodeTableFileName, "Лист1");
+            DataTable dt;
+            dynamic[] lchars =
+            {
+                new {LCharName = "МусорИД"},
+                new {LCharName = "ОтоплениеИД"},
+                new {LCharName = "ВодоснабжениеИД"},
+                new {LCharName = "КанализацияИД"},
+                new {LCharName = "ПоливИД"},
+            };
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectLChars, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+
+            var lcl = new List<CNV_LCHAR>();
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+
+                foreach (var value in lchars)
+                {
+                    foreach (DataRow row in recodeTable.Rows)
+                    {
+                        if (row["FIELD"].ToString() != value.LCharName ||
+                            Convert.ToInt32(row["Value"]) != (decimal) dataRow[value.LCharName]) continue;
+
+                        var lc = new CNV_LCHAR
+                        {
+                            LSHET = lshet,
+                            LCHARCD = Convert.ToInt32(row["LCHARCD"]),
+                            VALUE_ = Convert.ToInt32(row["LCHARVALUE"]),
+                            DATE_ = new DateTime(2015, 7, 1)
+                        };
+                        lcl.Add(lc);
+                    }
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(1);
+            lcl = LcharsRecordUtils.ThinOutList(lcl);
+            StepFinish();
+
+            SaveList(lcl, Consts.InsertRecordCount);
+        }
+    }
+
+    /// <summary>
     /// Конвертация данных о показаниях счетчиков
     /// </summary>
     public class ConvertCountersAndInd : ConvertCase
@@ -421,17 +503,70 @@ namespace _041_Sarai
             BufferEntitiesManager.DropTableData("CNV$NACHOPL");
             BufferEntitiesManager.DropTableData("CNV$OPLATA");
             BufferEntitiesManager.DropTableData("CNV$NACH");
-
+            DataTable dt;
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
             dynamic[] services =
             {
-                new {OriginName = "", Servicecd = 0},
-                new {OriginName = "", Servicecd = 0},
-                new {OriginName = "", Servicecd = 0},
-                new {OriginName = "", Servicecd = 0},
-                new {OriginName = "", Servicecd = 0},
-                new {OriginName = "", Servicecd = 0},
+                //new {NachName = "КвДолж", Servicecd = 0},
+                //new {NachName = "НаемКвДолж", Servicecd = 0},
+                //new {NachName = "РемКвДолж", Servicecd = 0},
+                new {NachName = "ОтДолж", OplName = "ПлатаОт", TarifName = "", Servicecd = 3},
+                new {NachName = "ХолДолж", OplName = "ПлатаХол", TarifName = "ВодоснабжениеТариф", Servicecd = 4},
+                new {NachName = "КанДолж", OplName = "ПлатаКан", TarifName = "КанализацияТариф", Servicecd = 8},
+                new {NachName = "МусДолж", OplName = "ПлатаМус", TarifName = "", Servicecd = 6},
             };
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectNachopl, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+            long recno = 0;
+             StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
+                foreach (var service in services)
+                {
+                    if ((decimal) dataRow[service.NachName] != 0)
+                    {
+                        recno++;
+                        string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                        var ndef = new CNV_NACH
+                        {
+                            VOLUME = String.IsNullOrWhiteSpace(service.TarifName)
+                                ? 0
+                                : (decimal) dataRow[service.NachName]*(decimal) dataRow[service.TarifName],
+                            REGIMCD = 10,
+                            TYPE_ = 0,
+                            SERVICECD = service.Servicecd
+                        };
+                        nm.RegisterNach(ndef, lshet, date.Month,
+                            date.Year, (decimal)dataRow[service.NachName], 0,date, documentcd);
+                    }
+
+                    if ((decimal) dataRow[service.OplName] != 0)
+                    {
+                        recno++;
+                        string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                        var odef = new CNV_OPLATA
+                        {
+                            SERVICECD = service.Servicecd,
+                            SOURCECD = 17
+                        };
+                        nm.RegisterOplata(odef, lshet, date.Month, date.Year, (decimal) dataRow[service.OplName], date,
+                            date, documentcd);
+                    }
+                }
+                Iterate();
+            }
+            StepFinish();
         }
     }
 
