@@ -63,7 +63,7 @@ namespace _041_Sarai
 
         public static string GetLs(long intls)
         {
-            return String.Format("88{0:D6}", intls);
+            return String.Format("92{0:D6}", intls);
         }
 
         public static readonly int CurrentMonth = 02;
@@ -218,7 +218,7 @@ namespace _041_Sarai
 
         public override void DoConvert()
         {
-            SetStepsCount(99);
+            SetStepsCount(4);
             BufferEntitiesManager.DropTableData("CNV$CHARS");
             DataTable dt;
 
@@ -262,6 +262,11 @@ namespace _041_Sarai
                 Iterate();
             }
             StepFinish();
+
+            StepStart(1);
+            lcc = CharsRecordUtils.ThinOutList(lcc);
+            StepFinish();
+
             SaveList(lcc, Consts.InsertRecordCount);
         }
     }
@@ -281,7 +286,7 @@ namespace _041_Sarai
         public override void DoConvert()
         {
             //SetStepsCount(12);
-            SetStepsCount(6);
+            SetStepsCount(7);
 
             BufferEntitiesManager.DropTableData("CNV$COUNTERS");
             BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
@@ -385,6 +390,10 @@ namespace _041_Sarai
                 recno++;
                 Iterate();
             }
+            StepFinish();
+
+            StepStart(1);
+            lci = CntrsindRecordUtils.ThinOutList(lci);
             StepFinish();
 
             SaveList(lcc, Consts.InsertRecordCount);

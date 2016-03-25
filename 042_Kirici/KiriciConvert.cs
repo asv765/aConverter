@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
@@ -208,6 +207,7 @@ namespace _042_Kirici
                     case 4:
                     case 5:
                     case 8:
+                    case 3:
                         continue;
                     default:
                         throw new Exception(String.Format("Незивестная характеристика {0} {1}", chars.Charname,
@@ -302,7 +302,7 @@ namespace _042_Kirici
 
         public override void DoConvert()
         {
-            DoubledCID = new List<string>();
+            DoubledCid = new List<string>();
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
@@ -349,7 +349,7 @@ namespace _042_Kirici
 
                 if (lcn.Any(cnt => cnt.COUNTERID == c.COUNTERID))
                 {
-                    DoubledCID.Add(c.COUNTERID);
+                    DoubledCid.Add(c.COUNTERID);
                     c.COUNTERID = (Convert.ToInt32(c.COUNTERID) + 2000).ToString("D9");
                 }
 
@@ -363,7 +363,7 @@ namespace _042_Kirici
             StepFinish();
         }
 
-        public static List<string> DoubledCID;
+        public static List<string> DoubledCid;
     }
 
     /// <summary>
@@ -406,7 +406,7 @@ namespace _042_Kirici
 
                 lci.Add(c);
 
-                if (ConvertCounters.DoubledCID.Contains(c.COUNTERID))
+                if (ConvertCounters.DoubledCid.Contains(c.COUNTERID))
                 {
                     c.COUNTERID = (Convert.ToInt32(c.COUNTERID) + 2000).ToString("D9");
                     lci.Add(c);
