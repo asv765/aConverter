@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
+using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 
@@ -36,11 +38,18 @@ namespace _041_Sarai
         public const string SelectCChars = @"select АдресИД, Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАрхив 
                                             union all (select АдресИД, '01.01.2016' as Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАдрес)";
 
+//        public const string SelectCChars = @"select АдресИД, Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАрхив where datepart(""yyyy"",Месяц) = 2016
+//                                            union all (select АдресИД, '01.01.2016' as Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАдрес)";
+
         public const string SelectLChars = @"select АдресИД, МусорИД, ОтоплениеИД, ВодоснабжениеИД, КанализацияИД, ПоливИД from tblАдрес";
 
         public const string SelectCounterIndications = @"select p1.АдресИД, p1.ДатаПлатежа, p1.{{service}} from tblПлатежи p1
 	                                                    where p1.{{service}} <>0 and p1.НомерПлатежа <> (select max(p2.НомерПлатежа) from tblПлатежи p2 where p2.АдресИД = p1.АдресИД)
                                                         order by 1,2";
+
+//        public const string SelectCounterIndications = @"select p1.АдресИД, p1.ДатаПлатежа, p1.{{service}} from tblПлатежи p1
+//	                                                    where p1.{{service}} <>0 and p1.НомерПлатежа <> (select max(p2.НомерПлатежа) from tblПлатежи p2 where p2.АдресИД = p1.АдресИД) and datepart(""yyyy"",НовыйМесяц) = 2016
+//                                                        order by 1,2";
 
         public const string SelectCounters = @"SELECT ind.АдресИД, ind.{{cntname}},
                                                (SELECT top 1 p.{{service}} 
@@ -57,6 +66,17 @@ namespace _041_Sarai
 
         public const string SelectNachopl = @"select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ВодоснабжениеТариф,КанализацияТариф from tblАрхив
                                             union all (select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ХолТариф,КанТариф from tblНачисления where datepart(""yyyy"",Месяц) > 2001)";
+
+//        public const string SelectNachopl =@"select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ВодоснабжениеТариф,КанализацияТариф from tblАрхив where datepart(""yyyy"",Месяц) = 2016
+//union all (select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ХолТариф,КанТариф from tblНачисления where datepart(""yyyy"",Месяц) = 2016)";
+
+
+
+        public const string SelectSaldo = @"select АдресИД, Месяц, ВходящееСальдо, ИсходящееСальдо, Перерасчет from tblАрхив 
+union all (select АдресИД, Месяц, ВхСальдо, ИсхСальдо, Перерасчет from tblНачисления where datepart(""yyyy"",Месяц) > 2001)";
+
+//        public const string SelectSaldo = @"select АдресИД, Месяц, ВходящееСальдо, ИсходящееСальдо, Перерасчет from tblАрхив where datepart(""yyyy"",Месяц) = 2016
+//union all (select АдресИД, Месяц, ВхСальдо, ИсхСальдо, Перерасчет from tblНачисления where datepart(""yyyy"",Месяц) = 2016)";
     }
     #endregion
 
@@ -171,33 +191,46 @@ namespace _041_Sarai
 
                 string house = dataRow["HOUSENO"].ToString().Trim();
                 match = numberRegex.Match(house);
-                if (match.Groups.Count > 2) abonent.HOUSEPOSTFIX = match.Groups[2].Value;
-                if (match.Groups.Count > 1)
+                if (numberRegex.IsMatch(house))
                 {
-                    int houseno;
-                    if (Int32.TryParse(match.Groups[1].Value, out houseno)) abonent.HOUSENO = match.Groups[1].Value;
-                    else abonent.HOUSEPOSTFIX = match.Groups[0].Value;
+                    if (match.Groups.Count > 2) abonent.HOUSEPOSTFIX = match.Groups[2].Value;
+                    if (match.Groups.Count > 1)
+                    {
+                        int houseno;
+                        if (Int32.TryParse(match.Groups[1].Value, out houseno)) abonent.HOUSENO = match.Groups[1].Value;
+                        else abonent.HOUSEPOSTFIX = match.Groups[0].Value;
+                    }
                 }
+                else abonent.HOUSEPOSTFIX = house;
 
                 string korpus = dataRow["KORPUSNO"].ToString().Trim();
                 match = numberRegex.Match(korpus);
-                if (match.Groups.Count > 2) abonent.KORPUSPOSTFIX = match.Groups[2].Value;
-                if (match.Groups.Count > 1)
+                if (numberRegex.IsMatch(korpus))
                 {
-                    int korpusno;
-                    if (Int32.TryParse(match.Groups[1].Value, out korpusno)) abonent.KORPUSNO = Convert.ToInt32(match.Groups[1].Value);
-                    else abonent.KORPUSPOSTFIX = match.Groups[0].Value;
+                    if (match.Groups.Count > 2) abonent.KORPUSPOSTFIX = match.Groups[2].Value;
+                    if (match.Groups.Count > 1)
+                    {
+                        int korpusno;
+                        if (Int32.TryParse(match.Groups[1].Value, out korpusno))
+                            abonent.KORPUSNO = Convert.ToInt32(match.Groups[1].Value);
+                        else abonent.KORPUSPOSTFIX = match.Groups[0].Value;
+                    }
                 }
+                else abonent.KORPUSPOSTFIX = korpus;
 
                 string flat = dataRow["FLATNO"].ToString().Trim();
                 match = numberRegex.Match(flat);
-                if (match.Groups.Count > 2) abonent.FLATPOSTFIX = match.Groups[2].Value;
-                if (match.Groups.Count > 1)
+                if (numberRegex.IsMatch(flat))
                 {
-                    int flatno;
-                    if (Int32.TryParse(match.Groups[1].Value, out flatno)) abonent.FLATNO = flatno;
-                    else abonent.FLATPOSTFIX = match.Groups[0].Value;
+                    if (match.Groups.Count > 2) abonent.FLATPOSTFIX = match.Groups[2].Value;
+                    if (match.Groups.Count > 1)
+                    {
+                        int flatno;
+                        if (Int32.TryParse(match.Groups[1].Value, out flatno)) abonent.FLATNO = flatno;
+                        else abonent.FLATPOSTFIX = match.Groups[0].Value;
+                    }
                 }
+                else abonent.FLATPOSTFIX = flat;
 
                 lca.Add(abonent);
                 Iterate();
@@ -510,10 +543,10 @@ namespace _041_Sarai
                 //new {NachName = "КвДолж", Servicecd = 0},
                 //new {NachName = "НаемКвДолж", Servicecd = 0},
                 //new {NachName = "РемКвДолж", Servicecd = 0},
-                new {NachName = "ОтДолж", OplName = "ПлатаОт", TarifName = "", Servicecd = 3},
-                new {NachName = "ХолДолж", OplName = "ПлатаХол", TarifName = "ВодоснабжениеТариф", Servicecd = 4},
-                new {NachName = "КанДолж", OplName = "ПлатаКан", TarifName = "КанализацияТариф", Servicecd = 8},
-                new {NachName = "МусДолж", OplName = "ПлатаМус", TarifName = "", Servicecd = 6},
+                new {NachName = "ОтДолж", OplName = "ПлатаОт", TarifName = "", Servicecd = 3, ServiceName = "Отопление"},
+                new {NachName = "ХолДолж", OplName = "ПлатаХол", TarifName = "ВодоснабжениеТариф", Servicecd = 4, ServiceName = "Хол. водоснабжение"},
+                new {NachName = "КанДолж", OplName = "ПлатаКан", TarifName = "КанализацияТариф", Servicecd = 8, ServiceName = "Водоотведение"},
+                new {NachName = "МусДолж", OplName = "ПлатаМус", TarifName = "", Servicecd = 6, ServiceName = "Вывоз мусора"},
             };
 
             StepStart(1);
@@ -540,12 +573,14 @@ namespace _041_Sarai
                         string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
                         var ndef = new CNV_NACH
                         {
-                            VOLUME = String.IsNullOrWhiteSpace(service.TarifName)
+                            VOLUME = String.IsNullOrWhiteSpace(service.TarifName) || (decimal)dataRow[service.TarifName] == 0
                                 ? 0
-                                : (decimal) dataRow[service.NachName]*(decimal) dataRow[service.TarifName],
+                                : (decimal) dataRow[service.NachName]/(decimal) dataRow[service.TarifName],
                             REGIMCD = 10,
+                            REGIMNAME = "Неизвестен",
                             TYPE_ = 0,
-                            SERVICECD = service.Servicecd
+                            SERVICECD = service.Servicecd,
+                            SERVICENAME = service.ServiceName
                         };
                         nm.RegisterNach(ndef, lshet, date.Month,
                             date.Year, (decimal)dataRow[service.NachName], 0,date, documentcd);
@@ -558,7 +593,9 @@ namespace _041_Sarai
                         var odef = new CNV_OPLATA
                         {
                             SERVICECD = service.Servicecd,
-                            SOURCECD = 17
+                            SERVICENAME = service.ServiceName,
+                            SOURCECD = 17,
+                            SOURCENAME = "Касса"
                         };
                         nm.RegisterOplata(odef, lshet, date.Month, date.Year, (decimal) dataRow[service.OplName], date,
                             date, documentcd);
@@ -567,8 +604,255 @@ namespace _041_Sarai
                 Iterate();
             }
             StepFinish();
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectSaldo, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                recno++;
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
+                int regimcd = 10;
+                int servicecd = 14;
+                string servicename = "Надворные постройки";
+                nm.RegisterBeginSaldo(lshet, date.Month, date.Year, servicecd, servicename,
+                    (decimal) dataRow["ВходящееСальдо"]);
+                nm.RegisterEndSaldo(lshet, date.Month, date.Year, servicecd, servicename, (decimal)dataRow["ИсходящееСальдо"]);
+                if ((decimal) dataRow["Перерасчет"] != 0)
+                    nm.RegisterNach(new CNV_NACH
+                    {
+                        VOLUME = 0,
+                        REGIMCD = regimcd,
+                        REGIMNAME = "Неизвестен",
+                        TYPE_ = 0,
+                        SERVICECD = servicecd,
+                        SERVICENAME = "Надворные постройки"
+                    }, lshet, date.Month, date.Year, 0, (decimal) dataRow["Перерасчет"], date,
+                        String.Format("{0}_{1}", dataRow["АдресИД"], recno));
+
+                Iterate();
+            }
+            StepFinish();
+
+            SaveList(nm.NachRecords, Consts.InsertRecordCount);
+            SaveList(nm.OplataRecords, Consts.InsertRecordCount);
+            SaveList(nm.NachoplRecords.Values, Consts.InsertRecordCount);
         }
     }
 
+    #endregion
+
+    #region Перенос данных из временных таблиц
+    public class TransferAddressObjects : ConvertCase
+    {
+        public TransferAddressObjects()
+        {
+            ConvertCaseName = "Перенос данных об адресных объектах";
+            Position = 1000;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(6);
+
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+
+            fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
+            Iterate();
+
+            StepFinish();
+        }
+    }
+
+    public class TransferAbonents : ConvertCase
+    {
+        public TransferAbonents()
+        {
+            ConvertCaseName = "Перенос данных об абонентах";
+            Position = 1010;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferChars : ConvertCase
+    {
+        public TransferChars()
+        {
+            ConvertCaseName = "Перенос данных о количественных характеристиках";
+            Position = 1020;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "0" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferLchars : ConvertCase
+    {
+        public TransferLchars()
+        {
+            ConvertCaseName = "Перенос данных о качественных характеристиках";
+            Position = 1030;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "1" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferCounters : ConvertCase
+    {
+        public TransferCounters()
+        {
+            ConvertCaseName = "Перенос данных о счетчиках";
+            Position = 1040;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            //fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
+            //Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0" });
+            Iterate();
+        }
+    }
+
+    public class TransferNachisl : ConvertCase
+    {
+        public TransferNachisl()
+        {
+            ConvertCaseName = "Перенос данных о начислениях";
+            Position = 1070;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
+            Iterate();
+        }
+    }
+
+    public class TransferOplata : ConvertCase
+    {
+        public TransferOplata()
+        {
+            ConvertCaseName = "Перенос данных об оплате";
+            Position = 1050;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01300_SOURCEDOC");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01400_OPLATA");
+            Iterate();
+        }
+    }
+
+    public class TransferSaldo : ConvertCase
+    {
+        public TransferSaldo()
+        {
+            ConvertCaseName = "Перенос данных о сальдо";
+            Position = 1060;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
+            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] { Consts.CurrentYear.ToString(CultureInfo.InvariantCulture),
+                Consts.CurrentMonth.ToString(CultureInfo.InvariantCulture) });
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
+            Iterate();
+        }
+    }
+
+    public class TransferPererashet : ConvertCase
+    {
+        public TransferPererashet()
+        {
+            ConvertCaseName = "Перерасчет";
+            Position = 1080;
+            IsChecked = false;
+
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01700_PERERASHETIMPORT");
+            Iterate();
+        }
+    }
     #endregion
 }
