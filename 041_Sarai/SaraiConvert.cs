@@ -520,11 +520,11 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
     /// <summary>
     /// Конвертация данных истории начислений
     /// </summary>
-    public class ConvertNachopl : ConvertCase
+    public class ConvertNachopl1 : ConvertCase
     {
-        public ConvertNachopl()
+        public ConvertNachopl1()
         {
-            ConvertCaseName = "NACHOPL - данные истории начислений";
+            ConvertCaseName = "NACHOPL - данные истории начислений. Первая половина";
             Position = 70;
             IsChecked = false;
         }
@@ -644,9 +644,395 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
             }
             StepFinish();
 
-            SaveList(nm.NachRecords, Consts.InsertRecordCount);
-            SaveList(nm.OplataRecords, Consts.InsertRecordCount);
-            SaveList(nm.NachoplRecords.Values, Consts.InsertRecordCount);
+            SaveList(nm.NachRecords.Take(250000), Consts.InsertRecordCount);
+            SaveList(nm.OplataRecords.Take(250000), Consts.InsertRecordCount);
+            SaveList(nm.NachoplRecords.Values.Take(250000), Consts.InsertRecordCount);
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных истории начислений
+    /// </summary>
+    public class ConvertNachopl2 : ConvertCase
+    {
+        public ConvertNachopl2()
+        {
+            ConvertCaseName = "NACHOPL - данные истории начислений. Второая половина";
+            Position = 80;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(99);
+
+            DataTable dt;
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+            dynamic[] services =
+            {
+                //new {NachName = "КвДолж", Servicecd = 0},
+                //new {NachName = "НаемКвДолж", Servicecd = 0},
+                //new {NachName = "РемКвДолж", Servicecd = 0},
+                new {NachName = "ОтДолж", OplName = "ПлатаОт", TarifName = "", Servicecd = 3, ServiceName = "Отопление"},
+                new {NachName = "ХолДолж", OplName = "ПлатаХол", TarifName = "ВодоснабжениеТариф", Servicecd = 4, ServiceName = "Хол. водоснабжение"},
+                new {NachName = "КанДолж", OplName = "ПлатаКан", TarifName = "КанализацияТариф", Servicecd = 8, ServiceName = "Водоотведение"},
+                new {NachName = "МусДолж", OplName = "ПлатаМус", TarifName = "", Servicecd = 6, ServiceName = "Вывоз мусора"},
+            };
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectNachopl, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+            long recno = 0;
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
+                foreach (var service in services)
+                {
+                    if ((decimal)dataRow[service.NachName] != 0)
+                    {
+                        recno++;
+                        string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                        var ndef = new CNV_NACH
+                        {
+                            VOLUME = String.IsNullOrWhiteSpace(service.TarifName) || (decimal)dataRow[service.TarifName] == 0
+                                ? 0
+                                : (decimal)dataRow[service.NachName] / (decimal)dataRow[service.TarifName],
+                            REGIMCD = 10,
+                            REGIMNAME = "Неизвестен",
+                            TYPE_ = 0,
+                            SERVICECD = service.Servicecd,
+                            SERVICENAME = service.ServiceName
+                        };
+                        nm.RegisterNach(ndef, lshet, date.Month,
+                            date.Year, (decimal)dataRow[service.NachName], 0, date, documentcd);
+                    }
+
+                    if ((decimal)dataRow[service.OplName] != 0)
+                    {
+                        recno++;
+                        string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                        var odef = new CNV_OPLATA
+                        {
+                            SERVICECD = service.Servicecd,
+                            SERVICENAME = service.ServiceName,
+                            SOURCECD = 17,
+                            SOURCENAME = "Касса"
+                        };
+                        nm.RegisterOplata(odef, lshet, date.Month, date.Year, (decimal)dataRow[service.OplName], date,
+                            date, documentcd);
+                    }
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectSaldo, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                recno++;
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
+                int regimcd = 10;
+                int servicecd = 14;
+                string servicename = "Надворные постройки";
+                nm.RegisterBeginSaldo(lshet, date.Month, date.Year, servicecd, servicename,
+                    (decimal)dataRow["ВходящееСальдо"]);
+                nm.RegisterEndSaldo(lshet, date.Month, date.Year, servicecd, servicename, (decimal)dataRow["ИсходящееСальдо"]);
+                if ((decimal)dataRow["Перерасчет"] != 0)
+                    nm.RegisterNach(new CNV_NACH
+                    {
+                        VOLUME = 0,
+                        REGIMCD = regimcd,
+                        REGIMNAME = "Неизвестен",
+                        TYPE_ = 0,
+                        SERVICECD = servicecd,
+                        SERVICENAME = "Надворные постройки"
+                    }, lshet, date.Month, date.Year, 0, (decimal)dataRow["Перерасчет"], date,
+                        String.Format("{0}_{1}", dataRow["АдресИД"], recno));
+
+                Iterate();
+            }
+            StepFinish();
+
+            SaveList(nm.NachRecords.Skip(250000), Consts.InsertRecordCount);
+            SaveList(nm.OplataRecords.Skip(250000), Consts.InsertRecordCount);
+            SaveList(nm.NachoplRecords.Values.Skip(250000).Take(250000), Consts.InsertRecordCount);
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных истории начислений
+    /// </summary>
+    public class ConvertNachopl3: ConvertCase
+    {
+        public ConvertNachopl3()
+        {
+            ConvertCaseName = "NACHOPL - данные истории начислений. Конец";
+            Position = 90;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(99);
+
+            DataTable dt;
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+            dynamic[] services =
+            {
+                //new {NachName = "КвДолж", Servicecd = 0},
+                //new {NachName = "НаемКвДолж", Servicecd = 0},
+                //new {NachName = "РемКвДолж", Servicecd = 0},
+                new {NachName = "ОтДолж", OplName = "ПлатаОт", TarifName = "", Servicecd = 3, ServiceName = "Отопление"},
+                new {NachName = "ХолДолж", OplName = "ПлатаХол", TarifName = "ВодоснабжениеТариф", Servicecd = 4, ServiceName = "Хол. водоснабжение"},
+                new {NachName = "КанДолж", OplName = "ПлатаКан", TarifName = "КанализацияТариф", Servicecd = 8, ServiceName = "Водоотведение"},
+                new {NachName = "МусДолж", OplName = "ПлатаМус", TarifName = "", Servicecd = 6, ServiceName = "Вывоз мусора"},
+            };
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectNachopl, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+            long recno = 0;
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
+                foreach (var service in services)
+                {
+                    if ((decimal)dataRow[service.NachName] != 0)
+                    {
+                        recno++;
+                        string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                        var ndef = new CNV_NACH
+                        {
+                            VOLUME = String.IsNullOrWhiteSpace(service.TarifName) || (decimal)dataRow[service.TarifName] == 0
+                                ? 0
+                                : (decimal)dataRow[service.NachName] / (decimal)dataRow[service.TarifName],
+                            REGIMCD = 10,
+                            REGIMNAME = "Неизвестен",
+                            TYPE_ = 0,
+                            SERVICECD = service.Servicecd,
+                            SERVICENAME = service.ServiceName
+                        };
+                        nm.RegisterNach(ndef, lshet, date.Month,
+                            date.Year, (decimal)dataRow[service.NachName], 0, date, documentcd);
+                    }
+
+                    if ((decimal)dataRow[service.OplName] != 0)
+                    {
+                        recno++;
+                        string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                        var odef = new CNV_OPLATA
+                        {
+                            SERVICECD = service.Servicecd,
+                            SERVICENAME = service.ServiceName,
+                            SOURCECD = 17,
+                            SOURCENAME = "Касса"
+                        };
+                        nm.RegisterOplata(odef, lshet, date.Month, date.Year, (decimal)dataRow[service.OplName], date,
+                            date, documentcd);
+                    }
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectSaldo, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                recno++;
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
+                int regimcd = 10;
+                int servicecd = 14;
+                string servicename = "Надворные постройки";
+                nm.RegisterBeginSaldo(lshet, date.Month, date.Year, servicecd, servicename,
+                    (decimal)dataRow["ВходящееСальдо"]);
+                nm.RegisterEndSaldo(lshet, date.Month, date.Year, servicecd, servicename, (decimal)dataRow["ИсходящееСальдо"]);
+                if ((decimal)dataRow["Перерасчет"] != 0)
+                    nm.RegisterNach(new CNV_NACH
+                    {
+                        VOLUME = 0,
+                        REGIMCD = regimcd,
+                        REGIMNAME = "Неизвестен",
+                        TYPE_ = 0,
+                        SERVICECD = servicecd,
+                        SERVICENAME = "Надворные постройки"
+                    }, lshet, date.Month, date.Year, 0, (decimal)dataRow["Перерасчет"], date,
+                        String.Format("{0}_{1}", dataRow["АдресИД"], recno));
+
+                Iterate();
+            }
+            StepFinish();
+
+            SaveList(nm.NachoplRecords.Values.Skip(500000).Take(250000), Consts.InsertRecordCount);
+        }
+    }
+
+    /// <summary>
+    /// Конвертация данных истории начислений
+    /// </summary>
+    public class ConvertNachopl4 : ConvertCase
+    {
+        public ConvertNachopl4()
+        {
+            ConvertCaseName = "NACHOPL - данные истории начислений. Конец 2";
+            Position = 100;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(99);
+
+            DataTable dt;
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+            dynamic[] services =
+            {
+                //new {NachName = "КвДолж", Servicecd = 0},
+                //new {NachName = "НаемКвДолж", Servicecd = 0},
+                //new {NachName = "РемКвДолж", Servicecd = 0},
+                new {NachName = "ОтДолж", OplName = "ПлатаОт", TarifName = "", Servicecd = 3, ServiceName = "Отопление"},
+                new {NachName = "ХолДолж", OplName = "ПлатаХол", TarifName = "ВодоснабжениеТариф", Servicecd = 4, ServiceName = "Хол. водоснабжение"},
+                new {NachName = "КанДолж", OplName = "ПлатаКан", TarifName = "КанализацияТариф", Servicecd = 8, ServiceName = "Водоотведение"},
+                new {NachName = "МусДолж", OplName = "ПлатаМус", TarifName = "", Servicecd = 6, ServiceName = "Вывоз мусора"},
+            };
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectNachopl, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+            long recno = 0;
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
+                foreach (var service in services)
+                {
+                    if ((decimal)dataRow[service.NachName] != 0)
+                    {
+                        recno++;
+                        string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                        var ndef = new CNV_NACH
+                        {
+                            VOLUME = String.IsNullOrWhiteSpace(service.TarifName) || (decimal)dataRow[service.TarifName] == 0
+                                ? 0
+                                : (decimal)dataRow[service.NachName] / (decimal)dataRow[service.TarifName],
+                            REGIMCD = 10,
+                            REGIMNAME = "Неизвестен",
+                            TYPE_ = 0,
+                            SERVICECD = service.Servicecd,
+                            SERVICENAME = service.ServiceName
+                        };
+                        nm.RegisterNach(ndef, lshet, date.Month,
+                            date.Year, (decimal)dataRow[service.NachName], 0, date, documentcd);
+                    }
+
+                    if ((decimal)dataRow[service.OplName] != 0)
+                    {
+                        recno++;
+                        string documentcd = String.Format("{0}_{1}", dataRow["АдресИД"], recno);
+                        var odef = new CNV_OPLATA
+                        {
+                            SERVICECD = service.Servicecd,
+                            SERVICENAME = service.ServiceName,
+                            SOURCECD = 17,
+                            SOURCENAME = "Касса"
+                        };
+                        nm.RegisterOplata(odef, lshet, date.Month, date.Year, (decimal)dataRow[service.OplName], date,
+                            date, documentcd);
+                    }
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectSaldo, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                recno++;
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
+                int regimcd = 10;
+                int servicecd = 14;
+                string servicename = "Надворные постройки";
+                nm.RegisterBeginSaldo(lshet, date.Month, date.Year, servicecd, servicename,
+                    (decimal)dataRow["ВходящееСальдо"]);
+                nm.RegisterEndSaldo(lshet, date.Month, date.Year, servicecd, servicename, (decimal)dataRow["ИсходящееСальдо"]);
+                if ((decimal)dataRow["Перерасчет"] != 0)
+                    nm.RegisterNach(new CNV_NACH
+                    {
+                        VOLUME = 0,
+                        REGIMCD = regimcd,
+                        REGIMNAME = "Неизвестен",
+                        TYPE_ = 0,
+                        SERVICECD = servicecd,
+                        SERVICENAME = "Надворные постройки"
+                    }, lshet, date.Month, date.Year, 0, (decimal)dataRow["Перерасчет"], date,
+                        String.Format("{0}_{1}", dataRow["АдресИД"], recno));
+
+                Iterate();
+            }
+            StepFinish();
+
+            SaveList(nm.NachoplRecords.Values.Skip(750000), Consts.InsertRecordCount);
         }
     }
 
