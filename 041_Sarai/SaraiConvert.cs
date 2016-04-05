@@ -41,7 +41,7 @@ namespace _041_Sarai
 //        public const string SelectCChars = @"select АдресИД, Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАрхив where datepart(""yyyy"",Месяц) = 2016
 //                                            union all (select АдресИД, '01.01.2016' as Месяц, КоличествоЖильцов, ОбщаяПлощадь, ОтапливаемаяПлощадь, КоличествоСоток from tblАдрес)";
 
-        public const string SelectLChars = @"select АдресИД, МусорИД, ОтоплениеИД, ВодоснабжениеИД, КанализацияИД, ПоливИД from tblАдрес";
+        public const string SelectLChars = @"select АдресИД, МусорИД, ОтоплениеИД, ВодоснабжениеИД, КанализацияИД, ПоливИД, СобственностьИД from tblАдрес";
 
         public const string SelectCounterIndications = @"select p1.АдресИД, p1.ДатаПлатежа, p1.{{service}} from tblПлатежи p1
 	                                                    where p1.{{service}} <>0 and p1.НомерПлатежа <> (select max(p2.НомерПлатежа) from tblПлатежи p2 where p2.АдресИД = p1.АдресИД)
@@ -64,8 +64,8 @@ namespace _041_Sarai
                                                where ind.АдресИД is not null
                                                order by 1";
 
-        public const string SelectNachopl = @"select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ВодоснабжениеТариф,КанализацияТариф from tblАрхив
-                                            union all (select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ХолТариф,КанТариф from tblНачисления where datepart(""yyyy"",Месяц) > 2001)";
+        public const string SelectNachopl = @"select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ВодоснабжениеТариф,КанализацияТариф,КвДолж,ПлатаКв from tblАрхив
+                                            union all (select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ХолТариф,КанТариф,КвДолж,ПлатаКв from tblНачисления where datepart(""yyyy"",Месяц) > 2001)";
 
 //        public const string SelectNachopl =@"select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ВодоснабжениеТариф,КанализацияТариф from tblАрхив where datepart(""yyyy"",Месяц) = 2016
 //union all (select АдресИД, Месяц, ОтДолж, ХолДолж, КанДолж, МусДолж, ПлатаОт, ПлатаХол, ПлатаКан, ПлатаМус,ХолТариф,КанТариф from tblНачисления where datepart(""yyyy"",Месяц) = 2016)";
@@ -77,12 +77,16 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
 
 //        public const string SelectSaldo = @"select АдресИД, Месяц, ВходящееСальдо, ИсходящееСальдо, Перерасчет from tblАрхив where datepart(""yyyy"",Месяц) = 2016
 //union all (select АдресИД, Месяц, ВхСальдо, ИсхСальдо, Перерасчет from tblНачисления where datepart(""yyyy"",Месяц) = 2016)";
+
+        public const string SelectNewOplata = @"select АдресИД, НовыйМесяц, ДатаПлатежа, Уплачено from tblПлатежи
+where (datepart(""yyyy"", НовыйМесяц) = 2011 and datepart(""m"", НовыйМесяц) >= 3) or (datepart(""yyyy"", НовыйМесяц) > 2011)
+order by 2";
     }
     #endregion
 
     public static class Consts
     {
-        public const string ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=D:\Work\C#\C#Projects\aConverter\041_Sarai\Sources\январь_2016.mdb";
+        public const string ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;Data Source=D:\Work\C#\C#Projects\aConverter\041_Sarai\Sources\март 2016.mdb";
 
         public const string RecodeTableFileName =
             @"D:\Work\C#\C#Projects\aConverter\041_Sarai\Sources\Таблица перекодировки.xlsx";
@@ -94,7 +98,7 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
             return String.Format("92{0:D6}", intls);
         }
 
-        public static readonly int CurrentMonth = 02;
+        public static readonly int CurrentMonth = 03;
 
         public static readonly int CurrentYear = 2016;
     }
@@ -338,6 +342,7 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
                 new {LCharName = "ВодоснабжениеИД"},
                 new {LCharName = "КанализацияИД"},
                 new {LCharName = "ПоливИД"},
+                new {LCharName = "СобственностьИД"},
             };
 
             StepStart(1);
@@ -531,7 +536,7 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
 
         public override void DoConvert()
         {
-            SetStepsCount(99);
+            SetStepsCount(7);
 
             BufferEntitiesManager.DropTableData("CNV$NACHOPL");
             BufferEntitiesManager.DropTableData("CNV$OPLATA");
@@ -547,6 +552,7 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
                 new {NachName = "ХолДолж", OplName = "ПлатаХол", TarifName = "ВодоснабжениеТариф", Servicecd = 4, ServiceName = "Хол. водоснабжение"},
                 new {NachName = "КанДолж", OplName = "ПлатаКан", TarifName = "КанализацияТариф", Servicecd = 8, ServiceName = "Водоотведение"},
                 new {NachName = "МусДолж", OplName = "ПлатаМус", TarifName = "", Servicecd = 6, ServiceName = "Вывоз мусора"},
+                new {NachName = "КвДолж", OplName = "ПлатаКв", TarifName = "", Servicecd = 6, ServiceName = "Вывоз мусора"},
             };
 
             StepStart(1);
@@ -753,8 +759,8 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
                 string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
                 DateTime date = Convert.ToDateTime(dataRow["Месяц"]);
                 int regimcd = 10;
-                int servicecd = 14;
-                string servicename = "Надворные постройки";
+                int servicecd = 10;
+                string servicename = "Старые долги";
                 nm.RegisterBeginSaldo(lshet, date.Month, date.Year, servicecd, servicename,
                     (decimal)dataRow["ВходящееСальдо"]);
                 nm.RegisterEndSaldo(lshet, date.Month, date.Year, servicecd, servicename, (decimal)dataRow["ИсходящееСальдо"]);
@@ -766,7 +772,7 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
                         REGIMNAME = "Неизвестен",
                         TYPE_ = 0,
                         SERVICECD = servicecd,
-                        SERVICENAME = "Надворные постройки"
+                        SERVICENAME = servicename
                     }, lshet, date.Month, date.Year, 0, (decimal)dataRow["Перерасчет"], date,
                         String.Format("{0}_{1}", dataRow["АдресИД"], recno));
 
@@ -1033,6 +1039,54 @@ union all (select АдресИД, Месяц, ВхСальдо, ИсхСальд
             StepFinish();
 
             SaveList(nm.NachoplRecords.Values.Skip(750000), Consts.InsertRecordCount);
+        }
+    }
+
+    public class ConvertOplataNew : ConvertCase
+    {
+        public ConvertOplataNew()
+        {
+            ConvertCaseName = "OPLATA - конвертация оплат новым способом";
+            Position = 150;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(99);
+            DataTable dt;
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+
+            StepStart(1);
+            using (var connection = new OleDbConnection(Consts.ConnectionString))
+            {
+                connection.Open();
+                var ad = new OleDbDataAdapter(Scripts.SelectNewOplata, connection);
+                var ds = new DataSet("ACCESS");
+                ad.Fill(ds);
+                dt = ds.Tables[0];
+            }
+            StepFinish();
+
+            long recno = 0;
+            StepStart(dt.Rows.Count);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                recno++;
+                string lshet = Consts.GetLs(Convert.ToInt64(dataRow["АдресИД"]));
+                DateTime date = Convert.ToDateTime(dataRow["НовыйМесяц"]);
+                string documentcd = String.Format("no{0}_{1}", dataRow["АдресИД"], recno);
+                nm.RegisterOplata(new CNV_OPLATA
+                {
+                    SERVICECD = 10,
+                    SERVICENAME = "Старые долги",
+                    SOURCECD = 17,
+                    SOURCENAME = "Касса"
+                }, lshet, date.Month, date.Year, (decimal)dataRow["Уплачено"], date, (DateTime)dataRow["ДатаПлатежа"], documentcd);
+                Iterate();
+            }
+
+            SaveList(nm.OplataRecords, Consts.InsertRecordCount);
         }
     }
 
