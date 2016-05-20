@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "160421_Elista", "160421_Eli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "044_TeplComp", "044_TeplComp\044_TeplComp.csproj", "{09704FE0-1801-452D-975D-EAE9FC5D116F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "045_SpasskStroyDetal", "045_SpasskStroyDetal\045_SpasskStroyDetal.csproj", "{D3507175-D801-4FCE-831E-1DCAD8C8E69D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -261,6 +263,18 @@ Global
 		{09704FE0-1801-452D-975D-EAE9FC5D116F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{09704FE0-1801-452D-975D-EAE9FC5D116F}.Release|x64.ActiveCfg = Release|Any CPU
 		{09704FE0-1801-452D-975D-EAE9FC5D116F}.Release|x86.ActiveCfg = Release|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Release|x64.ActiveCfg = Release|Any CPU
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -279,6 +293,7 @@ Global
 		{A7E130B0-1DA9-4FD7-87DB-60D503B453B1} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{52CFAA45-F552-4820-9FD3-F576C5AA922F} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 		{09704FE0-1801-452D-975D-EAE9FC5D116F} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
+		{D3507175-D801-4FCE-831E-1DCAD8C8E69D} = {03062899-12E1-49A8-9FFC-0219EB1D771C}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = aConverter.vsmdi
