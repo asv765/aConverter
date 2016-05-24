@@ -14,9 +14,9 @@ namespace _044_TeplComp
 {
     public class Consts
     {
-        public static string GetLs(long intls)
+        public static string GetLs(string intls)
         {
-            string s = String.Format("96{0:D6}", intls);
+            string s = String.Format("96{0:D6}", Convert.ToInt64(intls));
             return s.Substring(0, 8);
         }
 
@@ -31,9 +31,37 @@ namespace _044_TeplComp
         public const string OborotTableFileName =
             @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\1.xls";
 
+        public const string RecodeTableFileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Таблица перекодировки (3).xlsx";
+
         public const string OborotSheetName = "662209 (2)";
 
+        public const string CountersFileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_12.15.xls";
+        public const string CounterSheetName = "662209";
+
         public const int InsertRecordCount = 1;
+
+        public static dynamic[] SvodFiles =
+        {
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_10.15.xlsx", SheetName = "6618110", Date = new DateTime(2015,10,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_11.15.xlsx", SheetName = "6618110", Date = new DateTime(2015,11,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_12.15.xlsx", SheetName = "6618110", Date = new DateTime(2015,12,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_01.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,01,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_02.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,02,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_03.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,03,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_04.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,04,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_05.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,05,01)},
+        };
+
+        public static dynamic[] CounterFiles =
+        {
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_10.15.xls", SheetName = "662209", Date = new DateTime(2015,10,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_11.15.xls", SheetName = "662209", Date = new DateTime(2015,11,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_12.15.xls", SheetName = "662209", Date = new DateTime(2015,12,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_01.16.xls", SheetName = "662209", Date = new DateTime(2016,01,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_02.16.xls", SheetName = "662209", Date = new DateTime(2016,02,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_03.16.xls", SheetName = "662209", Date = new DateTime(2016,03,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_04.16.xls", SheetName = "662209", Date = new DateTime(2016,04,01)},
+        };
     }
 
     public class RecordSvod
@@ -99,7 +127,7 @@ namespace _044_TeplComp
             }
             try
             {
-                HVS = new ServiceRecord(row, 32, "ХВС");
+                HVS = new ServiceRecord(row, 33, "ХВС");
             }
             catch (MissingFieldException)
             {
@@ -118,6 +146,7 @@ namespace _044_TeplComp
         public class ServiceRecord
         {
             public string ServiceName { get; set; }
+            public decimal NachVolume { get; set; }
             public decimal Nach { get; set; }
             public decimal Pere { get; set; }
             public decimal Opl { get; set; }
@@ -127,6 +156,9 @@ namespace _044_TeplComp
             public ServiceRecord(DataRow row, int startIndex, string name)
             {
                 ServiceName = name;
+                NachVolume = String.IsNullOrWhiteSpace(row[0 + startIndex].ToString())
+                    ? 0
+                    : Decimal.Parse(row[0 + startIndex].ToString());
                 Nach = String.IsNullOrWhiteSpace(row[1 + startIndex].ToString())
                     ? 0
                     : Decimal.Parse(row[1 + startIndex].ToString());
@@ -175,6 +207,63 @@ namespace _044_TeplComp
                 if (record.Lshet == lshet) return record;
             }
             return null;
+        }
+    }
+
+    public class RecordCounter
+    {
+        public string Lshet { get; set; }
+        public int Type { get; set; }
+        public string SerialNumber { get; set; }
+        public double? BegInit { get; set; }
+        public double? EndInit { get; set; }
+        public string Prim { get; set; }
+
+        public RecordCounter(DataRow row)
+        {
+            try
+            {
+                Lshet = row[1].ToString();
+                SerialNumber = row[5].ToString();
+                Prim = row[9].ToString();
+
+                switch (row[3].ToString().Trim().ToLower())
+                {
+                    case "горячее водоснабжение":
+                        Type = 3177;
+                        break;
+                    case "хов":
+                        Type = 1;
+                        break;
+                    case "водотведение":
+                        Type = 999;
+                        break;
+                    case "хвс юр.":
+                        Type = 999;
+                        break;
+                    default:
+                        throw new Exception("Неизвестная услуга " + row[3]);
+                }
+
+                double? init = row.IsNull(6) || String.IsNullOrWhiteSpace(row[6].ToString())
+                    ? (double?)null : Double.Parse(row[6].ToString().Replace('.',','));
+                double? end = row.IsNull(7) || String.IsNullOrWhiteSpace(row[7].ToString())
+                    ? (double?)null : Double.Parse(row[7].ToString().Replace('.', ','));
+
+                if (init == null && end == null) BegInit = null;
+                else if (init == null) BegInit = end;
+                else BegInit = init;
+
+                if (init == null && end == null) EndInit = null;
+                else if (end == null) EndInit = init;
+                else EndInit = end;
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
+            
         }
     }
 
@@ -260,7 +349,8 @@ namespace _044_TeplComp
 
             BufferEntitiesManager.DropTableData("CNV$ABONENT");
 
-            DataTable svodTable = Utils.ReadExcelFile(Consts.SvodTableFileName, Consts.SvodSheetName);
+            dynamic lastSvodFile = Consts.SvodFiles.Last();
+            DataTable svodTable = Utils.ReadExcelFile(lastSvodFile.FileName, lastSvodFile.SheetName);
 
             var la = new List<CNV_ABONENT>();
             StepStart(svodTable.Rows.Count);
@@ -272,7 +362,7 @@ namespace _044_TeplComp
                 if (recordSvod.Lshet == "000190" || recordSvod.Lshet == "010280") continue;
                 var abonent = new CNV_ABONENT
                 {
-                    LSHET = Consts.GetLs(Convert.ToInt64(recordSvod.Lshet)),
+                    LSHET = Consts.GetLs(recordSvod.Lshet),
                     EXTLSHET = recordSvod.Lshet,
                     DISTKOD = 1,
                     DISTNAME = "Рязанская область",
@@ -319,50 +409,275 @@ namespace _044_TeplComp
 
         public override void DoConvert()
         {
-            SetStepsCount(3);
+            SetStepsCount(9999);
 
             BufferEntitiesManager.DropTableData("CNV$CHARS");
-
-            DataTable svodTable = Utils.ReadExcelFile(Consts.SvodTableFileName, Consts.SvodSheetName);
             var lcc = new List<CNV_CHAR>();
-            StepStart(svodTable.Rows.Count);
-            for (int i = 0; i < svodTable.Rows.Count - 1; i++)
-            {
-                if (i < 5) continue;
 
-                var recordSvod = new RecordSvod(svodTable.Rows[i]);
-                if (recordSvod.Lshet == "000190" || recordSvod.Lshet == "010280") continue;
-                if (recordSvod.LiveCount != null)
+            foreach (dynamic svodFile in Consts.SvodFiles)
+            {
+                DataTable svodTable = Utils.ReadExcelFile(svodFile.FileName, svodFile.SheetName);
+                StepStart(svodTable.Rows.Count);
+                for (int i = 0; i < svodTable.Rows.Count - 1; i++)
                 {
-                    var c = new CNV_CHAR
+                    if (i < 5) continue;
+
+                    var recordSvod = new RecordSvod(svodTable.Rows[i]);
+                    if (recordSvod.Lshet == "000190" || recordSvod.Lshet == "010280") continue;
+                    if (recordSvod.LiveCount != null)
                     {
-                        LSHET = Consts.GetLs(Convert.ToInt64(recordSvod.Lshet)),
-                        CHARCD = 1,
-                        VALUE_ = recordSvod.LiveCount,
-                        DATE_ = new DateTime(2016, 06, 01)
-                    };
-                    lcc.Add(c);
-                }
-                if (recordSvod.Square != null)
-                {
-                    var c = new CNV_CHAR
+                        var c = new CNV_CHAR
+                        {
+                            LSHET = Consts.GetLs(recordSvod.Lshet),
+                            CHARCD = 1,
+                            VALUE_ = recordSvod.LiveCount,
+                            DATE_ = svodFile.Date
+                        };
+                        lcc.Add(c);
+                    }
+                    if (recordSvod.Square != null)
                     {
-                        LSHET = Consts.GetLs(Convert.ToInt64(recordSvod.Lshet)),
-                        CHARCD = 2,
-                        VALUE_ = recordSvod.Square,
-                        DATE_ = new DateTime(2016, 06, 01)
-                    };
-                    lcc.Add(c);
+                        var c = new CNV_CHAR
+                        {
+                            LSHET = Consts.GetLs(recordSvod.Lshet),
+                            CHARCD = 4,
+                            VALUE_ = recordSvod.Square,
+                            DATE_ = svodFile.Date
+                        };
+                        lcc.Add(c);
+                    }
+                    Iterate();
                 }
-                Iterate();
+                StepFinish();
             }
-            StepFinish();
 
             StepStart(1);
             lcc = CharsRecordUtils.ThinOutList(lcc);
             StepFinish();
 
             SaveList(lcc, Consts.InsertRecordCount);
+        }
+    }
+
+    public class ConvertLchars : ConvertCase
+    {
+        public ConvertLchars()
+        {
+            ConvertCaseName = "LCHARS - данные о качественных характеристиках";
+            Position = 40;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(9999);
+
+            BufferEntitiesManager.DropTableData("CNV$LCHARS");
+            DataTable recodeTable = Utils.ReadExcelFile(Consts.RecodeTableFileName, "Лист1");
+
+            var llc = new List<CNV_LCHAR>();
+
+            foreach (dynamic svodFile in Consts.SvodFiles)
+            {
+                DataTable svodTable = Utils.ReadExcelFile(svodFile.FileName, svodFile.SheetName);
+                StepStart(svodTable.Rows.Count);
+                for (int i = 0; i < svodTable.Rows.Count - 1; i++)
+                {
+                    if (i < 5) continue;
+
+                    var recordSvod = new RecordSvod(svodTable.Rows[i]);
+                    if (recordSvod.Lshet == "000190" || recordSvod.Lshet == "010280") continue;
+
+                    if (recordSvod.Lshet.Contains("040260"))
+                    {
+                        int a = 10;
+                    }
+                    foreach (DataRow row in recodeTable.Rows)
+                    {
+                        //try
+                        //{
+                        if (row.IsNull(0) || String.IsNullOrWhiteSpace(row[0].ToString())) break;
+                        object checkingValue;
+                        switch (row[0].ToString().Trim())
+                        {
+                            case "W":
+                                if (recordSvod.GVS == null || recordSvod.GVS.NachVolume == 0)
+                                    checkingValue = null;
+                                else checkingValue = (double) recordSvod.GVS.NachVolume;
+                                break;
+                            case "W/E":
+                                if (recordSvod.GVS == null || recordSvod.GVS.NachVolume == 0)
+                                    checkingValue = null;
+                                else if (recordSvod.LiveCount == 0)
+                                    checkingValue = 999;
+                                else
+                                    checkingValue =
+                                        (double) (recordSvod.GVS.NachVolume/recordSvod.LiveCount);
+                                break;
+                            case "A":
+                                if (String.IsNullOrWhiteSpace(recordSvod.TownName)) checkingValue = null;
+                                else checkingValue = recordSvod.TownName;
+                                break;
+                            case "L":
+                                if (recordSvod.Otoplenie == null || recordSvod.Otoplenie.NachVolume == 0)
+                                    checkingValue = null;
+                                else checkingValue = (double) recordSvod.Otoplenie.NachVolume;
+                                break;
+                            case "AH/E":
+                                if (recordSvod.HVS == null || recordSvod.HVS.NachVolume == 0)
+                                    checkingValue = null;
+                                else if (recordSvod.LiveCount == 0)
+                                    checkingValue = 999;
+                                else
+                                    checkingValue =
+                                        (double) (recordSvod.HVS.NachVolume/recordSvod.LiveCount);
+                                break;
+                            case "AS":
+                                if (recordSvod.Vodootvedenie == null ||
+                                    recordSvod.Vodootvedenie.NachVolume == 0)
+                                    checkingValue = null;
+                                else checkingValue = (double) recordSvod.Vodootvedenie.NachVolume;
+                                break;
+                            default:
+                                throw new Exception("Неизвестная колонка " + row[0]);
+                        }
+                        if (checkingValue == null) continue;
+
+                        Func<object, object, bool> checkingFunc;
+                        switch (row[1].ToString().Trim())
+                        {
+                            case ">":
+                                checkingFunc =
+                                    (check, etalon) =>
+                                        Double.Parse(check.ToString()) > Double.Parse(etalon.ToString());
+                                break;
+                            case "=":
+                                checkingFunc = (check, etalon) =>
+                                {
+                                    if (check is double)
+                                        return
+                                            Math.Abs(Double.Parse(check.ToString()) -
+                                                     Double.Parse(etalon.ToString())) <
+                                            0.01;
+                                    else
+                                        return check.ToString().Trim() == etalon.ToString().Trim();
+                                };
+                                break;
+                            case "<>":
+                                checkingFunc = (check, etalon) =>
+                                {
+                                    if (check is double)
+                                        return
+                                            Math.Abs(Double.Parse(check.ToString()) -
+                                                     Double.Parse(etalon.ToString())) >
+                                            0.01;
+                                    else
+                                        return check.ToString().Trim() != etalon.ToString().Trim();
+                                };
+                                break;
+                            case "Not in":
+                                checkingFunc = (check, etalon) =>
+                                {
+                                    double[] arr = etalon.
+                                        ToString()
+                                        .Replace("(", "")
+                                        .Replace(")", "")
+                                        .Split(';')
+                                        .Select(s => Convert.ToDouble(s))
+                                        .ToArray();
+                                    return !arr.Contains(Double.Parse(check.ToString()));
+                                };
+                                break;
+                            default:
+                                throw new Exception("Неизвестная операция " + row[1]);
+                        }
+
+                        if (!checkingFunc(checkingValue, row[2])) continue;
+
+                        var c = new CNV_LCHAR
+                        {
+                            LSHET = Consts.GetLs(recordSvod.Lshet),
+                            LCHARCD = Convert.ToInt32(row[5].ToString()),
+                            VALUE_ = Convert.ToInt32(row[7].ToString()),
+                            DATE_ = svodFile.Date
+                        };
+
+                        llc.Add(c);
+                        //}
+                        //catch (Exception ex)
+                        //{
+
+                        //}
+                    }
+                    Iterate();
+                }
+                StepFinish();
+            }
+            SaveList(llc, Consts.InsertRecordCount);
+        }
+    }
+
+    public class ConvertCounters : ConvertCase
+    {
+        public ConvertCounters()
+        {
+            ConvertCaseName = "COUNTERS - создание счетчиков и их показания";
+            Position = 60;
+            IsChecked = false;
+        }
+
+        private static List<CNV_COUNTER> Counters = new List<CNV_COUNTER>();
+
+        public override void DoConvert()
+        {
+            SetStepsCount(9999);
+            BufferEntitiesManager.DropTableData("CNV$COUNTERS");
+            BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
+
+            var lci = new List<CNV_CNTRSIND>();
+            foreach (dynamic counterFile in Consts.CounterFiles)
+            {
+                int i = 0;
+                DataTable counterTable = Utils.ReadExcelFile(counterFile.FileName, counterFile.SheetName);
+                StepStart(counterTable.Rows.Count);
+                foreach (DataRow counterRow in counterTable.Rows)
+                {
+                    i++;
+                    if (i < 2) continue;
+                    if (counterRow.IsNull(1) || String.IsNullOrWhiteSpace(counterRow[1].ToString())) break;
+                    var counterRecord = new RecordCounter(counterRow);
+                    if (counterRecord.Type == 999) continue;
+                    var counter = Counters.SingleOrDefault(
+                        c => c.LSHET == Consts.GetLs(counterRecord.Lshet) && c.CNTTYPE == counterRecord.Type);
+                    if (counter == null)
+                    {
+                        counter = new CNV_COUNTER
+                        {
+                            LSHET = Consts.GetLs(counterRecord.Lshet),
+                            COUNTERID = String.Format("{0:D8}", Counters.Count + 1),
+                            CNTTYPE = counterRecord.Type,
+                            PRIM_ = counterRecord.Prim,
+                            SERIALNUM = counterRecord.SerialNumber
+                        };
+                        Counters.Add(counter);
+                    }
+                    if (counterRecord.BegInit == null || counterRecord.EndInit == null) continue;
+                    lci.Add(new CNV_CNTRSIND
+                    {
+                        COUNTERID = counter.COUNTERID,
+                        DOCUMENTCD = String.Format("{0}_{1}", counterRecord.Lshet, i),
+                        INDDATE = counterFile.Date,
+                        INDTYPE = 0,
+                        OLDIND = (decimal) counterRecord.BegInit,
+                        INDICATION = (decimal) counterRecord.EndInit
+                    });
+                    Iterate();
+                }
+                StepFinish();
+            }
+
+            SaveList(lci, Consts.InsertRecordCount);
+            SaveList(Counters, Consts.InsertRecordCount);
         }
     }
 
@@ -385,39 +700,42 @@ namespace _044_TeplComp
 
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
-            DataTable svodTable = Utils.ReadExcelFile(Consts.SvodTableFileName, Consts.SvodSheetName);
             DataTable oborotTable = Utils.ReadExcelFile(Consts.OborotTableFileName, Consts.OborotSheetName);
             long recno = 0;
-            StepStart(svodTable.Rows.Count);
-            for (int i = 0; i < svodTable.Rows.Count - 1; i++)
+            foreach (dynamic svodFile in Consts.SvodFiles)
             {
-                try
+                DataTable svodTable = Utils.ReadExcelFile(svodFile.FileName, svodFile.SheetName);
+                StepStart(svodTable.Rows.Count);
+                for (int i = 0; i < svodTable.Rows.Count - 1; i++)
                 {
-                    if (i < 5) continue;
-                    var recordSvod = new RecordSvod(svodTable.Rows[i]);
-                    if (recordSvod.Lshet == "000190" || recordSvod.Lshet == "010280") continue;
-                    //var recordOborot = RecordOborot.FindRecord(oborotTable, recordSvod.Lshet);
-                    string lshet = Consts.GetLs(Convert.ToInt64(recordSvod.Lshet));
+                    try
                     {
-                        if (recordSvod.Otoplenie != null)
-                            RigesterNachopl(recordSvod.Otoplenie, 3, "Отопление", lshet, nm);
-                        if (recordSvod.GVS != null)
-                            RigesterNachopl(recordSvod.GVS, 5, "Горячая вода", lshet, nm);
-                        if (recordSvod.HVS != null)
-                            RigesterNachopl(recordSvod.HVS, 4, "Хол. водоснабжение", lshet, nm);
-                        if (recordSvod.Vodootvedenie != null)
-                            RigesterNachopl(recordSvod.Vodootvedenie, 8, "Водоотведение", lshet, nm);
-                        
-                        Iterate();
-                    }
+                        if (i < 5) continue;
+                        var recordSvod = new RecordSvod(svodTable.Rows[i]);
+                        if (recordSvod.Lshet == "000190" || recordSvod.Lshet == "010280") continue;
+                        //var recordOborot = RecordOborot.FindRecord(oborotTable, recordSvod.Lshet);
+                        string lshet = Consts.GetLs(recordSvod.Lshet);
+                        {
+                            if (recordSvod.Otoplenie != null)
+                                RigesterNachopl(recordSvod.Otoplenie, 3, "Отопление", lshet, nm, svodFile.Date);
+                            if (recordSvod.GVS != null)
+                                RigesterNachopl(recordSvod.GVS, 5, "Горячая вода", lshet, nm, svodFile.Date);
+                            if (recordSvod.HVS != null)
+                                RigesterNachopl(recordSvod.HVS, 4, "Хол. водоснабжение", lshet, nm, svodFile.Date);
+                            if (recordSvod.Vodootvedenie != null)
+                                RigesterNachopl(recordSvod.Vodootvedenie, 8, "Водоотведение", lshet, nm, svodFile.Date);
 
+                            Iterate();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                StepFinish();
             }
-            StepFinish();
 
             SaveList(nm.NachRecords, Consts.InsertRecordCount);
             SaveList(nm.OplataRecords, Consts.InsertRecordCount);
@@ -426,7 +744,7 @@ namespace _044_TeplComp
 
         private static int recno = 0;
         private void RigesterNachopl(RecordSvod.ServiceRecord record, int servicecd, string servicename,
-            string lshet ,NachoplManager nm)
+            string lshet ,NachoplManager nm, DateTime date)
         {
             recno++;
             var ndef = new CNV_NACH
@@ -438,8 +756,8 @@ namespace _044_TeplComp
                 SERVICECD = servicecd,
                 SERVICENAME = servicename
             };
-            nm.RegisterNach(ndef, lshet, 03, 2016, record.Nach, record.Pere,
-                new DateTime(2016, 03, 01), String.Format("{0}_{1}", lshet, recno));
+            nm.RegisterNach(ndef, lshet, date.Month, date.Year, record.Nach, record.Pere,
+                date, String.Format("{0}_{1}", lshet, recno));
 
             recno++;
             var odef = new CNV_OPLATA
@@ -449,12 +767,12 @@ namespace _044_TeplComp
                 SOURCECD = 17,
                 SOURCENAME = "Касса"
             };
-            nm.RegisterOplata(odef, lshet, 03, 2016, record.Opl,
-                new DateTime(2016, 03, 01), new DateTime(2016, 03, 01),
+            nm.RegisterOplata(odef, lshet, date.Month, date.Year, record.Opl,
+                date, date,
                 String.Format("{0}_{1}", lshet, recno));
 
-            nm.RegisterBeginSaldo(lshet, 03, 2016, servicecd, servicename, record.BeginSaldo);
-            nm.RegisterEndSaldo(lshet, 03, 2016, servicecd, servicename, record.EndSaldo);
+            nm.RegisterBeginSaldo(lshet, date.Month, date.Year, servicecd, servicename, record.BeginSaldo);
+            nm.RegisterEndSaldo(lshet, date.Month, date.Year, servicecd, servicename, record.EndSaldo);
         }
     }
 
@@ -526,6 +844,27 @@ namespace _044_TeplComp
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "0" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+
+    public class TransferLchars : ConvertCase
+    {
+        public TransferLchars()
+        {
+            ConvertCaseName = "Перенос данных о качественных характеристиках";
+            Position = 1030;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "0" });
             Iterate();
             StepFinish();
         }
