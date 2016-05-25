@@ -701,9 +701,9 @@ namespace _044_TeplComp
         {
             SetStepsCount(9999);
 
-            //BufferEntitiesManager.DropTableData("CNV$NACHOPL");
-            //BufferEntitiesManager.DropTableData("CNV$OPLATA");
-            //BufferEntitiesManager.DropTableData("CNV$NACH");
+            BufferEntitiesManager.DropTableData("CNV$NACHOPL");
+            BufferEntitiesManager.DropTableData("CNV$OPLATA");
+            BufferEntitiesManager.DropTableData("CNV$NACH");
 
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
@@ -763,7 +763,7 @@ namespace _044_TeplComp
                 SERVICECD = servicecd,
                 SERVICENAME = servicename
             };
-            nm.RegisterNach(ndef, lshet, 03, 2016, record.Nach, record.Pere,
+            nm.RegisterNach(ndef, lshet, date.Month, date.Year, record.Nach, record.Pere,
                 date, String.Format("{0}_{1}", lshet, recno));
 
             recno++;
@@ -774,12 +774,12 @@ namespace _044_TeplComp
                 SOURCECD = 17,
                 SOURCENAME = "Касса"
             };
-            nm.RegisterOplata(odef, lshet, 03, 2016, record.Opl,
+            nm.RegisterOplata(odef, lshet, date.Month, date.Year, record.Opl,
                 date, date,
                 String.Format("{0}_{1}", lshet, recno));
 
-            nm.RegisterBeginSaldo(lshet, 03, 2016, servicecd, servicename, record.BeginSaldo);
-            nm.RegisterEndSaldo(lshet, 03, 2016, servicecd, servicename, record.EndSaldo);
+            nm.RegisterBeginSaldo(lshet, date.Month, date.Year, servicecd, servicename, record.BeginSaldo);
+            nm.RegisterEndSaldo(lshet, date.Month, date.Year, servicecd, servicename, record.EndSaldo);
         }
     }
 
