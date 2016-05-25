@@ -25,7 +25,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                     rcrl.Add(crl[i]);
                     oldlshet = crl[i].LSHET;
                     oldcharcd = (Int32)crl[i].CHARCD;
-                    oldcharvalue = (Int32)crl[i].VALUE_;
+                    oldcharvalue = (decimal)crl[i].VALUE_;
                 }
             }
             return rcrl;
