@@ -97,7 +97,7 @@ namespace aConverterClassLibrary
                 Description = "Проверка, что для всех записей в истории оплат/начислений сальдо на конец месяца предыдущего равно сальдо на начало следующего",
                 NormalRows = 0,
                 AnalyzeQuery = "SELECT * FROM CNV$CC_OLDNEWSALDOMISMATCH(1,0)",
-                FixCommand = "EXECUTE PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH(2,1)", // Корректируем с конца истории
+                FixCommand = "EXECUTE PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH(2,4)", // Корректируем с конца истории
                 DependOn = ccSaldoHistoryGap
             };
             checkCaseList.Add(ccOldNewSaldoMesmatch);
@@ -179,7 +179,9 @@ namespace aConverterClassLibrary
             {
                 Description = "Проверка, что в таблице CNV$NACHOPL выполняется арифметика: EDEBET = BDBET + FNATH + PROCHL - OPLATA",
                 NormalRows = 0,
-                AnalyzeQuery = "SELECT * FROM CNV$NACHOPL WHERE EDEBET <> (BDEBET + FNATH + PROCHL - OPLATA)"
+                AnalyzeQuery = "SELECT * FROM CNV$NACHOPL WHERE EDEBET <> (BDEBET + FNATH + PROCHL - OPLATA)",
+                FixCommand = "UPDATE cnv$nachopl SET EDEBET = BDEBET + FNATH + PROCHL - OPLATA WHERE EDEBET <> (BDEBET + FNATH + PROCHL - OPLATA)",
+                FixDescription = "Обновить сальдо на конец в тех записях, в которых не выполняется арифметика EDEBET = BDEBET + FNATH + PROCHL - OPLATA"
             };
             checkCaseList.Add(ccNachoplCalculation);
 

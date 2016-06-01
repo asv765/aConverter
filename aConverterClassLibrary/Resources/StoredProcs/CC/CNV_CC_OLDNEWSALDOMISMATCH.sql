@@ -74,6 +74,30 @@ BEGIN
            END
         END
      END
+	 IF (saldocorrectiontype = 4) THEN BEGIN
+        FOR SELECT DISTINCT lshet, servicecd FROM cnv$cc_oldnewsaldomismatch(1)
+            INTO :lshet, :servicecd
+        DO BEGIN
+           isfirstrow = 1;
+           FOR SELECT year_, month_, fnath, prochl, oplata, edebet
+               FROM cnv$nachopl
+               WHERE lshet = :lshet AND servicecd = :servicecd
+               ORDER BY year_ , month_ 
+               INTO :year_, :month_, :fnath, :prochl, :oplata, :edebet DO BEGIN
+               if (isfirstrow = 1) then BEGIN
+                  isfirstrow = 0;
+                  counteddebet = bdebet;
+               END
+               ELSE BEGIN
+                  UPDATE CNV$NACHOPL SET bdebet = :counteddebet
+                  WHERE lshet = :lshet AND servicecd = :servicecd and year_ = :year_ and month_ = :month_;
+               END
+               UPDATE CNV$NACHOPL SET edebet = bdebet + fnath + prochl - oplata
+               WHERE lshet = :lshet AND servicecd = :servicecd and year_ = :year_ and month_ = :month_;
+               counteddebet = counteddebet + fnath + prochl - oplata;
+           END
+        END
+     END
   END
   ELSE
      EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0, 1 или 2 не поддерживается процедурой';
