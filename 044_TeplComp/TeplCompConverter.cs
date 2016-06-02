@@ -19,7 +19,7 @@ namespace _044_TeplComp
             return s.Substring(0, 8);
         }
 
-        public static readonly int CurrentMonth = 05;
+        public static readonly int CurrentMonth = 06;
 
         public static readonly int CurrentYear = 2016;
 
@@ -37,29 +37,29 @@ namespace _044_TeplComp
         public const string CountersFileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_12.15.xls";
         public const string CounterSheetName = "662209";
 
-        public const int InsertRecordCount = 1;
+        public const int InsertRecordCount = 1000;
 
         public static dynamic[] SvodFiles =
         {
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_10.15.xlsx", SheetName = "6618110", Date = new DateTime(2015,10,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_11.15.xlsx", SheetName = "6618110", Date = new DateTime(2015,11,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_12.15.xlsx", SheetName = "6618110", Date = new DateTime(2015,12,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_01.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,01,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_02.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,02,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_03.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,03,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_04.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,04,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_05.16.xlsx", SheetName = "6618110", Date = new DateTime(2016,05,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_10.15.xlsx", SheetName = "662208", Date = new DateTime(2015,10,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_11.15.xlsx", SheetName = "662208", Date = new DateTime(2015,11,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_12.15.xlsx", SheetName = "662208", Date = new DateTime(2015,12,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_01.16.xlsx", SheetName = "662208", Date = new DateTime(2016,01,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_02.16.xlsx", SheetName = "662208", Date = new DateTime(2016,02,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_03.16.xlsx", SheetName = "662208", Date = new DateTime(2016,03,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_04.16.xlsx", SheetName = "662208", Date = new DateTime(2016,04,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\свод_05.16.xlsx", SheetName = "662208", Date = new DateTime(2016,05,01)},
         };
 
         public static dynamic[] CounterFiles =
         {
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_10.15.xls", SheetName = "662209", Date = new DateTime(2015,10,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_11.15.xls", SheetName = "662209", Date = new DateTime(2015,11,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_12.15.xls", SheetName = "662209", Date = new DateTime(2015,12,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_01.16.xls", SheetName = "662209", Date = new DateTime(2016,01,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_02.16.xls", SheetName = "662209", Date = new DateTime(2016,02,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_03.16.xls", SheetName = "662209", Date = new DateTime(2016,03,01)},
-            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Приборы учета_04.16.xls", SheetName = "662209", Date = new DateTime(2016,04,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_10.15.xls", SheetName = "662209", Date = new DateTime(2015,10,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_11.15.xls", SheetName = "662209", Date = new DateTime(2015,11,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_12.15.xls", SheetName = "662209", Date = new DateTime(2015,12,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_01.16.xls", SheetName = "662209", Date = new DateTime(2016,01,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_02.16.xls", SheetName = "662209", Date = new DateTime(2016,02,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_03.16.xls", SheetName = "662209", Date = new DateTime(2016,03,01)},
+            new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_04.16.xls", SheetName = "662209", Date = new DateTime(2016,04,01)},
         };
     }
 
@@ -82,6 +82,7 @@ namespace _044_TeplComp
         public ServiceRecord GVS { get; set; }
         public ServiceRecord HVS { get; set; }
         public ServiceRecord Vodootvedenie { get; set; }
+        public string Dogovor { get; set; }
 
         public RecordSvod(DataRow row)
         {
@@ -89,22 +90,23 @@ namespace _044_TeplComp
             Lshet = row[1].ToString();
 
             var fioRegex = new Regex(@"([а-я]+)[^а-я]*([а-я]*)[^а-я]*([а-я]*)", RegexOptions.IgnoreCase);
-            var fioGroups = fioRegex.Match(row[2].ToString()).Groups;
+            var fioGroups = fioRegex.Match(row[3].ToString()).Groups;
             if (fioGroups[1].Success) F = fioGroups[1].Value;
             if (fioGroups[2].Success) I = fioGroups[2].Value;
             if (fioGroups[3].Success) O = fioGroups[3].Value;
 
-            RegCount = String.IsNullOrWhiteSpace(row[3].ToString()) ? (int?) null : Int32.Parse(row[3].ToString());
-            LiveCount = String.IsNullOrWhiteSpace(row[4].ToString()) ? (int?) null : Int32.Parse(row[4].ToString());
-            Square = String.IsNullOrWhiteSpace(row[5].ToString()) ? (decimal?) null : Decimal.Parse(row[5].ToString());
+            Dogovor = row.IsNull(3) || String.IsNullOrWhiteSpace(row[3].ToString()) ? @"""""" : row[3].ToString();
+            RegCount = String.IsNullOrWhiteSpace(row[4].ToString()) ? (int?) null : Int32.Parse(row[4].ToString());
+            LiveCount = String.IsNullOrWhiteSpace(row[5].ToString()) ? (int?) null : Int32.Parse(row[5].ToString());
+            Square = String.IsNullOrWhiteSpace(row[6].ToString()) ? (decimal?) null : Decimal.Parse(row[6].ToString());
 
-            StreetName = String.IsNullOrWhiteSpace(row[6].ToString()) ? "" : row[6].ToString();
+            StreetName = String.IsNullOrWhiteSpace(row[7].ToString()) ? "" : row[7].ToString();
             var houseRegex = new Regex(@"(\d+)(.*)");
-            var houseGroups = houseRegex.Match(row[7].ToString()).Groups;
+            var houseGroups = houseRegex.Match(row[8].ToString()).Groups;
             if (houseGroups[1].Success) HouseNumber = Int32.Parse(houseGroups[1].Value);
             if (houseGroups[2].Success) HousePostrifx = houseGroups[2].Value;
 
-            var flatGroups = houseRegex.Match(row[8].ToString()).Groups;
+            var flatGroups = houseRegex.Match(row[9].ToString()).Groups;
             if (flatGroups[1].Success) FlatNumber = Int32.Parse(flatGroups[1].Value);
             if (flatGroups[2].Success) FlatPostrifx = flatGroups[2].Value;
 
@@ -155,6 +157,7 @@ namespace _044_TeplComp
 
             public ServiceRecord(DataRow row, int startIndex, string name)
             {
+                startIndex++;
                 ServiceName = name;
                 NachVolume = String.IsNullOrWhiteSpace(row[0 + startIndex].ToString())
                     ? 0
@@ -168,9 +171,9 @@ namespace _044_TeplComp
                 Opl = String.IsNullOrWhiteSpace(row[4 + startIndex].ToString())
                     ? 0
                     : Decimal.Parse(row[4 + startIndex].ToString());
-                EndSaldo = String.IsNullOrWhiteSpace(row[6 + startIndex].ToString()) || String.IsNullOrWhiteSpace(row[7 + startIndex].ToString()) 
+                EndSaldo = String.IsNullOrWhiteSpace(row[7 + startIndex].ToString()) 
                     ? 0
-                    : Decimal.Parse(row[6 + startIndex].ToString()) + Decimal.Parse(row[7 + startIndex].ToString());
+                    : Decimal.Parse(row[7 + startIndex].ToString());
                 BeginSaldo = EndSaldo - Nach - Pere + Opl;
 
                 if (Nach == 0 && Pere == 0 && Opl == 0 && EndSaldo == 0) throw new MissingFieldException();
@@ -269,45 +272,6 @@ namespace _044_TeplComp
         }
     }
 
-    public class SvodConvert : ConvertCase
-    {
-        public SvodConvert()
-        {
-            ConvertCaseName = "Конвертация сводного отчета по потребителям";
-            Position = 999;
-            IsChecked = false;
-        }
-
-        public override void DoConvert()
-        {
-            DataTable svodTable = Utils.ReadExcelFile(
-                @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Копия svod_lMZxP 04.05.2016.xlsx", "6618110");
-            DataTable oborotTable = Utils.ReadExcelFile(
-                @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\1.xls", "662209 (2)");
-
-
-            StepStart(9999);
-            for (int i = 5; i < svodTable.Rows.Count; i++)
-            {
-                try
-                {
-                    if (svodTable.Rows[i][1].ToString() == "000192")
-                    {
-                        int a = 10;
-                    }
-                    var recordSvod = new RecordSvod(svodTable.Rows[i]);
-                    var recordOborot = RecordOborot.FindRecord(oborotTable, recordSvod.Lshet);
-
-
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
-                Iterate();
-            }
-        }
-    }
 
     /// <summary>
     /// Создать базу данных для конвертации
@@ -423,7 +387,6 @@ namespace _044_TeplComp
                 for (int i = 0; i < svodTable.Rows.Count - 1; i++)
                 {
                     if (i < 5) continue;
-
                     var recordSvod = new RecordSvod(svodTable.Rows[i]);
                     if (recordSvod.Lshet == "000190" || recordSvod.Lshet == "010280") continue;
                     if (recordSvod.LiveCount != null)
@@ -540,6 +503,9 @@ namespace _044_TeplComp
                                     checkingValue = null;
                                 else checkingValue = (double) recordSvod.Vodootvedenie.NachVolume;
                                 break;
+                            case "C":
+                                checkingValue = recordSvod.Dogovor;
+                                break;
                             default:
                                 throw new Exception("Неизвестная колонка " + row[0]);
                         }
@@ -615,6 +581,9 @@ namespace _044_TeplComp
                 }
                 StepFinish();
             }
+
+            llc = LcharsRecordUtils.ThinOutList(llc);
+
             SaveList(llc, Consts.InsertRecordCount);
         }
     }
@@ -707,7 +676,6 @@ namespace _044_TeplComp
 
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
-            DataTable oborotTable = Utils.ReadExcelFile(Consts.OborotTableFileName, Consts.OborotSheetName);
             long recno = 0;
             foreach (dynamic svodFile in Consts.SvodFiles)
             {
