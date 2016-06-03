@@ -79,11 +79,11 @@ BEGIN
             INTO :lshet, :servicecd
         DO BEGIN
            isfirstrow = 1;
-           FOR SELECT year_, month_, fnath, prochl, oplata, edebet
+           FOR SELECT year_, month_, fnath, prochl, oplata, bdebet
                FROM cnv$nachopl
                WHERE lshet = :lshet AND servicecd = :servicecd
                ORDER BY year_ , month_ 
-               INTO :year_, :month_, :fnath, :prochl, :oplata, :edebet DO BEGIN
+               INTO :year_, :month_, :fnath, :prochl, :oplata, :bdebet DO BEGIN
                if (isfirstrow = 1) then BEGIN
                   isfirstrow = 0;
                   counteddebet = bdebet;
