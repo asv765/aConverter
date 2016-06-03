@@ -176,7 +176,7 @@ namespace _044_TeplComp
                     : Decimal.Parse(row[7 + startIndex].ToString());
                 BeginSaldo = EndSaldo - Nach - Pere + Opl;
 
-                if (Nach == 0 && Pere == 0 && Opl == 0 && EndSaldo == 0) throw new MissingFieldException();
+                //if (Nach == 0 && Pere == 0 && Opl == 0 && EndSaldo == 0) throw new MissingFieldException();
             }
         }
     }
@@ -724,7 +724,7 @@ namespace _044_TeplComp
             recno++;
             var ndef = new CNV_NACH
             {
-                //VOLUME = ,
+                VOLUME = record.NachVolume,
                 REGIMCD = 10,
                 REGIMNAME = "Неизвестен",
                 TYPE_ = 0,
