@@ -48,6 +48,7 @@
     <Compile Include="Records\CharsRecord.cs" />
     <Compile Include="Records\CntrindRecrod.cs" />
     <Compile Include="Records\CountersRecord.cs" />
+    <Compile Include="Records\NachoplRecord.cs" />
     <Compile Include="Records\RegistrRecord.cs" />
     <Compile Include="SpasskStroyDetalConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
