@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
@@ -3569,6 +3570,125 @@ namespace _045_SpasskStroyDetal
             public int CounterType;
             public DateTime PayDate;
         }
+
+
+    public class FindNotNach : ConvertCase
+    {
+        public FindNotNach ()
+        {
+            ConvertCaseName = "Создать таблицы для конвертации";
+            Position = 99991;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var aList = Abonent.ReadFile();
+            DataTable recodeTable = Utils.ReadExcelFile(@"D:\Work\C#\C#Projects\aConverter\045_SpasskStroyDetal\Sources\Таблица перекодировки_Каше.xlsx", "Лист1");
+            SetStepsCount(1);
+            string aResult = "";
+            StepStart(aList.Count + 1);
+            foreach (var abonent in aList)
+            {
+                Iterate();
+                if (abonent.MoneyList == null || abonent.MoneyList.Count == 0 || abonent.MoneyList.All(m => m.ServiceKod[0] != '5')) continue;
+                bool allNull = true;
+                foreach (var money in abonent.MoneyList)
+                {
+                    if (money.ServiceKod.Trim() == "5.5" || (money.ServiceKod[0] == '5' && money.Nath != 0))
+                    {
+                        allNull = false;
+                        break;
+                    }
+                }
+                if (!allNull) continue;
+                if (abonent.Thprogiv != 0) continue;
+                var groups = abonent.MoneyList.Where(a => a.ServiceKod[0] == '5').GroupBy(a => a.ServiceKod);
+                if (groups.Count() > 1) continue;
+                //if (groups.Count() > 1)
+                //    aResult += String.Format("{0}\t{1}\r\n", GetLs(abonent.Ls), abonent.Fio);
+                //aResult += String.Format("{0}\t{1}\r\n", abonent.Ls, abonent.Fio);
+
+                //INSERT INTO LCHARSABONENTLIST (LSHET, KODLCHARSLIST, ABONENTLCHARDATE, DOCUMENTCD, SIGNIFICANCE) VALUES ('0801064942',45,'2016-06-01 00:00:00',gen_id(documents_gen, 0),3);
+
+
+
+                foreach (DataRow row in recodeTable.Rows)
+                {
+                    if (row["Value"] == DBNull.Value) break;
+
+                    if (row["Value"].ToString().Replace(".", ",").Trim() ==
+                        abonent.MoneyList.First(m => m.ServiceKod[0] == '5').ServiceKod.Replace(".", ",").Trim())
+                    {
+                        aResult += String.Format(
+                            "INSERT INTO LCHARSABONENTLIST (LSHET, KODLCHARSLIST, ABONENTLCHARDATE, DOCUMENTCD, SIGNIFICANCE) VALUES ('{0}',{1},'2016-05-31 00:00:00',gen_id(documents_gen, 0),{2});\r\n",
+                            GetLs(abonent.Ls), row["LCHARCD"], row["LCHARVALUE"]);
+                        break;
+                    }
+                }
+            }
+            StepFinish();
+            Clipboard.SetText(aResult);
+        }
+
+
+
+        private static string GetLs(long lshet)
+        {
+            return String.Format("95{0:D8}", lshet);
+        }
+    }
+
+    public class GetSaldoODN : ConvertCase
+    {
+        public GetSaldoODN()
+        {
+            ConvertCaseName = "Получить сальдо ХОДН";
+            Position = 99992;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var aList = Abonent.ReadFile();
+            SetStepsCount(1);
+            string aResult = "";
+            StepStart(aList.Count + 1);
+            foreach (var abonent in aList)
+            {
+                Iterate();
+                decimal saldo = Decimal.MinValue;
+                foreach (var money in abonent.MoneyList)
+                {
+                    if (money.ServiceKod.Trim() != "5.15") continue;
+                    if (money.Month == 5)
+                    {
+                        saldo = money.SaldoEnd;
+                        break;
+                    }
+                    if (money.Month == 6)
+                    {
+                        saldo = money.SaldoBeg;
+                        break;
+                    }
+                    throw new Exception("ls = " + abonent.Ls);
+                }
+                if (saldo == Decimal.MinValue) continue;
+
+
+                aResult += String.Format("{0}\t{1}\r\n", GetLs(abonent.Ls), saldo);
+            }
+            StepFinish();
+            Clipboard.SetText(aResult);
+        }
+
+
+
+        private static string GetLs(long lshet)
+        {
+            return String.Format("95{0:D8}", lshet);
+        }
+    }
     }
 
 
