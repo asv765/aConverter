@@ -69,7 +69,7 @@ namespace _160421_Elista
         {
             ConvertCaseName = "Создание счетчиков";
             Position = 20;
-            IsChecked = true;
+            IsChecked = false;
         }
 
         public override void DoConvert()
@@ -185,7 +185,7 @@ namespace _160421_Elista
         public TransferCounters()
         {
             ConvertCaseName = "Перенос данных о счетчиках";
-            Position = 1040;
+            Position = 140;
             IsChecked = false;
 
         }
@@ -199,6 +199,90 @@ namespace _160421_Elista
             //Iterate();
             fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0" });
             Iterate();
+        }
+    }
+
+    public class ConvertCounters160623 : ConvertCase
+    {
+        public ConvertCounters160623()
+        {
+            ConvertCaseName = "Создание счетчиков 23.06.2016";
+            Position = 991;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+
+            DataTable dataTable = Utils.ReadExcelFile(@"D:\Work\C#\C#Projects\aConverter\160421_Elista\Sources\готовый файл он.xls", "приложение №1");
+
+            BufferEntitiesManager.DropTableData("CNV$COUNTERS");
+            BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
+
+            var counters = new List<CNV_COUNTER>();
+            var cinds = new List<CNV_CNTRSIND>();
+
+            int i = 0;
+            StepStart(dataTable.Rows.Count + 1);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                i++;
+                Iterate();
+                if (!row[2].ToString().Contains("08")) continue;
+
+                var abonentRecord = new AbonentRecord(row);
+                if (abonentRecord.Indication == Decimal.MinValue) continue;
+
+                var counter = new CNV_COUNTER
+                {
+                    LSHET = abonentRecord.Lshet,
+                    COUNTERID = String.Format("{0}_{1}", abonentRecord.Lshet, i),
+                    SERIALNUM = abonentRecord.SerialNumber,
+                    CNTTYPE = 199,
+                    CNTNAME = "СВ-15Х",
+                    SETUPDATE = new DateTime(2016,06,01)
+                };
+                counters.Add(counter);
+
+                cinds.Add(new CNV_CNTRSIND
+                {
+                    COUNTERID = counter.COUNTERID,
+                    OLDIND = abonentRecord.Indication,
+                    INDICATION = abonentRecord.Indication,
+                    DOCUMENTCD = String.Format("{0}_{1}", counter.COUNTERID, i),
+                    INDDATE = new DateTime(2016, 06, 01),
+                });
+            }
+            StepFinish();
+
+            SaveList(counters, 1000);
+            SaveList(cinds, 1000);
+        }
+
+        private class AbonentRecord
+        {
+            public string Lshet;
+            public string SerialNumber;
+            public decimal Indication;
+
+            public AbonentRecord(DataRow dataRow)
+            {
+                try
+                {
+                    Lshet = dataRow[2].ToString();
+                    SerialNumber = dataRow.IsNull(7) || dataRow[7].ToString().Trim() == @"б/н"
+                        ? ""
+                        : dataRow[7].ToString().Trim();
+                    Indication = dataRow.IsNull(8) || String.IsNullOrWhiteSpace(dataRow[8].ToString().Trim())
+                        ? Decimal.MinValue
+                        : Decimal.Parse(dataRow[8].ToString().Trim().Replace('.', ','));
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
         }
     }
 }
