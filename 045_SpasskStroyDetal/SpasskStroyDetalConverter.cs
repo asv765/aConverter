@@ -3689,6 +3689,55 @@ namespace _045_SpasskStroyDetal
             return String.Format("95{0:D8}", lshet);
         }
     }
+
+    public class GetBadSaldo : ConvertCase
+    {
+        public GetBadSaldo()
+        {
+            ConvertCaseName = "Получить сальдо, не привязанное к услуге";
+            Position = 99993;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var aList = Abonent.ReadFile();
+            const string file = @"D:\Work\C#\C#Projects\aConverter\045_SpasskStroyDetal\Sources\BadSaldo.txt";
+            SetStepsCount(1);
+            string[] lines = File.ReadAllLines(file);
+            string badSaldoList = "";
+            string notFounded = "";
+            StepStart(lines.Length);
+            foreach (var line in lines)
+            {
+                var info = line.Split('\t');
+                string grkod = info[0];
+                string lshet = info[1];
+                decimal saldo = Decimal.Parse(info[2].Replace('.',','));
+
+                string uklshet = String.Format("95{0}{1}", grkod.Substring(4, 4), lshet.Substring(4, 4));
+                bool founded = false;
+                foreach (var abonent in aList)
+                {
+                    if (abonent.Uklshet == uklshet)
+                    {
+                        badSaldoList +=(String.Format("{0}\t{1}\r\n", String.Format("95{0:D8}", abonent.Ls), saldo));
+                        founded = true;
+                        break;
+                    }
+                }
+                if (!founded)
+                {
+                    notFounded +=(String.Format("{0}\r\n", uklshet));
+                    badSaldoList += (String.Format("{0}\t{1}\r\n", uklshet, saldo));
+                }
+                Iterate();
+            }
+            StepFinish();
+            Clipboard.SetText(notFounded);
+            Clipboard.SetText(badSaldoList);
+        }
+    }
     }
 
 
