@@ -332,8 +332,8 @@ namespace _045_SpasskStroyDetal
                 Iterate();
                 int regimcd = 10;
                 string regimname = "Неизвестен";
-                int servicecd = 2;
-                string servicename = "Содержание жилья  (ООО РГО)";
+                int servicecd = 1002;
+                string servicename = @"Содержание жилья (ООО ""ЖКО Приокский"")";
 
                 Record record = allRecrods[i];
 
@@ -365,7 +365,7 @@ namespace _045_SpasskStroyDetal
                     record.Lshet = prevRecord.Lshet;
                 }
 
-                if (record.PaySum > 0)
+                if (record.PaySum != 0)
                 {
                     var odef = new CNV_OPLATA
                     {
@@ -374,9 +374,12 @@ namespace _045_SpasskStroyDetal
                         SOURCECD = 17,
                         SOURCENAME = "Касса"
                     };
-                    nm.RegisterOplata(odef, record.Lshet, record.PayTo.Value.Month, record.PayTo.Value.Year,
-                        record.PaySum,
-                        record.PayDate.Value, record.PayTo.Value, String.Format("P{0}{1}", i, record.Lshet));
+
+                    DateTime payTo = record.PayTo ?? record.FileDate;
+                    DateTime payDate = record.PayDate ?? record.FileDate;
+
+                    nm.RegisterOplata(odef, record.Lshet, payTo.Month, payTo.Year,
+                        record.PaySum, payDate, payDate, String.Format("P{0}{1}", i, record.Lshet));
                 }
             }
             StepFinish();
@@ -541,10 +544,10 @@ namespace _045_SpasskStroyDetal
             Reculc = Decimal.Parse(dr["izm"].ToString());
             string payTo = String.Format("{0:D4}", Convert.ToUInt16(dr["zam"].ToString()));
             if (payTo != "0000")
-                PayTo = new DateTime(Int32.Parse(payTo.Substring(0,2)), Int32.Parse(payTo.Substring(2,2)),1);
+                PayTo = new DateTime(Int32.Parse(payTo.Substring(0,2)) + 2000, Int32.Parse(payTo.Substring(2,2)),1);
             string payDate = String.Format("{0:D6}", Convert.ToUInt32(dr["dat"].ToString())); 
             if (payDate != "000000")
-                PayDate = new DateTime(Int32.Parse(payDate.Substring(0, 2)), Int32.Parse(payDate.Substring(2, 2)),
+                PayDate = new DateTime(Int32.Parse(payDate.Substring(0, 2)) + 2000, Int32.Parse(payDate.Substring(2, 2)),
                     Int32.Parse(payDate.Substring(4, 2)));
             PaySum = Decimal.Parse(dr["opl"].ToString());
             EndSaldo = Decimal.Parse(dr["di"].ToString()) - Decimal.Parse(dr["ki"].ToString());
