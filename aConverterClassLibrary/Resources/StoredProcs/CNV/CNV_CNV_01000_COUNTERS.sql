@@ -26,6 +26,7 @@ declare variable DOCUMENTCD varchar(20);
 declare variable INDTYPE integer;
 declare variable NEWDOCUMENTCD integer;
 declare variable BASEORG integer;
+declare variable MAXEQID integer;
 BEGIN
     
     IF (needdelete = 1) THEN BEGIN
@@ -80,7 +81,8 @@ BEGIN
         END
 
     END
-    EXECUTE STATEMENT 'SET GENERATOR ParentEquipment_Uniting TO 0';
+	select max(equipmentid) from parentequipment into :maxeqid;
+    EXECUTE STATEMENT 'SET GENERATOR ParentEquipment_Uniting TO ' || :maxeqid;
 
     SELECT extorgcd FROM extorgspr eos WHERE eos.isbaseorganization = 1 INTO :baseorg;
     FOR SELECT pe.equipmentid, ci.oldind, ci.ob_em, ci.indication, ci.inddate, ci.documentcd, ci.indtype
