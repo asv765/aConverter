@@ -94,7 +94,7 @@ namespace _045_SpasskStroyDetal
                      DISTKOD = 1,
                      DISTNAME = "РЯЗАНЬ",
                      DUCD = record.Ducd,
-                     //DUNAME = abonentRec.Duname.Trim(),
+                     DUNAME = @"ООО ""ЖКО Приокский""",
                      //RAYONKOD = 1,
                      //RAYONNAME = "Спасский р-н",
                      //PRIM_ = abonentRec.Prim_.Trim(),
@@ -110,6 +110,7 @@ namespace _045_SpasskStroyDetal
                      FLATNO = record.FlatId,
                      KORPUSNO = record.Korpusid,
                      ROOMNO = (short?)record.RoomNumber,
+                     EXTLSHET = record.Lshet + String.Format("{0:D2}",record.AddressHash)
                  };
                  lca.Add(a);
              }
@@ -117,11 +118,8 @@ namespace _045_SpasskStroyDetal
 
 
              StepStart(1);
-             using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-             {
-                 int houseMaxId = context.ExecuteQuery<int>("SELECT distinct gen_id(houses_g, 0) from Abonents", CommandType.Text).First();
+                 int houseMaxId = 80000;
                  AbonentRecordUtils.SetUniqueHouseCd(lca, houseMaxId + 1);
-             }
              StepFinish();
 
              SaveList(lca, Consts.InsertRecordCount);
@@ -212,13 +210,11 @@ namespace _045_SpasskStroyDetal
                  var summa = new CNV_CHAR
                  {
                      LSHET = record.Lshet,
-                     VALUE_ = record.Tariff * (decimal)record.LivingSquare,
+                     VALUE_ = record.Tariff * (decimal)record.TotalSquare,
                      CHARCD = 21,
                      DATE_ = record.FileDate
                  };
                  
-
-
 
                  lcc.Add(cPMG);
                  lcc.Add(cVo);
@@ -371,8 +367,8 @@ namespace _045_SpasskStroyDetal
                     {
                         SERVICECD = servicecd,
                         SERVICENAME = servicename,
-                        SOURCECD = 17,
-                        SOURCENAME = "Касса"
+                        SOURCECD = 999,
+                        SOURCENAME = "Корректировка"
                     };
 
                     DateTime payTo = record.PayTo ?? record.FileDate;
