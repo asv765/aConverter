@@ -127,6 +127,9 @@
     <Compile Include="RecordsDataAccessORM\CNV_CITIZEN.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_CITIZENMIGRATION.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
     <Compile Include="RecordsDataAccessORM\CNV_CNTRSIND.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
@@ -244,12 +247,14 @@
     <Content Include="Resources\CNV_CHARLST_d.sql" />
     <Content Include="Resources\CNV_CHARVALS.sql" />
     <Content Include="Resources\CNV_CHARVALS_d.sql" />
+    <Content Include="Resources\CNV_CITIZENMIGRATION_d.sql" />
     <Content Include="Resources\CNV_CITIZENS.sql" />
     <Content Include="Resources\CNV_CITIZENS_d.sql" />
     <Content Include="Resources\CNV_CNTRSIND.sql" />
     <Content Include="Resources\CNV_CNTRSIND_d.sql" />
     <Content Include="Resources\CNV_COUNTERS.sql" />
     <Content Include="Resources\CNV_COUNTERS_d.sql" />
+    <Content Include="Resources\CNV_CITIZENMIGRATION.sql" />
     <None Include="Resources\CNV_DOCUMENTNUMERATORTABLE.sql" />
     <None Include="Resources\CNV_DOCUMENTNUMERATORTABLE_d.sql" />
     <Content Include="Resources\CNV_DOGOVOR.sql" />
@@ -297,6 +302,7 @@
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01600_NACHISLIMPORT.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01700_PERERASHETIMPORT.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_02100_EXTLSHETS.sql" />
+    <Content Include="Resources\StoredProcs\CNV\CNV_CNV_03000_CITIZENS_TVER.sql" />
     <Content Include="Resources\StoredProcs\CNV\cnv_cnv_documentnumerator.sql" />
     <Content Include="Resources\StoredProcs\CNV_ADD_WRONG_PARAMETER_EXCEPTION.sql" />
   </ItemGroup>

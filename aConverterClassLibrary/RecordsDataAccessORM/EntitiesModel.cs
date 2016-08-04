@@ -250,6 +250,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		public IQueryable<CNV_CITIZENMIGRATION> CNV_CITIZENMIGRATIONs 
+		{
+			get
+			{
+				return this.GetAll<CNV_CITIZENMIGRATION>();
+			}
+		}
+		
 		public static BackendConfiguration GetBackendConfiguration()
 		{
 			BackendConfiguration backend = new BackendConfiguration();
@@ -368,6 +376,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			get;
 		}
 		IQueryable<EXTORGACCOUNT> EXTORGACCOUNTs
+		{
+			get;
+		}
+		IQueryable<CNV_CITIZENMIGRATION> CNV_CITIZENMIGRATIONs
 		{
 			get;
 		}

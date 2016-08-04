@@ -361,19 +361,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private short? _rOOMNO;
-		public virtual short? ROOMNO
-		{
-			get
-			{
-				return this._rOOMNO;
-			}
-			set
-			{
-				this._rOOMNO = value;
-			}
-		}
-		
 		private string _fLATPOSTFIX;
 		public virtual string FLATPOSTFIX
 		{
@@ -387,8 +374,21 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private int? _fLATNO;
-		public virtual int? FLATNO
+		private short _rOOMNO;
+		public virtual short ROOMNO
+		{
+			get
+			{
+				return this._rOOMNO;
+			}
+			set
+			{
+				this._rOOMNO = value;
+			}
+		}
+		
+		private int _fLATNO;
+		public virtual int FLATNO
 		{
 			get
 			{
@@ -397,6 +397,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			set
 			{
 				this._fLATNO = value;
+			}
+		}
+		
+		private string _rOOMPOSTFIX;
+		public virtual string ROOMPOSTFIX
+		{
+			get
+			{
+				return this._rOOMPOSTFIX;
+			}
+			set
+			{
+				this._rOOMPOSTFIX = value;
 			}
 		}
 		

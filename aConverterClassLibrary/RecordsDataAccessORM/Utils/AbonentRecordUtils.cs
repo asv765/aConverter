@@ -8,32 +8,28 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
     public class AbonentRecordUtils
     {
         /// <summary>
-        /// Заполняет уникальными значениями поле HouseCD списка абонентов
+        /// Заполняет уникальными значениями поле RAYONKOD списка абонентов
         /// </summary>
         /// <param name="list"></param>
-        public static void SetUniqueHouseCd(IEnumerable<CNV_ABONENT> list, int startValue)
+        public static void SetUniqueDistkod(IEnumerable<CNV_ABONENT> list, int startValue)
         {
             int counter = 0;
             var keysdic = new Dictionary<object, int>();
-            foreach (CNV_ABONENT ar in list.Where(p => p.HOUSECD == null))
+            foreach (CNV_ABONENT ar in list.Where(p => p.DISTKOD == null))
             {
                 object o = new
                 {
                     RayonKod = ar.RAYONKOD,
                     TownsKod = ar.TOWNSKOD,
-                    UlicaKod = ar.ULICAKOD,
-                    Houseno = ar.HOUSENO,
-                    Housepostfix = ar.HOUSEPOSTFIX,
-                    Korpusno = ar.KORPUSNO,
-                    Korpuspostfix = ar.KORPUSPOSTFIX
+                    DistName = ar.DISTNAME,
                 };
-                int housecd;
-                if (!keysdic.TryGetValue(o, out housecd))
+                int distKod;
+                if (!keysdic.TryGetValue(o, out distKod))
                 {
-                    housecd = startValue + (++counter);
-                    keysdic.Add(o, housecd);
+                    distKod = startValue + (++counter);
+                    keysdic.Add(o, distKod);
                 }
-                ar.HOUSECD = housecd;
+                ar.DISTKOD = distKod;
             }
         }
 
@@ -85,6 +81,36 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                     keysdic.Add(o, ulicaKod);
                 }
                 ar.ULICAKOD = ulicaKod;
+            }
+        }
+
+        /// <summary>
+        /// Заполняет уникальными значениями поле HouseCD списка абонентов
+        /// </summary>
+        /// <param name="list"></param>
+        public static void SetUniqueHouseCd(IEnumerable<CNV_ABONENT> list, int startValue)
+        {
+            int counter = 0;
+            var keysdic = new Dictionary<object, int>();
+            foreach (CNV_ABONENT ar in list.Where(p => p.HOUSECD == null))
+            {
+                object o = new
+                {
+                    RayonKod = ar.RAYONKOD,
+                    TownsKod = ar.TOWNSKOD,
+                    UlicaKod = ar.ULICAKOD,
+                    Houseno = ar.HOUSENO,
+                    Housepostfix = ar.HOUSEPOSTFIX,
+                    Korpusno = ar.KORPUSNO,
+                    Korpuspostfix = ar.KORPUSPOSTFIX
+                };
+                int housecd;
+                if (!keysdic.TryGetValue(o, out housecd))
+                {
+                    housecd = startValue + (++counter);
+                    keysdic.Add(o, housecd);
+                }
+                ar.HOUSECD = housecd;
             }
         }
     } 

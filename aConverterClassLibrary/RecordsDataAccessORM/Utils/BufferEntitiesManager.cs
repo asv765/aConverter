@@ -48,6 +48,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "PENI",
                 "SUPPLNET",
                 "DOCUMENTNUMERATORTABLE",
+                "CITIZENMIGRATION",
             };
             return l;
         }
@@ -140,6 +141,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_01600_NACHISLIMPORT");
                 l.Add("CNV_01700_PERERASHETIMPORT");
                 l.Add("CNV_02100_EXTLSHETS");
+                l.Add("CNV_03000_CITIZENS_TVER");
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {

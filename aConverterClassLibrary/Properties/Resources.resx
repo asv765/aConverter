@@ -181,6 +181,12 @@
   <data name="CNV_CHARVALS_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_charvals_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CITIZENMIGRATION" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_CITIZENMIGRATION.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="CNV_CITIZENMIGRATION_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_CITIZENMIGRATION_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="CNV_CITIZENS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_citizens.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -243,6 +249,9 @@
   </data>
   <data name="CNV_CNV_02100_EXTLSHETS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_02100_extlshets.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_03000_CITIZENS_TVER" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_03000_CITIZENS_TVER.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="CNV_CNV_DOCUMENTNUMERATOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_documentnumerator.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
