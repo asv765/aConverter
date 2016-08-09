@@ -115,7 +115,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 YEAR_ = year,
                 YEAR2 = year,
                 DATE_VV = dateVv,
-                DOCUMENTCD = documentcd
+                DOCUMENTCD = documentcd,
+                PROCHLVOLUME = defaultNachRecord.PROCHLVOLUME
             };
             NachRecords.Add(nr);
             UpdateNachoplDicByNachRecord(nr);

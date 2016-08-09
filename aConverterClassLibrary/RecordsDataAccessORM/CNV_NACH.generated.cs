@@ -270,6 +270,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		private decimal _pROCHLVOLUME;
+		public virtual decimal PROCHLVOLUME
+		{
+			get
+			{
+				return this._pROCHLVOLUME;
+			}
+			set
+			{
+				this._pROCHLVOLUME = value;
+			}
+		}
+		
 	}
 }
 #pragma warning restore 1591

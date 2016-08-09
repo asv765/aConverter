@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
@@ -17,7 +18,7 @@ namespace _047_Tver
             FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\учет жильцов на 25.07.16 для загрузки (3).xls",
             ListName = "паспортный стол",
             StartDataRow = 6,
-            EndDataRow = 38722
+            EndDataRow = 38719
         };
 
         public static ExcelFileInfo LsInfoFile = new ExcelFileInfo
@@ -42,6 +43,9 @@ namespace _047_Tver
         {
             return String.Format("01{0:D8}",Convert.ToInt64(ls));
         }
+
+        public static int CurrentYear = 2016;
+        public static int CurrentMonth = 09;
     }
 
     public class ExcelFileInfo
@@ -286,6 +290,7 @@ namespace _047_Tver
             DataTable countersInfoTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
             var lcc = new List<CNV_COUNTER>();
             var lci = new List<CNV_CNTRSIND>();
+            long docId = 0;
             StepStart(countersInfoTable.Rows.Count + 1);
             for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
             {
@@ -306,7 +311,7 @@ namespace _047_Tver
                 lci.Add(new CNV_CNTRSIND
                 {
                     COUNTERID = counter.COUNTERID,
-                    DOCUMENTCD = "Конвертация Нач пок",
+                    DOCUMENTCD = "КонНачПок_"+ counter.COUNTERID,
                     OLDIND = counterInfo.InitialIndication,
                     INDICATION = counterInfo.InitialIndication,
                     INDDATE = counterInfo.SetupDate,
@@ -316,10 +321,11 @@ namespace _047_Tver
                 if (counterInfo.Indicatios.Count == 0) continue;
                 decimal lastIndication = counterInfo.InitialIndication;
                 var indication = counterInfo.Indicatios[0];
+                docId++;
                 lci.Add(new CNV_CNTRSIND
                 {
                     COUNTERID = counter.COUNTERID,
-                    DOCUMENTCD = "Конвертация Ист пок",
+                    DOCUMENTCD = "КонИстПок_"+docId,
                     OLDIND = lastIndication,
                     INDICATION = indication.Value,
                     INDDATE = indication.Date,
@@ -329,16 +335,19 @@ namespace _047_Tver
                 for (int j = 1; j < counterInfo.Indicatios.Count; j++)
                 {
                     indication = counterInfo.Indicatios[j];
-                    if (counterInfo.SetupDate < indication.Date) 
+                    if (counterInfo.SetupDate < indication.Date)
+                    {
+                        docId++;
                         lci.Add(new CNV_CNTRSIND
                         {
                             COUNTERID = counter.COUNTERID,
-                            DOCUMENTCD = "Конвертация Ист пок",
+                            DOCUMENTCD = "КонИстПок_"+docId,
                             OLDIND = lastIndication,
                             INDICATION = indication.Value,
                             INDDATE = indication.Date,
                             INDTYPE = 0
                         });
+                    }
                     lastIndication = indication.Value;
                 }
             }
@@ -424,6 +433,125 @@ namespace _047_Tver
         }
     }
 
+    public class ConvertNachopl : ConvertCase
+    {
+        public ConvertNachopl()
+        {
+            ConvertCaseName = "Nachopl - история оплат и начислений";
+            Position = 50;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(5);
+
+            BufferEntitiesManager.DropTableData("CNV$NACH");
+            BufferEntitiesManager.DropTableData("CNV$OPLATA");
+            BufferEntitiesManager.DropTableData("CNV$NACHOPL");
+
+            //var minDate = new DateTime(2015, 05, 01);
+            var minDate = new DateTime(2016, 03, 01);
+            var maxDate = new DateTime(2016, 04, 01);
+
+            StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
+            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            {
+                var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
+                DataTable moneyTable = Utils.ReadExcelFile(
+                    @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\" + Money.GetFileName(date), "66186");
+                for (int i = 0; i < moneyTable.Rows.Count; i++)
+                {
+                    long ls;
+                    if (!Int64.TryParse(moneyTable.Rows[i][0].ToString(), out ls)) continue;
+
+                    var money = new Money(moneyTable.Rows[i], date);
+
+                    long lshetLg = Int64.Parse(money.Lshet);
+                    if (date.Year == 2015 && lshetLg >= 5000001 && ls <= 5016062)
+                        money.Lshet = "5" + money.Lshet;
+                    string lshet = Consts.GetLs(money.Lshet);
+                    for (int j = 0; j < money.Services.Length; j++)
+                    {
+                        var serviceMoney = money.Services[j];
+
+                        nm.RegisterNach(new CNV_NACH
+                        {
+                            REGIMCD = serviceMoney.RegimCd,
+                            REGIMNAME = serviceMoney.RegimName,
+                            SERVICECD = serviceMoney.ServiceCd,
+                            SERVICENAME = serviceMoney.ServiceName,
+                            TYPE_ = 0,
+                            VOLUME = Math.Round(serviceMoney.Volume,4),
+                            PROCHLVOLUME = Math.Round(serviceMoney.RecalcVol,4)
+                        }, lshet, date.Month, date.Year, serviceMoney.Nach, serviceMoney.RecalcSum, date,
+                            String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd")));
+                    }
+                    nm.RegisterBeginSaldo(lshet, date.Month, date.Year, 3, "Отопление", money.BegSaldo);
+                    nm.RegisterEndSaldo(lshet, date.Month, date.Year, 3, "Отопление", money.EndSaldo);
+                }
+
+                SaveList(nm.NachRecords, Consts.InsertRecordCount, false);
+                SaveList(nm.OplataRecords, Consts.InsertRecordCount, false);
+                SaveList(nm.NachoplRecords.Values, Consts.InsertRecordCount, false);
+
+                Iterate();
+            }
+            StepFinish();
+
+
+
+
+
+
+
+            //if (record.StringNumber == 1)
+            //    {
+            //        var ndef = new CNV_NACH
+            //        {
+            //            REGIMCD = regimcd,
+            //            REGIMNAME = regimname,
+            //            SERVICECD = servicecd,
+            //            SERVICENAME = servicename,
+            //            TYPE_ = 0
+            //        };
+            //        nm.RegisterNach(ndef, record.Lshet, record.FileDate.Month,
+            //            record.FileDate.Year, record.NachSum, record.Reculc, record.FileDate,
+            //            String.Format("N{0}{1}", i, record.Lshet));
+
+            //        nm.RegisterBeginSaldo(record.Lshet, record.FileDate.Month, record.FileDate.Year, servicecd,
+            //            servicename,
+            //            record.BegSaldo);
+            //        nm.RegisterEndSaldo(record.Lshet, record.FileDate.Month, record.FileDate.Year, servicecd,
+            //            servicename,
+            //            record.EndSaldo);
+            //    }
+            //    else
+            //    {
+            //        Record prevRecord = allRecrods[i - (record.StringNumber - 1)];
+            //        record.FileDate = prevRecord.FileDate;
+            //        record.Lshet = prevRecord.Lshet;
+            //    }
+
+            //    if (record.PaySum != 0)
+            //    {
+            //        var odef = new CNV_OPLATA
+            //        {
+            //            SERVICECD = servicecd,
+            //            SERVICENAME = servicename,
+            //            SOURCECD = 999,
+            //            SOURCENAME = "Корректировка"
+            //        };
+
+            //        DateTime payTo = record.PayTo ?? record.FileDate;
+            //        DateTime payDate = record.PayDate ?? record.FileDate;
+
+            //        nm.RegisterOplata(odef, record.Lshet, payTo.Month, payTo.Year,
+            //            record.PaySum, payDate, payDate, String.Format("P{0}{1}", i, record.Lshet));
+            //    }
+        }
+    }
+
     public class RoomerInfo
     {
         public string Lshet;
@@ -465,7 +593,12 @@ namespace _047_Tver
         {
             if (String.IsNullOrWhiteSpace(dr[12].ToString())) return;
             if (MissingInfoList == null) MissingInfoList = new List<MissingInfo>();
-            MissingInfoList.Add(new MissingInfo(dr));
+            var missingInfo = new MissingInfo(dr);
+            if (missingInfo.MissingStartDate.HasValue && missingInfo.MissingStartDate.Value < RegisteredStartDate)
+                missingInfo.MissingStartDate = RegisteredStartDate;
+            if (missingInfo.MissingEndDate.HasValue && RegisteredEndDate.HasValue && missingInfo.MissingEndDate.Value > RegisteredEndDate)
+                missingInfo.MissingEndDate = RegisteredEndDate;
+            MissingInfoList.Add(missingInfo);
         }
 
         public void ExtractFio(ref CNV_CITIZEN cityzen)
@@ -838,6 +971,85 @@ namespace _047_Tver
         }
     }
 
+    public class Money
+    {
+        public DateTime Date;
+        public string Lshet;
+        public ServiceMoney[] Services;
+        public decimal BegSaldo;
+        public decimal EndSaldo;
+
+        public Money(DataRow dr, DateTime fileDate)
+        {
+            FileDate = fileDate;
+            Date = fileDate;
+            Lshet = dr[0].ToString();
+            Services = new[]
+            {
+                new ServiceMoney(dr, 12, 26, 5, "Гор. водоснабжение", 10, "Неизвестен"), // ГВС Гкал
+                new ServiceMoney(dr, 14, 28, 5, "Гор. водоснабжение", 10, "Неизвестен"), // Гвс Тн
+                new ServiceMoney(dr, 16, 30, 5, "Гор. водоснабжение", 10, "Неизвестен"), // ХВС куб.м
+                new ServiceMoney(dr, 18, 33, 3, "Отопление", 10, "Неизвестен"), // Отопление Гкал
+                new ServiceMoney(dr, 20, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН Гкал
+                new ServiceMoney(dr, 22, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН Тн
+                new ServiceMoney(dr, 24, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН куб.м
+            };
+            BegSaldo = String.IsNullOrWhiteSpace(dr[44 - 1].ToString()) ? 0 : Decimal.Parse(dr[44 - 1].ToString());
+            EndSaldo= String.IsNullOrWhiteSpace(dr[45 - 1].ToString()) ? 0 : Decimal.Parse(dr[45 - 1].ToString());
+        }
+
+        public static DateTime FileDate;
+
+        public class ServiceMoney
+        {
+            public int ServiceCd;
+            public string ServiceName;
+            public int RegimCd;
+            public string RegimName;
+
+            public decimal Volume;
+            public decimal Nach;
+            public decimal RecalcVol;
+            public decimal RecalcSum;
+
+            public ServiceMoney(DataRow dr, int volumeId, int recalcId, int servicecd, string servicename, int regimcd, string regimname)
+            {
+                try
+                {
+                    ServiceCd = servicecd;
+                    ServiceName = servicename;
+                    RegimCd = regimcd;
+                    RegimName = regimname;
+
+                    Volume = String.IsNullOrWhiteSpace(dr[volumeId - 1].ToString())
+                        ? 0
+                        : Decimal.Parse(dr[volumeId - 1].ToString());
+                    Nach = String.IsNullOrWhiteSpace(dr[volumeId].ToString())
+                        ? 0
+                        : Decimal.Parse(dr[volumeId].ToString());
+                    if (recalcId != 0)
+                    {
+                        RecalcVol = String.IsNullOrWhiteSpace(dr[recalcId - 1].ToString())
+                            ? 0
+                            : Decimal.Parse(dr[recalcId - 1].ToString());
+                        RecalcSum = String.IsNullOrWhiteSpace(dr[recalcId].ToString())
+                            ? 0
+                            : Decimal.Parse(dr[recalcId].ToString());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+            }
+        }
+
+        public static string GetFileName(DateTime date)
+        {
+            return String.Format("справка расчет {0:D2}.{1}.xls",date.Month, date.Year);
+        }
+    }
+
     public class Test : ConvertCase
     {
         public Test()
@@ -1151,6 +1363,37 @@ namespace _047_Tver
             //Iterate();
             fbm.ExecuteProcedure("CNV$CNV_02100_EXTLSHETS", new[] { "2","0" });
             Iterate();
+        }
+    }
+
+    public class TransferNachopl : ConvertCase
+    {
+        public TransferNachopl()
+        {
+            ConvertCaseName = "Перенос данных о истории оплат и начислений";
+            Position = 1070;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            StepStart(6);
+            fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01300_SOURCEDOC");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01400_OPLATA");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
+            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] { Consts.CurrentYear.ToString(CultureInfo.InvariantCulture),
+                Consts.CurrentMonth.ToString(CultureInfo.InvariantCulture) });
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01700_PERERASHETIMPORT");
+            StepFinish();
         }
     }
 

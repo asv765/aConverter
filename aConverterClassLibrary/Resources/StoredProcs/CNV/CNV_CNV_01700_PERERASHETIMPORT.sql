@@ -8,6 +8,7 @@ declare variable YEAR2 integer;
 declare variable MONTH2 integer;
 declare variable LSHET varchar(10);
 declare variable PROCHL numeric(18,4);
+declare variable PROCHLVOLUME numeric(18,4);
 declare variable REGIMCD integer;
 declare variable SERVICECD integer;
 declare variable FYEAR integer;
@@ -38,12 +39,13 @@ BEGIN
        documentcd,
        type_,
        docname,
-       docdate
+       docdate,
+	   prochlvolume
     FROM cnv$nach
     WHERE prochl <> 0
     ORDER BY year_,month_,lshet
     INTO :year_, :month_, :year2, :month2, :lshet, :prochl, :regimcd, :servicecd,
-         :fyear, :fmonth, :fday, :date_vv, :documentcd, :type_, :docname, :docdate
+         :fyear, :fmonth, :fday, :date_vv, :documentcd, :type_, :docname, :docdate, :prochlvolume
   DO BEGIN
     IF (:docname IS NULL) THEN
       idocname = 'Перерасчет за ' || + CAST(:MONTH_ AS VARCHAR(10)) || '.' || CAST(:YEAR_ AS VARCHAR(10)) || ' по лицевому счету ' || :lshet;
@@ -71,6 +73,8 @@ BEGIN
        VALUES (:lshet, :ncaseid, :regimcd, :servicecd, :type_, :year_, :month_, 1, :year2, :month2, 1, :prochl, 0);
 /*    INSERT INTO NACHISLSUMMA (LSHET, CASEID, KODREGIM, BALANCE_KOD, SUMMATYPE, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, SUMMA, NORMTYPE)
     VALUES (:LSHET, :NCASEID, :REGIMCD, :SERVICECD, :TYPE_, :YEAR_, :MONTH_, 1, :YEAR2, :MONTH2, 1, :FNATH, 0); */
+		    INSERT INTO NACHISLVOLUMS (LSHET, CASEID, KODREGIM, BALANCE_KOD, VOLUME, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, VOLUMETYPE, NORMTYPE)
+		VALUES (:LSHET, :NCASEID, :REGIMCD, :SERVICECD, :PROCHLVOLUME, :YEAR_, :MONTH_, 1, :YEAR2, :MONTH2, 1, 1, 0);
   END
 END^
 

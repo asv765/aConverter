@@ -34,6 +34,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "CHARLST",
                 "CHARS",
                 "CHARVALS",
+                "CITIZENMIGRATION",
                 "CITIZENS",
                 "CNTRSIND",
                 "COUNTERS",
@@ -48,7 +49,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "PENI",
                 "SUPPLNET",
                 "DOCUMENTNUMERATORTABLE",
-                "CITIZENMIGRATION",
             };
             return l;
         }

@@ -145,11 +145,11 @@ namespace aConverterClassLibrary
 
         public abstract void DoConvert();
 
-        public void SaveList<T>(IEnumerable<T> listToSave, int commitStep)
+        public void SaveList<T>(IEnumerable<T> listToSave, int commitStep, bool countSteps = true)
         {
             var list = listToSave.ToList();
             int stepsCount = (list.Count / commitStep) + 1;
-            StepStart(stepsCount);
+            if (countSteps) StepStart(stepsCount);
             while (list.Count > 0)
             {
                 int count = Math.Min(commitStep, list.Count);
@@ -160,9 +160,9 @@ namespace aConverterClassLibrary
                 }
                 list.RemoveRange(0, count);
                 SaveContextPart(sublist);
-                Iterate();
+                if (countSteps) Iterate();
             }
-            StepFinish();
+            if (countSteps) StepFinish();
         }
 
         public void SaveContextPart(IEnumerable<object> entitiesList)

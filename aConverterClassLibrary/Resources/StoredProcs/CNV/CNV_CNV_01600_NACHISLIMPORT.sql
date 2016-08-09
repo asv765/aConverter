@@ -8,6 +8,7 @@ declare variable YEAR2 integer;
 declare variable MONTH2 integer;
 declare variable LSHET varchar(10);
 declare variable FNATH numeric(18,4);
+declare variable VOLUME numeric(18,4);
 declare variable REGIMCD integer;
 declare variable SERVICECD integer;
 declare variable DATE_ date;
@@ -29,12 +30,12 @@ begin
   olddocumentcd = '-1';
   SELECT extorgcd FROM extorgspr eos WHERE eos.isbaseorganization = 1 INTO :baseorg;
   FOR SELECT YEAR_, MONTH_, YEAR2, MONTH2, LSHET, FNATH, REGIMCD, SERVICECD, DATE_VV AS DATE_,
-    EXTRACT(YEAR FROM DATE_VV) AS FYEAR, EXTRACT(MONTH FROM DATE_VV) AS FMONTH, EXTRACT(DAY FROM DATE_VV) AS FDAY, DOCUMENTCD, TYPE_
+    EXTRACT(YEAR FROM DATE_VV) AS FYEAR, EXTRACT(MONTH FROM DATE_VV) AS FMONTH, EXTRACT(DAY FROM DATE_VV) AS FDAY, DOCUMENTCD, TYPE_, volume
     FROM CNV$NACH
     WHERE FNATH <> 0
     order by year_,  month_, lshet, documentcd
     INTO :YEAR_, :MONTH_, :YEAR2, :MONTH2, :lshet,  :fnath,  :regimcd,  :servicecd, :date_,
-      :fyear,  :fmonth, :fday, :documentcd, :type_
+      :fyear,  :fmonth, :fday, :documentcd, :type_, :volume
   DO BEGIN
     if ((:oldyear <> :year_) or (:oldmonth <> :month_) or (:oldlshet <> :lshet) or (:olddocumentcd <> :documentcd) ) then begin
        select documentcd from cnv$cnv_documentnumerator(:DOCUMENTCD, 'Импорт данных о начислениях', :DATE_, :DATE_, :baseorg) into :ncaseid;
@@ -47,6 +48,9 @@ begin
     end
     INSERT INTO NACHISLSUMMA (LSHET, CASEID, KODREGIM, BALANCE_KOD, SUMMATYPE, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, SUMMA, NORMTYPE)
     VALUES (:LSHET, :NCASEID, :REGIMCD, :SERVICECD, :TYPE_, :YEAR_, :MONTH_, 1, :YEAR2, :MONTH2, 1, :FNATH, 0);
+	if (:volume <> 0) then
+	    INSERT INTO NACHISLVOLUMS (LSHET, CASEID, KODREGIM, BALANCE_KOD, VOLUME, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, VOLUMETYPE, NORMTYPE)
+		VALUES (:LSHET, :NCASEID, :REGIMCD, :SERVICECD, :volume, :YEAR_, :MONTH_, 1, :YEAR2, :MONTH2, 1, 1, 0);
   END
 end^
 

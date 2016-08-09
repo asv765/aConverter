@@ -28,7 +28,7 @@ CREATE TABLE CNV$ABONENT (
     TOWNSNAME      VARCHAR(40),
     ULICAKOD       INTEGER,
     ULICANAME      VARCHAR(40),
-    F              VARCHAR(50),
+    F              VARCHAR(100),
     I              VARCHAR(50),
     O              VARCHAR(50),
     PRIM_          VARCHAR(250),
@@ -45,7 +45,8 @@ CREATE TABLE CNV$ABONENT (
     KORPUSPOSTFIX  VARCHAR(10),
     FLATNO         INTEGER,
     FLATPOSTFIX    VARCHAR(10),
-    ROOMNO         SMALLINT
+    ROOMNO         SMALLINT,
+	ROOMPOSTFIX	   VARCHAR(10)
 );
 
 

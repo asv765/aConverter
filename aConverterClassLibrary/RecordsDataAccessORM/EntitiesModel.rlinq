@@ -248,6 +248,7 @@
         <orm:field name="_sERVICENAME" property="SERVICENAME" behavior="readwrite" uniqueId="40ad90f5-c573-4014-88a9-0e21713cb7e4" type="System.String">
           <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
+        <orm:field name="_pROCHLVOLUME" property="PROCHLVOLUME" uniqueId="a370db5a-a160-4382-8321-65eda216b400" type="System.Decimal" />
         <orm:index name="CNV$NACH_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
@@ -2004,6 +2005,7 @@
       <Property Id="e7890c99-b51e-4e70-bed1-05975a50b5ef" name="YEAR_" type="Int32" label="YEAR_ : Int32" kind="Persistent" fieldName="_yEAR_" />
       <Property Id="f93ab0b6-0acd-45a6-80fd-5c039802f91e" name="YEAR2" type="Int32" label="YEAR2 : Int32" kind="Persistent" fieldName="_yEAR2" />
       <Property Id="40ad90f5-c573-4014-88a9-0e21713cb7e4" name="SERVICENAME" label="SERVICENAME : String" kind="Persistent" fieldName="_sERVICENAME" />
+      <Property Id="a370db5a-a160-4382-8321-65eda216b400" name="PROCHLVOLUME" type="Decimal" label="PROCHLVOLUME : Decimal" fieldName="_pROCHLVOLUME" />
     </DomainClass>
     <DomainClass Id="28d3d09e-675e-4116-bd0b-e54dba7ec378" name="CNV_LCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="ae228361-4967-4568-a1fa-0d70c342ca59" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
