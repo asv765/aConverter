@@ -23,7 +23,7 @@ namespace _047_Tver
 
         public static ExcelFileInfo LsInfoFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\информация по ЛС на 29.07.16_для загрузки.xls",
+            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\информация по ЛС на 29.07.16_для загрузки_Дополн.xls",
             ListName = "66184",
             StartDataRow = 3,
             EndDataRow = 17616
@@ -35,6 +35,14 @@ namespace _047_Tver
             ListName = "610",
             StartDataRow = 3,
             EndDataRow = 4878
+        };
+
+        public static ExcelFileInfo RecodeTableFile = new ExcelFileInfo
+        {
+            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\Таблица перекодировкиv1.5.xlsx",
+            ListName = "Лист1",
+            StartDataRow = 2,
+            EndDataRow = 17
         };
 
         public const int InsertRecordCount = 1000;
@@ -271,6 +279,192 @@ namespace _047_Tver
         }
     }
 
+    public class ConvetCcharsHours : ConvertCase
+    {
+        public ConvetCcharsHours()
+        {
+            ConvertCaseName = "CCHAR - часы";
+            Position = 36;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(3);
+            var lc = new List<CNV_CHAR>();
+
+            //var minDate = new DateTime(2015, 05, 01);
+            var minDate = new DateTime(2016, 07, 01);
+            var maxDate = new DateTime(2016, 07, 01);
+            //var maxDate = new DateTime(2016, 07, 01);
+
+            StepStart((maxDate.Month - minDate.Month) + 12*(maxDate.Year - minDate.Year) + 1);
+            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            {
+                DataTable moneyTable = Utils.ReadExcelFile(
+                    @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\" + Money.GetFileName(date), "66186");
+                for (int i = 0; i < moneyTable.Rows.Count; i++)
+                {
+                    long ls;
+                    if (!Int64.TryParse(moneyTable.Rows[i][0].ToString(), out ls)) continue;
+
+                    var money = new Money(moneyTable.Rows[i], date);
+
+                    long lshetLg = Int64.Parse(money.Lshet);
+                    if (date.Year == 2015 && lshetLg >= 5000001 && ls <= 5016062)
+                        money.Lshet = "5" + money.Lshet;
+                    string lshet = Consts.GetLs(money.Lshet);
+                    lc.Add(new CNV_CHAR
+                    {
+                        CHARCD = 200, 
+                        CHARNAME = "Часы ГВС",
+                        LSHET = lshet,
+                        DATE_ = date,
+                        VALUE_ = money.HoursGVS
+                    });
+                    lc.Add(new CNV_CHAR
+                    {
+                        CHARCD = 220, 
+                        CHARNAME = "Часы отопление",
+                        LSHET = lshet,
+                        DATE_ = date,
+                        VALUE_ = money.HoursOtopl
+                    });
+                }
+            }
+            Iterate();
+            StepFinish();
+
+            StepStart(1);
+            lc = CharsRecordUtils.ThinOutList(lc);
+            StepFinish();
+
+            SaveList(lc, Consts.InsertRecordCount);
+        }
+    }
+
+    public class ConvetLchars : ConvertCase
+    {
+        public ConvetLchars()
+        {
+            ConvertCaseName = "LCHAR - качественные характеристики";
+            Position = 39;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(3);
+            BufferEntitiesManager.DropTableData("CNV$LCHARS");
+            var lc = new List<CNV_LCHAR>();
+            ExcelFileInfo lsFileInfo = Consts.LsInfoFile;
+            DataTable lsInfoTable = Utils.ReadExcelFile(lsFileInfo.FileName, lsFileInfo.ListName);
+            ExcelFileInfo recodeTableInfo = Consts.RecodeTableFile;
+            DataTable recodeDataTable = Utils.ReadExcelFile(recodeTableInfo.FileName, recodeTableInfo.ListName);
+            var recodeTable = new List<Recode>();
+            for (int i = recodeTableInfo.StartDataRow - 2; i <= recodeTableInfo.EndDataRow - 2; i++)
+            {
+                recodeTable.Add(new Recode(recodeDataTable.Rows[i]));
+            }
+            recodeDataTable.Dispose();
+            StepStart(lsInfoTable.Rows.Count);
+            for (int i = lsFileInfo.StartDataRow - 2; i <= lsFileInfo.EndDataRow - 2; i++)
+            {
+                var lsInfo = new LsInfo(lsInfoTable.Rows[i]);
+                for (int j = 0; j < recodeTable.Count; j++)
+                {
+                    if (lsInfo.Lshet == "300")
+                    {
+                        int a = 10;
+                    }
+
+                    var recode = recodeTable[j];
+                    object checkingValue;
+                    switch (recode.CheckField1)
+                    {
+                        case "L":
+                            checkingValue = lsInfo.IndividualNorm;
+                            break;
+                        case "J":
+                            checkingValue = lsInfo.HasCounter;
+                            break;
+                        case "M":
+                            checkingValue = lsInfo.GVSTypeOpen;
+                            break;
+                        case "O":
+                            checkingValue = lsInfo.NachGvsOdn;
+                            break;
+                        case "P":
+                            checkingValue = lsInfo.NachOtopl;
+                            break;
+                        default:
+                            throw new Exception("Неизвестное 1 поле для проверки: " + recode.CheckField1);
+                    }
+                    object chekingValue2 = null;
+                    if (recode.CheckField2 != null)
+                    {
+                        switch (recode.CheckField2)
+                        {
+                            case "K":
+                                chekingValue2 = lsInfo.HasHVS;
+                                break;
+                            default:
+                                throw new Exception("Неизвестное 2 поле для проверки: " + recode.CheckField2);
+                        }
+                    }
+
+                    if (checkingValue == null || (!checkingValue.Equals(recode.Value1)) || (chekingValue2 != null && !chekingValue2.Equals(recode.Value2))) continue;
+
+                    lc.Add(new CNV_LCHAR
+                    {
+                        LSHET = Consts.GetLs(lsInfo.Lshet),
+                        DATE_ = new DateTime(2014, 07, 01),
+                        LCHARCD = recode.LcharCd,
+                        VALUE_ = recode.LcharValue
+                    });
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(1);
+            lc = LcharsRecordUtils.ThinOutList(lc);
+            StepFinish();
+
+            SaveList(lc, Consts.InsertRecordCount);
+        }
+
+        private class Recode
+        {
+            public string CheckField1;
+            public object Value1;
+            public string CheckField2;
+            public object Value2;
+
+            public int LcharCd;
+            public string LcharName;
+            public int LcharValue;
+            public string LcharValueDesc;
+
+            public Recode(DataRow dr)
+            {
+                CheckField1 = dr[0].ToString().ToUpper().Trim();
+                decimal decVal;
+                if (!Decimal.TryParse(dr[1].ToString(), out decVal))
+                    Value1 = dr[1].ToString().ToLower().Trim();
+                else Value1 = decVal;
+                CheckField2 = String.IsNullOrWhiteSpace(dr[2].ToString()) ? null : dr[2].ToString();
+                if (!String.IsNullOrWhiteSpace(dr[3].ToString()))
+                    Value2 = dr[3].ToString().ToLower().Trim();
+                else Value2 = null;
+
+                LcharCd = Int32.Parse(dr[4].ToString());
+                LcharName = dr[5].ToString();
+                LcharValue = Int32.Parse(dr[6].ToString());
+                LcharValueDesc = dr[7].ToString();
+            }
+        }
+    }
 
     public class ConvertCounters : ConvertCase
     {
@@ -446,13 +640,14 @@ namespace _047_Tver
         {
             SetStepsCount(5);
 
-            BufferEntitiesManager.DropTableData("CNV$NACH");
-            BufferEntitiesManager.DropTableData("CNV$OPLATA");
-            BufferEntitiesManager.DropTableData("CNV$NACHOPL");
+            //BufferEntitiesManager.DropTableData("CNV$NACH");
+            //BufferEntitiesManager.DropTableData("CNV$OPLATA");
+            //BufferEntitiesManager.DropTableData("CNV$NACHOPL");
 
             //var minDate = new DateTime(2015, 05, 01);
-            var minDate = new DateTime(2016, 03, 01);
-            var maxDate = new DateTime(2016, 04, 01);
+            var minDate = new DateTime(2016, 07, 01);
+            var maxDate = new DateTime(2016, 07, 01);
+            //var maxDate = new DateTime(2016, 07, 01);
 
             StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
             for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
@@ -699,11 +894,13 @@ namespace _047_Tver
         public bool Active;
         public DateTime LsOpenDate;
         public DateTime? LsCloseDate;
-        public bool HasCounter;
-        public bool HasHVS;
+        public string HasCounter;
+        public string HasHVS;
         public decimal? IndividualNorm;
-        public bool GVSTypeOpen;
+        public string GVSTypeOpen;
         public decimal? Square;
+        public string NachGvsOdn;
+        public string NachOtopl;
 
         public const int UnknowInformationOwnerId = 0;
         public const string UnknownInformationOnwer = "неизвестно";
@@ -720,15 +917,17 @@ namespace _047_Tver
             LsCloseDate = String.IsNullOrWhiteSpace(dr[8].ToString())
                 ? (DateTime?) null
                 : DateTime.Parse(dr[8].ToString());
-            HasCounter = dr[9].ToString().ToLower().Trim() == "да";
-            HasHVS = dr[10].ToString().ToLower().Trim() == "есть";
+            HasCounter = dr[9].ToString().ToLower().Trim();
+            HasHVS = dr[10].ToString().ToLower().Trim();
             IndividualNorm = String.IsNullOrWhiteSpace(dr[11].ToString())
                 ? (decimal?) null
                 : Decimal.Parse(dr[11].ToString());
-            GVSTypeOpen = dr[12].ToString().ToLower().Trim() == "открытая";
+            GVSTypeOpen = dr[12].ToString().ToLower().Trim();
             Square = String.IsNullOrWhiteSpace(dr[13].ToString())
                 ? (decimal?) null
                 : Decimal.Parse(dr[13].ToString());
+            NachGvsOdn = dr[14].ToString().ToLower().Trim();
+            NachOtopl = dr[15].ToString().ToLower().Trim();
 
             switch (InformationOwner.Trim().ToLower())
             {
@@ -978,6 +1177,8 @@ namespace _047_Tver
         public ServiceMoney[] Services;
         public decimal BegSaldo;
         public decimal EndSaldo;
+        public decimal HoursGVS;
+        public decimal HoursOtopl;
 
         public Money(DataRow dr, DateTime fileDate)
         {
@@ -994,8 +1195,10 @@ namespace _047_Tver
                 new ServiceMoney(dr, 22, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН Тн
                 new ServiceMoney(dr, 24, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН куб.м
             };
-            BegSaldo = String.IsNullOrWhiteSpace(dr[44 - 1].ToString()) ? 0 : Decimal.Parse(dr[44 - 1].ToString());
-            EndSaldo= String.IsNullOrWhiteSpace(dr[45 - 1].ToString()) ? 0 : Decimal.Parse(dr[45 - 1].ToString());
+            BegSaldo = String.IsNullOrWhiteSpace(dr[44 - 1].ToString()) ? 0 : Decimal.Parse(dr[44 - 1].ToString().Replace('.',','));
+            EndSaldo = String.IsNullOrWhiteSpace(dr[45 - 1].ToString()) ? 0 : Decimal.Parse(dr[45 - 1].ToString().Replace('.',','));
+            HoursGVS = String.IsNullOrWhiteSpace(dr[6 - 1].ToString()) ? 0 : Decimal.Parse(dr[6 - 1].ToString().Replace('.',','));
+            HoursOtopl = String.IsNullOrWhiteSpace(dr[7 - 1].ToString()) ? 0 : Decimal.Parse(dr[7 - 1].ToString().Replace('.',','));
         }
 
         public static DateTime FileDate;
@@ -1023,18 +1226,18 @@ namespace _047_Tver
 
                     Volume = String.IsNullOrWhiteSpace(dr[volumeId - 1].ToString())
                         ? 0
-                        : Decimal.Parse(dr[volumeId - 1].ToString());
+                        : Decimal.Parse(dr[volumeId - 1].ToString(), NumberStyles.Float);
                     Nach = String.IsNullOrWhiteSpace(dr[volumeId].ToString())
                         ? 0
-                        : Decimal.Parse(dr[volumeId].ToString());
+                        : Decimal.Parse(dr[volumeId].ToString(), NumberStyles.Float);
                     if (recalcId != 0)
                     {
                         RecalcVol = String.IsNullOrWhiteSpace(dr[recalcId - 1].ToString())
                             ? 0
-                            : Decimal.Parse(dr[recalcId - 1].ToString());
+                            : Decimal.Parse(dr[recalcId - 1].ToString(), NumberStyles.Float);
                         RecalcSum = String.IsNullOrWhiteSpace(dr[recalcId].ToString())
                             ? 0
-                            : Decimal.Parse(dr[recalcId].ToString());
+                            : Decimal.Parse(dr[recalcId].ToString(), NumberStyles.Float);
                     }
                 }
                 catch (Exception ex)
@@ -1317,6 +1520,26 @@ namespace _047_Tver
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "1" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferLchars : ConvertCase
+    {
+        public TransferLchars()
+        {
+            ConvertCaseName = "Перенос данных о качественных характеристиках";
+            Position = 1030;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "1" });
             Iterate();
             StepFinish();
         }
