@@ -722,7 +722,7 @@ namespace _047_Tver
                         DateTime payDate = oplata.PayDate ?? date;
 
                         nm.RegisterOplata(odef, Consts.GetLs(oplata.Lshet), date.Month, date.Year,
-                            oplata.ServicesSumma, payDate, payDate,
+                            oplata.Summa, payDate, payDate,
                             String.Format("{0}_{1}", oplata.Lshet, recno));
                     }
                 }
@@ -1303,6 +1303,7 @@ namespace _047_Tver
         public DateTime? PayDate;
         public decimal ServicesSumma;
         public decimal CoefSumma;
+        public decimal Summa;
 
         public Oplata(DataRow dr)
         {
@@ -1319,8 +1320,9 @@ namespace _047_Tver
                         PayDate = DateTime.Parse(dr[6].ToString());
                 }
                 else PayDate = DateTime.Parse(dr[4].ToString());
-                ServicesSumma = Decimal.Parse(dr[7].ToString());
-                CoefSumma = Decimal.Parse(dr[8].ToString());
+                //ServicesSumma = Decimal.Parse(dr[7].ToString());
+                //CoefSumma = Decimal.Parse(dr[8].ToString());
+                Summa = Decimal.Parse(dr[9].ToString());
 
                 if (String.IsNullOrWhiteSpace(Source))
                 {
