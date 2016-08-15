@@ -45,15 +45,26 @@ namespace _047_Tver
             EndDataRow = 17
         };
 
+        public static ExcelFileInfo OplataFile = new ExcelFileInfo
+        {
+            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\свод по оплатам в разрезе ЛС.xls",
+            StartDataRow = 3,
+        };
+
+        public const string SpravkaFolder = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\";
+
         public const int InsertRecordCount = 1000;
 
         public static string GetLs(string ls)
         {
-            return String.Format("01{0:D8}",Convert.ToInt64(ls));
+            return String.Format("01{0:D8}", Convert.ToInt64(ls));
         }
 
         public static int CurrentYear = 2016;
         public static int CurrentMonth = 09;
+
+        public const int BaseServiceCd = 3;
+        public const string BaseServiceName = "Отопление";
     }
 
     public class ExcelFileInfo
@@ -302,13 +313,13 @@ namespace _047_Tver
             for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
             {
                 DataTable moneyTable = Utils.ReadExcelFile(
-                    @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\" + Money.GetFileName(date), "66186");
+                    Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
                 {
                     long ls;
                     if (!Int64.TryParse(moneyTable.Rows[i][0].ToString(), out ls)) continue;
 
-                    var money = new Money(moneyTable.Rows[i], date);
+                    var money = new Spravka(moneyTable.Rows[i], date);
 
                     long lshetLg = Int64.Parse(money.Lshet);
                     if (date.Year == 2015 && lshetLg >= 5000001 && ls <= 5016062)
@@ -640,27 +651,30 @@ namespace _047_Tver
         {
             SetStepsCount(5);
 
-            //BufferEntitiesManager.DropTableData("CNV$NACH");
-            //BufferEntitiesManager.DropTableData("CNV$OPLATA");
-            //BufferEntitiesManager.DropTableData("CNV$NACHOPL");
+            BufferEntitiesManager.DropTableData("CNV$NACH");
+            BufferEntitiesManager.DropTableData("CNV$OPLATA");
+            BufferEntitiesManager.DropTableData("CNV$NACHOPL");
 
             //var minDate = new DateTime(2015, 05, 01);
-            var minDate = new DateTime(2016, 07, 01);
-            var maxDate = new DateTime(2016, 07, 01);
+            var minDate = new DateTime(2016, 04, 01);
+            var maxDate = new DateTime(2016, 04, 01);
             //var maxDate = new DateTime(2016, 07, 01);
 
+            var minPayDate = new DateTime(2015, 07, 01);
+            var maxPayDate = new DateTime(2016, 07, 01);
+
+            long recno = 0;
             StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
             for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
             {
                 var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
-                DataTable moneyTable = Utils.ReadExcelFile(
-                    @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\" + Money.GetFileName(date), "66186");
+                DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
                 {
                     long ls;
                     if (!Int64.TryParse(moneyTable.Rows[i][0].ToString(), out ls)) continue;
 
-                    var money = new Money(moneyTable.Rows[i], date);
+                    var money = new Spravka(moneyTable.Rows[i], date);
 
                     long lshetLg = Int64.Parse(money.Lshet);
                     if (date.Year == 2015 && lshetLg >= 5000001 && ls <= 5016062)
@@ -677,14 +691,42 @@ namespace _047_Tver
                             SERVICECD = serviceMoney.ServiceCd,
                             SERVICENAME = serviceMoney.ServiceName,
                             TYPE_ = 0,
-                            VOLUME = Math.Round(serviceMoney.Volume,4),
-                            PROCHLVOLUME = Math.Round(serviceMoney.RecalcVol,4)
+                            VOLUME = Math.Round(serviceMoney.Volume, 4),
+                            PROCHLVOLUME = Math.Round(serviceMoney.RecalcVol, 4)
                         }, lshet, date.Month, date.Year, serviceMoney.Nach, serviceMoney.RecalcSum, date,
                             String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd")));
                     }
-                    nm.RegisterBeginSaldo(lshet, date.Month, date.Year, 3, "Отопление", money.BegSaldo);
-                    nm.RegisterEndSaldo(lshet, date.Month, date.Year, 3, "Отопление", money.EndSaldo);
+                    nm.RegisterBeginSaldo(lshet, date.Month, date.Year, Consts.BaseServiceCd, Consts.BaseServiceName,
+                        money.BegSaldo);
+                    //nm.RegisterEndSaldo(lshet, date.Month, date.Year, 3, "Отопление", money.EndSaldo);
                 }
+
+                if (minPayDate <= date && date <= maxPayDate)
+                {
+                    DataTable oplataTable = Utils.ReadExcelFile(Consts.OplataFile.FileName, Oplata.GetListName(date));
+                    for (int i = Consts.OplataFile.StartDataRow; i < oplataTable.Rows.Count; i++)
+                    {
+                        recno++;
+                        if (String.IsNullOrWhiteSpace(oplataTable.Rows[i][0].ToString()) ||
+                            oplataTable.Rows[i][0].ToString().Trim().ToUpper() == "ИТОГО") break;
+                        var oplata = new Oplata(oplataTable.Rows[i]);
+
+                        var odef = new CNV_OPLATA
+                        {
+                            SERVICECD = Consts.BaseServiceCd,
+                            SERVICENAME = Consts.BaseServiceName,
+                            SOURCECD = oplata.SourceCd,
+                            SOURCENAME = oplata.Source
+                        };
+
+                        DateTime payDate = oplata.PayDate ?? date;
+
+                        nm.RegisterOplata(odef, Consts.GetLs(oplata.Lshet), date.Month, date.Year,
+                            oplata.ServicesSumma, payDate, payDate,
+                            String.Format("{0}_{1}", oplata.Lshet, recno));
+                    }
+                }
+
 
                 SaveList(nm.NachRecords, Consts.InsertRecordCount, false);
                 SaveList(nm.OplataRecords, Consts.InsertRecordCount, false);
@@ -1170,17 +1212,17 @@ namespace _047_Tver
         }
     }
 
-    public class Money
+    public class Spravka
     {
         public DateTime Date;
         public string Lshet;
         public ServiceMoney[] Services;
         public decimal BegSaldo;
-        public decimal EndSaldo;
+        //public decimal EndSaldo;
         public decimal HoursGVS;
         public decimal HoursOtopl;
 
-        public Money(DataRow dr, DateTime fileDate)
+        public Spravka(DataRow dr, DateTime fileDate)
         {
             FileDate = fileDate;
             Date = fileDate;
@@ -1196,7 +1238,7 @@ namespace _047_Tver
                 new ServiceMoney(dr, 24, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН куб.м
             };
             BegSaldo = String.IsNullOrWhiteSpace(dr[44 - 1].ToString()) ? 0 : Decimal.Parse(dr[44 - 1].ToString().Replace('.',','));
-            EndSaldo = String.IsNullOrWhiteSpace(dr[45 - 1].ToString()) ? 0 : Decimal.Parse(dr[45 - 1].ToString().Replace('.',','));
+            //EndSaldo = String.IsNullOrWhiteSpace(dr[45 - 1].ToString()) ? 0 : Decimal.Parse(dr[45 - 1].ToString().Replace('.',','));
             HoursGVS = String.IsNullOrWhiteSpace(dr[6 - 1].ToString()) ? 0 : Decimal.Parse(dr[6 - 1].ToString().Replace('.',','));
             HoursOtopl = String.IsNullOrWhiteSpace(dr[7 - 1].ToString()) ? 0 : Decimal.Parse(dr[7 - 1].ToString().Replace('.',','));
         }
@@ -1250,6 +1292,78 @@ namespace _047_Tver
         public static string GetFileName(DateTime date)
         {
             return String.Format("справка расчет {0:D2}.{1}.xls",date.Month, date.Year);
+        }
+    }
+
+    public class Oplata
+    {
+        public string Lshet;
+        public string Source;
+        public int SourceCd;
+        public DateTime? PayDate;
+        public decimal ServicesSumma;
+        public decimal CoefSumma;
+
+        public Oplata(DataRow dr)
+        {
+            try
+            {
+
+                Lshet = dr[0].ToString().Trim();
+                Source = dr[3].ToString().Trim();
+                if (String.IsNullOrWhiteSpace(dr[4].ToString()))
+                {
+                    if (String.IsNullOrWhiteSpace(dr[6].ToString()))
+                        PayDate = null;
+                    else
+                        PayDate = DateTime.Parse(dr[6].ToString());
+                }
+                else PayDate = DateTime.Parse(dr[4].ToString());
+                ServicesSumma = Decimal.Parse(dr[7].ToString());
+                CoefSumma = Decimal.Parse(dr[8].ToString());
+
+                if (String.IsNullOrWhiteSpace(Source))
+                {
+                    Source = "Неизвестен";
+                    SourceCd = 9;
+                }
+                else
+                    switch (Source)
+                    {
+                        case "Касса":
+                            SourceCd = 11;
+                            break;
+                        case "Сбербанк":
+                            SourceCd = 2;
+                            break;
+                        case "Почта":
+                            SourceCd = 4;
+                            break;
+                        case "Бин Банк":
+                            SourceCd = 5;
+                            break;
+                        case "ТГБ":
+                            SourceCd = 6;
+                            break;
+                        case "Выписка":
+                            SourceCd = 8;
+                            break;
+                        case "Уралсиб":
+                            SourceCd = 7;
+                            break;
+                        default:
+                            throw new Exception("Неизвестный источник оплаты: " + Source);
+                    }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static string GetListName(DateTime date)
+        {
+            return String.Format("{0}.{1}", date.ToString("MM"), date.ToString("yy"));
         }
     }
 

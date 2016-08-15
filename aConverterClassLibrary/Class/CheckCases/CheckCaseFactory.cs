@@ -97,7 +97,7 @@ namespace aConverterClassLibrary
                 Description = "Проверка, что для всех записей в истории оплат/начислений сальдо на конец месяца предыдущего равно сальдо на начало следующего",
                 NormalRows = 0,
                 AnalyzeQuery = "SELECT * FROM CNV$CC_OLDNEWSALDOMISMATCH(1,0)",
-                FixCommand = "EXECUTE PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH(2,4)", // Корректируем с конца истории
+                FixCommand = "EXECUTE PROCEDURE CNV$CC_OLDNEWSALDOMISMATCH(2,4)", 
                 DependOn = ccSaldoHistoryGap
             };
             checkCaseList.Add(ccOldNewSaldoMesmatch);
