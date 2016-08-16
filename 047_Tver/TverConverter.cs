@@ -23,7 +23,7 @@ namespace _047_Tver
 
         public static ExcelFileInfo LsInfoFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\информация по ЛС на 29.07.16_для загрузки_Дополн.xls",
+            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\информация по ЛС на 29.07.16_для загрузки_сКоэф.xls",
             ListName = "66184",
             StartDataRow = 3,
             EndDataRow = 17616
@@ -39,10 +39,10 @@ namespace _047_Tver
 
         public static ExcelFileInfo RecodeTableFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\Таблица перекодировкиv1.5.xlsx",
+            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\Таблица перекодировкиv1.6.xlsx",
             ListName = "Лист1",
             StartDataRow = 2,
-            EndDataRow = 17
+            EndDataRow = 27
         };
 
         public static ExcelFileInfo OplataFile = new ExcelFileInfo
@@ -65,6 +65,18 @@ namespace _047_Tver
 
         public const int BaseServiceCd = 3;
         public const string BaseServiceName = "Отопление";
+
+        public static string FixLs(string lshet, DateTime date)
+        {
+            long lshetLg = Int64.Parse(lshet);
+            if (date.Year == 2015 &&
+                (lshetLg >= 5000001 && lshetLg <= 5016062) &&
+                (lshetLg <= 5007001 || lshetLg >= 5007021) &&
+                (lshetLg <= 5011001 || lshetLg >= 5011019) &&
+                (lshetLg <= 5017001 || lshetLg >= 5017006))
+                lshet = "5" + lshet;
+            return GetLs(lshet);
+        }
     }
 
     public class ExcelFileInfo
@@ -304,10 +316,10 @@ namespace _047_Tver
             SetStepsCount(3);
             var lc = new List<CNV_CHAR>();
 
-            //var minDate = new DateTime(2015, 05, 01);
-            var minDate = new DateTime(2016, 07, 01);
-            var maxDate = new DateTime(2016, 07, 01);
+            var minDate = new DateTime(2015, 05, 01);
+            //var minDate = new DateTime(2016, 07, 01);
             //var maxDate = new DateTime(2016, 07, 01);
+            var maxDate = new DateTime(2016, 07, 01);
 
             StepStart((maxDate.Month - minDate.Month) + 12*(maxDate.Year - minDate.Year) + 1);
             for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
@@ -321,25 +333,22 @@ namespace _047_Tver
 
                     var money = new Spravka(moneyTable.Rows[i], date);
 
-                    long lshetLg = Int64.Parse(money.Lshet);
-                    if (date.Year == 2015 && lshetLg >= 5000001 && ls <= 5016062)
-                        money.Lshet = "5" + money.Lshet;
-                    string lshet = Consts.GetLs(money.Lshet);
+                    string lshet = Consts.FixLs(money.Lshet, date);
                     lc.Add(new CNV_CHAR
                     {
-                        CHARCD = 200, 
+                        CHARCD = 200,
                         CHARNAME = "Часы ГВС",
                         LSHET = lshet,
                         DATE_ = date,
-                        VALUE_ = money.HoursGVS
+                        VALUE_ = DateTime.DaysInMonth(date.Year, date.Month)*24 - money.HoursGVS
                     });
                     lc.Add(new CNV_CHAR
                     {
-                        CHARCD = 220, 
+                        CHARCD = 220,
                         CHARNAME = "Часы отопление",
                         LSHET = lshet,
                         DATE_ = date,
-                        VALUE_ = money.HoursOtopl
+                        VALUE_ = DateTime.DaysInMonth(date.Year, date.Month)*24 - money.HoursOtopl
                     });
                 }
             }
@@ -407,6 +416,12 @@ namespace _047_Tver
                             break;
                         case "P":
                             checkingValue = lsInfo.NachOtopl;
+                            break;
+                        case "Q":
+                            checkingValue = lsInfo.NachPkInd;
+                            break;
+                        case "R":
+                            checkingValue = lsInfo.NachPkOdn;
                             break;
                         default:
                             throw new Exception("Неизвестное 1 поле для проверки: " + recode.CheckField1);
@@ -660,15 +675,19 @@ namespace _047_Tver
             var maxDate = new DateTime(2016, 04, 01);
             //var maxDate = new DateTime(2016, 07, 01);
 
-            var minPayDate = new DateTime(2015, 07, 01);
+            DateTime[] dates = { new DateTime(2016, 03, 01), new DateTime(2016, 04, 01), new DateTime(2016, 07, 01) };
+
+            var minPayDate = new DateTime(2015, 04, 01);
             var maxPayDate = new DateTime(2016, 07, 01);
 
             long recno = 0;
-            StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
-            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            StepStart(3);
+            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            foreach (var date in dates)
             {
                 var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
                 DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
+                decimal debt = 0;
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
                 {
                     long ls;
@@ -676,10 +695,7 @@ namespace _047_Tver
 
                     var money = new Spravka(moneyTable.Rows[i], date);
 
-                    long lshetLg = Int64.Parse(money.Lshet);
-                    if (date.Year == 2015 && lshetLg >= 5000001 && ls <= 5016062)
-                        money.Lshet = "5" + money.Lshet;
-                    string lshet = Consts.GetLs(money.Lshet);
+                    string lshet = Consts.FixLs(money.Lshet, date);
                     for (int j = 0; j < money.Services.Length; j++)
                     {
                         var serviceMoney = money.Services[j];
@@ -696,36 +712,47 @@ namespace _047_Tver
                         }, lshet, date.Month, date.Year, serviceMoney.Nach, serviceMoney.RecalcSum, date,
                             String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd")));
                     }
-                    nm.RegisterBeginSaldo(lshet, date.Month, date.Year, Consts.BaseServiceCd, Consts.BaseServiceName,
-                        money.BegSaldo);
-                    //nm.RegisterEndSaldo(lshet, date.Month, date.Year, 3, "Отопление", money.EndSaldo);
+                    debt = money.Debt;
                 }
+                
+                //string oldLs = "";
+                //if (minPayDate <= date && date <= maxPayDate)
+                //{
+                //    DataTable oplataTable = Utils.ReadExcelFile(Consts.OplataFile.FileName, Oplata.GetListName(date));
+                //    for (int i = Consts.OplataFile.StartDataRow; i < oplataTable.Rows.Count; i++)
+                //    {
+                //        recno++;
+                //        if (String.IsNullOrWhiteSpace(oplataTable.Rows[i][0].ToString()) ||
+                //            oplataTable.Rows[i][0].ToString().Trim().ToUpper() == "ИТОГО") break;
+                //        var oplata = new Oplata(oplataTable.Rows[i]);
 
-                if (minPayDate <= date && date <= maxPayDate)
-                {
-                    DataTable oplataTable = Utils.ReadExcelFile(Consts.OplataFile.FileName, Oplata.GetListName(date));
-                    for (int i = Consts.OplataFile.StartDataRow; i < oplataTable.Rows.Count; i++)
-                    {
-                        recno++;
-                        if (String.IsNullOrWhiteSpace(oplataTable.Rows[i][0].ToString()) ||
-                            oplataTable.Rows[i][0].ToString().Trim().ToUpper() == "ИТОГО") break;
-                        var oplata = new Oplata(oplataTable.Rows[i]);
+                //        string lshet = Consts.FixLs(oplata.Lshet, date);
+                //        var odef = new CNV_OPLATA
+                //        {
+                //            SERVICECD = Consts.BaseServiceCd,
+                //            SERVICENAME = Consts.BaseServiceName,
+                //            SOURCECD = oplata.SourceCd,
+                //            SOURCENAME = oplata.Source
+                //        };
 
-                        var odef = new CNV_OPLATA
-                        {
-                            SERVICECD = Consts.BaseServiceCd,
-                            SERVICENAME = Consts.BaseServiceName,
-                            SOURCECD = oplata.SourceCd,
-                            SOURCENAME = oplata.Source
-                        };
+                //        DateTime payDate = oplata.PayDate ?? date;
 
-                        DateTime payDate = oplata.PayDate ?? date;
+                //        nm.RegisterOplata(odef, lshet, date.Month, date.Year,
+                //            oplata.Summa, payDate, payDate,
+                //            String.Format("{0}_{1}", oplata.Lshet, recno));
 
-                        nm.RegisterOplata(odef, Consts.GetLs(oplata.Lshet), date.Month, date.Year,
-                            oplata.Summa, payDate, payDate,
-                            String.Format("{0}_{1}", oplata.Lshet, recno));
-                    }
-                }
+                //        if (oldLs == lshet) debt += oplata.Summa;
+                //        else
+                //        {
+                //            nm.RegisterBeginSaldo(oldLs, date.Month, date.Year, Consts.BaseServiceCd, Consts.BaseServiceName, debt);
+                //            debt = 0;
+                //            oldLs = lshet;
+                //        }
+
+                        
+                //        //nm.RegisterEndSaldo(lshet, date.Month, date.Year, 3, "Отопление", money.EndSaldo);
+                //    }
+                //}
 
 
                 SaveList(nm.NachRecords, Consts.InsertRecordCount, false);
@@ -943,6 +970,8 @@ namespace _047_Tver
         public decimal? Square;
         public string NachGvsOdn;
         public string NachOtopl;
+        public string NachPkInd;
+        public string NachPkOdn;
 
         public const int UnknowInformationOwnerId = 0;
         public const string UnknownInformationOnwer = "неизвестно";
@@ -970,6 +999,8 @@ namespace _047_Tver
                 : Decimal.Parse(dr[13].ToString());
             NachGvsOdn = dr[14].ToString().ToLower().Trim();
             NachOtopl = dr[15].ToString().ToLower().Trim();
+            NachPkInd = dr[16].ToString().ToLower().Trim();
+            NachPkOdn = dr[17].ToString().ToLower().Trim();
 
             switch (InformationOwner.Trim().ToLower())
             {
@@ -1217,8 +1248,7 @@ namespace _047_Tver
         public DateTime Date;
         public string Lshet;
         public ServiceMoney[] Services;
-        public decimal BegSaldo;
-        //public decimal EndSaldo;
+        public decimal Debt;
         public decimal HoursGVS;
         public decimal HoursOtopl;
 
@@ -1236,9 +1266,10 @@ namespace _047_Tver
                 new ServiceMoney(dr, 20, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН Гкал
                 new ServiceMoney(dr, 22, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН Тн
                 new ServiceMoney(dr, 24, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН куб.м
+                new ServiceMoney(dr, 39, 41, 105, "Гор. водоснабжение пов. коэф.", 10, "Неизвестен", false), // коеф. инд.
+                new ServiceMoney(dr, 40, 0, 115, "Гор. водоснабжение ОДН пов. коэф", 10, "Неизвестен", false), // коеф. одн
             };
-            BegSaldo = String.IsNullOrWhiteSpace(dr[44 - 1].ToString()) ? 0 : Decimal.Parse(dr[44 - 1].ToString().Replace('.',','));
-            //EndSaldo = String.IsNullOrWhiteSpace(dr[45 - 1].ToString()) ? 0 : Decimal.Parse(dr[45 - 1].ToString().Replace('.',','));
+            Debt = String.IsNullOrWhiteSpace(dr[44 - 1].ToString()) ? 0 : Decimal.Parse(dr[44 - 1].ToString().Replace('.', ','));
             HoursGVS = String.IsNullOrWhiteSpace(dr[6 - 1].ToString()) ? 0 : Decimal.Parse(dr[6 - 1].ToString().Replace('.',','));
             HoursOtopl = String.IsNullOrWhiteSpace(dr[7 - 1].ToString()) ? 0 : Decimal.Parse(dr[7 - 1].ToString().Replace('.',','));
         }
@@ -1257,7 +1288,7 @@ namespace _047_Tver
             public decimal RecalcVol;
             public decimal RecalcSum;
 
-            public ServiceMoney(DataRow dr, int volumeId, int recalcId, int servicecd, string servicename, int regimcd, string regimname)
+            public ServiceMoney(DataRow dr, int volumeId, int recalcId, int servicecd, string servicename, int regimcd, string regimname, bool withVolume = true)
             {
                 try
                 {
@@ -1266,17 +1297,19 @@ namespace _047_Tver
                     RegimCd = regimcd;
                     RegimName = regimname;
 
-                    Volume = String.IsNullOrWhiteSpace(dr[volumeId - 1].ToString())
-                        ? 0
-                        : Decimal.Parse(dr[volumeId - 1].ToString(), NumberStyles.Float);
+                    if (withVolume)
+                        Volume = String.IsNullOrWhiteSpace(dr[volumeId - 1].ToString())
+                            ? 0
+                            : Decimal.Parse(dr[volumeId - 1].ToString(), NumberStyles.Float);
                     Nach = String.IsNullOrWhiteSpace(dr[volumeId].ToString())
                         ? 0
                         : Decimal.Parse(dr[volumeId].ToString(), NumberStyles.Float);
                     if (recalcId != 0)
                     {
-                        RecalcVol = String.IsNullOrWhiteSpace(dr[recalcId - 1].ToString())
-                            ? 0
-                            : Decimal.Parse(dr[recalcId - 1].ToString(), NumberStyles.Float);
+                        if (withVolume)
+                            RecalcVol = String.IsNullOrWhiteSpace(dr[recalcId - 1].ToString())
+                                ? 0
+                                : Decimal.Parse(dr[recalcId - 1].ToString(), NumberStyles.Float);
                         RecalcSum = String.IsNullOrWhiteSpace(dr[recalcId].ToString())
                             ? 0
                             : Decimal.Parse(dr[recalcId].ToString(), NumberStyles.Float);
@@ -1320,8 +1353,8 @@ namespace _047_Tver
                         PayDate = DateTime.Parse(dr[6].ToString());
                 }
                 else PayDate = DateTime.Parse(dr[4].ToString());
-                //ServicesSumma = Decimal.Parse(dr[7].ToString());
-                //CoefSumma = Decimal.Parse(dr[8].ToString());
+                ServicesSumma = Decimal.Parse(dr[7].ToString());
+                CoefSumma = Decimal.Parse(dr[8].ToString());
                 Summa = Decimal.Parse(dr[9].ToString());
 
                 if (String.IsNullOrWhiteSpace(Source))
