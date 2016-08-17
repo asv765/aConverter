@@ -21,7 +21,7 @@ using Telerik.OpenAccess.Metadata.Fluent.Advanced;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM	
 {
-	public partial class CNV_HADDCHAR
+	public partial class CNV_CHARSHOUSES
 	{
 		private int _iD;
 		public virtual int ID
@@ -36,8 +36,47 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private int? _hOUSECD;
-		public virtual int? HOUSECD
+		private int _cHARCD;
+		public virtual int CHARCD
+		{
+			get
+			{
+				return this._cHARCD;
+			}
+			set
+			{
+				this._cHARCD = value;
+			}
+		}
+		
+		private string _cHARNAME;
+		public virtual string CHARNAME
+		{
+			get
+			{
+				return this._cHARNAME;
+			}
+			set
+			{
+				this._cHARNAME = value;
+			}
+		}
+		
+		private DateTime _dATE_;
+		public virtual DateTime DATE_
+		{
+			get
+			{
+				return this._dATE_;
+			}
+			set
+			{
+				this._dATE_ = value;
+			}
+		}
+		
+		private int _hOUSECD;
+		public virtual int HOUSECD
 		{
 			get
 			{
@@ -49,21 +88,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private int? _aDDCHARCD;
-		public virtual int? ADDCHARCD
-		{
-			get
-			{
-				return this._aDDCHARCD;
-			}
-			set
-			{
-				this._aDDCHARCD = value;
-			}
-		}
-		
-		private string _vALUE_;
-		public virtual string VALUE_
+		private decimal _vALUE_;
+		public virtual decimal VALUE_
 		{
 			get
 			{

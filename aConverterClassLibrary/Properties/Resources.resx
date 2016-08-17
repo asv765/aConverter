@@ -172,6 +172,12 @@
   <data name="CNV_CHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_CHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CHARSHOUSES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_CHARSHOUSES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CHARSHOUSES_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_CHARSHOUSES_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CHARS_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_CHARS_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -222,6 +228,9 @@
   </data>
   <data name="CNV_CNV_00800_CHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_00800_CHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_00850_CHARSHOUSES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00850_CHARSHOUSES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_CNV_00900_LCHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_00900_LCHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

@@ -258,6 +258,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		public IQueryable<CNV_CHARSHOUSES> CNV_CHARSHOUSEs 
+		{
+			get
+			{
+				return this.GetAll<CNV_CHARSHOUSES>();
+			}
+		}
+		
 		public static BackendConfiguration GetBackendConfiguration()
 		{
 			BackendConfiguration backend = new BackendConfiguration();
@@ -380,6 +388,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			get;
 		}
 		IQueryable<CNV_CITIZENMIGRATION> CNV_CITIZENMIGRATIONs
+		{
+			get;
+		}
+		IQueryable<CNV_CHARSHOUSES> CNV_CHARSHOUSEs
 		{
 			get;
 		}

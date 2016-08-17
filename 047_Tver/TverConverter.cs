@@ -23,10 +23,10 @@ namespace _047_Tver
 
         public static ExcelFileInfo LsInfoFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\информация по ЛС на 29.07.16_для загрузки_сКоэф.xls",
+            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\информация по ЛС на 29.07.16_для загрузки_корр.xls",
             ListName = "66184",
             StartDataRow = 3,
-            EndDataRow = 17616
+            EndDataRow = 17701
         };
 
         public static ExcelFileInfo CountersInfoFile = new ExcelFileInfo
@@ -49,6 +49,14 @@ namespace _047_Tver
         {
             FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\свод по оплатам в разрезе ЛС.xls",
             StartDataRow = 3,
+        };
+
+        public static ExcelFileInfo HousesCharsFile = new ExcelFileInfo
+        {
+            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\общие данные по жилым домам и нежилым помещениям для загрузки.xls",
+            ListName = "общие данные по жилым домам",
+            StartDataRow = 5,
+            EndDataRow = 217
         };
 
         public const string SpravkaFolder = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\";
@@ -77,6 +85,8 @@ namespace _047_Tver
                 lshet = "5" + lshet;
             return GetLs(lshet);
         }
+
+        public static readonly DateTime FirstDate = new DateTime(2014, 07, 01);
     }
 
     public class ExcelFileInfo
@@ -189,7 +199,7 @@ namespace _047_Tver
                     CHARCD = 2,
                     CHARNAME = "Общая площадь",
                     LSHET = Consts.GetLs(lsInfo.Lshet),
-                    DATE_ = new DateTime(2014,07,01),
+                    DATE_ = Consts.FirstDate,
                     VALUE_ = lsInfo.Square
                 });
                 Iterate();
@@ -816,6 +826,71 @@ namespace _047_Tver
         }
     }
 
+    public class ConvetHouseChars : ConvertCase
+    {
+        public ConvetHouseChars()
+        {
+            ConvertCaseName = "HOUSECHAR - характеристики домов";
+            Position = 60;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(2);
+            BufferEntitiesManager.DropTableData("CNV$CHARSHOUSES");
+            var lc = new List<CNV_CHARSHOUSES>();
+            ExcelFileInfo houseFileInfo = Consts.HousesCharsFile;
+            DataTable houseCharsTable = Utils.ReadExcelFile(houseFileInfo.FileName, houseFileInfo.ListName);
+            StepStart(houseCharsTable.Rows.Count);
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = houseFileInfo.StartDataRow - 2; i <= houseFileInfo.EndDataRow - 2; i++)
+                {
+                    var houseChars = new HouseChars(houseCharsTable.Rows[i]);
+                    string query = String.Format(
+                        "SELECT FIRST 1 * FROM CNV$ABONENT WHERE ULICANAME LIKE '%{0}%' AND HOUSENO = '{1}'",
+                        houseChars.Street, houseChars.HouseNo);
+                    if (!String.IsNullOrWhiteSpace(houseChars.HousePostfix))
+                        query += String.Format(" AND HOUSEPOSTFIX = '{0}'", houseChars.HousePostfix);
+                    else query += @" AND (HOUSEPOSTFIX is null or HOUSEPOSTFIX = '')";
+                    if (houseChars.KorpusNo.HasValue)
+                        query += String.Format(" AND KORPUSNO = '{0}'", houseChars.KorpusNo.Value);
+                    else
+                        query += @" AND (KORPUSNO is null)";
+                    var result = context.ExecuteQuery<CNV_ABONENT>(query);
+                    if (result.Any())
+                    {
+                        context.ExecuteNonQuery(String.Format(
+                            "UPDATE CNV$ABONENT SET HOUSECD = {0} WHERE HOUSECD = {1}", houseChars.HouseId,
+                            result[0].HOUSECD));
+                        context.SaveChanges();
+                        lc.Add(new CNV_CHARSHOUSES
+                        {
+                            CHARCD = 206001,
+                            DATE_ = Consts.FirstDate,
+                            VALUE_ = houseChars.TotalSquare,
+                            HOUSECD = houseChars.HouseId
+                        });
+                        if (houseChars.HeatingSquare.HasValue)
+                            lc.Add(new CNV_CHARSHOUSES
+                            {
+                                CHARCD = 32010,
+                                DATE_ = Consts.FirstDate,
+                                VALUE_ = houseChars.HeatingSquare.Value,
+                                HOUSECD = houseChars.HouseId
+                            });
+                    }
+
+                    Iterate();
+                }
+            }
+            StepFinish();
+
+            SaveList(lc, Consts.InsertRecordCount);
+        }
+    }
+
     public class RoomerInfo
     {
         public string Lshet;
@@ -1402,6 +1477,61 @@ namespace _047_Tver
         }
     }
 
+    public class HouseChars
+    {
+        public string District;
+        public string Address;
+        public decimal TotalSquare;
+        public decimal? HeatingSquare;
+        public int HouseId;
+
+        public string Street;
+        public string HouseNo;
+        public string HousePostfix;
+        public int? KorpusNo;
+
+        private static readonly Regex HouseRegex = new Regex(@"(\d+)(.*)");
+        private static readonly Regex KorpusRegex = new Regex(@"к(\d+)");
+        private static readonly string[] Prefixes = { "улица", "ул.", "пр-д.", "б-р.", "ш.", "пр-т.", "пер.", "ул", "проезд." };
+
+        public HouseChars(DataRow dr)
+        {
+            try
+            {
+                District = dr[2].ToString().Trim();
+                Address = dr[4].ToString().Trim();
+                TotalSquare = Decimal.Parse(dr[14].ToString());
+                HeatingSquare = String.IsNullOrWhiteSpace(dr[15].ToString())
+                    ? (decimal?) null
+                    : Decimal.Parse(dr[15].ToString());
+                HouseId = Int32.Parse(dr[31].ToString());
+
+                string[] separetedAddress = Address.Split(',');
+                if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
+                Street = separetedAddress[0].Trim();
+                for (int i = 0; i < Prefixes.Length; i++)
+                {
+                    Street = Street.Replace(Prefixes[i], "");
+                }
+                Street = Street.Replace(".", "").Trim();
+                string house = separetedAddress[1];
+                var korpusMatch = KorpusRegex.Match(house);
+                if (korpusMatch.Success)
+                {
+                    KorpusNo = Int32.Parse(korpusMatch.Groups[1].Value);
+                    house = house.Replace(korpusMatch.Value, "").Trim();
+                }
+                var groups = HouseRegex.Match(house).Groups;
+                HouseNo = groups[1].Value.Trim();
+                HousePostfix = groups[2].Value.Trim();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+    }
+
     public class Test : ConvertCase
     {
         public Test()
@@ -1415,62 +1545,122 @@ namespace _047_Tver
         {
             SetStepsCount(99);
 
-            // несколько жильцов с одинаковым ФИО
-            ExcelFileInfo fileInfo = Consts.RoomingReportFile;
-            DataTable reportTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
-            string currentLs = null;
-            RoomerInfo lastRommerInfo = null;
-            var roomers = new Dictionary<string, List<RoomerInfo>>();
-            StepStart(reportTable.Rows.Count + 1);
-            for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
+            // проверка дублирования районов
+            //ExcelFileInfo fileInfo = Consts.HousesCharsFile;
+            //DataTable houseTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
+            //StepStart(houseTable.Rows.Count + 1);
+            //var lh = new List<HouseChars>();
+            //using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            //{
+            //    for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
+            //    {
+            //        var houseChars = new HouseChars(houseTable.Rows[i]);
+            //        string query = String.Format(
+            //            "SELECT DISTINCT DISTNAME FROM CNV$ABONENT WHERE ULICANAME LIKE '%{0}%' AND HOUSENO = '{1}'",
+            //            houseChars.Street, houseChars.HouseNo);
+            //        if (!String.IsNullOrWhiteSpace(houseChars.HousePostfix))
+            //            query += String.Format(" AND HOUSEPOSTFIX = '{0}'", houseChars.HousePostfix);
+            //        if (houseChars.KorpusNo.HasValue)
+            //            query += String.Format(" AND KORPUSNO = '{0}'", houseChars.KorpusNo.Value);
+            //        var result = context.ExecuteQuery<string>(query);
+            //        if (result.Count > 1) 
+            //        {
+            //            lh.Add(houseChars);
+            //        }
+            //        Iterate();
+            //    }
+            //}
+            //StepFinish();
+
+            //// проверка сопоставления адресов в данных о домах и о ЛС
+            ExcelFileInfo fileInfo = Consts.HousesCharsFile;
+            DataTable houseTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
+            StepStart(houseTable.Rows.Count + 1);
+            var lhUnknown = new List<HouseChars>();
+            var notEqualDistricts = "";
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
-                Iterate();
-                bool empty = false;
-                RoomerInfo roomerInfo;
-                if (String.IsNullOrWhiteSpace(reportTable.Rows[i][0].ToString()))
+                for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
                 {
-                    roomerInfo = lastRommerInfo;
-                    roomerInfo.ReadMissingInfo(reportTable.Rows[i]);
-                    empty = true;
-                }
-                else
-                    roomerInfo = new RoomerInfo(reportTable.Rows[i]);
-
-                if (roomerInfo.Lshet == currentLs)
-                {
-                    if (!empty) roomers[currentLs].Add(roomerInfo);
-                }
-                else
-                    roomers.Add(roomerInfo.Lshet, new List<RoomerInfo> { roomerInfo });
-
-                lastRommerInfo = roomerInfo;
-                currentLs = lastRommerInfo.Lshet;
-            }
-            StepFinish();
-
-            StepStart(roomers.Count + 1);
-            var test = new List<string>();
-            foreach (var roomer in roomers)
-            {
-                Iterate();
-                var fioGroup = roomer.Value.Where(r => !String.IsNullOrWhiteSpace(r.FIO)).GroupBy(r => r.FIO);
-                foreach (var group in fioGroup)
-                {
-                    if (group.Count() > 1)
+                    var houseChars = new HouseChars(houseTable.Rows[i]);
+                    string query = String.Format(
+                        "SELECT FIRST 1 * FROM CNV$ABONENT WHERE ULICANAME LIKE '%{0}%' AND HOUSENO = '{1}'",
+                        houseChars.Street, houseChars.HouseNo);
+                    if (!String.IsNullOrWhiteSpace(houseChars.HousePostfix))
+                        query += String.Format(" AND HOUSEPOSTFIX = '{0}'", houseChars.HousePostfix);
+                    if (houseChars.KorpusNo.HasValue)
+                        query += String.Format(" AND KORPUSNO = '{0}'", houseChars.KorpusNo.Value);
+                    var result = context.ExecuteQuery<CNV_ABONENT>(query);
+                    if (!result.Any()) lhUnknown.Add(houseChars);
+                    else
                     {
-                        test.Add(roomer.Key);
-                        break;
+                        var abonent = result[0];
+                        if (abonent.DISTNAME != houseChars.District)
+                            notEqualDistricts += String.Format("{0,-30}\t{1, -20}\t{2}\r\n", houseChars.Address,
+                                houseChars.District, abonent.DISTNAME);
                     }
+                    Iterate();
                 }
             }
             StepFinish();
 
-            string result = "";
-            for (int i = 0; i < test.Count; i++)
-            {
-                result += test[i] + "\r\n";
-            }
-            int a = 10;
+
+            //// несколько жильцов с одинаковым ФИО
+            //ExcelFileInfo fileInfo = Consts.RoomingReportFile;
+            //DataTable reportTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
+            //string currentLs = null;
+            //RoomerInfo lastRommerInfo = null;
+            //var roomers = new Dictionary<string, List<RoomerInfo>>();
+            //StepStart(reportTable.Rows.Count + 1);
+            //for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
+            //{
+            //    Iterate();
+            //    bool empty = false;
+            //    RoomerInfo roomerInfo;
+            //    if (String.IsNullOrWhiteSpace(reportTable.Rows[i][0].ToString()))
+            //    {
+            //        roomerInfo = lastRommerInfo;
+            //        roomerInfo.ReadMissingInfo(reportTable.Rows[i]);
+            //        empty = true;
+            //    }
+            //    else
+            //        roomerInfo = new RoomerInfo(reportTable.Rows[i]);
+
+            //    if (roomerInfo.Lshet == currentLs)
+            //    {
+            //        if (!empty) roomers[currentLs].Add(roomerInfo);
+            //    }
+            //    else
+            //        roomers.Add(roomerInfo.Lshet, new List<RoomerInfo> { roomerInfo });
+
+            //    lastRommerInfo = roomerInfo;
+            //    currentLs = lastRommerInfo.Lshet;
+            //}
+            //StepFinish();
+
+            //StepStart(roomers.Count + 1);
+            //var test = new List<string>();
+            //foreach (var roomer in roomers)
+            //{
+            //    Iterate();
+            //    var fioGroup = roomer.Value.Where(r => !String.IsNullOrWhiteSpace(r.FIO)).GroupBy(r => r.FIO);
+            //    foreach (var group in fioGroup)
+            //    {
+            //        if (group.Count() > 1)
+            //        {
+            //            test.Add(roomer.Key);
+            //            break;
+            //        }
+            //    }
+            //}
+            //StepFinish();
+
+            //string result = "";
+            //for (int i = 0; i < test.Count; i++)
+            //{
+            //    result += test[i] + "\r\n";
+            //}
+            //int a = 10;
 
 
             //// абоненты с признаком счетчика, но в файле нет счетчика
@@ -1784,6 +1974,26 @@ namespace _047_Tver
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_03000_CITIZENS_TVER", new[] { "1" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferCharsHouses : ConvertCase
+    {
+        public TransferCharsHouses()
+        {
+            ConvertCaseName = "Перенос данных о количественных характеристиках домов";
+            Position = 1080;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00850_CHARSHOUSES", new[] { "1" });
             Iterate();
             StepFinish();
         }

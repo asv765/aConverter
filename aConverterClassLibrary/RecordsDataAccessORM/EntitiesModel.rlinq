@@ -1384,6 +1384,34 @@
           <orm:column name="DIRECTION" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
         </orm:field>
       </orm:class>
+      <orm:class name="CNV_CHARSHOUSES" uniqueId="e25adef4-c5ba-4f30-bda6-f950a74a8c93">
+        <orm:table name="CNV$CHARSHOUSES" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="ID" />
+          </orm:key-generator>
+          <orm:single-field field-name="_iD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_iD" property="ID" uniqueId="ac4f53b1-d708-457b-9f76-1e513de65a09" type="System.Int32">
+          <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" converter="OpenAccessRuntime.Data.IntConverter" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cHARCD" property="CHARCD" uniqueId="fca10f14-90b1-4836-8983-3ef61c0f07f5" type="System.Int32">
+          <orm:column name="CHARCD" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cHARNAME" property="CHARNAME" uniqueId="d79b9d6e-c32b-4647-9751-c95a007b206f" type="System.String">
+          <orm:column name="CHARNAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_dATE_" property="DATE_" uniqueId="3aafad42-a774-4271-bb65-d24ebd713237" type="System.DateTime">
+          <orm:column name="DATE_" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_hOUSECD" property="HOUSECD" uniqueId="981b39f2-419b-4710-b578-b25798da551d" type="System.Int32">
+          <orm:column name="HOUSECD" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_vALUE_" property="VALUE_" uniqueId="cde6407f-29e4-48ef-a992-db69e4b8c50e" type="System.Decimal">
+          <orm:column name="VALUE_" sql-type="numeric" nullable="true" length="18" scale="8" converter="OpenAccessRuntime.Data.FirebirdDecimalConverter" ado-type="Numeric" />
+        </orm:field>
+      </orm:class>
     </orm:namespace>
     <orm:schema schema="">
       <orm:table name="CNV$SUPPLNET">
@@ -1901,6 +1929,14 @@
         <orm:column name="DATE_" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
         <orm:column name="MIGRATIONTYPE" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
         <orm:column name="DIRECTION" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+      </orm:table>
+      <orm:table name="CNV$CHARSHOUSES">
+        <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" converter="OpenAccessRuntime.Data.IntConverter" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="CHARCD" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="CHARNAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        <orm:column name="DATE_" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        <orm:column name="HOUSECD" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="VALUE_" sql-type="numeric" nullable="true" length="18" scale="8" converter="OpenAccessRuntime.Data.FirebirdDecimalConverter" ado-type="Numeric" />
       </orm:table>
     </orm:schema>
     <orm:relational-naming-settings>
@@ -2476,6 +2512,14 @@
       <Property Id="0124990d-2ab1-47bb-8e53-22f07e520409" name="MIGRATIONTYPE" type="Int32" label="MIGRATIONTYPE : Int32" fieldName="_mIGRATIONTYPE" />
       <Property Id="4dac70e8-59cb-4294-a972-2318a18373be" name="DIRECTION" type="Int32" label="DIRECTION : Int32" fieldName="_dIRECTION" />
     </DomainClass>
+    <DomainClass Id="e25adef4-c5ba-4f30-bda6-f950a74a8c93" name="CNV_CHARSHOUSES" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
+      <Property Id="ac4f53b1-d708-457b-9f76-1e513de65a09" name="ID" type="Int32" label="ID : Int32" identity="true" fieldName="_iD" />
+      <Property Id="fca10f14-90b1-4836-8983-3ef61c0f07f5" name="CHARCD" type="Int32" label="CHARCD : Int32" fieldName="_cHARCD" />
+      <Property Id="d79b9d6e-c32b-4647-9751-c95a007b206f" name="CHARNAME" label="CHARNAME : String" fieldName="_cHARNAME" />
+      <Property Id="3aafad42-a774-4271-bb65-d24ebd713237" name="DATE_" type="DateTime" label="DATE_ : DateTime" fieldName="_dATE_" />
+      <Property Id="981b39f2-419b-4710-b578-b25798da551d" name="HOUSECD" type="Int32" label="HOUSECD : Int32" fieldName="_hOUSECD" />
+      <Property Id="cde6407f-29e4-48ef-a992-db69e4b8c50e" name="VALUE_" type="Decimal" label="VALUE_ : Decimal" fieldName="_vALUE_" />
+    </DomainClass>
   </Types>
   <domainContext>
     <domainModelHasDomainContext Id="45252271-1885-496c-bfb7-6169c8a416fe">
@@ -2506,6 +2550,7 @@
         <entitySetProperty name="CNV_AADDCHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_AADDCHAR" label="CNV_AADDCHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_AADDCHAR&gt;" />
         <entitySetProperty name="EXTORGACCOUNTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="EXTORGACCOUNT" label="EXTORGACCOUNTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.EXTORGACCOUNT&gt;" />
         <entitySetProperty name="CNV_CITIZENMIGRATIONs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CITIZENMIGRATION" label="CNV_CITIZENMIGRATIONs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CITIZENMIGRATION&gt;" />
+        <entitySetProperty name="CNV_CHARSHOUSEs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CHARSHOUSES" label="CNV_CHARSHOUSEs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CHARSHOUSES&gt;" />
       </domainContainer>
     </domainModelHasDomainContext>
   </domainContext>

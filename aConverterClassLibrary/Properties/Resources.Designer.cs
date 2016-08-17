@@ -63,7 +63,7 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$AADDCHAR (
         ///    ID INTEGER NOT NULL,
-        ///    LSHET VARCHAR(14),
+        ///    LSHET VARCHAR(10),
         ///    ADDCHARCD INTEGER,
         ///    &quot;VALUE&quot; VARCHAR(30),
         ///    primary key (ID));
@@ -469,7 +469,7 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$CHARS (
         ///  ID INTEGER NOT NULL,
-        ///  LSHET VARCHAR(14),
+        ///  LSHET VARCHAR(10),
         ///  CHARCD INTEGER,
         ///  CHARNAME VARCHAR(50),
         ///  VALUE_ NUMERIC(11,4),
@@ -509,6 +509,52 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_CHARS_d {
             get {
                 return ResourceManager.GetString("CNV_CHARS_d", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CREATE TABLE CNV$CHARSHOUSES (
+        ///  ID INTEGER NOT NULL,
+        ///  HOUSECD INTEGER,
+        ///  CHARCD INTEGER,
+        ///  CHARNAME VARCHAR(50),
+        ///  VALUE_ NUMERIC(11,4),
+        ///  DATE_ TIMESTAMP,
+        ///  PRIMARY KEY (ID)
+        ///);
+        ///CREATE INDEX CNV$CHARSHOUSES_IDX1 ON CNV$CHARSHOUSES (HOUSECD);
+        ///CREATE SEQUENCE GEN_CNV$CHARSHOUSES_ID;
+        ///
+        ///SET TERM ^ ;
+        ///CREATE TRIGGER CNV$CHARSHOUSES_BI FOR CNV$CHARSHOUSES
+        ///ACTIVE BEFORE INSERT POSITION 0
+        ///AS
+        ///BEGIN
+        ///  IF (NEW.ID IS NULL) THEN
+        ///    NEW.ID = GEN_ID(GEN_CNV$CHARSHOUSES_ID,1);
+        ///END
+        ///^
+        ///SET TERM ; ^
+        ///.
+        /// </summary>
+        internal static string CNV_CHARSHOUSES {
+            get {
+                return ResourceManager.GetString("CNV_CHARSHOUSES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DROP TRIGGER CNV$CHARSHOUSES_BI;
+        ///DROP SEQUENCE GEN_CNV$CHARSHOUSES_ID;
+        ///DROP INDEX CNV$CHARSHOUSES_IDX1;
+        ///DROP TABLE CNV$CHARSHOUSES;
+        ///
+        ///
+        ///.
+        /// </summary>
+        internal static string CNV_CHARSHOUSES_d {
+            get {
+                return ResourceManager.GetString("CNV_CHARSHOUSES_d", resourceCulture);
             }
         }
         
@@ -882,6 +928,29 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
+        ///create or alter procedure CNV_CNV_00850_CHARSHOUSES (
+        ///    NEEDDELETE smallint)
+        ///as
+        ///declare variable HOUSECD integer;
+        ///declare variable CHARCD integer;
+        ///declare variable VALUE_ numeric(11,4);
+        ///declare variable DATE_ timestamp;
+        ///declare variable DOCUMENTCD integer;
+        ///BEGIN
+        ///    IF (needdelete = 1) THEN BEGIN
+        ///        DELETE FROM CCHARSHOUSELIST WHERE housecd IN (SELECT housecd FROM cnv$charshouses);
+        ///        DELETE FROM documents WHERE documentcd IN (SELECT ccal.documentcd
+        ///                   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_00850_CHARSHOUSES {
+            get {
+                return ResourceManager.GetString("CNV_CNV_00850_CHARSHOUSES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
         ///create or alter procedure CNV$CNV_00900_LCHARS (
         ///    NEEDDELETE smallint)
         ///as
@@ -1032,13 +1101,13 @@ namespace aConverterClassLibrary.Properties {
         ///declare variable MONTH2 integer;
         ///declare variable LSHET varchar(10);
         ///declare variable FNATH numeric(18,4);
+        ///declare variable VOLUME numeric(18,4);
         ///declare variable REGIMCD integer;
         ///declare variable SERVICECD integer;
         ///declare variable DATE_ date;
         ///declare variable FYEAR integer;
         ///declare variable FMONTH integer;
-        ///declare variable FDAY integer;
-        ///declare variable DOCUMENTC [rest of string was truncated]&quot;;.
+        ///declare variable F [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_CNV_01600_NACHISLIMPORT {
             get {
@@ -1057,13 +1126,13 @@ namespace aConverterClassLibrary.Properties {
         ///declare variable MONTH2 integer;
         ///declare variable LSHET varchar(10);
         ///declare variable PROCHL numeric(18,4);
+        ///declare variable PROCHLVOLUME numeric(18,4);
         ///declare variable REGIMCD integer;
         ///declare variable SERVICECD integer;
         ///declare variable FYEAR integer;
         ///declare variable FMONTH integer;
         ///declare variable FDAY integer;
-        ///declare variable DATE_VV timestamp;
-        ///declare variabl [rest of string was truncated]&quot;;.
+        ///declar [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_CNV_01700_PERERASHETIMPORT {
             get {
@@ -1368,6 +1437,7 @@ namespace aConverterClassLibrary.Properties {
         ///  HOUSECD INTEGER,
         ///  ADDCHARCD INTEGER,
         ///  VALUE_ varchar(30),
+        ///  DATE_ timestamp,
         ///  PRIMARY KEY (ID)
         ///);
         ///CREATE SEQUENCE GEN_CNV$HADDCHAR_ID;
@@ -1454,7 +1524,7 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$NACH (
         ///  ID INTEGER NOT NULL,
-        ///  LSHET varchar(14) NOT NULL,
+        ///  LSHET varchar(10) NOT NULL,
         ///  DOCUMENTCD varchar(20) NOT NULL,
         ///  MONTH_ INTEGER NOT NULL,
         ///  YEAR_ INTEGER NOT NULL,
@@ -1462,13 +1532,13 @@ namespace aConverterClassLibrary.Properties {
         ///  YEAR2 INTEGER NOT NULL,
         ///  FNATH NUMERIC(18,4) NOT NULL,
         ///  PROCHL NUMERIC(18,4) NOT NULL,
+        ///  PROCHLVOLUME NUMERIC(18,4) NOT NULL,
         ///  VOLUME NUMERIC(18,4) NOT NULL,
         ///  REGIMCD INTEGER NOT NULL,
         ///  REGIMNAME varchar(50) NOT NULL,
         ///  SERVICECD INTEGER NOT NULL,
         ///  SERVICENAME varchar(50) NOT NULL,
-        ///  DATE_VV timestamp NOT NULL,
-        ///  TYPE_ INTEGER NOT NU [rest of string was truncated]&quot;;.
+        ///  DATE_VV timestamp NOT NULL, [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_NACH {
             get {
@@ -1494,7 +1564,7 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$NACHOPL (
         ///  ID INTEGER NOT NULL,
-        ///  LSHET varchar(14) NOT NULL,
+        ///  LSHET varchar(10) NOT NULL,
         ///  MONTH_ INTEGER NOT NULL,
         ///  YEAR_ INTEGER NOT NULL,
         ///  MONTH2 INTEGER NOT NULL,
@@ -1509,7 +1579,7 @@ namespace aConverterClassLibrary.Properties {
         ///  PRIMARY KEY (ID)
         ///);
         ///CREATE INDEX CNV$NACHOPL_IDX1 ON CNV$NACHOPL (LSHET);
-        ///CRE [rest of string was truncated]&quot;;.
+        ///CREATE SEQUENCE GEN_ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_NACHOPL {
             get {
@@ -1535,7 +1605,7 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$OPLATA (
         ///  ID INTEGER NOT NULL,
-        ///  LSHET varchar(14) NOT NULL,
+        ///  LSHET varchar(10) NOT NULL,
         ///  DOCUMENTCD varchar(20) NOT NULL,
         ///  MONTH_ INTEGER NOT NULL,
         ///  YEAR_ INTEGER NOT NULL,
@@ -1549,7 +1619,8 @@ namespace aConverterClassLibrary.Properties {
         ///  PRIM_ varchar(100) DEFAULT NULL,
         ///  PRIMARY KEY (ID)
         ///);
-        ///CREATE INDEX CNV$OPLATA_IDX1 ON CNV$OPLATA (LSHET);        /// [rest of string was truncated]&quot;;.
+        ///CREATE INDEX CNV$OPLATA_IDX1 ON CNV$OPLATA (LSHET);
+        ///CREATE SEQUENCE  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_OPLATA {
             get {

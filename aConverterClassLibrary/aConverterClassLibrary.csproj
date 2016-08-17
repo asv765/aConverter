@@ -121,6 +121,9 @@
     <Compile Include="RecordsDataAccessORM\CNV_CHAR.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_CHARSHOUSES.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
     <Compile Include="RecordsDataAccessORM\CNV_CHARVAL.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
@@ -245,6 +248,8 @@
     <Content Include="Resources\CNV_AADDCHAR_d.sql" />
     <Content Include="Resources\CNV_CHARLST.sql" />
     <Content Include="Resources\CNV_CHARLST_d.sql" />
+    <None Include="Resources\CNV_CHARSHOUSES.sql" />
+    <None Include="Resources\CNV_CHARSHOUSES_d.sql" />
     <Content Include="Resources\CNV_CHARVALS.sql" />
     <Content Include="Resources\CNV_CHARVALS_d.sql" />
     <Content Include="Resources\CNV_CITIZENMIGRATION_d.sql" />
@@ -297,6 +302,7 @@
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLOPLATANOTFOUND.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_OPLATANOTFOUNDINNACHOPL.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01300_SOURCEDOC.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00850_CHARSHOUSES.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01400_OPLATA.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01500_SALDO.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01600_NACHISLIMPORT.sql" />

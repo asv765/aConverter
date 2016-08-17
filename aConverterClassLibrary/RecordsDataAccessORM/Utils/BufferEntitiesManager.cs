@@ -41,6 +41,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "DOGOVOR",
                 "EQUIPMENT",
                 "GCOUNTER",
+                "CHARSHOUSES",
                 "HADDCHAR",
                 "LCHARS",
                 "NACH",
@@ -132,6 +133,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_00600_HOUSES");
                 l.Add("CNV_00700_ABONENTS");
                 l.Add("CNV_00800_CHARS");
+                l.Add("CNV_00850_CHARSHOUSES");
                 l.Add("CNV_00900_LCHARS");
                 l.Add("CNV_00950_COUNTERSTYPES");
                 l.Add("CNV_01000_COUNTERS");
