@@ -323,7 +323,7 @@ namespace _047_Tver
 
         public override void DoConvert()
         {
-            SetStepsCount(4);
+            SetStepsCount(5);
             var lc = new List<CNV_CHAR>();
 
             var minDate = new DateTime(2015, 05, 01);
@@ -394,6 +394,34 @@ namespace _047_Tver
                         VALUE_ = 0
                     });
                 }
+                Iterate();
+            }
+            StepFinish();
+
+            var allLs = lc.Select(c => c.LSHET).Distinct().ToArray();
+            StepStart(allLs.Length);
+            for (int i = 0; i < allLs.Length; i++)
+            {
+                string ls = allLs[i];
+                var date = lc.Where(c => c.LSHET == ls).Select(c => c.DATE_).Max();
+                if (date == null) continue;
+                lc.Add(new CNV_CHAR
+                {
+                    CHARCD = 200,
+                    CHARNAME = "Часы ГВС",
+                    LSHET = ls,
+                    DATE_ = date.Value.AddMonths(1),
+                    VALUE_ = 0
+                });
+
+                lc.Add(new CNV_CHAR
+                {
+                    CHARCD = 220,
+                    CHARNAME = "Часы отопление",
+                    LSHET = ls,
+                    DATE_ = date.Value.AddMonths(1),
+                    VALUE_ = 0
+                });
                 Iterate();
             }
             StepFinish();
