@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using System.Windows.Forms;
 using aConverterClassLibrary;
 using FirebirdSql.Data.FirebirdClient;
@@ -81,13 +82,19 @@ namespace aConverter.Forms
                     try
                     {
                         // command.CommandText = "SELECT COUNT(*) FROM USERSVARIABLES";
-                        command.CommandText = "SELECT FIRST 1 * FROM useractions";
+                        command.CommandText = "SELECT FIRST 1 * FROM MON$ATTACHMENTS ORDER BY MON$TIMESTAMP DESC";
                         DataTable dt = new DataTable();
                         using (FbDataAdapter fda = new FbDataAdapter(command))
                         {
                             fda.Fill(dt);
                         }
-                        MessageBox.Show(dt.Rows[0]["NOTE"].ToString());
+                        // Encoding.Convert()
+                        var connectionInfo = String.Format("База:{0}, IP:{1}, Process:{2}",
+                            fcsb.Database, 
+                            dt.Rows[0]["MON$REMOTE_ADDRESS"],
+                            dt.Rows[0]["MON$REMOTE_PROCESS"]
+                            );
+                        MessageBox.Show(connectionInfo);
                         // int count = Convert.ToInt32(command.ExecuteScalar());
                         int count = dt.Rows.Count;
                         if (count > 0)

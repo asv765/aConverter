@@ -15,7 +15,7 @@ namespace _047_Tver
     {
         public static ExcelFileInfo RoomingReportFile  = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\учет жильцов на 25.07.16 для загрузки (3).xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath +  @"\учет жильцов на 25.07.16 для загрузки (3).xls",
             ListName = "паспортный стол",
             StartDataRow = 6,
             EndDataRow = 38719
@@ -23,7 +23,7 @@ namespace _047_Tver
 
         public static ExcelFileInfo LsInfoFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\информация по ЛС на 29.07.16_для загрузки_корр.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ЛС на 29.07.16_для загрузки_корр.xls",
             ListName = "66184",
             StartDataRow = 3,
             EndDataRow = 17701
@@ -31,7 +31,7 @@ namespace _047_Tver
 
         public static ExcelFileInfo CountersInfoFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\информация по ИПУ с историей показаний_для загрузки.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ИПУ с историей показаний_для загрузки.xls",
             ListName = "610",
             StartDataRow = 3,
             EndDataRow = 4878
@@ -39,7 +39,7 @@ namespace _047_Tver
 
         public static ExcelFileInfo RecodeTableFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\Таблица перекодировкиv1.6.xlsx",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировкиv1.6.xlsx",
             ListName = "Лист1",
             StartDataRow = 2,
             EndDataRow = 27
@@ -47,19 +47,19 @@ namespace _047_Tver
 
         public static ExcelFileInfo OplataFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\свод по оплатам в разрезе ЛС.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\свод по оплатам в разрезе ЛС.xls",
             StartDataRow = 3,
         };
 
         public static ExcelFileInfo HousesCharsFile = new ExcelFileInfo
         {
-            FileName = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\общие данные по жилым домам и нежилым помещениям для загрузки.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки.xls",
             ListName = "общие данные по жилым домам",
             StartDataRow = 5,
             EndDataRow = 217
         };
 
-        public const string SpravkaFolder = @"D:\Work\C#\C#Projects\aConverter\047_Tver\Sources\";
+        public static readonly string SpravkaFolder = aConverter_RootSettings.SourceDbfFilePath + "\\";
 
         public const int InsertRecordCount = 1000;
 
@@ -1420,6 +1420,7 @@ namespace _047_Tver
                 new ServiceMoney(dr, 39, 41, 105, "Гор. водоснабжение пов. коэф.", 10, "Неизвестен", false), // коеф. инд.
                 new ServiceMoney(dr, 40, 0, 115, "Гор. водоснабжение ОДН пов. коэф", 10, "Неизвестен", false), // коеф. одн
             };
+            
             Debt = String.IsNullOrWhiteSpace(dr[44 - 1].ToString()) ? 0 : Decimal.Parse(dr[44 - 1].ToString().Replace('.', ','));
             HoursGVS = String.IsNullOrWhiteSpace(dr[6 - 1].ToString()) ? 0 : Decimal.Parse(dr[6 - 1].ToString().Replace('.',','));
             HoursOtopl = String.IsNullOrWhiteSpace(dr[7 - 1].ToString()) ? 0 : Decimal.Parse(dr[7 - 1].ToString().Replace('.',','));
