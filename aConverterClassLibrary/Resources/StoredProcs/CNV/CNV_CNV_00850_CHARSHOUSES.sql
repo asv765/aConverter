@@ -1,6 +1,6 @@
 SET TERM ^ ;
 
-create or alter procedure CNV_CNV_00850_CHARSHOUSES (
+create or alter procedure CNV$CNV_00850_CHARSHOUSES (
     NEEDDELETE smallint)
 as
 declare variable HOUSECD integer;

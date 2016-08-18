@@ -352,6 +352,7 @@ namespace _047_Tver
                         DATE_ = date,
                         VALUE_ = DateTime.DaysInMonth(date.Year, date.Month)*24 - money.HoursGVS
                     });
+
                     lc.Add(new CNV_CHAR
                     {
                         CHARCD = 220,
@@ -361,8 +362,8 @@ namespace _047_Tver
                         VALUE_ = DateTime.DaysInMonth(date.Year, date.Month)*24 - money.HoursOtopl
                     });
                 }
+                Iterate();
             }
-            Iterate();
             StepFinish();
 
             StepStart(1);
@@ -1994,6 +1995,26 @@ namespace _047_Tver
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_00850_CHARSHOUSES", new[] { "1" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class CalculateAbonentDolya : ConvertCase
+    {
+        public CalculateAbonentDolya()
+        {
+            ConvertCaseName = "Подсчет доли абонента";
+            Position = 1090;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_03100_TVER_ABONENTDOLYA");
             Iterate();
             StepFinish();
         }

@@ -144,6 +144,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_01700_PERERASHETIMPORT");
                 l.Add("CNV_02100_EXTLSHETS");
                 l.Add("CNV_03000_CITIZENS_TVER");
+                l.Add("CNV_03100_TVER_ABONENTDOLYA");
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {

@@ -928,7 +928,7 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
-        ///create or alter procedure CNV_CNV_00850_CHARSHOUSES (
+        ///create or alter procedure CNV$CNV_00850_CHARSHOUSES (
         ///    NEEDDELETE smallint)
         ///as
         ///declare variable HOUSECD integer;
@@ -1185,6 +1185,28 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_CNV_03000_CITIZENS_TVER {
             get {
                 return ResourceManager.GetString("CNV_CNV_03000_CITIZENS_TVER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///create or alter procedure CNV$CNV_03100_TVER_ABONENTDOLYA
+        ///as
+        ///declare variable ABONENTSQUARE numeric(11,4);
+        ///declare variable HOUSETOTALSQUARE numeric(11,4);
+        ///declare variable HOUSEHEATINGSQUARE numeric(11,4);
+        ///declare variable DOCUMENTCD integer;
+        ///declare variable DATE_ timestamp;
+        ///declare variable LSHET varchar(10);
+        ///begin
+        ///  for select A.LSHET, C.VALUE_, CH1.VALUE_, CH2.VALUE_, C.DATE_
+        ///      from CNV$ABONENT A
+        ///      inner join CNV$CHARS C on C.LSHET = A.LSHET and
+        ///            C.CHARCD =  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_03100_TVER_ABONENTDOLYA {
+            get {
+                return ResourceManager.GetString("CNV_CNV_03100_TVER_ABONENTDOLYA", resourceCulture);
             }
         }
         
