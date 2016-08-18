@@ -184,7 +184,7 @@ namespace _047_Tver
 
         public override void DoConvert()
         {
-            SetStepsCount(3);
+            SetStepsCount(4);
             BufferEntitiesManager.DropTableData("CNV$CHARS");
             var lc = new List<CNV_CHAR>();
             ExcelFileInfo lsFileInfo = Consts.LsInfoFile;
@@ -323,7 +323,7 @@ namespace _047_Tver
 
         public override void DoConvert()
         {
-            SetStepsCount(3);
+            SetStepsCount(4);
             var lc = new List<CNV_CHAR>();
 
             var minDate = new DateTime(2015, 05, 01);
@@ -360,6 +360,38 @@ namespace _047_Tver
                         LSHET = lshet,
                         DATE_ = date,
                         VALUE_ = DateTime.DaysInMonth(date.Year, date.Month)*24 - money.HoursOtopl
+                    });
+                }
+                Iterate();
+            }
+            var lcArray = lc.OrderBy(c => c.CHARCD).ThenBy(c => c.LSHET).ThenBy(c => c.DATE_).ToArray();
+            StepFinish();
+
+            StepStart(lcArray.Length);
+            for (int i = 0; i < lcArray.Length; i++)
+            {
+                var currentChar = lcArray[i];
+                CNV_CHAR nextChar;
+                try
+                {
+                    nextChar = lcArray[i + 1];
+                }
+                catch
+                {
+                    break;
+                }
+                if (currentChar.LSHET != nextChar.LSHET || currentChar.CHARCD != nextChar.CHARCD) continue;
+                int monthDiff = (nextChar.DATE_.Value.Year * 12 + nextChar.DATE_.Value.Month) -
+                                (currentChar.DATE_.Value.Year * 12 + currentChar.DATE_.Value.Month);
+                for (int j = 1; j < monthDiff; j++)
+                {
+                    lc.Add(new CNV_CHAR
+                    {
+                        CHARCD = currentChar.CHARCD,
+                        CHARNAME = currentChar.CHARNAME,
+                        LSHET = currentChar.LSHET,
+                        DATE_ = currentChar.DATE_.Value.AddMonths(j),
+                        VALUE_ = 0
                     });
                 }
                 Iterate();
@@ -686,13 +718,13 @@ namespace _047_Tver
             var maxDate = new DateTime(2016, 04, 01);
             //var maxDate = new DateTime(2016, 07, 01);
 
-            DateTime[] dates = { new DateTime(2016, 03, 01), new DateTime(2016, 04, 01), new DateTime(2016, 07, 01) };
+            DateTime[] dates = { new DateTime(2016, 03, 01)/*, new DateTime(2016, 04, 01)*/, new DateTime(2016, 07, 01) };
 
             var minPayDate = new DateTime(2015, 04, 01);
             var maxPayDate = new DateTime(2016, 07, 01);
 
             long recno = 0;
-            StepStart(3);
+            StepStart(dates.Length);
             //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
             foreach (var date in dates)
             {
@@ -838,9 +870,10 @@ namespace _047_Tver
 
         public override void DoConvert()
         {
-            SetStepsCount(2);
+            SetStepsCount(3);
             BufferEntitiesManager.DropTableData("CNV$CHARSHOUSES");
-            var lc = new List<CNV_CHARSHOUSES>();
+            var lch = new List<CNV_CHARSHOUSES>();
+            var lca = new List<CNV_LCHAR>();
             ExcelFileInfo houseFileInfo = Consts.HousesCharsFile;
             DataTable houseCharsTable = Utils.ReadExcelFile(houseFileInfo.FileName, houseFileInfo.ListName);
             StepStart(houseCharsTable.Rows.Count);
@@ -850,7 +883,7 @@ namespace _047_Tver
                 {
                     var houseChars = new HouseChars(houseCharsTable.Rows[i]);
                     string query = String.Format(
-                        "SELECT FIRST 1 * FROM CNV$ABONENT WHERE ULICANAME LIKE '%{0}%' AND HOUSENO = '{1}'",
+                        "SELECT * FROM CNV$ABONENT WHERE ULICANAME LIKE '%{0}%' AND HOUSENO = '{1}'",
                         houseChars.Street, houseChars.HouseNo);
                     if (!String.IsNullOrWhiteSpace(houseChars.HousePostfix))
                         query += String.Format(" AND HOUSEPOSTFIX = '{0}'", houseChars.HousePostfix);
@@ -866,7 +899,7 @@ namespace _047_Tver
                             "UPDATE CNV$ABONENT SET HOUSECD = {0} WHERE HOUSECD = {1}", houseChars.HouseId,
                             result[0].HOUSECD));
                         context.SaveChanges();
-                        lc.Add(new CNV_CHARSHOUSES
+                        lch.Add(new CNV_CHARSHOUSES
                         {
                             CHARCD = 206001,
                             DATE_ = Consts.FirstDate,
@@ -874,13 +907,26 @@ namespace _047_Tver
                             HOUSECD = houseChars.HouseId
                         });
                         if (houseChars.HeatingSquare.HasValue)
-                            lc.Add(new CNV_CHARSHOUSES
+                            lch.Add(new CNV_CHARSHOUSES
                             {
                                 CHARCD = 32010,
                                 DATE_ = Consts.FirstDate,
                                 VALUE_ = houseChars.HeatingSquare.Value,
                                 HOUSECD = houseChars.HouseId
                             });
+
+                        if (houseChars.HasODNCounter)
+                            for (int j = 0; j < result.Count; j++)
+                            {
+                                var abonent = result[j];
+                                lca.Add(new CNV_LCHAR
+                                {
+                                    LSHET = abonent.LSHET,
+                                    DATE_ = Consts.FirstDate,
+                                    VALUE_ = 1,
+                                    LCHARCD = 119,
+                                });
+                            }
                     }
 
                     Iterate();
@@ -888,7 +934,8 @@ namespace _047_Tver
             }
             StepFinish();
 
-            SaveList(lc, Consts.InsertRecordCount);
+            SaveList(lch, Consts.InsertRecordCount);
+            SaveList(lca, Consts.InsertRecordCount);
         }
     }
 
@@ -1485,6 +1532,7 @@ namespace _047_Tver
         public decimal TotalSquare;
         public decimal? HeatingSquare;
         public int HouseId;
+        public bool HasODNCounter;
 
         public string Street;
         public string HouseNo;
@@ -1506,6 +1554,7 @@ namespace _047_Tver
                     ? (decimal?) null
                     : Decimal.Parse(dr[15].ToString());
                 HouseId = Int32.Parse(dr[31].ToString());
+                HasODNCounter = dr[11].ToString().ToLower().Trim() == "да";
 
                 string[] separetedAddress = Address.Split(',');
                 if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
