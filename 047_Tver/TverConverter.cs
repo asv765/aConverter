@@ -93,12 +93,20 @@ namespace _047_Tver
         public static string FixLs(string lshet, DateTime date)
         {
             long lshetLg = Int64.Parse(lshet);
+
             if (date.Year == 2015 &&
-                (lshetLg >= 5000001 && lshetLg <= 5016062) &&
-                (lshetLg <= 5007001 || lshetLg >= 5007021) &&
-                (lshetLg <= 5011001 || lshetLg >= 5011019) &&
-                (lshetLg <= 5017001 || lshetLg >= 5017006))
+                (lshetLg >= 5000001 &&
+                 (lshetLg < 5007001 || lshetLg > 5007021) &&
+                 (lshetLg < 5011001 || lshetLg > 5011019) &&
+                 lshetLg <= 5016062))
                 lshet = "5" + lshet;
+
+            //if (date.Year == 2015 &&
+            //    (lshetLg >= 5000001 && lshetLg <= 5016062) &&
+            //    (lshetLg <= 5007001 || lshetLg >= 5007021) &&
+            //    (lshetLg <= 5011001 || lshetLg >= 5011019) &&
+            //    (lshetLg <= 5017001 || lshetLg >= 5017006))
+            //    lshet = "5" + lshet;
             return GetLs(lshet);
         }
 
@@ -459,8 +467,13 @@ namespace _047_Tver
             //var maxDate = new DateTime(2016, 07, 01);
             var maxDate = new DateTime(2016, 07, 01);
 
-            StepStart((maxDate.Month - minDate.Month) + 12*(maxDate.Year - minDate.Year) + 1);
-            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+
+            DateTime[] dates = { new DateTime(2016, 03, 01)/*, new DateTime(2016, 04, 01)*/, new DateTime(2016, 07, 01) };
+
+            //StepStart((maxDate.Month - minDate.Month) + 12*(maxDate.Year - minDate.Year) + 1);
+            StepStart(dates.Length);
+            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            foreach (var date in dates)
             {
                 DataTable moneyTable = Utils.ReadExcelFile(
                     Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
@@ -911,7 +924,8 @@ namespace _047_Tver
             var maxDate = new DateTime(2016, 04, 01);
             //var maxDate = new DateTime(2016, 07, 01);
 
-            DateTime[] dates = { new DateTime(2016, 03, 01)/*, new DateTime(2016, 04, 01)*/, new DateTime(2016, 07, 01) };
+            //DateTime[] dates = { new DateTime(2016, 03, 01), new DateTime(2016, 07, 01) };
+            DateTime[] dates = { new DateTime(2016, 03, 01),new DateTime(2016, 04, 01)};
 
             var minPayDate = new DateTime(2015, 04, 01);
             var maxPayDate = new DateTime(2016, 07, 01);
@@ -923,7 +937,6 @@ namespace _047_Tver
             {
                 var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
                 DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
-                decimal debt = 0;
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
                 {
                     long ls;
@@ -948,47 +961,36 @@ namespace _047_Tver
                         }, lshet, date.Month, date.Year, serviceMoney.Nach, serviceMoney.RecalcSum, date,
                             String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd")));
                     }
-                    debt = money.Debt;
+
+                    nm.RegisterEndSaldo(lshet, date.Month, date.Year, Consts.BaseServiceCd, Consts.BaseServiceName,
+                        money.EndSaldo);
                 }
-                
-                //string oldLs = "";
-                //if (minPayDate <= date && date <= maxPayDate)
-                //{
-                //    DataTable oplataTable = Utils.ReadExcelFile(Consts.OplataFile.FileName, Oplata.GetListName(date));
-                //    for (int i = Consts.OplataFile.StartDataRow; i < oplataTable.Rows.Count; i++)
-                //    {
-                //        recno++;
-                //        if (String.IsNullOrWhiteSpace(oplataTable.Rows[i][0].ToString()) ||
-                //            oplataTable.Rows[i][0].ToString().Trim().ToUpper() == "ИТОГО") break;
-                //        var oplata = new Oplata(oplataTable.Rows[i]);
+                if (minPayDate <= date && date <= maxPayDate)
+                {
+                    DataTable oplataTable = Utils.ReadExcelFile(Consts.OplataFile.FileName, Oplata.GetListName(date));
+                    for (int i = Consts.OplataFile.StartDataRow; i < oplataTable.Rows.Count; i++)
+                    {
+                        recno++;
+                        if (String.IsNullOrWhiteSpace(oplataTable.Rows[i][0].ToString()) ||
+                            oplataTable.Rows[i][0].ToString().Trim().ToUpper() == "ИТОГО") break;
+                        var oplata = new Oplata(oplataTable.Rows[i]);
 
-                //        string lshet = Consts.FixLs(oplata.Lshet, date);
-                //        var odef = new CNV_OPLATA
-                //        {
-                //            SERVICECD = Consts.BaseServiceCd,
-                //            SERVICENAME = Consts.BaseServiceName,
-                //            SOURCECD = oplata.SourceCd,
-                //            SOURCENAME = oplata.Source
-                //        };
+                        string lshet = Consts.FixLs(oplata.Lshet, date);
+                        var odef = new CNV_OPLATA
+                        {
+                            SERVICECD = Consts.BaseServiceCd,
+                            SERVICENAME = Consts.BaseServiceName,
+                            SOURCECD = oplata.SourceCd,
+                            SOURCENAME = oplata.Source
+                        };
 
-                //        DateTime payDate = oplata.PayDate ?? date;
+                        DateTime payDate = oplata.PayDate ?? date;
 
-                //        nm.RegisterOplata(odef, lshet, date.Month, date.Year,
-                //            oplata.Summa, payDate, payDate,
-                //            String.Format("{0}_{1}", oplata.Lshet, recno));
-
-                //        if (oldLs == lshet) debt += oplata.Summa;
-                //        else
-                //        {
-                //            nm.RegisterBeginSaldo(oldLs, date.Month, date.Year, Consts.BaseServiceCd, Consts.BaseServiceName, debt);
-                //            debt = 0;
-                //            oldLs = lshet;
-                //        }
-
-                        
-                //        //nm.RegisterEndSaldo(lshet, date.Month, date.Year, 3, "Отопление", money.EndSaldo);
-                //    }
-                //}
+                        nm.RegisterOplata(odef, lshet, date.Month, date.Year,
+                            oplata.Summa, payDate, payDate,
+                            String.Format("{0}_{1}", oplata.Lshet, recno));
+                    }
+                }
 
 
                 SaveList(nm.NachRecords, Consts.InsertRecordCount, false);
@@ -1561,9 +1563,9 @@ namespace _047_Tver
         public DateTime Date;
         public string Lshet;
         public ServiceMoney[] Services;
-        public decimal Debt;
         public decimal HoursGVS;
         public decimal HoursOtopl;
+        public decimal EndSaldo;
 
         public Spravka(DataRow dr, DateTime fileDate)
         {
@@ -1583,7 +1585,7 @@ namespace _047_Tver
                 new ServiceMoney(dr, 40, 0, 115, "Гор. водоснабжение ОДН пов. коэф", 10, "Неизвестен", false), // коеф. одн
             };
             
-            Debt = String.IsNullOrWhiteSpace(dr[44 - 1].ToString()) ? 0 : Decimal.Parse(dr[44 - 1].ToString().Replace('.', ','));
+            EndSaldo = String.IsNullOrWhiteSpace(dr[45 - 1].ToString()) ? 0 : Decimal.Parse(dr[45 - 1].ToString().Replace('.', ','));
             HoursGVS = String.IsNullOrWhiteSpace(dr[6 - 1].ToString()) ? 0 : Decimal.Parse(dr[6 - 1].ToString().Replace('.',','));
             HoursOtopl = String.IsNullOrWhiteSpace(dr[7 - 1].ToString()) ? 0 : Decimal.Parse(dr[7 - 1].ToString().Replace('.',','));
         }
@@ -1874,6 +1876,31 @@ namespace _047_Tver
         {
             SetStepsCount(99);
 
+            // тест измененных ЛС
+            var minDate = new DateTime(2015, 05, 01);
+            var maxDate = new DateTime(2016, 07, 01);
+            
+            StepStart(1);
+            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            {
+                DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
+                for (int i = 0; i < moneyTable.Rows.Count; i++)
+                {
+                    long ls;
+                    if (!Int64.TryParse(moneyTable.Rows[i][0].ToString(), out ls)) continue;
+
+                    var money = new Spravka(moneyTable.Rows[i], date);
+                    if (money.Lshet == "5007001")
+                    {
+                        int a = 10;
+                    }
+                    string lshet = Consts.FixLs(money.Lshet, date);
+                }
+            }
+            StepFinish();
+
+
+
             // проверка дублирования районов
             //ExcelFileInfo fileInfo = Consts.HousesCharsFile;
             //DataTable houseTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
@@ -1902,36 +1929,36 @@ namespace _047_Tver
             //StepFinish();
 
             //// проверка сопоставления адресов в данных о домах и о ЛС
-            ExcelFileInfo fileInfo = Consts.HousesCharsFile;
-            DataTable houseTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
-            StepStart(houseTable.Rows.Count + 1);
-            var lhUnknown = new List<HouseChars>();
-            var notEqualDistricts = "";
-            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
-            {
-                for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
-                {
-                    var houseChars = new HouseChars(houseTable.Rows[i]);
-                    string query = String.Format(
-                        "SELECT FIRST 1 * FROM CNV$ABONENT WHERE ULICANAME LIKE '%{0}%' AND HOUSENO = '{1}'",
-                        houseChars.Street, houseChars.HouseNo);
-                    if (!String.IsNullOrWhiteSpace(houseChars.HousePostfix))
-                        query += String.Format(" AND HOUSEPOSTFIX = '{0}'", houseChars.HousePostfix);
-                    if (houseChars.KorpusNo.HasValue)
-                        query += String.Format(" AND KORPUSNO = '{0}'", houseChars.KorpusNo.Value);
-                    var result = context.ExecuteQuery<CNV_ABONENT>(query);
-                    if (!result.Any()) lhUnknown.Add(houseChars);
-                    else
-                    {
-                        var abonent = result[0];
-                        if (abonent.DISTNAME != houseChars.District)
-                            notEqualDistricts += String.Format("{0,-30}\t{1, -20}\t{2}\r\n", houseChars.Address,
-                                houseChars.District, abonent.DISTNAME);
-                    }
-                    Iterate();
-                }
-            }
-            StepFinish();
+            //ExcelFileInfo fileInfo = Consts.HousesCharsFile;
+            //DataTable houseTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
+            //StepStart(houseTable.Rows.Count + 1);
+            //var lhUnknown = new List<HouseChars>();
+            //var notEqualDistricts = "";
+            //using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            //{
+            //    for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
+            //    {
+            //        var houseChars = new HouseChars(houseTable.Rows[i]);
+            //        string query = String.Format(
+            //            "SELECT FIRST 1 * FROM CNV$ABONENT WHERE ULICANAME LIKE '%{0}%' AND HOUSENO = '{1}'",
+            //            houseChars.Street, houseChars.HouseNo);
+            //        if (!String.IsNullOrWhiteSpace(houseChars.HousePostfix))
+            //            query += String.Format(" AND HOUSEPOSTFIX = '{0}'", houseChars.HousePostfix);
+            //        if (houseChars.KorpusNo.HasValue)
+            //            query += String.Format(" AND KORPUSNO = '{0}'", houseChars.KorpusNo.Value);
+            //        var result = context.ExecuteQuery<CNV_ABONENT>(query);
+            //        if (!result.Any()) lhUnknown.Add(houseChars);
+            //        else
+            //        {
+            //            var abonent = result[0];
+            //            if (abonent.DISTNAME != houseChars.District)
+            //                notEqualDistricts += String.Format("{0,-30}\t{1, -20}\t{2}\r\n", houseChars.Address,
+            //                    houseChars.District, abonent.DISTNAME);
+            //        }
+            //        Iterate();
+            //    }
+            //}
+            //StepFinish();
 
 
             //// несколько жильцов с одинаковым ФИО
