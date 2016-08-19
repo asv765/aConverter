@@ -45,6 +45,14 @@ namespace _047_Tver
             EndDataRow = 27
         };
 
+        public static ExcelFileInfo RecodeEmptyHousesTableFile = new ExcelFileInfo
+        {
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировки_юрv1.1.xlsx",
+            ListName = "Лист1",
+            StartDataRow = 2,
+            EndDataRow = 10
+        };
+
         public static ExcelFileInfo OplataFile = new ExcelFileInfo
         {
             FileName = aConverter_RootSettings.SourceDbfFilePath + @"\свод по оплатам в разрезе ЛС.xls",
@@ -176,7 +184,7 @@ namespace _047_Tver
                 var houseInfo = new EmptyHouseInfo(emptyHousesInfoTable.Rows[i]);
                 var house = new CNV_ABONENT
                 {
-                    LSHET = Consts.GetLs(houseInfo.Id.ToString()),
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
                     EXTLSHET = houseInfo.ContractId.ToString(),
                     ISDELETED = 0,
                 };
@@ -238,7 +246,7 @@ namespace _047_Tver
 
         public override void DoConvert()
         {
-            SetStepsCount(4);
+            SetStepsCount(5);
             BufferEntitiesManager.DropTableData("CNV$CHARS");
             var lc = new List<CNV_CHAR>();
             ExcelFileInfo lsFileInfo = Consts.LsInfoFile;
@@ -255,6 +263,72 @@ namespace _047_Tver
                     LSHET = Consts.GetLs(lsInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = lsInfo.Square
+                });
+                Iterate();
+            }
+            StepFinish();
+
+            ExcelFileInfo emptyHousesFileInfo = Consts.EmptyHousesCharsFile;
+            DataTable emptyHousesInfoTable = Utils.ReadExcelFile(emptyHousesFileInfo.FileName, emptyHousesFileInfo.ListName);
+            StepStart(emptyHousesInfoTable.Rows.Count);
+            for (int i = emptyHousesFileInfo.StartDataRow - 2; i <= emptyHousesFileInfo.EndDataRow - 2; i++)
+            {
+                var houseInfo = new EmptyHouseInfo(emptyHousesInfoTable.Rows[i]);
+                lc.Add(new CNV_CHAR //Отапливаемая площадь арендаторы
+                {
+                    CHARCD = 2,
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
+                    DATE_ = Consts.FirstDate,
+                    VALUE_ = houseInfo.Square
+                });
+                lc.Add(new CNV_CHAR //Часы
+                {
+                    CHARCD = 231,
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
+                    DATE_ = Consts.FirstDate,
+                    VALUE_ = houseInfo.HoursPerWeek*houseInfo.HoursPerDay
+                });
+                lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по закр.схеме (Гкал/ч) 
+                {
+                    CHARCD = 232,
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
+                    DATE_ = Consts.FirstDate,
+                    VALUE_ = houseInfo.DopGVSCloseGKal
+                });
+                lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по закр.схеме (Т/ч) 
+                {
+                    CHARCD = 233,
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
+                    DATE_ = Consts.FirstDate,
+                    VALUE_ = houseInfo.DopGVSCloseTn
+                });
+                lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по откр.схем (Гкал/ч) 
+                {
+                    CHARCD = 234,
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
+                    DATE_ = Consts.FirstDate,
+                    VALUE_ = houseInfo.DopGVSOpenGKal
+                });
+                lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по откр.схеме (Т/ч)
+                {
+                    CHARCD = 235,
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
+                    DATE_ = Consts.FirstDate,
+                    VALUE_ = houseInfo.DopGVSOpenTn
+                });
+                lc.Add(new CNV_CHAR //Дог.нагрузка на отопление (Гкал/ч)
+                {
+                    CHARCD = 236,
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
+                    DATE_ = Consts.FirstDate,
+                    VALUE_ = houseInfo.DopOtoplGKal
+                });
+                lc.Add(new CNV_CHAR //Дог.нагрузка на отопление (Т/ч) 
+                {
+                    CHARCD = 237,
+                    LSHET = Consts.GetLs(houseInfo.Lshet),
+                    DATE_ = Consts.FirstDate,
+                    VALUE_ = houseInfo.DopOtoplTn
                 });
                 Iterate();
             }
@@ -491,7 +565,7 @@ namespace _047_Tver
 
         public override void DoConvert()
         {
-            SetStepsCount(3);
+            SetStepsCount(4);
             BufferEntitiesManager.DropTableData("CNV$LCHARS");
             var lc = new List<CNV_LCHAR>();
             ExcelFileInfo lsFileInfo = Consts.LsInfoFile;
@@ -510,11 +584,6 @@ namespace _047_Tver
                 var lsInfo = new LsInfo(lsInfoTable.Rows[i]);
                 for (int j = 0; j < recodeTable.Count; j++)
                 {
-                    if (lsInfo.Lshet == "300")
-                    {
-                        int a = 10;
-                    }
-
                     var recode = recodeTable[j];
                     object checkingValue;
                     switch (recode.CheckField1)
@@ -561,7 +630,57 @@ namespace _047_Tver
                     lc.Add(new CNV_LCHAR
                     {
                         LSHET = Consts.GetLs(lsInfo.Lshet),
-                        DATE_ = new DateTime(2014, 07, 01),
+                        DATE_ = Consts.FirstDate,
+                        LCHARCD = recode.LcharCd,
+                        VALUE_ = recode.LcharValue
+                    });
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            ExcelFileInfo emptyHousesFileInfo = Consts.EmptyHousesCharsFile;
+            DataTable emptyHousesInfoTable = Utils.ReadExcelFile(emptyHousesFileInfo.FileName, emptyHousesFileInfo.ListName);
+            ExcelFileInfo recodeEmptyTableInfo = Consts.RecodeEmptyHousesTableFile;
+            DataTable recodeEmptyDataTable = Utils.ReadExcelFile(recodeEmptyTableInfo.FileName, recodeEmptyTableInfo.ListName);
+            var recodeEmptyTable = new List<Recode>();
+            for (int i = recodeEmptyTableInfo.StartDataRow - 2; i <= recodeEmptyTableInfo.EndDataRow - 2; i++)
+            {
+                recodeEmptyTable.Add(new Recode(recodeEmptyDataTable.Rows[i]));
+            }
+            recodeEmptyDataTable.Dispose();
+            StepStart(emptyHousesInfoTable.Rows.Count);
+            for (int i = emptyHousesFileInfo.StartDataRow - 2; i <= emptyHousesFileInfo.EndDataRow - 2; i++)
+            {
+                var houseInfo = new EmptyHouseInfo(emptyHousesInfoTable.Rows[i]);
+                for (int j = 0; j < recodeEmptyTable.Count; j++)
+                {
+                    var recode = recodeEmptyTable[j];
+                    object checkingValue;
+                    switch (recode.CheckField1)
+                    {
+                        case "T":
+                            checkingValue = houseInfo.HasIPU;
+                            break;
+                        case "S":
+                            checkingValue = houseInfo.WatercaptureType;
+                            break;
+                        case "U":
+                            checkingValue = houseInfo.NachODPU;
+                            break;
+                        case "Y":
+                            checkingValue = houseInfo.HouseType;
+                            break;
+                        default:
+                            throw new Exception("Неизвестное 1 поле для проверки: " + recode.CheckField1);
+                    }
+
+                    if (checkingValue == null || (!checkingValue.Equals(recode.Value1))) continue;
+
+                    lc.Add(new CNV_LCHAR
+                    {
+                        LSHET = Consts.GetLs(houseInfo.Lshet),
+                        DATE_ = Consts.FirstDate,
                         LCHARCD = recode.LcharCd,
                         VALUE_ = recode.LcharValue
                     });
@@ -1667,6 +1786,15 @@ namespace _047_Tver
         public int HoursPerDay;
         public string HouseType;
 
+        public decimal DopGVSCloseGKal;
+        public decimal DopGVSCloseTn;
+        public decimal DopGVSOpenGKal;
+        public decimal DopGVSOpenTn;
+        public decimal DopOtoplGKal;
+        public decimal DopOtoplTn;
+
+        public string Lshet;
+
         public EmptyHouseInfo(DataRow dr)
         {
             Id = Int32.Parse(dr[0].ToString());
@@ -1680,6 +1808,26 @@ namespace _047_Tver
             HoursPerWeek = Int32.Parse(dr[16].ToString());
             HoursPerDay = Int32.Parse(dr[17].ToString());
             HouseType = dr[24].ToString().ToLower().Trim();
+
+            DopGVSCloseGKal = String.IsNullOrWhiteSpace(dr[10].ToString())
+                ? 0
+                : Math.Round(Decimal.Parse(dr[10].ToString(), NumberStyles.Float), 4);
+            DopGVSCloseTn = String.IsNullOrWhiteSpace(dr[11].ToString())
+                ? 0
+                : Math.Round(Decimal.Parse(dr[11].ToString(), NumberStyles.Float), 4);
+            DopGVSOpenGKal = String.IsNullOrWhiteSpace(dr[12].ToString())
+                ? 0
+                : Math.Round(Decimal.Parse(dr[12].ToString(), NumberStyles.Float), 4);
+            DopGVSOpenTn = String.IsNullOrWhiteSpace(dr[13].ToString())
+                ? 0
+                : Math.Round(Decimal.Parse(dr[13].ToString(), NumberStyles.Float), 4);
+            DopOtoplGKal = String.IsNullOrWhiteSpace(dr[14].ToString())
+                ? 0
+                : Math.Round(Decimal.Parse(dr[14].ToString(), NumberStyles.Float), 4);
+            DopOtoplTn = String.IsNullOrWhiteSpace(dr[15].ToString())
+                ? 0
+                : Math.Round(Decimal.Parse(dr[15].ToString(), NumberStyles.Float), 4);
+            Lshet = Id.ToString();
         }
 
         private static readonly Regex HouseRegex = new Regex(@"(\d+)(.*)");
