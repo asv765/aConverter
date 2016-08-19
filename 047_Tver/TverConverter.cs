@@ -59,6 +59,14 @@ namespace _047_Tver
             EndDataRow = 217
         };
 
+        public static ExcelFileInfo EmptyHousesCharsFile = new ExcelFileInfo
+        {
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки.xls",
+            ListName = "нежилые помещения",
+            StartDataRow = 4,
+            EndDataRow = 25
+        };
+
         public static readonly string SpravkaFolder = aConverter_RootSettings.SourceDbfFilePath + "\\";
 
         public const int InsertRecordCount = 1000;
@@ -87,6 +95,7 @@ namespace _047_Tver
         }
 
         public static readonly DateTime FirstDate = new DateTime(2014, 07, 01);
+        public static readonly string[] Prefixes = { "улица", "ул.", "пр-д.", "б-р.", "ш.", "пр-т.", "пер.", "ул", "проезд." };
     }
 
     public class ExcelFileInfo
@@ -132,7 +141,7 @@ namespace _047_Tver
 
         public override void DoConvert()
         {
-            SetStepsCount(3);
+            SetStepsCount(4);
             BufferEntitiesManager.DropTableData("CNV$ABONENT");
 
             var la = new List<CNV_ABONENT>();
@@ -155,6 +164,51 @@ namespace _047_Tver
                 lsInfo.ExtractFio(ref abonent);
                 lsInfo.ExctractAddress(ref abonent);
                 la.Add(abonent);
+                Iterate();
+            }
+            StepFinish();
+
+            ExcelFileInfo emptyHousesFileInfo = Consts.EmptyHousesCharsFile;
+            DataTable emptyHousesInfoTable = Utils.ReadExcelFile(emptyHousesFileInfo.FileName, emptyHousesFileInfo.ListName);
+            StepStart(emptyHousesInfoTable.Rows.Count);
+            for (int i = emptyHousesFileInfo.StartDataRow - 2; i <= emptyHousesFileInfo.EndDataRow - 2; i++)
+            {
+                var houseInfo = new EmptyHouseInfo(emptyHousesInfoTable.Rows[i]);
+                var house = new CNV_ABONENT
+                {
+                    LSHET = Consts.GetLs(houseInfo.Id.ToString()),
+                    EXTLSHET = houseInfo.ContractId.ToString(),
+                    ISDELETED = 0,
+                };
+
+                houseInfo.ExtractAddress(ref house);
+                var abonentsAtHouse =
+                    la.Where(a => a.ULICANAME.Contains(house.ULICANAME) && a.HOUSENO == house.HOUSENO);
+                abonentsAtHouse = !String.IsNullOrWhiteSpace(house.HOUSEPOSTFIX)
+                    ? abonentsAtHouse.Where(a => a.HOUSEPOSTFIX == house.HOUSEPOSTFIX)
+                    : abonentsAtHouse.Where(a => String.IsNullOrWhiteSpace(a.HOUSEPOSTFIX));
+                abonentsAtHouse = house.KORPUSNO.HasValue
+                    ? abonentsAtHouse.Where(a => a.KORPUSNO == house.KORPUSNO)
+                    : abonentsAtHouse.Where(a => a.KORPUSNO == null);
+                CNV_ABONENT abonentEtalon;
+                try
+                {
+                    abonentEtalon = abonentsAtHouse.First();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+
+                house.TOWNSNAME = abonentEtalon.TOWNSNAME;
+                house.RAYONNAME = abonentEtalon.RAYONNAME;
+                house.RAYONKOD = abonentEtalon.RAYONKOD;
+                house.DISTNAME = abonentEtalon.DISTNAME;
+                house.ULICANAME = abonentEtalon.ULICANAME;
+
+
+                houseInfo.ExtractFio(ref house);
+                la.Add(house);
                 Iterate();
             }
             StepFinish();
@@ -368,18 +422,10 @@ namespace _047_Tver
             StepFinish();
 
             StepStart(lcArray.Length);
-            for (int i = 0; i < lcArray.Length; i++)
+            for (int i = 0; i < lcArray.Length - 1; i++)
             {
                 var currentChar = lcArray[i];
-                CNV_CHAR nextChar;
-                try
-                {
-                    nextChar = lcArray[i + 1];
-                }
-                catch
-                {
-                    break;
-                }
+                CNV_CHAR nextChar = lcArray[i + 1];
                 if (currentChar.LSHET != nextChar.LSHET || currentChar.CHARCD != nextChar.CHARCD) continue;
                 int monthDiff = (nextChar.DATE_.Value.Year * 12 + nextChar.DATE_.Value.Month) -
                                 (currentChar.DATE_.Value.Year * 12 + currentChar.DATE_.Value.Month);
@@ -1108,7 +1154,7 @@ namespace _047_Tver
         public string Lshet;
         public string FIO;
         public string InformationOwner;
-        public int InformationOwnerId;
+        public int? InformationOwnerId;
         public int? ContractNumber;
         public string Address;
         public bool Active;
@@ -1123,9 +1169,6 @@ namespace _047_Tver
         public string NachOtopl;
         public string NachPkInd;
         public string NachPkOdn;
-
-        public const int UnknowInformationOwnerId = 0;
-        public const string UnknownInformationOnwer = "неизвестно";
 
         public LsInfo(DataRow dr)
         {
@@ -1182,8 +1225,8 @@ namespace _047_Tver
                 default:
                     if (String.IsNullOrWhiteSpace(InformationOwner))
                     {
-                        InformationOwnerId = UnknowInformationOwnerId;
-                        InformationOwner = UnknownInformationOnwer;
+                        InformationOwnerId = null;
+                        InformationOwner = null;
                         break;
                     }
                     throw new Exception("Неизвестная УК " + InformationOwner);
@@ -1570,7 +1613,6 @@ namespace _047_Tver
 
         private static readonly Regex HouseRegex = new Regex(@"(\d+)(.*)");
         private static readonly Regex KorpusRegex = new Regex(@"к(\d+)");
-        private static readonly string[] Prefixes = { "улица", "ул.", "пр-д.", "б-р.", "ш.", "пр-т.", "пер.", "ул", "проезд." };
 
         public HouseChars(DataRow dr)
         {
@@ -1588,9 +1630,9 @@ namespace _047_Tver
                 string[] separetedAddress = Address.Split(',');
                 if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
                 Street = separetedAddress[0].Trim();
-                for (int i = 0; i < Prefixes.Length; i++)
+                for (int i = 0; i < Consts.Prefixes.Length; i++)
                 {
-                    Street = Street.Replace(Prefixes[i], "");
+                    Street = Street.Replace(Consts.Prefixes[i], "");
                 }
                 Street = Street.Replace(".", "").Trim();
                 string house = separetedAddress[1];
@@ -1608,6 +1650,66 @@ namespace _047_Tver
             {
                 throw;
             }
+        }
+    }
+
+    public class EmptyHouseInfo
+    {
+        public int Id;
+        public int ContractId;
+        public string FullName;
+        public string Address;
+        public string WatercaptureType;
+        public string HasIPU;
+        public string NachODPU;
+        public decimal Square;
+        public int HoursPerWeek;
+        public int HoursPerDay;
+        public string HouseType;
+
+        public EmptyHouseInfo(DataRow dr)
+        {
+            Id = Int32.Parse(dr[0].ToString());
+            ContractId = Int32.Parse(dr[1].ToString());
+            FullName = dr[2].ToString();
+            Address = dr[3].ToString();
+            WatercaptureType = dr[18].ToString().ToLower().Trim();
+            HasIPU = dr[19].ToString().ToLower().Trim();
+            NachODPU = dr[20].ToString().ToLower().Trim();
+            Square = Decimal.Parse(dr[22].ToString(), NumberStyles.Float);
+            HoursPerWeek = Int32.Parse(dr[16].ToString());
+            HoursPerDay = Int32.Parse(dr[17].ToString());
+            HouseType = dr[24].ToString().ToLower().Trim();
+        }
+
+        private static readonly Regex HouseRegex = new Regex(@"(\d+)(.*)");
+        private static readonly Regex KorpusRegex = new Regex(@"к(\d+)");
+
+        public void ExtractAddress(ref CNV_ABONENT abonent)
+        {
+            string[] separetedAddress = Address.Split(',');
+            if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
+            abonent.ULICANAME = separetedAddress[0].Trim();
+            for (int i = 0; i < Consts.Prefixes.Length; i++)
+            {
+                abonent.ULICANAME = abonent.ULICANAME.Replace(Consts.Prefixes[i], "");
+            }
+            abonent.ULICANAME = abonent.ULICANAME.Replace(".", "").Trim();
+            string house = separetedAddress[1];
+            var korpusMatch = KorpusRegex.Match(house);
+            if (korpusMatch.Success)
+            {
+                abonent.KORPUSNO = Int32.Parse(korpusMatch.Groups[1].Value);
+                house = house.Replace(korpusMatch.Value, "").Trim();
+            }
+            var groups = HouseRegex.Match(house).Groups;
+            abonent.HOUSENO = groups[1].Value.Trim();
+            abonent.HOUSEPOSTFIX = groups[2].Value.Trim();
+        }
+
+        public void ExtractFio(ref CNV_ABONENT house)
+        {
+            house.F = FullName.Split(',')[0].Trim();
         }
     }
 
