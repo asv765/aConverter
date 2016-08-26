@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -51,6 +52,28 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
             get
             {
                 return EDEBET - FNATH - PROCHL + OPLATA;
+            }
+        }
+
+        public string InsertSQL
+        {
+            get
+            {
+                // INSERT INTO CNV$NACHOPL (ID, LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME) VALUES (NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+                var insertNachoplTemplate =
+                    "INSERT INTO CNV$NACHOPL (ID, LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME) " +
+                    "VALUES (NULL, '{0}', {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, '{11}');";
+
+                var sql = String.Format(insertNachoplTemplate,
+                    LSHET, MONTH_, YEAR_, MONTH2, YEAR2,
+                    BDEBET.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
+                    FNATH.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
+                    PROCHL.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
+                    OPLATA.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
+                    EDEBET.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
+                    SERVICECD,
+                    SERVICENAME);
+                return sql;
             }
         }
     }

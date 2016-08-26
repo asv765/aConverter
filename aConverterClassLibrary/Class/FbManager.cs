@@ -81,6 +81,7 @@ namespace aConverterClassLibrary.Class
                     {
                         command.CommandText = aQuery;
                         command.Transaction = transaction;
+                        command.CommandType = CommandType.Text;
                         int result = command.ExecuteNonQuery();
                         command.Transaction.Commit();
                         return result;

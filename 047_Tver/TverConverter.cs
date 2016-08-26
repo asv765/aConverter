@@ -4,6 +4,8 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM;
@@ -267,7 +269,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR
                 {
                     CHARCD = 2,
-                    CHARNAME = "Общая площадь",
+                    CHARNAME = "Отапливаемая площадь",
                     LSHET = Consts.GetLs(lsInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = lsInfo.Square
@@ -285,6 +287,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR //Отапливаемая площадь арендаторы
                 {
                     CHARCD = 2,
+                    CHARNAME = "Отапливаемая площадь",
                     LSHET = Consts.GetLs(houseInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = houseInfo.Square
@@ -292,6 +295,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR //Часы
                 {
                     CHARCD = 231,
+                    CHARNAME = "Часы",
                     LSHET = Consts.GetLs(houseInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = houseInfo.HoursPerWeek*houseInfo.HoursPerDay
@@ -299,6 +303,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по закр.схеме (Гкал/ч) 
                 {
                     CHARCD = 232,
+                    CHARNAME = "Дог.нагрузка на ГВС по закр.схеме (Гкал/ч)",
                     LSHET = Consts.GetLs(houseInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = houseInfo.DopGVSCloseGKal
@@ -306,6 +311,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по закр.схеме (Т/ч) 
                 {
                     CHARCD = 233,
+                    CHARNAME = "Дог.нагрузка на ГВС по закр.схеме (Т/ч)",
                     LSHET = Consts.GetLs(houseInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = houseInfo.DopGVSCloseTn
@@ -313,6 +319,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по откр.схем (Гкал/ч) 
                 {
                     CHARCD = 234,
+                    CHARNAME = "Дог.нагрузка на ГВС по откр.схем (Гкал/ч)",
                     LSHET = Consts.GetLs(houseInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = houseInfo.DopGVSOpenGKal
@@ -320,6 +327,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по откр.схеме (Т/ч)
                 {
                     CHARCD = 235,
+                    CHARNAME = "Дог.нагрузка на ГВС по откр.схеме (Т/ч)",
                     LSHET = Consts.GetLs(houseInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = houseInfo.DopGVSOpenTn
@@ -327,6 +335,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR //Дог.нагрузка на отопление (Гкал/ч)
                 {
                     CHARCD = 236,
+                    CHARNAME = "Дог.нагрузка на отопление (Гкал/ч)",
                     LSHET = Consts.GetLs(houseInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = houseInfo.DopOtoplGKal
@@ -334,6 +343,7 @@ namespace _047_Tver
                 lc.Add(new CNV_CHAR //Дог.нагрузка на отопление (Т/ч) 
                 {
                     CHARCD = 237,
+                    CHARNAME = "Дог.нагрузка на отопление (Т/ч)",
                     LSHET = Consts.GetLs(houseInfo.Lshet),
                     DATE_ = Consts.FirstDate,
                     VALUE_ = houseInfo.DopOtoplTn
@@ -920,22 +930,40 @@ namespace _047_Tver
             BufferEntitiesManager.DropTableData("CNV$NACHOPL");
 
             //var minDate = new DateTime(2015, 05, 01);
-            var minDate = new DateTime(2016, 04, 01);
-            var maxDate = new DateTime(2016, 04, 01);
+            //var minDate = new DateTime(2016, 04, 01);
+            //var maxDate = new DateTime(2016, 04, 01);
             //var maxDate = new DateTime(2016, 07, 01);
 
             //DateTime[] dates = { new DateTime(2016, 03, 01), new DateTime(2016, 07, 01) };
-            DateTime[] dates = { new DateTime(2016, 03, 01),new DateTime(2016, 04, 01)};
+            DateTime[] dates =
+            {
+                new DateTime(2015, 05, 01),
+                new DateTime(2015, 06, 01),
+                new DateTime(2015, 07, 01),
+                new DateTime(2015, 08, 01),
+                new DateTime(2015, 09, 01),
+                new DateTime(2015, 10, 01),
+                new DateTime(2015, 11, 01),
+                new DateTime(2015, 12, 01),
+                new DateTime(2016, 01, 01),
+                new DateTime(2016, 02, 01),
+                new DateTime(2016, 03, 01),
+                new DateTime(2016, 04, 01),
+                new DateTime(2016, 05, 01),
+                new DateTime(2016, 06, 01),
+                new DateTime(2016, 07, 01)
+            };
 
             var minPayDate = new DateTime(2015, 04, 01);
             var maxPayDate = new DateTime(2016, 07, 01);
+
+            var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
             long recno = 0;
             StepStart(dates.Length);
             //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
             foreach (var date in dates)
             {
-                var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
                 DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
                 {
@@ -949,17 +977,23 @@ namespace _047_Tver
                     {
                         var serviceMoney = money.Services[j];
 
-                        nm.RegisterNach(new CNV_NACH
+                        if (serviceMoney.Volume != 0 ||
+                            serviceMoney.RecalcVol != 0 ||
+                            serviceMoney.Nach != 0 ||
+                            serviceMoney.RecalcSum != 0)
                         {
-                            REGIMCD = serviceMoney.RegimCd,
-                            REGIMNAME = serviceMoney.RegimName,
-                            SERVICECD = serviceMoney.ServiceCd,
-                            SERVICENAME = serviceMoney.ServiceName,
-                            TYPE_ = 0,
-                            VOLUME = Math.Round(serviceMoney.Volume, 4),
-                            PROCHLVOLUME = Math.Round(serviceMoney.RecalcVol, 4)
-                        }, lshet, date.Month, date.Year, serviceMoney.Nach, serviceMoney.RecalcSum, date,
-                            String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd")));
+                            nm.RegisterNach(new CNV_NACH
+                            {
+                                REGIMCD = serviceMoney.RegimCd,
+                                REGIMNAME = serviceMoney.RegimName,
+                                SERVICECD = serviceMoney.ServiceCd,
+                                SERVICENAME = serviceMoney.ServiceName,
+                                TYPE_ = 0,
+                                VOLUME = Math.Round(serviceMoney.Volume, 4),
+                                PROCHLVOLUME = Math.Round(serviceMoney.RecalcVol, 4)
+                            }, lshet, date.Month, date.Year, serviceMoney.Nach, serviceMoney.RecalcSum, date,
+                                String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd")));
+                        }
                     }
 
                     nm.RegisterEndSaldo(lshet, date.Month, date.Year, Consts.BaseServiceCd, Consts.BaseServiceName,
@@ -976,36 +1010,37 @@ namespace _047_Tver
                         var oplata = new Oplata(oplataTable.Rows[i]);
 
                         string lshet = Consts.FixLs(oplata.Lshet, date);
-                        var odef = new CNV_OPLATA
+                        if (lshet.Length <= 10)
                         {
-                            SERVICECD = Consts.BaseServiceCd,
-                            SERVICENAME = Consts.BaseServiceName,
-                            SOURCECD = oplata.SourceCd,
-                            SOURCENAME = oplata.Source
-                        };
+                            var odef = new CNV_OPLATA
+                            {
+                                SERVICECD = Consts.BaseServiceCd,
+                                SERVICENAME = Consts.BaseServiceName,
+                                SOURCECD = oplata.SourceCd,
+                                SOURCENAME = oplata.Source
+                            };
 
-                        DateTime payDate = oplata.PayDate ?? date;
+                            DateTime payDate = oplata.PayDate ?? date;
 
-                        nm.RegisterOplata(odef, lshet, date.Month, date.Year,
-                            oplata.Summa, payDate, payDate,
-                            String.Format("{0}_{1}", oplata.Lshet, recno));
+                            nm.RegisterOplata(odef, lshet, date.Month, date.Year,
+                                oplata.Summa, payDate, payDate,
+                                String.Format("{0}_{1}", oplata.Lshet, recno));
+                        }
                     }
                 }
 
-
-                SaveList(nm.NachRecords, Consts.InsertRecordCount, false);
-                SaveList(nm.OplataRecords, Consts.InsertRecordCount, false);
-                SaveList(nm.NachoplRecords.Values, Consts.InsertRecordCount, false);
+                // SaveList(nm.NachRecords, Consts.InsertRecordCount, false);
+                // SaveList(nm.OplataRecords, Consts.InsertRecordCount, false);
+                // SaveList(nm.NachoplRecords.Values, Consts.InsertRecordCount, false);
 
                 Iterate();
             }
+
+            nm.SaveNachRecords(aConverter_RootSettings.FirebirdStringConnection);
+            nm.SaveOplataRecords(aConverter_RootSettings.FirebirdStringConnection);
+            nm.SaveNachoplRecords(aConverter_RootSettings.FirebirdStringConnection);
+
             StepFinish();
-
-
-
-
-
-
 
             //if (record.StringNumber == 1)
             //    {

@@ -75,7 +75,7 @@ namespace aConverterClassLibrary
                 Description = "Проверка, встречаются ли в таблице CNV$NACHOPL несколько записей по одному лицевому счету в одном месяце по одной услуге",
                 NormalRows = 0,
                 AnalyzeQuery = "SELECT * FROM CNV$CC_NOTUNIQUENACHOPLSALDO(1)",
-                FixCommand = "EXEQUTE PROCEDURE CNV$CC_NOTUNIQUENACHOPLSALDO(2)",
+                FixCommand = "EXECUTE PROCEDURE CNV$CC_NOTUNIQUENACHOPLSALDO(2)",
                 DependOn = ccNotUniqueLshet
             };
             checkCaseList.Add(ccNotUniqueNachoplSaldo);
@@ -248,7 +248,8 @@ namespace aConverterClassLibrary
             checkCaseList.Add(GenerateIntegrityCheckCase("BALANCESLIST", "BALANCE_KOD", "CNV$NACHOPL", "SERVICECD", null));
             checkCaseList.Add(GenerateIntegrityCheckCase("BALANCESLIST", "BALANCE_KOD", "CNV$OPLATA", "SERVICECD", null));
             checkCaseList.Add(GenerateIntegrityCheckCase("RESOURCESREGIMSLIST", "KODREGIM", "CNV$NACH", "REGIMCD", null));
-            checkCaseList.Add(GenerateIntegrityCheckCase("INFORMATIONOWNERS", "OWNERID", "CNV$ABONENT", "DUCD", null));
+            // Закомментарено, так как фикс для этого случая означает удаление данных из CNV$ABONENT
+            // checkCaseList.Add(GenerateIntegrityCheckCase("INFORMATIONOWNERS", "OWNERID", "CNV$ABONENT", "DUCD", null));
 
             checkCaseList.Add(GenerateUncertaintyCheckCase("CNV$ABONENT", "ULICAKOD", "ULICANAME", null));
             checkCaseList.Add(GenerateUncertaintyCheckCase("CNV$ABONENT", "RAYONKOD", "RAYONNAME", null));

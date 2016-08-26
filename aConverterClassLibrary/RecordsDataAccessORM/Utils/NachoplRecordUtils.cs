@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using FirebirdSql.Data.FirebirdClient;
+using FirebirdSql.Data.Isql;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
 {
@@ -205,13 +207,31 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// </summary>
         public void SaveNachoplRecords(string connectionString)
         {
-            using (var context = new AbonentConvertationEntitiesModel(connectionString))
+            //using (var context = new AbonentConvertationEntitiesModel(connectionString))
+            //{
+            //    foreach (CNV_NACHOPL no in NachoplRecords.Values)
+            //    {
+            //        context.Add(no);
+            //        context.SaveChanges();
+            //    }
+            //}
+            int counter = 0;
+            using (var fbc = new FbConnection(connectionString))
             {
-                foreach (CNV_NACHOPL no in NachoplRecords.Values)
+                fbc.Open();
+                var fbt = fbc.BeginTransaction();
+                var command = fbc.CreateCommand();
+                command.Transaction = fbt;
+                foreach (CNV_NACHOPL nor in NachoplRecords.Values)
                 {
-                    context.Add(no);
-                    context.SaveChanges();
+                    command.CommandText = nor.InsertSQL;
+                    command.ExecuteNonQuery();
+                    if ((++counter % 5000) == 0)
+                    {
+                        fbt.CommitRetaining();
+                    }
                 }
+                fbt.Commit();
             }
         }
 
@@ -220,10 +240,28 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// </summary>
         public void SaveNachRecords(string connectionString)
         {
-            using(var context = new AbonentConvertationEntitiesModel(connectionString))
+            //using(var context = new AbonentConvertationEntitiesModel(connectionString))
+            //{
+            //    context.Add(NachRecords);
+            //    context.SaveChanges();
+            //}
+            int counter = 0;
+            using (var fbc = new FbConnection(connectionString))
             {
-                context.Add(NachRecords);
-                context.SaveChanges();
+                fbc.Open();
+                var fbt = fbc.BeginTransaction();
+                var command = fbc.CreateCommand();
+                command.Transaction = fbt;
+                foreach (CNV_NACH nr in NachRecords)
+                {
+                    command.CommandText = nr.InsertSQL;
+                    command.ExecuteNonQuery();
+                    if ((++counter % 5000) == 0)
+                    {
+                        fbt.CommitRetaining();
+                    }
+                }
+                fbt.Commit();
             }
         }
 
@@ -232,10 +270,28 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// </summary>
         public void SaveOplataRecords(string connectionString)
         {
-            using (var context = new AbonentConvertationEntitiesModel(connectionString))
+            //using (var context = new AbonentConvertationEntitiesModel(connectionString))
+            //{
+            //    context.Add(OplataRecords);
+            //    context.SaveChanges();
+            //}
+            int counter = 0;
+            using (var fbc = new FbConnection(connectionString))
             {
-                context.Add(OplataRecords);
-                context.SaveChanges();
+                fbc.Open();
+                var fbt = fbc.BeginTransaction();
+                var command = fbc.CreateCommand();
+                command.Transaction = fbt;
+                foreach (CNV_OPLATA or in OplataRecords)
+                {
+                    command.CommandText = or.InsertSQL;
+                    command.ExecuteNonQuery();
+                    if ((++counter%5000) == 0)
+                    {
+                        fbt.CommitRetaining();
+                    }
+                }
+                fbt.Commit();
             }
         }
     }

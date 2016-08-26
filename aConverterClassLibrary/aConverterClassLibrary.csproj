@@ -186,6 +186,8 @@
     <Compile Include="RecordsDataAccessORM\LCHARSLIST.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\PartialNACHRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialOPLATARecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialSUPPLNETRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialNACHOPLRecord.cs" />
     <Compile Include="RecordsDataAccessORM\STREET.generated.cs">
