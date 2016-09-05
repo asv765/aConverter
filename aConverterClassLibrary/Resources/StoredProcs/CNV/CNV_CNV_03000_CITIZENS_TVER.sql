@@ -98,4 +98,16 @@ begin
   set ISMAINCITYZEN = 1
   where HIDDEN = 0 and
         CITIZENSTATEID = 1;
+  for select C.LSHET, CA.SIGNIFICANCE
+      from CITYZENS C
+      inner join CITYZENADDITIONCHARS CA on C.CITYZEN_ID = CA.CITYZEN_ID and
+            CA.ADDITIONALCHARCD = 11001
+      where C.ISMAINCITYZEN = 1
+      order by C.LSHET
+      into :LSHET, :PHONE
+  do
+  begin
+    insert into ABONENTPHONES (LSHET, PHONETYPEID, PHONENUMBER)
+    values (:LSHET, 0, :PHONE);
+  end
 end^

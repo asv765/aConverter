@@ -17,10 +17,10 @@ namespace _047_Tver
     {
         public static ExcelFileInfo RoomingReportFile  = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath +  @"\учет жильцов на 25.07.16 для загрузки (3).xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\учет жильцов на 22.08.16 для загрузки коррект(+4 дома с 01.07.16).xls",
             ListName = "паспортный стол",
             StartDataRow = 6,
-            EndDataRow = 38719
+            EndDataRow = 39142
         };
 
         public static ExcelFileInfo LsInfoFile = new ExcelFileInfo
@@ -71,10 +71,10 @@ namespace _047_Tver
 
         public static ExcelFileInfo EmptyHousesCharsFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки.xls",
-            ListName = "нежилые помещения",
-            StartDataRow = 4,
-            EndDataRow = 25
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\данные по жилым домам ФЛ с нежилыми помещениями_без ОДПУ.xls",
+            ListName = "без ОДПУ для загрузки",
+            StartDataRow = 7,
+            EndDataRow = 231
         };
 
         public static readonly string SpravkaFolder = aConverter_RootSettings.SourceDbfFilePath + "\\";
@@ -208,15 +208,8 @@ namespace _047_Tver
                 abonentsAtHouse = house.KORPUSNO.HasValue
                     ? abonentsAtHouse.Where(a => a.KORPUSNO == house.KORPUSNO)
                     : abonentsAtHouse.Where(a => a.KORPUSNO == null);
-                CNV_ABONENT abonentEtalon;
-                try
-                {
-                    abonentEtalon = abonentsAtHouse.First();
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
+
+                var abonentEtalon = abonentsAtHouse.First();
 
                 house.TOWNSNAME = abonentEtalon.TOWNSNAME;
                 house.RAYONNAME = abonentEtalon.RAYONNAME;
@@ -284,22 +277,24 @@ namespace _047_Tver
             for (int i = emptyHousesFileInfo.StartDataRow - 2; i <= emptyHousesFileInfo.EndDataRow - 2; i++)
             {
                 var houseInfo = new EmptyHouseInfo(emptyHousesInfoTable.Rows[i]);
-                lc.Add(new CNV_CHAR //Отапливаемая площадь арендаторы
-                {
-                    CHARCD = 2,
-                    CHARNAME = "Отапливаемая площадь",
-                    LSHET = Consts.GetLs(houseInfo.Lshet),
-                    DATE_ = Consts.FirstDate,
-                    VALUE_ = houseInfo.Square
-                });
-                lc.Add(new CNV_CHAR //Часы
-                {
-                    CHARCD = 231,
-                    CHARNAME = "Часы",
-                    LSHET = Consts.GetLs(houseInfo.Lshet),
-                    DATE_ = Consts.FirstDate,
-                    VALUE_ = houseInfo.HoursPerWeek*houseInfo.HoursPerDay
-                });
+                if (houseInfo.Square.HasValue)
+                    lc.Add(new CNV_CHAR //Отапливаемая площадь арендаторы
+                    {
+                        CHARCD = 2,
+                        CHARNAME = "Отапливаемая площадь",
+                        LSHET = Consts.GetLs(houseInfo.Lshet),
+                        DATE_ = Consts.FirstDate,
+                        VALUE_ = houseInfo.Square
+                    });
+                if (houseInfo.HoursPerDay.HasValue && houseInfo.HoursPerWeek.HasValue)
+                    lc.Add(new CNV_CHAR //Часы
+                    {
+                        CHARCD = 231,
+                        CHARNAME = "Часы",
+                        LSHET = Consts.GetLs(houseInfo.Lshet),
+                        DATE_ = Consts.FirstDate,
+                        VALUE_ = houseInfo.HoursPerWeek*houseInfo.HoursPerDay
+                    });
                 lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по закр.схеме (Гкал/ч) 
                 {
                     CHARCD = 232,
@@ -1041,51 +1036,6 @@ namespace _047_Tver
             nm.SaveNachoplRecords(aConverter_RootSettings.FirebirdStringConnection);
 
             StepFinish();
-
-            //if (record.StringNumber == 1)
-            //    {
-            //        var ndef = new CNV_NACH
-            //        {
-            //            REGIMCD = regimcd,
-            //            REGIMNAME = regimname,
-            //            SERVICECD = servicecd,
-            //            SERVICENAME = servicename,
-            //            TYPE_ = 0
-            //        };
-            //        nm.RegisterNach(ndef, record.Lshet, record.FileDate.Month,
-            //            record.FileDate.Year, record.NachSum, record.Reculc, record.FileDate,
-            //            String.Format("N{0}{1}", i, record.Lshet));
-
-            //        nm.RegisterBeginSaldo(record.Lshet, record.FileDate.Month, record.FileDate.Year, servicecd,
-            //            servicename,
-            //            record.BegSaldo);
-            //        nm.RegisterEndSaldo(record.Lshet, record.FileDate.Month, record.FileDate.Year, servicecd,
-            //            servicename,
-            //            record.EndSaldo);
-            //    }
-            //    else
-            //    {
-            //        Record prevRecord = allRecrods[i - (record.StringNumber - 1)];
-            //        record.FileDate = prevRecord.FileDate;
-            //        record.Lshet = prevRecord.Lshet;
-            //    }
-
-            //    if (record.PaySum != 0)
-            //    {
-            //        var odef = new CNV_OPLATA
-            //        {
-            //            SERVICECD = servicecd,
-            //            SERVICENAME = servicename,
-            //            SOURCECD = 999,
-            //            SOURCENAME = "Корректировка"
-            //        };
-
-            //        DateTime payTo = record.PayTo ?? record.FileDate;
-            //        DateTime payDate = record.PayDate ?? record.FileDate;
-
-            //        nm.RegisterOplata(odef, record.Lshet, payTo.Month, payTo.Year,
-            //            record.PaySum, payDate, payDate, String.Format("P{0}{1}", i, record.Lshet));
-            //    }
         }
     }
 
@@ -1818,9 +1768,9 @@ namespace _047_Tver
         public string WatercaptureType;
         public string HasIPU;
         public string NachODPU;
-        public decimal Square;
-        public int HoursPerWeek;
-        public int HoursPerDay;
+        public decimal? Square;
+        public int? HoursPerWeek;
+        public int? HoursPerDay;
         public string HouseType;
 
         public decimal DopGVSCloseGKal;
@@ -1838,32 +1788,38 @@ namespace _047_Tver
             ContractId = Int32.Parse(dr[1].ToString());
             FullName = dr[2].ToString();
             Address = dr[3].ToString();
-            WatercaptureType = dr[18].ToString().ToLower().Trim();
-            HasIPU = dr[19].ToString().ToLower().Trim();
-            NachODPU = dr[20].ToString().ToLower().Trim();
-            Square = Decimal.Parse(dr[22].ToString(), NumberStyles.Float);
-            HoursPerWeek = Int32.Parse(dr[16].ToString());
-            HoursPerDay = Int32.Parse(dr[17].ToString());
-            HouseType = dr[24].ToString().ToLower().Trim();
+            WatercaptureType = dr[19].ToString().ToLower().Trim();
+            HasIPU = dr[20].ToString().ToLower().Trim();
+            NachODPU = dr[21].ToString().ToLower().Trim();
+            Square = String.IsNullOrWhiteSpace(dr[22].ToString())
+                ? (decimal?) null
+                : Decimal.Parse(dr[22].ToString(), NumberStyles.Float);
+            HoursPerWeek = String.IsNullOrWhiteSpace(dr[17].ToString())
+                ? (int?) null
+                : Int32.Parse(dr[17].ToString());
+            HoursPerDay = String.IsNullOrWhiteSpace(dr[18].ToString())
+                ? (int?) null
+                : Int32.Parse(dr[18].ToString());
+            HouseType = dr[23].ToString().ToLower().Trim();
 
-            DopGVSCloseGKal = String.IsNullOrWhiteSpace(dr[10].ToString())
-                ? 0
-                : Math.Round(Decimal.Parse(dr[10].ToString(), NumberStyles.Float), 4);
-            DopGVSCloseTn = String.IsNullOrWhiteSpace(dr[11].ToString())
+            DopGVSCloseGKal = String.IsNullOrWhiteSpace(dr[11].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[11].ToString(), NumberStyles.Float), 4);
-            DopGVSOpenGKal = String.IsNullOrWhiteSpace(dr[12].ToString())
+            DopGVSCloseTn = String.IsNullOrWhiteSpace(dr[12].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[12].ToString(), NumberStyles.Float), 4);
-            DopGVSOpenTn = String.IsNullOrWhiteSpace(dr[13].ToString())
+            DopGVSOpenGKal = String.IsNullOrWhiteSpace(dr[13].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[13].ToString(), NumberStyles.Float), 4);
-            DopOtoplGKal = String.IsNullOrWhiteSpace(dr[14].ToString())
+            DopGVSOpenTn = String.IsNullOrWhiteSpace(dr[14].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[14].ToString(), NumberStyles.Float), 4);
-            DopOtoplTn = String.IsNullOrWhiteSpace(dr[15].ToString())
+            DopOtoplGKal = String.IsNullOrWhiteSpace(dr[15].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[15].ToString(), NumberStyles.Float), 4);
+            DopOtoplTn = String.IsNullOrWhiteSpace(dr[16].ToString())
+                ? 0
+                : Math.Round(Decimal.Parse(dr[16].ToString(), NumberStyles.Float), 4);
             Lshet = Id.ToString();
         }
 
@@ -1890,6 +1846,8 @@ namespace _047_Tver
             var groups = HouseRegex.Match(house).Groups;
             abonent.HOUSENO = groups[1].Value.Trim();
             abonent.HOUSEPOSTFIX = groups[2].Value.Trim();
+            if (String.IsNullOrWhiteSpace(abonent.HOUSENO)) abonent.HOUSENO = null;
+            if (String.IsNullOrWhiteSpace(abonent.HOUSEPOSTFIX)) abonent.HOUSEPOSTFIX = null;
         }
 
         public void ExtractFio(ref CNV_ABONENT house)
@@ -2292,7 +2250,7 @@ namespace _047_Tver
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             //fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
             //Iterate();
-            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1", "0" });
             Iterate();
         }
     }
