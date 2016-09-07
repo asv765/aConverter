@@ -10,6 +10,7 @@ declare variable EMAIL varchar(100) = null;
 declare variable PHONE varchar(100) = null;
 declare variable ENDDATE timestamp = null;
 declare variable STARTDATE timestamp = null;
+declare variable UNIQUECITYZENID varchar(45) = null;
 declare variable F varchar(50) = null;
 declare variable O varchar(50) = null;
 declare variable I varchar(50) = null;
@@ -37,10 +38,10 @@ begin
     where LSHET in (select LSHET
                     from CNV$CITIZENS);
   end
-  for select LSHET, CITIZENID, F, I, O, STARTDATE, ENDDATE, DOCUMENTNAME, DORGNAME, VREMREG, PRIBYT, COMMENT_
+  for select LSHET, CITIZENID, F, I, O, STARTDATE, ENDDATE, DOCUMENTNAME, DORGNAME, VREMREG, PRIBYT, COMMENT_, NOMER
       from CNV$CITIZENS
       order by LSHET, CITIZENID
-      into :LSHET, :CITIZENID, :F, :I, :O, :STARTDATE, :ENDDATE, :PHONE, :EMAIL, :ISREGISTRED, :ISLIVING, :ISOWNER
+      into :LSHET, :CITIZENID, :F, :I, :O, :STARTDATE, :ENDDATE, :PHONE, :EMAIL, :ISREGISTRED, :ISLIVING, :ISOWNER, :UNIQUECITYZENID
   do
   begin
     C_STARTDATE = null;
@@ -83,9 +84,9 @@ begin
 
     insert into CITYZENS (CITYZEN_ID, LSHET, ISMAINCITYZEN, CTZFIO, CTZNAME, CTZPARENTNAME, HIDDEN, OWNERSHIPNUMERATOR,
                           OWNERSHIPDENOMINATOR, OWNERSHIPTYPE, CITIZENSTATEID, STARTDATE, ENDDATE, REGISTRATIONTYPE,
-                          ARRIVEDATE, LEAVEDATE)
+                          ARRIVEDATE, LEAVEDATE, UNIQUECITYZENID)
     values (:CITIZENID, :LSHET, 0, :F, :I, :O, :C_HIDDEN, :C_OSHIPNUM, :C_OSHIPDEN, :C_OSHIPTYPE, :C_STATE,
-            :C_STARTDATE, :C_ENDDATE, :C_REGTYPE, :C_ARRIVEDATE, :C_LEAVEDATE);
+            :C_STARTDATE, :C_ENDDATE, :C_REGTYPE, :C_ARRIVEDATE, :C_LEAVEDATE, :UNIQUECITYZENID);
 
     if (:EMAIL is not null) then
       insert into CITYZENADDITIONCHARS (CITYZEN_ID, ADDITIONALCHARCD, SIGNIFICANCE)

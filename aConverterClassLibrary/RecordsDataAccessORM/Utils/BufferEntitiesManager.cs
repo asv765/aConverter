@@ -36,6 +36,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "CHARVALS",
                 "CITIZENMIGRATION",
                 "CITIZENS",
+                "CITYZENLGOTA",
+                "LGOTSUMMA",
                 "CNTRSIND",
                 "COUNTERS",
                 "DOGOVOR",
@@ -144,7 +146,10 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_01700_PERERASHETIMPORT");
                 l.Add("CNV_02100_EXTLSHETS");
                 l.Add("CNV_03000_CITIZENS_TVER");
+                l.Add("CNV_03050_CITIZENSMIGR_TVER");
                 l.Add("CNV_03100_TVER_ABONENTDOLYA");
+                l.Add("CNV_3200_CITYZENLGOTA_TVER");
+                
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {

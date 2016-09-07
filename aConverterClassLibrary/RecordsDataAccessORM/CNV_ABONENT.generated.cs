@@ -413,6 +413,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		private DateTime? _cLOSEDATE;
+		public virtual DateTime? CLOSEDATE
+		{
+			get
+			{
+				return this._cLOSEDATE;
+			}
+			set
+			{
+				this._cLOSEDATE = value;
+			}
+		}
+		
 	}
 }
 #pragma warning restore 1591
