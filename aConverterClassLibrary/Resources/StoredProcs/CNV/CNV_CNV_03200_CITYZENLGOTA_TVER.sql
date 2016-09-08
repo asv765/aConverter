@@ -1,5 +1,5 @@
 ﻿SET TERM ^ ;
-create or alter procedure CNV$CNV_3200_CITYZENLGOTA_TVER (
+create or alter procedure CNV$CNV_03200_CITYZENLGOTA_TVER (
     NEEDDELETE smallint)
 as
 declare variable CITYZENID integer;

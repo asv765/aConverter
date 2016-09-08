@@ -322,8 +322,9 @@
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_02100_EXTLSHETS.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_03000_CITIZENS_TVER.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03100_TVER_ABONENTDOLYA.sql" />
-    <None Include="Resources\StoredProcs\CNV\CNV_CNV_3200_CITYZENLGOTA_TVER.sql" />
-    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03050_CITIZENSMIGRATION_TVER.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03200_CITYZENLGOTA_TVER.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03050_CITIZENSMIGR_TVER.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03300_LGOTSUMMA.sql" />
     <Content Include="Resources\StoredProcs\CNV\cnv_cnv_documentnumerator.sql" />
     <Content Include="Resources\StoredProcs\CNV_ADD_WRONG_PARAMETER_EXCEPTION.sql" />
   </ItemGroup>

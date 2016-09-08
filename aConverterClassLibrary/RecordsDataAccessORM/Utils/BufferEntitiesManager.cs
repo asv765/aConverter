@@ -148,8 +148,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_03000_CITIZENS_TVER");
                 l.Add("CNV_03050_CITIZENSMIGR_TVER");
                 l.Add("CNV_03100_TVER_ABONENTDOLYA");
-                l.Add("CNV_3200_CITYZENLGOTA_TVER");
-                
+                l.Add("CNV_03200_CITYZENLGOTA_TVER");
+                l.Add("CNV_03300_LGOTSUMMA");   
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {

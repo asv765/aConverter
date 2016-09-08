@@ -1249,9 +1249,9 @@ namespace aConverterClassLibrary.Properties {
         ///    where CITYZEN_ID in (select distinct CITIZENID
         ///                         from CNV$CITIZENMIGRA [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string CNV_CNV_03050_CITIZENSMIGRATION_TVER {
+        internal static string CNV_CNV_03050_CITIZENSMIGR_TVER {
             get {
-                return ResourceManager.GetString("CNV_CNV_03050_CITIZENSMIGRATION_TVER", resourceCulture);
+                return ResourceManager.GetString("CNV_CNV_03050_CITIZENSMIGR_TVER", resourceCulture);
             }
         }
         
@@ -1279,7 +1279,7 @@ namespace aConverterClassLibrary.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
-        ///create or alter procedure CNV$CNV_3200_CITYZENLGOTA_TVER (
+        ///create or alter procedure CNV$CNV_03200_CITYZENLGOTA_TVER (
         ///    NEEDDELETE smallint)
         ///as
         ///declare variable CITYZENID integer;
@@ -1294,11 +1294,35 @@ namespace aConverterClassLibrary.Properties {
         ///  begin
         ///    delete from CITYZENLGOTA
         ///    where CITYZEN_ID in (select CITYZENID
-        ///                         from CN [rest of string was truncated]&quot;;.
+        ///                         from C [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string CNV_CNV_3200_CITYZENLGOTA_TVER {
+        internal static string CNV_CNV_03200_CITYZENLGOTA_TVER {
             get {
-                return ResourceManager.GetString("CNV_CNV_3200_CITYZENLGOTA_TVER", resourceCulture);
+                return ResourceManager.GetString("CNV_CNV_03200_CITYZENLGOTA_TVER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///create or alter procedure CNV$CNV_03300_LGOTSUMMA
+        ///as
+        ///declare variable YEAR_ integer;
+        ///declare variable MONTH_ integer;
+        ///declare variable YEAR2 integer;
+        ///declare variable MONTH2 integer;
+        ///declare variable LSHET varchar(10);
+        ///declare variable SUMMA numeric(18,4);
+        ///declare variable REGIMCD integer;
+        ///declare variable SERVICECD integer;
+        ///declare variable DATE_ date;
+        ///declare variable FYEAR integer;
+        ///declare variable FMONTH integer;
+        ///declare variable FDAY integer;
+        ///declare variable DOCUMENTCD varc [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_03300_LGOTSUMMA {
+            get {
+                return ResourceManager.GetString("CNV_CNV_03300_LGOTSUMMA", resourceCulture);
             }
         }
         

@@ -64,10 +64,10 @@ namespace _047_Tver
 
         public static readonly ExcelFileInfo HousesCharsFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки_кор2.xls",
             ListName = "общие данные по жилым домам",
             StartDataRow = 5,
-            EndDataRow = 217
+            EndDataRow = 241
         };
 
         public static readonly ExcelFileInfo EmptyHousesCharsFile = new ExcelFileInfo
@@ -77,6 +77,14 @@ namespace _047_Tver
             StartDataRow = 7,
             EndDataRow = 231
         };
+
+        //public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
+        //{
+        //    FileName = aConverter_RootSettings.SourceDbfFilePath + @"\1.1 Отчет по льготникам за август 2016.xls",
+        //    ListName = "66181",
+        //    StartDataRow = 3,
+        //    EndDataRow = 2462
+        //};
 
         public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
         {
@@ -88,10 +96,10 @@ namespace _047_Tver
 
         public static readonly ExcelFileInfo LgotaRecodeTableFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировки льгот.xlsx",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировки льгот 2.xlsx",
             ListName = "Лист1",
             StartDataRow = 2,
-            EndDataRow = 15
+            EndDataRow = 18
         };
 
         public static readonly string SpravkaFolder = aConverter_RootSettings.SourceDbfFilePath + "\\";
@@ -540,10 +548,10 @@ namespace _047_Tver
 
             DateTime[] dates = { /*new DateTime(2016, 03, 01), new DateTime(2016, 04, 01),*/ new DateTime(2016, 07, 01) };
 
-            StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
-            //StepStart(dates.Length);
-            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
-            //foreach (var date in dates)
+            //StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
+            StepStart(dates.Length);
+            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            foreach (var date in dates)
             {
                 DataTable moneyTable = Utils.ReadExcelFile(
                     Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
@@ -1064,10 +1072,10 @@ namespace _047_Tver
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
             long recno = 0;
-            //StepStart(dates.Length);
-            StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
-            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
-            //foreach (var date in dates)
+            StepStart(dates.Length);
+            //StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
+            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            foreach (var date in dates)
             {
                 DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
@@ -1224,13 +1232,14 @@ namespace _047_Tver
                             "UPDATE CNV$ABONENT SET HOUSECD = {0} WHERE HOUSECD = {1}", houseChars.HouseId,
                             result[0].HOUSECD));
                         context.SaveChanges();
-                        lch.Add(new CNV_CHARSHOUSES
-                        {
-                            CHARCD = 206001,
-                            DATE_ = Consts.FirstDate,
-                            VALUE_ = houseChars.TotalSquare,
-                            HOUSECD = houseChars.HouseId
-                        });
+                        if (houseChars.TotalSquare.HasValue)
+                            lch.Add(new CNV_CHARSHOUSES
+                            {
+                                CHARCD = 206001,
+                                DATE_ = Consts.FirstDate,
+                                VALUE_ = houseChars.TotalSquare.Value,
+                                HOUSECD = houseChars.HouseId
+                            });
                         if (houseChars.HeatingSquare.HasValue)
                             lch.Add(new CNV_CHARSHOUSES
                             {
@@ -1397,10 +1406,18 @@ namespace _047_Tver
                 {
                     var lgota = new Lgota(lgotaTable.Rows[i]);
 
+                    DateTime date = new DateTime(2016,07,01);
                     var l = new CNV_LGOTSUMMA
                     {
                         LSHET = Consts.GetLs(lgota.Lshet),
-                        
+                        MONTH_ = date.Month,
+                        YEAR_ = date.Year,
+                        MONTH2 = date.Month,
+                        YEAR2 = date.Year,
+                        DATE_VV = date,
+                        TYPE_ = 0,
+                        REGIMCD = 10,
+                        REGIMNAME = "Неизвестен"
                     };
 
                     bool founded = false;
@@ -1409,6 +1426,7 @@ namespace _047_Tver
                         if (recodeTable[j].LgotaName == lgota.Category)
                         {
                             l.LGOTACD = recodeTable[j].LgotaId;
+                            //l.LGOTANAME = recodeTable[j].LgotaName;
                             founded = true;
                             break;
                         }
@@ -1435,12 +1453,30 @@ namespace _047_Tver
                     }
 
                     l.CITYZENID = result[0];
+
+                    l.SERVICECD = 3;
+                    l.SUMMA = lgota.SummaOtopl;
+                    l.SERVICENAME = "Отопление";
                     lg.Add(l);
 
-                    sql = String.Format(
-                        @"UPDATE CNV$CITIZENS SET NOMER = '{0}' WHERE CITIZENID = {1}",
-                        lgota.PKU, l.CITYZENID);
-                    context.ExecuteNonQuery(sql, CommandType.Text, null);
+                    lg.Add(new CNV_LGOTSUMMA
+                    {
+                        SERVICECD = 5,
+                        SUMMA = lgota.SummaGVS,
+                        SERVICENAME = "Гор. водоснабжение",
+                        LSHET = l.LSHET,
+                        MONTH_ = date.Month,
+                        YEAR_ = date.Year,
+                        MONTH2 = date.Month,
+                        YEAR2 = date.Year,
+                        DATE_VV = date,
+                        TYPE_ = 0,
+                        REGIMCD = 10,
+                        REGIMNAME = "Неизвестен",
+                        CITYZENID = l.CITYZENID,
+                        LGOTACD = l.LGOTACD,
+                        LGOTANAME = l.LGOTANAME
+                    });;
 
                     Iterate();
                 }
@@ -2060,10 +2096,12 @@ namespace _047_Tver
     {
         public string District;
         public string Address;
-        public decimal TotalSquare;
+        public decimal? TotalSquare;
         public decimal? HeatingSquare;
         public int HouseId;
         public bool HasODNCounter;
+        public string AlgorithmInOtoplPeriod;
+        public string AlgorithmInNeOtoplPeriod;
 
         public string Street;
         public string HouseNo;
@@ -2075,40 +2113,38 @@ namespace _047_Tver
 
         public HouseChars(DataRow dr)
         {
-            try
-            {
-                District = dr[2].ToString().Trim();
-                Address = dr[4].ToString().Trim();
-                TotalSquare = Decimal.Parse(dr[14].ToString());
-                HeatingSquare = String.IsNullOrWhiteSpace(dr[15].ToString())
-                    ? (decimal?) null
-                    : Decimal.Parse(dr[15].ToString());
-                HouseId = Int32.Parse(dr[31].ToString());
-                HasODNCounter = dr[11].ToString().ToLower().Trim() == "да";
 
-                string[] separetedAddress = Address.Split(',');
-                if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
-                Street = separetedAddress[0].Trim();
-                for (int i = 0; i < Consts.Prefixes.Length; i++)
-                {
-                    Street = Street.Replace(Consts.Prefixes[i], "");
-                }
-                Street = Street.Replace(".", "").Trim();
-                string house = separetedAddress[1];
-                var korpusMatch = KorpusRegex.Match(house);
-                if (korpusMatch.Success)
-                {
-                    KorpusNo = Int32.Parse(korpusMatch.Groups[1].Value);
-                    house = house.Replace(korpusMatch.Value, "").Trim();
-                }
-                var groups = HouseRegex.Match(house).Groups;
-                HouseNo = groups[1].Value.Trim();
-                HousePostfix = groups[2].Value.Trim();
-            }
-            catch (Exception ex)
+            District = dr[2].ToString().Trim();
+            Address = dr[4].ToString().Trim();
+            TotalSquare = String.IsNullOrWhiteSpace(dr[16].ToString())
+                ? (decimal?)null
+                : Decimal.Parse(dr[16].ToString());
+            HeatingSquare = String.IsNullOrWhiteSpace(dr[17].ToString())
+                ? (decimal?) null
+                : Decimal.Parse(dr[17].ToString());
+            HouseId = Int32.Parse(dr[33].ToString());
+            HasODNCounter = dr[13].ToString().ToLower().Trim() == "да";
+            AlgorithmInOtoplPeriod = dr[11].ToString().ToLower().Trim();
+            AlgorithmInNeOtoplPeriod = dr[12].ToString().ToLower().Trim();
+
+            string[] separetedAddress = Address.Split(',');
+            if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
+            Street = separetedAddress[0].Trim();
+            for (int i = 0; i < Consts.Prefixes.Length; i++)
             {
-                throw;
+                Street = Street.Replace(Consts.Prefixes[i], "");
             }
+            Street = Street.Replace(".", "").Trim();
+            string house = separetedAddress[1];
+            var korpusMatch = KorpusRegex.Match(house);
+            if (korpusMatch.Success)
+            {
+                KorpusNo = Int32.Parse(korpusMatch.Groups[1].Value);
+                house = house.Replace(korpusMatch.Value, "").Trim();
+            }
+            var groups = HouseRegex.Match(house).Groups;
+            HouseNo = groups[1].Value.Trim();
+            HousePostfix = groups[2].Value.Trim();
         }
     }
 
@@ -2268,10 +2304,10 @@ namespace _047_Tver
                     var lgota = new Lgota(lgotaTable.Rows[i]);
 
                     // поиск деактивированных льгот
-                    if (lgota.EndDate.HasValue && lgota.EndDate < DateTime.Now)
-                        endedLgots.Add(lgota);
+                    //if (lgota.EndDate.HasValue && lgota.EndDate < DateTime.Now)
+                    //    endedLgots.Add(lgota);
 
-                    continue;
+                    //continue;
                     string sql = String.Format(
                         @"select CITIZENID from cnv$citizens cn where cn.lshet = '{0}' and (cn.f || ' ' || cn.i || iif(cn.o is not null, ' ' || cn.o, '')) = '{1}'",
                         Consts.GetLs(lgota.Lshet), lgota.FIO.Replace("  ", " "));
@@ -2819,7 +2855,7 @@ namespace _047_Tver
             SetStepsCount(1);
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            fbm.ExecuteProcedure("CNV$CNV_3200_CITYZENLGOTA_TVER", new []{"1"});
+            fbm.ExecuteProcedure("CNV$CNV_03200_CITYZENLGOTA_TVER", new []{"1"});
             Iterate();
             StepFinish();
         }
