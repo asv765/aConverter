@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -67,7 +68,7 @@ namespace _047_Tver
             FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки_кор2.xls",
             ListName = "общие данные по жилым домам",
             StartDataRow = 5,
-            EndDataRow = 241
+            EndDataRow = 242
         };
 
         public static readonly ExcelFileInfo EmptyHousesCharsFile = new ExcelFileInfo
@@ -78,21 +79,21 @@ namespace _047_Tver
             EndDataRow = 231
         };
 
-        //public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
-        //{
-        //    FileName = aConverter_RootSettings.SourceDbfFilePath + @"\1.1 Отчет по льготникам за август 2016.xls",
-        //    ListName = "66181",
-        //    StartDataRow = 3,
-        //    EndDataRow = 2462
-        //};
-
         public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Отчет по льготникам за июль 2016 (2).xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\1.1 Отчет по льготникам за август 2016.xls",
             ListName = "66181",
             StartDataRow = 3,
-            EndDataRow = 2433
+            EndDataRow = 2462
         };
+
+        //public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
+        //{
+        //    FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Отчет по льготникам за июль 2016 (2).xls",
+        //    ListName = "66181",
+        //    StartDataRow = 3,
+        //    EndDataRow = 2433
+        //};
 
         public static readonly ExcelFileInfo LgotaRecodeTableFile = new ExcelFileInfo
         {
@@ -141,7 +142,7 @@ namespace _047_Tver
         }
 
         public static readonly DateTime FirstDate = new DateTime(2014, 07, 01);
-        public static readonly string[] Prefixes = { "улица", "ул.", "пр-д.", "б-р.", "ш.", "пр-т.", "пер.", "ул", "проезд." };
+        public static readonly string[] Prefixes = { "улица", "ул.", "пр-д.", "б-р.", "ш.", "пр-т.", "пер.", "ул", "проезд.", "пр.", "пр-т" };
     }
 
     public class ExcelFileInfo
@@ -543,7 +544,7 @@ namespace _047_Tver
             var lc = new List<CNV_CHAR>();
 
             var minDate = new DateTime(2014, 07, 01);
-            var maxDate = new DateTime(2016, 07, 01);
+            var maxDate = new DateTime(2016, 08, 01);
 
 
             DateTime[] dates = { /*new DateTime(2016, 03, 01), new DateTime(2016, 04, 01),*/ new DateTime(2016, 07, 01) };
@@ -1044,7 +1045,7 @@ namespace _047_Tver
             BufferEntitiesManager.DropTableData("CNV$NACHOPL");
 
             var minDate = new DateTime(2014, 07, 01);
-            var maxDate = new DateTime(2016, 07, 01);
+            var maxDate = new DateTime(2016, 08, 01);
 
             DateTime[] dates = { new DateTime(2016, 07, 01) };
             //DateTime[] dates =
@@ -1210,6 +1211,7 @@ namespace _047_Tver
             ExcelFileInfo houseFileInfo = Consts.HousesCharsFile;
             DataTable houseCharsTable = Utils.ReadExcelFile(houseFileInfo.FileName, houseFileInfo.ListName);
             StepStart(houseCharsTable.Rows.Count);
+            string notFounded = "";
             using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
                 for (int i = houseFileInfo.StartDataRow - 2; i <= houseFileInfo.EndDataRow - 2; i++)
@@ -1262,9 +1264,19 @@ namespace _047_Tver
                                 });
                             }
                     }
+                    else
+                    {
+                        notFounded += houseChars.Address + "\r\n";
+                    }
 
                     Iterate();
                 }
+            }
+            if (!String.IsNullOrWhiteSpace(notFounded))
+            {
+                File.WriteAllText(aConverter_RootSettings.SourceDbfFilePath + "\\housesNotFounded.txt", notFounded);
+                Task.Run(() => MessageBox.Show(
+                    "Обнаружены дома, в которых отсутсвуют абоненты (см. файл в директории с исходными данными housesNotFounded.txt)"));
             }
             StepFinish();
 
@@ -1298,7 +1310,7 @@ namespace _047_Tver
                 recodeTable.Add(new Recode(recodeDt.Rows[i]));
             }
             recodeDt.Dispose();
-
+            string badPeople = "";
             StepStart(lgotaTable.Rows.Count);
             using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
@@ -1331,16 +1343,13 @@ namespace _047_Tver
                     var result = context.ExecuteQuery<int>(sql, CommandType.Text, null);
                     if (result.Count == 0)
                     {
-                        Task.Run(
-                            () => MessageBox.Show(String.Format("Не найден льготник {0} {1}", lgota.Lshet, lgota.FIO)));
+                        badPeople += String.Format("Не найден льготник {0} {1}\r\n", lgota.Lshet, lgota.FIO);
                         continue;
                     }
                     if (result.Count > 1)
                     {
-                        Task.Run(
-                            () =>
-                                MessageBox.Show(String.Format("Найдено несколько льготников ({2}) {0} {1}", lgota.Lshet,
-                                    lgota.FIO, result.Count)));
+                        badPeople += String.Format("Найдено несколько льготников ({2}) {0} {1}\r\n", lgota.Lshet,
+                            lgota.FIO, result.Count);
                         continue;
                     }
 
@@ -1350,10 +1359,17 @@ namespace _047_Tver
                     sql = String.Format(
                         @"UPDATE CNV$CITIZENS SET NOMER = '{0}' WHERE CITIZENID = {1}",
                         lgota.PKU, l.CITYZENID);
-                    context.ExecuteNonQuery(sql, CommandType.Text, null);
+                    context.ExecuteNonQuery(sql);
+                    context.SaveChanges();
 
                     Iterate();
                 }
+            }
+            if (!String.IsNullOrWhiteSpace(badPeople))
+            {
+                File.WriteAllText(aConverter_RootSettings.SourceDbfFilePath + "\\badLgotaPeople.txt", badPeople);
+                Task.Run(() => MessageBox.Show(
+                    "Обнаружены проблемные льготники (см. файл в директории с исходными данными badLgotaPeople.txt)"));
             }
             StepFinish();
 
@@ -1370,6 +1386,73 @@ namespace _047_Tver
                 LgotaName = dr[0].ToString().Trim();
                 LgotaId = Int32.Parse(dr[1].ToString());
             }
+        }
+    }
+
+    public class ConvertGPU : ConvertCase
+    {
+        public ConvertGPU()
+        {
+            ConvertCaseName = "ГПУ - групповые приборы учета";
+            Position = 120;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(2);
+            var lca = new List<CNV_LCHAR>();
+            ExcelFileInfo houseFileInfo = Consts.HousesCharsFile;
+            DataTable houseCharsTable = Utils.ReadExcelFile(houseFileInfo.FileName, houseFileInfo.ListName);
+            StepStart(houseCharsTable.Rows.Count);
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = houseFileInfo.StartDataRow - 2; i <= houseFileInfo.EndDataRow - 2; i++)
+                {
+                    var houseChars = new HouseChars(houseCharsTable.Rows[i]);
+                    if (!houseChars.HasODNCounter || (
+                        String.IsNullOrWhiteSpace(houseChars.AlgorithmInNeOtoplPeriod) ||
+                        houseChars.AlgorithmInNeOtoplPeriod.ToLower() == "счетчик ипу" ||
+                        houseChars.AlgorithmInNeOtoplPeriod.ToLower() == "нет")) continue;
+                    string query = String.Format(@" select * from cnv$abonent where housecd = {0}", houseChars.HouseId);
+                    var result = context.ExecuteQuery<CNV_ABONENT>(query);
+                    for (int j = 0; j < result.Count; j++)
+                    {
+                        var abonent = result[j];
+                        var l = new CNV_LCHAR
+                        {
+                            LSHET = abonent.LSHET,
+                            DATE_ = new DateTime(2016, 06, 01),
+                            LCHARCD = 28,
+                            LCHARNAME = "Алгоритм ГПУ"
+                        };
+                        switch (houseChars.AlgorithmInNeOtoplPeriod.ToLower())
+                        {
+                            case "не указан":
+                                l.VALUE_ = 0;
+                                break;
+                            case "1,2":
+                                l.VALUE_ = 7;
+                                break;
+                            case "1":
+                            case "2":
+                            case "3":
+                            case "4":
+                            case "5":
+                            case "6":
+                                l.VALUE_ = Int32.Parse(houseChars.AlgorithmInNeOtoplPeriod);
+                                break;
+                            default:
+                                throw new Exception("Неизвестный алгоритм ГПУ " + houseChars.AlgorithmInNeOtoplPeriod);
+                        }
+                        lca.Add(l);
+                    }
+                    Iterate();
+                }
+            }
+            StepFinish();
+
+            SaveList(lca, Consts.InsertRecordCount);
         }
     }
 
@@ -1406,7 +1489,7 @@ namespace _047_Tver
                 {
                     var lgota = new Lgota(lgotaTable.Rows[i]);
 
-                    DateTime date = new DateTime(2016,07,01);
+                    DateTime date = new DateTime(2016,08,01);
                     var l = new CNV_LGOTSUMMA
                     {
                         LSHET = Consts.GetLs(lgota.Lshet),
@@ -1767,7 +1850,7 @@ namespace _047_Tver
             if (!String.IsNullOrWhiteSpace(abonent.O)) abonent.O = abonent.O.Trim();
         }
 
-        private static Regex addressRegex = new Regex(@"(?<index>\d{6}).+г\. Тверь,(?<district>[^,]+),(?<street>[^,]+)");
+        private static Regex addressRegex = new Regex(@"(?<index>\d{6}).+г\. ?Тверь,(?<district>[^,]+),(?<street>[^,]+)");
         private static Regex houseRegex = new Regex(@"д[\., ]+([^ ,]+)");
         private static Regex korpusRegex = new Regex(@"корп[\., ]+([^ ,]+)");
         private static Regex flatRegex = new Regex(@"кв[\., ]+([^ ,]+)");
@@ -1777,6 +1860,7 @@ namespace _047_Tver
         public void ExctractAddress(ref CNV_ABONENT abonent)
         {
             if (String.IsNullOrWhiteSpace(Address)) return;
+            Address = Address.Replace("  ", " ");
             abonent.TOWNSNAME = "Тверь";
             abonent.RAYONNAME = "Тверская область";
             abonent.RAYONKOD = 69;
@@ -2124,8 +2208,8 @@ namespace _047_Tver
                 : Decimal.Parse(dr[17].ToString());
             HouseId = Int32.Parse(dr[33].ToString());
             HasODNCounter = dr[13].ToString().ToLower().Trim() == "да";
-            AlgorithmInOtoplPeriod = dr[11].ToString().ToLower().Trim();
-            AlgorithmInNeOtoplPeriod = dr[12].ToString().ToLower().Trim();
+            AlgorithmInOtoplPeriod = dr[11].ToString().Trim();
+            AlgorithmInNeOtoplPeriod = dr[12].ToString().Trim();
 
             string[] separetedAddress = Address.Split(',');
             if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
