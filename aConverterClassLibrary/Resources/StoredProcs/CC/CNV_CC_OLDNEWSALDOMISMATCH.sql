@@ -19,6 +19,10 @@ declare variable FNATH decimal(18,4);
 declare variable PROCHL decimal(18,4);
 declare variable OPLATA decimal(18,4);
 declare variable COUNTEDDEBET decimal(18,4);
+declare variable ID integer = 0;
+declare variable YEARMONTH integer = 0;
+declare variable OLDYEARMONTH integer = 0;
+declare variable OLDDEBET decimal(18,4) = 0;
 BEGIN
   /* Тестирование, Диагностика */
   IF (actiontype = 0 OR actiontype = 1 ) THEN BEGIN
@@ -48,6 +52,7 @@ BEGIN
         2 - (Не реализовано) Скорректировать суммой изменений сальдо на конец предыдущего месяца,
         3 - (Не реализовано) Скорректировать сальдо на начало текущего месяца с суммой изменений в текущем месяце,
         4 - Пересчитать сальдо вперед с начала истории,
+		5 - Восстановить сальдо вперед путем копирования сальдо на конец месяца и вставки его в начало следующего
  */
   ELSE IF (actiontype = 2) THEN BEGIN
      IF (saldocorrectiontype = 1) THEN BEGIN
@@ -98,6 +103,26 @@ BEGIN
            END
         END
      END
+	if (SALDOCORRECTIONTYPE = 5) then
+	begin
+	  for select ID, LSHET, YEAR_ * 12 + MONTH_, EDEBET, SERVICECD
+	      from CNV$NACHOPL
+	      order by LSHET, SERVICECD, YEAR_, MONTH_
+	      into :ID, :LSHET, :YEARMONTH, :EDEBET, :SERVICECD
+	  do
+	  begin
+	    if (LSHET = OLDLSHET and
+	        SERVICECD = OLDSERVICECD and
+	        YEARMONTH = OLDYEARMONTH + 1) then
+	      update CNV$NACHOPL
+	      set BDEBET = :OLDDEBET
+	      where ID = :ID;
+	    OLDLSHET = :LSHET;
+	    OLDYEARMONTH = :YEARMONTH;
+	    oldservicecd = :servicecd;
+	    OLDDEBET = :EDEBET;
+	  end
+	end
   END
   ELSE
      EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0, 1 или 2 не поддерживается процедурой';

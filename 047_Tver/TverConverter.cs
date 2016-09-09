@@ -19,26 +19,26 @@ namespace _047_Tver
     {
         public static readonly ExcelFileInfo RoomingReportFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\учет жильцов на 22.08.16 для загрузки коррект(+4 дома с 01.07.16).xls",
-            ListName = "паспортный стол",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\учет жильцов на 09.09.16 для загрузки.xls",
+            ListName = "учет жильцов",
             StartDataRow = 6,
-            EndDataRow = 39142
+            EndDataRow = 41026
         };
 
         public static readonly ExcelFileInfo LsInfoFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ЛС на 29.07.16_для загрузки_кор5.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ЛС на 09.09.16_для загрузки.xls",
             ListName = "66184",
             StartDataRow = 3,
-            EndDataRow = 17701
+            EndDataRow = 18449
         };
 
         public static readonly ExcelFileInfo CountersInfoFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ИПУ с историей показаний_для загрузки.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ИПУ с историей показаний_для загрузки кор1.xls",
             ListName = "610",
             StartDataRow = 3,
-            EndDataRow = 4878
+            EndDataRow = 5190
         };
 
         public static readonly ExcelFileInfo RecodeTableFile = new ExcelFileInfo
@@ -73,27 +73,27 @@ namespace _047_Tver
 
         public static readonly ExcelFileInfo EmptyHousesCharsFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\данные по жилым домам ФЛ с нежилыми помещениями_без ОДПУ.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\данные по жилым домам ФЛ с нежилыми помещениями_без ОДПУ_кор2.xls",
             ListName = "без ОДПУ для загрузки",
             StartDataRow = 7,
-            EndDataRow = 231
-        };
-
-        public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
-        {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\1.1 Отчет по льготникам за август 2016.xls",
-            ListName = "66181",
-            StartDataRow = 3,
-            EndDataRow = 2462
+            EndDataRow = 250
         };
 
         //public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
         //{
-        //    FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Отчет по льготникам за июль 2016 (2).xls",
+        //    FileName = aConverter_RootSettings.SourceDbfFilePath + @"\1.1 Отчет по льготникам за август 2016.xls",
         //    ListName = "66181",
         //    StartDataRow = 3,
-        //    EndDataRow = 2433
+        //    EndDataRow = 2462
         //};
+
+        public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
+        {
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Отчет по льготникам за июль 2016 (2).xls",
+            ListName = "66181",
+            StartDataRow = 3,
+            EndDataRow = 2433
+        };
 
         public static readonly ExcelFileInfo LgotaRecodeTableFile = new ExcelFileInfo
         {
@@ -239,13 +239,20 @@ namespace _047_Tver
                     ? abonentsAtHouse.Where(a => a.KORPUSNO == house.KORPUSNO)
                     : abonentsAtHouse.Where(a => a.KORPUSNO == null);
 
-                var abonentEtalon = abonentsAtHouse.First();
 
-                house.TOWNSNAME = abonentEtalon.TOWNSNAME;
-                house.RAYONNAME = abonentEtalon.RAYONNAME;
-                house.RAYONKOD = abonentEtalon.RAYONKOD;
-                house.DISTNAME = abonentEtalon.DISTNAME;
-                house.ULICANAME = abonentEtalon.ULICANAME;
+                try
+                {
+                    var abonentEtalon = abonentsAtHouse.First();
+                    house.TOWNSNAME = abonentEtalon.TOWNSNAME;
+                    house.RAYONNAME = abonentEtalon.RAYONNAME;
+                    house.RAYONKOD = abonentEtalon.RAYONKOD;
+                    house.DISTNAME = abonentEtalon.DISTNAME;
+                    house.ULICANAME = abonentEtalon.ULICANAME;
+                }
+                catch (Exception ex)
+                {
+                    
+                }
 
 
                 houseInfo.ExtractFio(ref house);
@@ -549,10 +556,10 @@ namespace _047_Tver
 
             DateTime[] dates = { /*new DateTime(2016, 03, 01), new DateTime(2016, 04, 01),*/ new DateTime(2016, 07, 01) };
 
-            //StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
-            StepStart(dates.Length);
-            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
-            foreach (var date in dates)
+            StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
+            //StepStart(dates.Length);
+            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            //foreach (var date in dates)
             {
                 DataTable moneyTable = Utils.ReadExcelFile(
                     Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
@@ -1047,24 +1054,12 @@ namespace _047_Tver
             var minDate = new DateTime(2014, 07, 01);
             var maxDate = new DateTime(2016, 08, 01);
 
-            DateTime[] dates = { new DateTime(2016, 07, 01) };
+            DateTime[] dates = { new DateTime(2016, 04, 01) };
             //DateTime[] dates =
             //{
-            //    new DateTime(2015, 05, 01),
-            //    new DateTime(2015, 06, 01),
-            //    new DateTime(2015, 07, 01),
-            //    new DateTime(2015, 08, 01),
-            //    new DateTime(2015, 09, 01),
-            //    new DateTime(2015, 10, 01),
-            //    new DateTime(2015, 11, 01),
-            //    new DateTime(2015, 12, 01),
-            //    new DateTime(2016, 01, 01),
-            //    new DateTime(2016, 02, 01),
             //    new DateTime(2016, 03, 01),
             //    new DateTime(2016, 04, 01),
             //    new DateTime(2016, 05, 01),
-            //    new DateTime(2016, 06, 01),
-            //    new DateTime(2016, 07, 01)
             //};
 
             var minPayDate = new DateTime(2014, 07, 01);
@@ -1073,10 +1068,10 @@ namespace _047_Tver
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
             long recno = 0;
-            StepStart(dates.Length);
-            //StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
-            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
-            foreach (var date in dates)
+            //StepStart(dates.Length);
+            StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
+            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            //foreach (var date in dates)
             {
                 DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
@@ -1116,13 +1111,12 @@ namespace _047_Tver
                 if (minPayDate <= date && date <= maxPayDate)
                 {
                     DataTable oplataTable = Utils.ReadExcelFile(Consts.OplataFile.FileName, Oplata.GetListName(date));
-                    for (int i = Consts.OplataFile.StartDataRow; i < oplataTable.Rows.Count; i++)
+                    for (int i = Consts.OplataFile.StartDataRow-2; i < oplataTable.Rows.Count; i++)
                     {
                         recno++;
                         if (String.IsNullOrWhiteSpace(oplataTable.Rows[i][0].ToString()) ||
                             oplataTable.Rows[i][0].ToString().Trim().ToUpper() == "ИТОГО") break;
                         var oplata = new Oplata(oplataTable.Rows[i]);
-
                         string lshet = Consts.FixLs(oplata.Lshet, date);
                         if (lshet.Length <= 10)
                         {
@@ -1489,7 +1483,7 @@ namespace _047_Tver
                 {
                     var lgota = new Lgota(lgotaTable.Rows[i]);
 
-                    DateTime date = new DateTime(2016,08,01);
+                    DateTime date = new DateTime(2016,07,01);
                     var l = new CNV_LGOTSUMMA
                     {
                         LSHET = Consts.GetLs(lgota.Lshet),
@@ -1736,6 +1730,7 @@ namespace _047_Tver
         public decimal? Square;
         public string NachGvsOdn;
         public string NachOtopl;
+        public string NachPkTeplEnergy;
         public string NachPkInd;
         public string NachPkOdn;
 
@@ -1766,8 +1761,9 @@ namespace _047_Tver
                     : Decimal.Parse(dr[13].ToString());
                 NachGvsOdn = dr[14].ToString().ToLower().Trim();
                 NachOtopl = dr[15].ToString().ToLower().Trim();
-                NachPkInd = dr[16].ToString().ToLower().Trim();
-                NachPkOdn = dr[17].ToString().ToLower().Trim();
+                NachPkTeplEnergy = dr[16].ToString().ToLower().Trim();
+                NachPkInd = dr[17].ToString().ToLower().Trim();
+                NachPkOdn = dr[18].ToString().ToLower().Trim();
 
                 switch (InformationOwner.Trim().ToLower())
                 {
@@ -1794,6 +1790,10 @@ namespace _047_Tver
                         break;
                     case "ооо ук \"верхневолжский град\"":
                         InformationOwnerId = 202;
+                        break;
+                    case "общество с ограниченной ответственностью \"ук расцвет\"":
+                        InformationOwner = "ООО \"УК Расцвет\"";
+                        InformationOwnerId = 99;
                         break;
                     default:
                         if (String.IsNullOrWhiteSpace(InformationOwner))
@@ -1982,6 +1982,9 @@ namespace _047_Tver
                         break;
                     case "в кармане":
                         SetupPlaceId = 18;
+                        break;
+                    case "в рукаве":
+                        SetupPlaceId = 19;
                         break;
                     default:
                         throw new Exception("Неизвестное место установки " + SetupPlace);
@@ -2266,7 +2269,7 @@ namespace _047_Tver
             NachODPU = dr[21].ToString().ToLower().Trim();
             Square = String.IsNullOrWhiteSpace(dr[22].ToString())
                 ? (decimal?) null
-                : Decimal.Parse(dr[22].ToString(), NumberStyles.Float);
+                : Decimal.Parse(dr[22].ToString().Replace('.',','), NumberStyles.Float);
             HoursPerWeek = String.IsNullOrWhiteSpace(dr[17].ToString())
                 ? (int?) null
                 : Int32.Parse(dr[17].ToString());
