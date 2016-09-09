@@ -133,8 +133,14 @@
   <data name="CNV_ADD_WRONG_PARAMETER_EXCEPTION" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv_add_wrong_parameter_exception.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CC_CCHARSDUPLICATION" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_CCHARSDUPLICATION.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CC_FIO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CC\CNV_CC_FIO.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_LCHARSDUPLICATION" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_LCHARSDUPLICATION.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_CC_NACHNOTFOUNDINNACHOPL" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cc\cnv_cc_nachnotfoundinnachopl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

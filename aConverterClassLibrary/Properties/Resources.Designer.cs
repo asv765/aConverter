@@ -149,6 +149,33 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
+        ///create or alter procedure CNV$CC_CCHARSDUPLICATION (
+        ///    ACTIONTYPE smallint)
+        ///returns (
+        ///    ID integer,
+        ///    LSHET varchar(10),
+        ///    CHARCD integer,
+        ///    CHARNAME varchar(50),
+        ///    VALUE_ numeric(11,4),
+        ///    DATE_ timestamp)
+        ///as
+        ///declare variable CURID integer;
+        ///declare variable CURLSHET varchar(10);
+        ///declare variable CURCHARCD integer;
+        ///declare variable CURCHARNAME varchar(50);
+        ///declare variable CURVALUE numeric(11,4);
+        ///declare variable CURDATE timestamp;
+        ///declare variable OLDLSHET varch [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CC_CCHARSDUPLICATION {
+            get {
+                return ResourceManager.GetString("CNV_CC_CCHARSDUPLICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
         ///create or alter procedure CNV$CC_FIO (
         ///    ACTIONTYPE smallint = 0)
         ///returns (
@@ -169,6 +196,34 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_CC_FIO {
             get {
                 return ResourceManager.GetString("CNV_CC_FIO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
+        ///create or alter procedure CNV$CC_LCHARSDUPLICATION (
+        ///    ACTIONTYPE smallint)
+        ///returns (
+        ///    ID integer,
+        ///    LSHET varchar(10),
+        ///    LCHARCD integer,
+        ///    LCHARNAME varchar(100),
+        ///    VALUE_ integer,
+        ///    VALUEDESC varchar(100),
+        ///    DATE_ timestamp)
+        ///as
+        ///declare variable CURID integer;
+        ///declare variable CURLSHET varchar(10);
+        ///declare variable CURLCHARCD integer;
+        ///declare variable CURLCHARNAME varchar(100);
+        ///declare variable CURVALUE integer;
+        ///declare variable CURVALUEDESC varchar(100);
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CC_LCHARSDUPLICATION {
+            get {
+                return ResourceManager.GetString("CNV_CC_LCHARSDUPLICATION", resourceCulture);
             }
         }
         
@@ -1257,7 +1312,8 @@ namespace aConverterClassLibrary.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
-        ///create or alter procedure CNV$CNV_03100_TVER_ABONENTDOLYA
+        ///create or alter procedure CNV$CNV_03100_TVER_ABONENTDOLYA (
+        ///    NEEDDELETE smallint = 0)
         ///as
         ///declare variable CURHOUSECD integer;
         ///declare variable PREHOUSECD integer;
@@ -1269,7 +1325,7 @@ namespace aConverterClassLibrary.Properties {
         ///declare variable LSHET varchar(10);
         ///declare variable CLOSEDATE timestamp;
         ///begin
-        ///  for select A.LSHET, C.VALUE_, CH1.VALUE_, CH1.HOUSEC [rest of string was truncated]&quot;;.
+        ///  if (NEEDDELETE = 1)  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_CNV_03100_TVER_ABONENTDOLYA {
             get {

@@ -307,6 +307,8 @@
     <None Include="Resources\StoredProcs\CC\CNV_CC_SALDOHISTORYGAP.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_00950_COUNTERSTYPES.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01000_COUNTERS.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_CCHARSDUPLICATION.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_LCHARSDUPLICATION.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHNOTFOUNDINNACHOPL.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLNACHMISMATCH.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLNACHNOTFOUND.sql" />
