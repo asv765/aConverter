@@ -34,8 +34,8 @@ begin
             extract(day from date_) as dday, extract(month from date_) as dmonth, extract(year from date_) as dyear
         from cnv$oplata
         order by date_vv, sourcecd, lshet, servicecd
-        into :lshet, :documentcd, :month_, :year_, :summa, :date_, :date_vv, :sourcecd,
-            :servicecd, :dvday, :dvmonth, :dvyear,
+        into :lshet, :documentcd, :month_, :year_, :summa, :date_, :date_vv, :sourcecd, :servicecd, 
+			:dvday, :dvmonth, :dvyear,
             :dday, :dmonth, :dyear
     do begin
        if ((:olddate_vv <> :date_vv) or (:oldsourcecd <> :sourcecd)) then begin
@@ -53,7 +53,7 @@ begin
        end
        if (:oldlshet <> :lshet) then begin
           insert into PAYTICKET (TICKETCD, PRIMARYDOCCD, USERCD, ABNLSHET, PAYDATE, DISCOUNTDATE, IMPORTDATE, LASTEDITDATE)
-             values (gen_id(PAYTICKET_G,1), :pdcd, 1, :lshet, :DATE_, :DATE_, current_timestamp, current_timestamp);
+             values (gen_id(PAYTICKET_G,1), :pdcd, 1, :lshet, :date_, :date_vv, current_timestamp, current_timestamp);
           oldlshet = :lshet;
        end
        insert into PAYFACT (PAYFACTCD, TICKETCD, GAZSERVICECD, PAYPENI, PAYYEAR, PAYMONTH, PAYSUM, DISCOUNTRESOURCECD)

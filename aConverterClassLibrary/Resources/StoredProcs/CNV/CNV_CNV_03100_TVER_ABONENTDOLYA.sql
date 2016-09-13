@@ -51,7 +51,7 @@ begin
         begin
           DOCUMENTCD = gen_id(DOCUMENTS_GEN, 1);
           insert into DOCUMENTS (DOCUMENTCD, REGISTERUSERCD, OTVETSTVUSERCD, DOCNAME, FACTDOCUMENTDATE)
-          values (:DOCUMENTCD, 1, 1, 'РљРѕРЅРІРµСЂС‚Р°С†РёСЏ РґРѕР»Рё Р°Р±РѕРЅРµРЅС‚Р°', :DATE_);
+          values (:DOCUMENTCD, 1, 1, 'Конвертация доли абонента', :DATE_);
           insert into CCHARSABONENTLIST (LSHET, KODCCHARSLIST, ABONENTCCHARDATE, DOCUMENTCD, SIGNIFICANCE)
           values (:LSHET, 150, :DATE_, :DOCUMENTCD, :ABONENTSQUARE * :HOUSEHEATINGSQUARE / :HOUSETOTALSQUARE);
         end
