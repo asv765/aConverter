@@ -27,7 +27,7 @@ namespace _047_Tver
 
         public static readonly ExcelFileInfo LsInfoFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ЛС на 09.09.16_для загрузки.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ЛС на 09.09.16_для загрузки_кор1.xls",
             ListName = "66184",
             StartDataRow = 3,
             EndDataRow = 18449
@@ -43,7 +43,7 @@ namespace _047_Tver
 
         public static readonly ExcelFileInfo RecodeTableFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировкиv1.6.xlsx",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировкиv1.7.xlsx",
             ListName = "Лист1",
             StartDataRow = 2,
             EndDataRow = 27
@@ -59,7 +59,7 @@ namespace _047_Tver
 
         public static readonly ExcelFileInfo OplataFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Оплата с 01.07.14-31.07.16 общ. корр..xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Оплата с 01.07.14-31.07.16 общ. кор2.xls",
             StartDataRow = 3,
         };
 
@@ -79,21 +79,21 @@ namespace _047_Tver
             EndDataRow = 250
         };
 
-        //public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
-        //{
-        //    FileName = aConverter_RootSettings.SourceDbfFilePath + @"\1.1 Отчет по льготникам за август 2016.xls",
-        //    ListName = "66181",
-        //    StartDataRow = 3,
-        //    EndDataRow = 2462
-        //};
-
         public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Отчет по льготникам за июль 2016 (2).xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\1.1 Отчет по льготникам за август 2016.xls",
             ListName = "66181",
             StartDataRow = 3,
-            EndDataRow = 2433
+            EndDataRow = 2462
         };
+
+        //public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
+        //{
+        //    FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Отчет по льготникам за июль 2016 (2).xls",
+        //    ListName = "66181",
+        //    StartDataRow = 3,
+        //    EndDataRow = 2433
+        //};
 
         public static readonly ExcelFileInfo LgotaRecodeTableFile = new ExcelFileInfo
         {
@@ -240,19 +240,12 @@ namespace _047_Tver
                     : abonentsAtHouse.Where(a => a.KORPUSNO == null);
 
 
-                try
-                {
-                    var abonentEtalon = abonentsAtHouse.First();
-                    house.TOWNSNAME = abonentEtalon.TOWNSNAME;
-                    house.RAYONNAME = abonentEtalon.RAYONNAME;
-                    house.RAYONKOD = abonentEtalon.RAYONKOD;
-                    house.DISTNAME = abonentEtalon.DISTNAME;
-                    house.ULICANAME = abonentEtalon.ULICANAME;
-                }
-                catch (Exception ex)
-                {
-                    
-                }
+               var abonentEtalon = abonentsAtHouse.First();
+               house.TOWNSNAME = abonentEtalon.TOWNSNAME;
+               house.RAYONNAME = abonentEtalon.RAYONNAME;
+               house.RAYONKOD = abonentEtalon.RAYONKOD;
+               house.DISTNAME = abonentEtalon.DISTNAME;
+               house.ULICANAME = abonentEtalon.ULICANAME;
 
 
                 houseInfo.ExtractFio(ref house);
@@ -554,7 +547,7 @@ namespace _047_Tver
             var maxDate = new DateTime(2016, 08, 01);
 
 
-            DateTime[] dates = { /*new DateTime(2016, 03, 01), new DateTime(2016, 04, 01),*/ new DateTime(2016, 07, 01) };
+            DateTime[] dates = { /*new DateTime(2016, 03, 01), new DateTime(2016, 04, 01),*/ new DateTime(2016, 08, 01) };
 
             StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
             //StepStart(dates.Length);
@@ -1054,16 +1047,17 @@ namespace _047_Tver
             var minDate = new DateTime(2014, 07, 01);
             var maxDate = new DateTime(2016, 08, 01);
 
-            DateTime[] dates = { new DateTime(2016, 04, 01) };
-            //DateTime[] dates =
-            //{
-            //    new DateTime(2016, 03, 01),
-            //    new DateTime(2016, 04, 01),
-            //    new DateTime(2016, 05, 01),
-            //};
+            //DateTime[] dates = { new DateTime(2016, 08, 01) };
+            DateTime[] dates =
+            {
+                new DateTime(2016, 06, 01),
+                new DateTime(2016, 07, 01),
+            };
 
             var minPayDate = new DateTime(2014, 07, 01);
-            var maxPayDate = new DateTime(2016, 07, 01);
+            var maxPayDate = new DateTime(2016, 08, 01);
+            var minPkDate = new DateTime(2015, 07, 01);
+            var maxPkDate = new DateTime(2016, 08, 01);
 
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
@@ -1074,6 +1068,23 @@ namespace _047_Tver
             //foreach (var date in dates)
             {
                 DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
+
+                var pkList = new List<PKCoef>();
+                PKCoef.Date = date;
+                if (minPkDate <= date && date <= maxPkDate)
+                {
+                    DataTable pkTable = Utils.ReadExcelFile(Consts.SpravkaFolder + PKCoef.GetFileName(date), "Лист1");
+                    for (int j = 0; j < pkTable.Rows.Count; j++)
+                    {
+                        long tempLs;
+                        if (!Int64.TryParse(moneyTable.Rows[j][0].ToString(), out tempLs)) continue;
+
+                        if (String.IsNullOrWhiteSpace(pkTable.Rows[j][0].ToString()) ||
+                            pkTable.Rows[j][0].ToString().Trim().ToLower() == "общий итог") break;
+                        pkList.Add(new PKCoef(pkTable.Rows[j]));
+                    }
+                    pkTable.Dispose();
+                }
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
                 {
                     long ls;
@@ -1081,15 +1092,35 @@ namespace _047_Tver
 
                     var money = new Spravka(moneyTable.Rows[i], date);
 
+                    var pk = pkList.SingleOrDefault(p => p.Lshet == money.Lshet);
+                    if (pk == null)
+                    {
+                        pk = new PKCoef
+                        {
+                            Lshet = money.Lshet,
+                            EndSaldoInd = 0,
+                            EndSaldoOdn = 0,
+                            PereOdn = 0,
+                            PereInd = 0
+                        };
+                    }
+
                     string lshet = Consts.FixLs(money.Lshet, date);
+
                     for (int j = 0; j < money.Services.Length; j++)
                     {
                         var serviceMoney = money.Services[j];
 
+                        var reculc = serviceMoney.RecalcSum;
+                        if (minPkDate <= date && date <= maxPkDate)
+                        {
+                            if (serviceMoney.ServiceCd == 105) reculc = pk.PereInd;
+                            if (serviceMoney.ServiceCd == 115) reculc = pk.PereOdn;
+                        }
                         if (serviceMoney.Volume != 0 ||
                             serviceMoney.RecalcVol != 0 ||
                             serviceMoney.Nach != 0 ||
-                            serviceMoney.RecalcSum != 0)
+                            reculc != 0)
                         {
                             nm.RegisterNach(new CNV_NACH
                             {
@@ -1100,19 +1131,26 @@ namespace _047_Tver
                                 TYPE_ = 0,
                                 VOLUME = Math.Round(serviceMoney.Volume, 4),
                                 PROCHLVOLUME = Math.Round(serviceMoney.RecalcVol, 4)
-                            }, lshet, date.Month, date.Year, serviceMoney.Nach, serviceMoney.RecalcSum, date,
+                            }, lshet, date.Month, date.Year, serviceMoney.Nach, reculc, date,
                                 String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd")));
                         }
                     }
 
                     nm.RegisterEndSaldo(lshet, date.Month, date.Year, Consts.BaseServiceCd, Consts.BaseServiceName,
-                        money.EndSaldo);
+                        money.EndSaldo - (pk.EndSaldoInd + pk.EndSaldoOdn));
+                    nm.RegisterEndSaldo(lshet, date.Month, date.Year, 105, "Гор. водоснабжение пов. коэф.",
+                        pk.EndSaldoInd);
+                    nm.RegisterEndSaldo(lshet, date.Month, date.Year, 115, "Гор. водоснабжение ОДН пов. коэф",
+                        pk.EndSaldoOdn);
                 }
                 if (minPayDate <= date && date <= maxPayDate)
                 {
+                    Oplata.Date = date;
                     DataTable oplataTable = Utils.ReadExcelFile(Consts.OplataFile.FileName, Oplata.GetListName(date));
-                    for (int i = Consts.OplataFile.StartDataRow-2; i < oplataTable.Rows.Count; i++)
+                    for (int i = 0; i < oplataTable.Rows.Count; i++)
                     {
+                        long ls;
+                        if (!Int64.TryParse(oplataTable.Rows[i][0].ToString(), out ls)) continue;
                         recno++;
                         if (String.IsNullOrWhiteSpace(oplataTable.Rows[i][0].ToString()) ||
                             oplataTable.Rows[i][0].ToString().Trim().ToUpper() == "ИТОГО") break;
@@ -1131,19 +1169,31 @@ namespace _047_Tver
                             DateTime payDate = oplata.PayDate ?? date;
 
                             nm.RegisterOplata(odef, lshet, date.Month, date.Year,
-                                oplata.ServicesSumma, payDate, payDate,
+                                oplata.ServicesSumma, payDate, date,
                                 String.Format("{0}_{1}", oplata.Lshet, recno));
 
                             odef = new CNV_OPLATA
                             {
-                                SERVICECD = Consts.BaseCoefCd,
-                                SERVICENAME = Consts.BaseCoefName,
+                                SERVICECD = 105,
+                                SERVICENAME = "Гор. водоснабжение пов. коэф.",
                                 SOURCECD = oplata.SourceCd,
                                 SOURCENAME = oplata.Source
                             };
 
                             nm.RegisterOplata(odef, lshet, date.Month, date.Year,
-                                oplata.CoefSumma, payDate, payDate,
+                                oplata.IndCoefSumma, payDate, date,
+                                String.Format("{0}_{1}", oplata.Lshet, recno));
+
+                            odef = new CNV_OPLATA
+                            {
+                                SERVICECD = 115,
+                                SERVICENAME = "Гор. водоснабжение ОДН пов. коэф",
+                                SOURCECD = oplata.SourceCd,
+                                SOURCENAME = oplata.Source
+                            };
+
+                            nm.RegisterOplata(odef, lshet, date.Month, date.Year,
+                                oplata.OdnCoefSumma, payDate, date,
                                 String.Format("{0}_{1}", oplata.Lshet, recno));
                         }
                     }
@@ -1483,7 +1533,7 @@ namespace _047_Tver
                 {
                     var lgota = new Lgota(lgotaTable.Rows[i]);
 
-                    DateTime date = new DateTime(2016,07,01);
+                    DateTime date = new DateTime(2016,08,01);
                     var l = new CNV_LGOTSUMMA
                     {
                         LSHET = Consts.GetLs(lgota.Lshet),
@@ -1793,7 +1843,7 @@ namespace _047_Tver
                         break;
                     case "общество с ограниченной ответственностью \"ук расцвет\"":
                         InformationOwner = "ООО \"УК Расцвет\"";
-                        InformationOwnerId = 99;
+                        InformationOwnerId = 11;
                         break;
                     default:
                         if (String.IsNullOrWhiteSpace(InformationOwner))
@@ -2105,6 +2155,38 @@ namespace _047_Tver
         }
     }
 
+    public class PKCoef
+    {
+        public string Lshet;
+        public decimal PereInd;
+        public decimal PereOdn;
+        public decimal EndSaldoInd;
+        public decimal EndSaldoOdn;
+
+        public PKCoef() { }
+        public static DateTime Date;
+        public PKCoef(DataRow dr)
+        {
+            try
+            {
+                Lshet = dr[0].ToString().Trim();
+                PereInd = Math.Round(Decimal.Parse(dr[17].ToString(), NumberStyles.Float), 4);
+                PereOdn = Math.Round(Decimal.Parse(dr[18].ToString(), NumberStyles.Float), 4);
+                EndSaldoInd = Math.Round(Decimal.Parse(dr[24].ToString(), NumberStyles.Float), 4);
+                EndSaldoOdn = Math.Round(Decimal.Parse(dr[25].ToString(), NumberStyles.Float), 4);
+            }
+            catch (Exception xe)
+            {
+                throw;
+            }
+        }
+
+        public static string GetFileName(DateTime date)
+        {
+            return String.Format("ПК_{0:D2}_{1}.xlsx", date.Month, date.Year);
+        }
+    }
+
     public class Oplata
     {
         public string Lshet;
@@ -2114,12 +2196,15 @@ namespace _047_Tver
         public decimal ServicesSumma;
         public decimal CoefSumma;
         public decimal Summa;
+        public decimal IndCoefSumma;
+        public decimal OdnCoefSumma;
+
+        public static DateTime Date;
 
         public Oplata(DataRow dr)
         {
             try
             {
-
                 Lshet = dr[0].ToString().Trim();
                 Source = dr[3].ToString().Trim();
                 if (String.IsNullOrWhiteSpace(dr[4].ToString()))
@@ -2130,9 +2215,11 @@ namespace _047_Tver
                         PayDate = DateTime.Parse(dr[6].ToString());
                 }
                 else PayDate = DateTime.Parse(dr[4].ToString());
-                ServicesSumma = Decimal.Parse(dr[7].ToString());
-                CoefSumma = Decimal.Parse(dr[8].ToString());
-                Summa = Decimal.Parse(dr[9].ToString());
+                ServicesSumma = String.IsNullOrWhiteSpace(dr[7].ToString()) ? 0 : Decimal.Parse(dr[7].ToString());
+                IndCoefSumma = String.IsNullOrWhiteSpace(dr[8].ToString()) ? 0 : Decimal.Parse(dr[8].ToString());
+                OdnCoefSumma = String.IsNullOrWhiteSpace(dr[9].ToString()) ? 0 : Decimal.Parse(dr[9].ToString());
+                CoefSumma = String.IsNullOrWhiteSpace(dr[10].ToString()) ? 0 : Decimal.Parse(dr[10].ToString());
+                Summa = String.IsNullOrWhiteSpace(dr[11].ToString()) ? 0 : Decimal.Parse(dr[11].ToString());
 
                 if (String.IsNullOrWhiteSpace(Source))
                 {
@@ -2375,38 +2462,69 @@ namespace _047_Tver
         {
             SetStepsCount(99);
 
-            // поиск граждан по льготам
-            ExcelFileInfo fileInfo = Consts.LgotaReportFile;
-            DataTable lgotaTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
-            StepStart(lgotaTable.Rows.Count + 1);
-            var correctFounded = "";
-            var notFounded = "";
-            var fewFounded = "";
-            var endedLgots = new List<Lgota>();
-            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            // поиск дубликатов по инициалам граждарн
+            StepStart(1);
+            var roomers = RoomerInfo.ReadRoomers(Consts.RoomingReportFile);
+            StepFinish();
+
+            var fewFounded = new List<KeyValuePair<string, List<RoomerInfo>>>();
+
+            foreach (var roomer in roomers)
             {
-                for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
+                foreach (var roomerInfo in roomer.Value)
                 {
-                    Iterate();
-                    var lgota = new Lgota(lgotaTable.Rows[i]);
-
-                    // поиск деактивированных льгот
-                    //if (lgota.EndDate.HasValue && lgota.EndDate < DateTime.Now)
-                    //    endedLgots.Add(lgota);
-
-                    //continue;
-                    string sql = String.Format(
-                        @"select CITIZENID from cnv$citizens cn where cn.lshet = '{0}' and (cn.f || ' ' || cn.i || iif(cn.o is not null, ' ' || cn.o, '')) = '{1}'",
-                        Consts.GetLs(lgota.Lshet), lgota.FIO.Replace("  ", " "));
-                    var result = context.ExecuteQuery<int>(sql, CommandType.Text, null);
-                    if (result.Count == 1)
-                        correctFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
-                    if (result.Count == 0)
-                        notFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
-                    if (result.Count > 1)
-                        fewFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
+                    int fouded = 0;
+                    var cityzen = new CNV_CITIZEN();
+                    roomerInfo.ExtractFio(ref cityzen);
+                    if ((!String.IsNullOrWhiteSpace(cityzen.I) && cityzen.I.Length == 1) &&
+                        (!String.IsNullOrWhiteSpace(cityzen.O) && cityzen.O.Length == 1))
+                    {
+                        foreach (var checkRoomer in roomer.Value)
+                        {
+                            var checkCityzen = new CNV_CITIZEN();
+                            checkRoomer.ExtractFio(ref checkCityzen);
+                            if ((!String.IsNullOrWhiteSpace(checkCityzen.I) && checkCityzen.I[0] == cityzen.I[0]) &&
+                                (!String.IsNullOrWhiteSpace(checkCityzen.O) && checkCityzen.O[0] == cityzen.O[0]))
+                                fouded++;
+                        }
+                    }
+                    if (fouded > 2) fewFounded.Add(roomer);
                 }
             }
+            int a = 10;
+
+            //// поиск граждан по льготам
+            //ExcelFileInfo fileInfo = Consts.LgotaReportFile;
+            //DataTable lgotaTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
+            //StepStart(lgotaTable.Rows.Count + 1);
+            //var correctFounded = "";
+            //var notFounded = "";
+            //var fewFounded = "";
+            //var endedLgots = new List<Lgota>();
+            //using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            //{
+            //    for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
+            //    {
+            //        Iterate();
+            //        var lgota = new Lgota(lgotaTable.Rows[i]);
+
+            //        // поиск деактивированных льгот
+            //        //if (lgota.EndDate.HasValue && lgota.EndDate < DateTime.Now)
+            //        //    endedLgots.Add(lgota);
+
+            //        //continue;
+            //        string sql = String.Format(
+            //            @"select CITIZENID from cnv$citizens cn where cn.lshet = '{0}' and (cn.f || ' ' || cn.i || iif(cn.o is not null, ' ' || cn.o, '')) = '{1}'",
+            //            Consts.GetLs(lgota.Lshet), lgota.FIO.Replace("  ", " "));
+            //        var result = context.ExecuteQuery<int>(sql, CommandType.Text, null);
+            //        if (result.Count == 1)
+            //            correctFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
+            //        if (result.Count == 0)
+            //            notFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
+            //        if (result.Count > 1)
+            //            fewFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
+            //    }
+            //}
 
             //// список льгот
             //ExcelFileInfo fileInfo = Consts.LgotaReportFile;
