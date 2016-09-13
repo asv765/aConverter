@@ -19,8 +19,17 @@ declare variable CURDATE timestamp;
 declare variable OLDLSHET varchar(10) = '';
 declare variable OLDCHARCD integer = 0;
 declare variable OLDVALUE numeric(11,4) = 0;
+declare variable IDTODELETE integer;
 begin
-  if (ACTIONTYPE = 0 or ACTIONTYPE = 1) then
+  if (ACTIONTYPE = 0) then
+  begin
+    select first 1 ID, LSHET, CHARCD, CHARNAME, VALUE_, DATE_
+    from CNV$CC_CCHARSDUPLICATION(1)
+    into :ID, :LSHET, :CHARCD, :CHARNAME, :VALUE_, :DATE_;
+    suspend;
+  end
+  else
+  if (ACTIONTYPE = 1) then
   begin
     for select ID, LSHET, CHARCD, CHARNAME, VALUE_, DATE_
         from CNV$CHARS
@@ -51,14 +60,21 @@ begin
   else
   if (ACTIONTYPE = 2) then
   begin
-    delete from cnv$chars where id in (select id from CNV$CC_CCHARSDUPLICATION(1));
+    for select ID
+        from CNV$CC_CCHARSDUPLICATION(1)
+        into :IDTODELETE
+    do
+    begin
+      delete from CNV$CHARS
+      where ID = :IDTODELETE;
+    end
   end
   else
     exception CNV$WRONG_PARAMATER_VALUE 'Значение ACTIONTYPE отличное от 0, 1 или 2 не поддерживается процедурой';
 end^
 
 SET TERM ; ^
-
+  
 GRANT DELETE ON CNV$CHARS TO PROCEDURE CNV$CC_CCHARSDUPLICATION;
 
 GRANT EXECUTE ON PROCEDURE CNV$CC_CCHARSDUPLICATION TO PROCEDURE CNV$CC_CCHARSDUPLICATION;
