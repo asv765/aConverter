@@ -65,7 +65,7 @@ namespace _047_Tver
 
         public static readonly ExcelFileInfo HousesCharsFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки_кор2.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки_кор3.xls",
             ListName = "общие данные по жилым домам",
             StartDataRow = 5,
             EndDataRow = 242
@@ -73,7 +73,7 @@ namespace _047_Tver
 
         public static readonly ExcelFileInfo EmptyHousesCharsFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\данные по жилым домам ФЛ с нежилыми помещениями_без ОДПУ_кор2.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\данные по жилым домам ФЛ с нежилыми помещениями_без ОДПУ_кор3.xls",
             ListName = "без ОДПУ для загрузки",
             StartDataRow = 7,
             EndDataRow = 250
