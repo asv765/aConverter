@@ -1232,6 +1232,7 @@ namespace _047_Tver
                                                                            where NOP1.LSHET = NOP.LSHET)
                                     group by NOP.LSHET
                                     having sum(NOP.EDEBET) <> 0);");
+                context.SaveChanges();
             }
             StepFinish();
         }
@@ -1366,7 +1367,7 @@ namespace _047_Tver
                     {
                         STARTDATE = lgota.StartDate,
                         ENDDATE = lgota.EndDate,
-                        ISDELETED = lgota.EndDate.HasValue && lgota.EndDate.Value < DateTime.Now ? 1 : 0,
+                        //ISDELETED = lgota.EndDate.HasValue && lgota.EndDate.Value < DateTime.Now ? 1 : 0,
                     };
 
                     bool founded = false;
