@@ -387,8 +387,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private int _fLATNO;
-		public virtual int FLATNO
+		private int? _fLATNO;
+		public virtual int? FLATNO
 		{
 			get
 			{

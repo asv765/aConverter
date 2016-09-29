@@ -764,7 +764,7 @@
           <orm:column name="FLATPOSTFIX" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_rOOMNO" property="ROOMNO" uniqueId="ae74589d-b163-4aad-9c7d-db571d1aa019" type="System.Int16" />
-        <orm:field name="_fLATNO" property="FLATNO" uniqueId="c23db484-61d7-45be-a097-ea9c244f98b5" type="System.Int32" />
+        <orm:field name="_fLATNO" property="FLATNO" uniqueId="c23db484-61d7-45be-a097-ea9c244f98b5" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
         <orm:field name="_rOOMPOSTFIX" property="ROOMPOSTFIX" uniqueId="cacd0a19-20d8-4bf8-84a1-8e441c107cc7" type="System.String" />
         <orm:field name="_cLOSEDATE" property="CLOSEDATE" uniqueId="6fa0766f-b188-49f7-a521-316f75bc4d70" type="DateTime?" />
         <orm:index name="CNV$ABONENT_IDX1">
@@ -2321,7 +2321,7 @@
       <Property Id="53022a8a-0a2e-4028-a120-1aefc8ecfe5b" name="HOUSENO" label="HOUSENO : String" kind="Persistent" fieldName="_hOUSENO" />
       <Property Id="adf59acb-f434-41f6-95cf-348130b0339d" name="FLATPOSTFIX" label="FLATPOSTFIX : String" kind="Persistent" fieldName="_fLATPOSTFIX" />
       <Property Id="ae74589d-b163-4aad-9c7d-db571d1aa019" name="ROOMNO" type="Int16" label="ROOMNO : Int16" fieldName="_rOOMNO" />
-      <Property Id="c23db484-61d7-45be-a097-ea9c244f98b5" name="FLATNO" type="Int32" label="FLATNO : Int32" fieldName="_fLATNO" />
+      <Property Id="c23db484-61d7-45be-a097-ea9c244f98b5" name="FLATNO" type="Int32" label="FLATNO : Int32" nullable="true" fieldName="_fLATNO" />
       <Property Id="cacd0a19-20d8-4bf8-84a1-8e441c107cc7" name="ROOMPOSTFIX" label="ROOMPOSTFIX : String" fieldName="_rOOMPOSTFIX" />
       <Property Id="6fa0766f-b188-49f7-a521-316f75bc4d70" name="CLOSEDATE" type="DateTime?" label="CLOSEDATE : DateTime?" fieldName="_cLOSEDATE" />
     </DomainClass>
