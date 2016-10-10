@@ -283,6 +283,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		private int? _vTYPE_;
+		public virtual int? VTYPE_
+		{
+			get
+			{
+				return this._vTYPE_;
+			}
+			set
+			{
+				this._vTYPE_ = value;
+			}
+		}
+		
 	}
 }
 #pragma warning restore 1591

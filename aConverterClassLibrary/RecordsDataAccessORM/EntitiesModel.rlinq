@@ -192,66 +192,67 @@
         </orm:identity>
         <orm:concurrency strategy="changed" />
         <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="df18351b-b06f-4c7d-a627-08d9a9eb5887" type="System.Int32">
-          <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+          <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
         </orm:field>
         <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="d6f7b1ad-4b6e-45d1-bceb-b7476df4c0b0" type="System.String">
-          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="LSHET" sql-type="varchar" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_dOCUMENTCD" property="DOCUMENTCD" behavior="readwrite" uniqueId="aa14fe03-f950-4991-add8-e265f77b23f5" type="System.String">
-          <orm:column name="DOCUMENTCD" sql-type="VARCHAR" nullable="false" length="20" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="DOCUMENTCD" sql-type="varchar" nullable="false" length="20" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_mONTH_" property="MONTH_" behavior="readwrite" uniqueId="3b97961e-8249-4230-863e-13937687f58c" type="System.Int32">
-          <orm:column name="MONTH_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="MONTH_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_yEAR_" property="YEAR_" behavior="readwrite" uniqueId="e7890c99-b51e-4e70-bed1-05975a50b5ef" type="System.Int32">
-          <orm:column name="YEAR_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="YEAR_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_mONTH2" property="MONTH2" behavior="readwrite" uniqueId="37b08c87-a2ff-4f36-a22f-f202eddfc06c" type="System.Int32">
-          <orm:column name="MONTH2" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="MONTH2" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_yEAR2" property="YEAR2" behavior="readwrite" uniqueId="f93ab0b6-0acd-45a6-80fd-5c039802f91e" type="System.Int32">
-          <orm:column name="YEAR2" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="YEAR2" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_fNATH" property="FNATH" behavior="readwrite" uniqueId="fcfe79dc-9083-4552-9b4a-aa5e8d930782" type="System.Decimal">
-          <orm:column name="FNATH" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
+          <orm:column name="FNATH" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
         </orm:field>
         <orm:field name="_pROCHL" property="PROCHL" behavior="readwrite" uniqueId="db02a508-3c79-41de-982b-5a7ffc9c9dcb" type="System.Decimal">
-          <orm:column name="PROCHL" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
+          <orm:column name="PROCHL" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
         </orm:field>
         <orm:field name="_vOLUME" property="VOLUME" behavior="readwrite" uniqueId="41feed6b-21bb-4d2d-bc6b-7a3ad56271a0" type="System.Decimal">
-          <orm:column name="VOLUME" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
+          <orm:column name="VOLUME" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
         </orm:field>
         <orm:field name="_rEGIMCD" property="REGIMCD" behavior="readwrite" uniqueId="1469606e-8ba3-4025-b56e-3e5dd4a4be58" type="System.Int32">
-          <orm:column name="REGIMCD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="REGIMCD" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_rEGIMNAME" property="REGIMNAME" behavior="readwrite" uniqueId="4951e342-d3cb-4709-9359-97198ea44d10" type="System.String">
-          <orm:column name="REGIMNAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="REGIMNAME" sql-type="varchar" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_sERVICECD" property="SERVICECD" behavior="readwrite" uniqueId="dfb64495-e44d-41f0-90ce-818dd1122334" type="System.Int32">
-          <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="SERVICECD" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_dATE_VV" property="DATE_VV" behavior="readwrite" uniqueId="7ebc9ad5-f793-4f3f-80b1-9cc30234abcd" type="System.DateTime">
-          <orm:column name="DATE_VV" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
+          <orm:column name="DATE_VV" sql-type="timestamp" nullable="false" length="0" scale="0" ado-type="DateTime" />
         </orm:field>
         <orm:field name="_tYPE_" property="TYPE_" behavior="readwrite" uniqueId="7780b6e8-f622-4e64-a021-1472926c50fd" type="System.Int32">
-          <orm:column name="TYPE_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="TYPE_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_dOCNAME" property="DOCNAME" behavior="readwrite" uniqueId="57bbd7e9-940a-4bbc-ab9d-37dfb7eb509c" type="System.String">
-          <orm:column name="DOCNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="DOCNAME" sql-type="varchar" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_dOCNUMBER" property="DOCNUMBER" behavior="readwrite" uniqueId="50947dbc-9df9-4dc5-afa0-b9bbc1e65f33" type="System.String">
-          <orm:column name="DOCNUMBER" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="DOCNUMBER" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_dOCDATE" property="DOCDATE" behavior="readwrite" uniqueId="6aa60fb0-b777-473e-b425-4f3575d8c43f" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="DOCDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+          <orm:column name="DOCDATE" sql-type="timestamp" nullable="true" length="0" scale="0" ado-type="DateTime" />
         </orm:field>
         <orm:field name="_sERVICENAME" property="SERVICENAME" behavior="readwrite" uniqueId="40ad90f5-c573-4014-88a9-0e21713cb7e4" type="System.String">
-          <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="SERVICENAME" sql-type="varchar" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_pROCHLVOLUME" property="PROCHLVOLUME" uniqueId="a370db5a-a160-4382-8321-65eda216b400" type="System.Decimal" />
+        <orm:field name="_vTYPE_" property="VTYPE_" uniqueId="5104686b-98ba-4d0f-a19a-8c3568820bdb" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
         <orm:index name="CNV$NACH_IDX1">
           <orm:columnMapping>
-            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
+            <orm:column name="LSHET" sql-type="varchar" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
       </orm:class>
@@ -1586,28 +1587,29 @@
         </orm:index>
       </orm:table>
       <orm:table name="CNV$NACH">
-        <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
-        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="DOCUMENTCD" sql-type="VARCHAR" nullable="false" length="20" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="MONTH_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="YEAR_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="MONTH2" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="YEAR2" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="FNATH" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
-        <orm:column name="PROCHL" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
-        <orm:column name="VOLUME" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
-        <orm:column name="REGIMCD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="REGIMNAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="DATE_VV" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
-        <orm:column name="TYPE_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="DOCNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="DOCNUMBER" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="DOCDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
-        <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="varchar" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOCUMENTCD" sql-type="varchar" nullable="false" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="MONTH_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="YEAR_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="MONTH2" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="YEAR2" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="FNATH" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="PROCHL" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="VOLUME" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="REGIMCD" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="REGIMNAME" sql-type="varchar" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SERVICECD" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DATE_VV" sql-type="timestamp" nullable="false" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="TYPE_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DOCNAME" sql-type="varchar" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOCNUMBER" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOCDATE" sql-type="timestamp" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="SERVICENAME" sql-type="varchar" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="VTYPE_" sql-type="integer" nullable="true" length="0" scale="0" ado-type="" />
         <orm:index name="CNV$NACH_IDX1">
           <orm:columnMapping>
-            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
+            <orm:column name="LSHET" sql-type="varchar" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
       </orm:table>
@@ -2180,6 +2182,7 @@
       <Property Id="f93ab0b6-0acd-45a6-80fd-5c039802f91e" name="YEAR2" type="Int32" label="YEAR2 : Int32" kind="Persistent" fieldName="_yEAR2" />
       <Property Id="40ad90f5-c573-4014-88a9-0e21713cb7e4" name="SERVICENAME" label="SERVICENAME : String" kind="Persistent" fieldName="_sERVICENAME" />
       <Property Id="a370db5a-a160-4382-8321-65eda216b400" name="PROCHLVOLUME" type="Decimal" label="PROCHLVOLUME : Decimal" fieldName="_pROCHLVOLUME" />
+      <Property Id="5104686b-98ba-4d0f-a19a-8c3568820bdb" name="VTYPE_" type="Int32" label="VTYPE_ : Int32" nullable="true" fieldName="_vTYPE_" />
     </DomainClass>
     <DomainClass Id="28d3d09e-675e-4116-bd0b-e54dba7ec378" name="CNV_LCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="ae228361-4967-4568-a1fa-0d70c342ca59" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
