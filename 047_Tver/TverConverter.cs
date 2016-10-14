@@ -2162,7 +2162,7 @@ namespace _047_Tver
             Services = new[]
             {
                 new ServiceMoney(dr, 12, 26, 5, "Гор. водоснабжение", 10, "Неизвестен", true, true, abonent), // ГВС Гкал
-                new ServiceMoney(dr, 14, 28, 5, "Гор. водоснабжение", 10, "Неизвестен5", false, true, abonent), // Гвс Тн
+                new ServiceMoney(dr, 14, 28, 5, "Гор. водоснабжение", 10, "Неизвестен", false, true, abonent), // Гвс Тн
                 new ServiceMoney(dr, 16, 30, 5, "Гор. водоснабжение", 10, "Неизвестен", false, true, abonent), // ХВС куб.м
                 new ServiceMoney(dr, 18, 33, 3, "Отопление", 10, "Неизвестен", true, true, abonent), // Отопление Гкал
                 new ServiceMoney(dr, 20, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен", true, true, abonent), // ОДН Гкал
@@ -2223,7 +2223,7 @@ namespace _047_Tver
                         : Decimal.Parse(dr[recalcId].ToString(), NumberStyles.Float);
                 }
 
-                if (Nach != 0 && abonent != null && abonent.IndividualNorm != null)
+                if ((Nach != 0 || Volume != 0 || RecalcSum != 0 || RecalcVol != 0) && abonent != null && abonent.IndividualNorm != null)
                 {
                     if (abonent.IndividualNorm.Value == 0.0257m || abonent.IndividualNorm.Value == 0) return;
                     if (servicecd == 3)
