@@ -36,8 +36,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Vishetravino = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База Вышетравино.xlsx"),
-            RecodeStartRow = 7, 
-            RecodeEndRow = 11,
+            RecodeStartRow = 10, 
+            RecodeEndRow = 19,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "дом1", TownName = "с. Вышетравино"},
@@ -76,7 +76,7 @@ namespace _043_PkStroy
         {
             FileName = Consts.FormFullFilePath("База военный городок.xlsx"),
             RecodeStartRow = 2,
-            RecodeEndRow = 6,
+            RecodeEndRow = 9,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "дом 1", TownName = "Дашки военные2", HasContract = true},
@@ -90,8 +90,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo DmitrievkaLugki = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База д. Дмитриевка, д. Лужки.xlsx"),
-            RecodeStartRow = 12,
-            RecodeEndRow = 17,
+            RecodeStartRow = 20,
+            RecodeEndRow = 25,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "д. дмитриевка", TownName = "д. Дмитриевка", HasContract = true},
@@ -102,8 +102,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Pushino = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База д. пущино.xlsx"),
-            RecodeStartRow = 18,
-            RecodeEndRow = 19,
+            RecodeStartRow = 26,
+            RecodeEndRow = 27,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "Лист1", TownName = "д. Пущино"},
@@ -113,8 +113,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Rovnoe = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База д. ровное.xlsx"),
-            RecodeStartRow = 20,
-            RecodeEndRow = 24,
+            RecodeStartRow = 28,
+            RecodeEndRow = 38,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "ул школьная,1", TownName = "д. Ровное", StreetName = "ул. Школьная" ,HasContract = true},
@@ -132,8 +132,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Rubcovo = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База д. рубцово.xlsx"),
-            RecodeStartRow = 25,
-            RecodeEndRow = 31,
+            RecodeStartRow = 39,
+            RecodeEndRow = 45,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "ул. луговая", TownName = "д. Рубцово", StreetName = "ул. Луговая" ,HasContract = true},
@@ -145,8 +145,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Dashki2 = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База Дашки2-2.xlsx"),
-            RecodeStartRow = 32,
-            RecodeEndRow = 38,
+            RecodeStartRow = 46,
+            RecodeEndRow = 57,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "дом 34", TownName = "п. Дашки 2"},
@@ -162,8 +162,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Dadkovo = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База Дядьково.xlsx"),
-            RecodeStartRow = 39,
-            RecodeEndRow = 44,
+            RecodeStartRow = 58,
+            RecodeEndRow = 65,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "дом№1", TownName = "Дядьково с", StreetName = "ул. Юбилейная"},
@@ -182,8 +182,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo NovoselkiVishnevka = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База новоселки, вишневка.xlsx"),
-            RecodeStartRow = 45,
-            RecodeEndRow = 51,
+            RecodeStartRow = 66,
+            RecodeEndRow = 75,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "ул. Вишневая", TownName = "п. Новоселки", StreetName = "ул. Вишневая"},
@@ -218,8 +218,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Lgovo = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База с. Льгово.xlsx"),
-            RecodeStartRow = 52,
-            RecodeEndRow = 57,
+            RecodeStartRow = 76,
+            RecodeEndRow = 83,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "ул. 3-я линия", TownName = "с. Льгово", StreetName = "ул. 3-я Линия", HasContract = true},
@@ -238,8 +238,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Stenkino = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База с. стенькино.xlsx"),
-            RecodeStartRow = 58,
-            RecodeEndRow = 60,
+            RecodeStartRow = 84,
+            RecodeEndRow = 89,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "Лист1", TownName = "п. Стенькино", HasContract = true},
@@ -249,8 +249,8 @@ namespace _043_PkStroy
         public static readonly ExcelFileInfo Dubrovichi = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("База Дубровичи 07.10.2016.xlsx"),
-            RecodeStartRow = 61,
-            RecodeEndRow = 67,
+            RecodeStartRow = 90,
+            RecodeEndRow = 97,
             ListInfo = new[]
             {
                 new ExcelListInfo {ListName = "дом 1", TownName = "Дубровичи", HasContract = true, PrimCol = 13},
@@ -261,7 +261,7 @@ namespace _043_PkStroy
         {
             FileName = Consts.FormFullFilePath("База военный городок.xlsx"),
             RecodeStartRow = 2,
-            RecodeEndRow = 6,
+            RecodeEndRow = 9,
             ListInfo = new[]
             {
                 new ExcelListInfo{ListName = "newAbonents", HasContract = true, TownName = "Дашки военные2", StreetName = "1"},
@@ -270,9 +270,9 @@ namespace _043_PkStroy
 
         public static readonly ExcelFileInfo RecodeTable = new ExcelFileInfo
         {
-            FileName = Consts.FormFullFilePath("Таблица перекодировкиv2.2.xlsx"),
+            FileName = Consts.FormFullFilePath("Таблица перекодировкиv3.0.xlsx"),
             RecodeStartRow = 2,
-            RecodeEndRow = 67,
+            RecodeEndRow = 97,
             ListInfo = new[]
             {
                 new ExcelListInfo{ListName = "Лист1"}, 
@@ -786,9 +786,19 @@ namespace _043_PkStroy
                 if (!(_fileInfo.RecodeStartRow <= i+2 && i+2 <= _fileInfo.RecodeEndRow)) continue;
                 var recode = RecodeTableData[i];
                 if (poliv != recode.Poliv) continue;
-                if (recode.EmptyWithoutCounter)
+                if (recode.EmptyField.HasValue && recode.ShoudByEmpty)
                 {
-                    if (excelData.NoCntVO != null || excelData.NoCntVS != null) continue;
+                    switch (recode.EmptyField)
+                    {
+                            case RecodeTable.CheckEmptyField.NoVsAndnoVo:
+                            if (excelData.NoCntVO != null || excelData.NoCntVS != null) continue;
+                            break;
+                            case RecodeTable.CheckEmptyField.Vs:
+                            if (excelData.CntVS != null) continue;
+                            break;
+                            default:
+                            throw new Exception("Неизвестный тип значения перекодировки " + recode.EmptyField);
+                    }
                 }
                 double checkValue;
                 switch (recode.CounterType)
@@ -899,8 +909,9 @@ namespace _043_PkStroy
         public class RecodeTable
         {
             public CounterRecode CounterType;
+            public CheckEmptyField? EmptyField;
             public double Value;
-            public bool EmptyWithoutCounter;
+            public bool ShoudByEmpty;
             public bool Poliv;
             public int LcharCd;
             public string LcharName;
@@ -927,12 +938,24 @@ namespace _043_PkStroy
                         throw new Exception("Неизвестный тип в таблице перекодировке " + dr[1]);
                 }
                 Value = Double.Parse(dr[2].ToString());
-                EmptyWithoutCounter = dr[4].ToString().ToLower() == "\"пусто\"";
+                ShoudByEmpty = dr[4].ToString().ToLower() == "\"пусто\"";
                 Poliv = dr[5].ToString().Trim().ToLower() == "полив";
                 LcharCd = Int32.Parse(dr[6].ToString());
                 LcharName = dr[7].ToString().Trim();
                 LcharValue = Int32.Parse(dr[8].ToString());
                 LcharValueName = dr[9].ToString().Trim();
+                if (!String.IsNullOrWhiteSpace(dr[3].ToString()))
+                    switch (dr[3].ToString().Trim().ToLower())
+                    {
+                        case "без счетчика во и без счетчика вс":
+                            EmptyField = CheckEmptyField.NoVsAndnoVo;
+                            break;
+                        case "по счетчику вс":
+                            EmptyField = CheckEmptyField.Vs;
+                            break;
+                        default:
+                            throw new Exception("Неизвестный тип пустого поля в таблице перекодировке " + dr[3]);
+                    }
             }
 
 
@@ -942,6 +965,12 @@ namespace _043_PkStroy
                 Vo,
                 NoVs,
                 NoVo
+            }
+
+            public enum CheckEmptyField
+            {
+                NoVsAndnoVo,
+                Vs,
             }
         }
     }
