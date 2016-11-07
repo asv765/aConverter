@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
@@ -43,6 +44,30 @@ namespace _043_PkStroy
             get { return new[] {Vishetravino}; }
         }
         
+        public static readonly ExcelFileInfo NewDubrovichi = new ExcelFileInfo
+        {
+            FileName = Consts.FormFullFilePath("База Дубровичи 01.11.2016.xlsx"),
+            ListInfo = new []
+            {
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Школьная", ListName = "Школьная"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Совхозная", ListName = "Совхозная"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Советской армии", ListName = "Советской армии"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Советская", ListName = "Советская"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Свобода", ListName = "Свобода"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Садовая", ListName = "Садовая"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Революции", ListName = "Революции"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Радищева", ListName = "Радищева"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Новая", ListName = "Новая"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Молодежная", ListName = "Молодежная"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Кооперативная", ListName = "Кооперативная"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Комсомольская", ListName = "Комсомольская"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Колхозная", ListName = "Колхозная"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Есенина", ListName = "Есенина"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. 1 мая", ListName = "1 мая"}, 
+                new ExcelListInfo{HasContract = true, TownName = "Дубровичи", StreetName = "ул. Городцова", ListName = "Городцова"}, 
+            }
+        };
+
         public static readonly ExcelFileInfo RecodeTable1C = new ExcelFileInfo
         {
             FileName = Consts.FormFullFilePath("Таблица перекодировкиv1С1.1 (1).xlsx"),
@@ -1721,8 +1746,8 @@ namespace _043_PkStroy
         private static void FinishAbonent()
         {
             AbonentRecordUtils.SetUniqueTownskod(Abonents, 10);
-            AbonentRecordUtils.SetUniqueUlicakod(Abonents, 30);
-            AbonentRecordUtils.SetUniqueHouseCd(Abonents, 200);
+            AbonentRecordUtils.SetUniqueUlicakod(Abonents, 80);
+            AbonentRecordUtils.SetUniqueHouseCd(Abonents, 2000);
         }
 
         private static void SaveAbonent(ConvertCase convert)
@@ -2134,6 +2159,172 @@ namespace _043_PkStroy
 
             Result = ConvertCaseStatus.Шаг_выполнен_успешно;
             Iterate();
+        }
+    }
+
+    public class ConvertAbonentDubrovichiNew : ConvertCase
+    {
+        public ConvertAbonentDubrovichiNew()
+        {
+            ConvertCaseName = "ABONENTS - Дубровичи new";
+            Position = 11;
+            IsChecked = true;
+        }
+
+        private class DuplicatedAbonent
+        {
+            public string fio { get; set; }
+            public string name { get; set; }
+            public string second_name { get; set; }
+            public int housecd { get; set; }
+            public float? cc { get; set; }
+            public float? lc { get; set; }
+        }
+
+        public override void DoConvert()
+        {
+//            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+//            {
+//                var result = context.ExecuteQuery<DuplicatedAbonent>(
+//                    @"select a.fio, a.name, a.second_name, a.housecd, ca.significance as cc, la.significance as lc from abonents a
+//                        inner join houses h on h.housecd = a.housecd and h.punktcd = 22
+//                        left join ccharsabonentlist ca on ca.lshet = a.lshet and ca.kodccharslist = 1
+//                        left join lcharsabonentlist la on la.lshet = a.lshet and la.kodlcharslist = 22
+//                        group by a.housecd, a.fio, a.name, a.second_name, ca.significance, la.significance
+//                        having count(*) > 1");
+
+//                string duplicatedAbonents = "";
+//                for (int i = 0; i < result.Count; i++)
+//                {
+//                    var da = result[i];
+//                    string sql = String.Format(
+//                        @"select first 1 a.lshet from abonents a
+//                        inner join houses h on h.housecd = a.housecd and h.punktcd = 22
+//                        left join ccharsabonentlist ca on ca.lshet = a.lshet and ca.kodccharslist = 1
+//                        left join lcharsabonentlist la on la.lshet = a.lshet and la.kodlcharslist = 22
+//                        where a.fio = '{0}' and a.name = '{1}' and a.second_name = '{2}' and a.housecd = {3}",
+//                        da.fio, da.name, da.second_name, da.housecd);
+
+
+//                    if (da.cc.HasValue) sql += " and ca.significance = " + da.cc.Value;
+//                    if (da.lc.HasValue) sql += " and la.significance = " + da.lc.Value;
+
+//            var r = context.ExecuteQuery<string>(sql);
+//                    if (r.Count == 0)
+//                    {
+//                        int a = 10;
+//                    }
+//                    duplicatedAbonents += r[0] + "\r\n";
+//                }
+//            }
+
+
+
+            BufferEntitiesManager.DropTableData("CNV$ABONENT");
+            var convertType = ExcelListReader.ConvertType.Abonents;
+            ExcelListReader.Initialize(convertType);
+            SetStepsCount(6);
+            var files = new [] {ExcelFileInfo.NewDubrovichi};
+
+            StepStart(files.Length);
+            for (int i = 0; i < files.Length; i++)
+            {
+                var fileInfo = files[i];
+                for (int j = 0; j < fileInfo.ListInfo.Length; j++)
+                {
+                    var reader = new ExcelListReader(fileInfo, fileInfo.ListInfo[j]);
+                    reader.Read(ExcelListReader.ConvertType.Abonents);
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            for (int i = 0; i < ExcelListReader.Abonents.Count; i++)
+            {
+                ExcelListReader.Abonents[i].TOWNSKOD = 22;
+            }
+
+            StepStart(1);
+            ExcelListReader.FinishRead(convertType);
+            StepFinish();
+
+            StepStart(1);
+            ExcelListReader.Save(this, convertType);
+            StepFinish();
+
+            StepStart(6);
+
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+
+            fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
+            Iterate();
+
+            StepFinish();
+
+            StepStart(ExcelListReader.Abonents.Count);
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = 0; i < ExcelListReader.Abonents.Count; i++)
+                {
+                    var abonent = ExcelListReader.Abonents[i];
+
+                    string sql;
+                    if (abonent.F == "Ермишин" && abonent.I == "Анатолий" && abonent.O == "Иванович")
+                    {
+                        sql = String.Format(@"update abonents set housecd = {0} where lshet = '{1}'", abonent.HOUSECD, "96202621");
+                        context.ExecuteNonQuery(sql);
+                        context.SaveChanges();
+                        continue;
+                    }
+
+                    sql = String.Format(@"select a.lshet from abonents a
+inner join houses h on h.housecd = a.housecd
+where h.punktcd = 22 and
+    a.fio = '{0}'", abonent.F);
+                    if (abonent.I == null) sql += " and a.name is null";
+                    else sql += String.Format(" and a.name = '{0}'", abonent.I);
+                    if (abonent.O == null) sql += " and a.second_name is null";
+                    else sql += String.Format(" and a.second_name = '{0}'", abonent.O);
+                    if (abonent.HOUSENO == null) sql += " and h.houseno is null";
+                    else sql += String.Format(" and h.houseno = {0}", abonent.HOUSENO);
+                    if (abonent.HOUSEPOSTFIX == null) sql += " and h.housepostfix is null";
+                    else sql += String.Format(" and h.housepostfix = '{0}'", abonent.HOUSEPOSTFIX);
+
+                    var result = context.ExecuteQuery<string>(sql);
+                    for (int j = 0; j < result.Count; j++)
+                    {
+                        sql = String.Format(@"update abonents set housecd = {0} where lshet = '{1}'", abonent.HOUSECD, result[j]);
+                        context.ExecuteNonQuery(sql);
+                        if (abonent.FLATNO != null)
+                        {
+                            sql = String.Format(@"update abonents set FLATNO = {0} where lshet = '{1}'", abonent.FLATNO, result[j]);
+                            context.ExecuteNonQuery(sql);
+                        }
+                        if (!String.IsNullOrWhiteSpace(abonent.FLATPOSTFIX))
+                        {
+                            sql = String.Format(@"update abonents set FLATPOSTFIX = {0} where lshet = '{1}'", abonent.FLATPOSTFIX, result[j]);
+                            context.ExecuteNonQuery(sql);
+                        }
+                        context.SaveChanges();
+                    }
+                    if (result.Count != 1)
+                    {
+                        int a = 10;
+                    }
+                    Iterate();
+                }
+            }
+            StepFinish();
         }
     }
 
