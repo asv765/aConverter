@@ -4,6 +4,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -3170,6 +3171,191 @@ namespace _047_Tver
             fbm.ExecuteProcedure("CNV$CNV_03200_CITYZENLGOTA_TVER", new []{"1"});
             Iterate();
             StepFinish();
+        }
+    }
+
+    public class ImportPere : ConvertCase
+    {
+        public ImportPere()
+        {
+            ConvertCaseName = "Перерасчет ПК за июль-август 2016";
+            Position = 1;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(99);
+            StepStart(1);
+            PereRecord[] pereInfo;
+            {
+                var tempPereInfo = new List<PereRecord>();
+                ExcelFileInfo junePere = new ExcelFileInfo
+                {
+                    FileName =
+                        aConverter_RootSettings.SourceDbfFilePath + @"\файл для перерасчета ПК_07.2016_по услугам.xlsx",
+                    StartDataRow = 2,
+                    EndDataRow = 8548,
+                    ListName = "Лист1"
+                };
+                DataTable pereTable = Utils.ReadExcelFile(junePere.FileName, junePere.ListName);
+                for (int i = junePere.StartDataRow - 2; i <= junePere.EndDataRow - 2; i++)
+                {
+                    tempPereInfo.Add(new PereRecord(pereTable.Rows[i], 07));
+                }
+                ExcelFileInfo augPere = new ExcelFileInfo
+                {
+                    FileName =
+                        aConverter_RootSettings.SourceDbfFilePath + @"\файл для перерасчета ПК_08.2016_по услугам.xlsx",
+                    StartDataRow = 2,
+                    EndDataRow = 8464,
+                    ListName = "Лист1"
+                };
+                pereTable = Utils.ReadExcelFile(augPere.FileName, augPere.ListName);
+                for (int i = augPere.StartDataRow - 2; i <= augPere.EndDataRow - 2; i++)
+                {
+                    tempPereInfo.Add(new PereRecord(pereTable.Rows[i], 08));
+                }
+                pereInfo = tempPereInfo.ToArray();
+            }
+            StepFinish();
+
+            AbonentLchars[] abonentLchars;
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                StepStart(1);
+                string sql = @"select * from currentabonentlogicchars ca
+                               where ca.kodlcharslist = 16
+                               order by ca.lshet";
+                var result = context.ExecuteQuery<CurrentAbonentLchars>(sql);
+
+                var tempLchars = new List<AbonentLchars>();
+                var lastLchars = new AbonentLchars();
+                foreach (var currentLchar in result)
+                {
+                    if (currentLchar.LSHET != lastLchars.Lshet)
+                    {
+                        lastLchars = new AbonentLchars { Lshet = currentLchar.LSHET };
+                        tempLchars.Add(lastLchars);
+                    }
+                    switch (currentLchar.KODLCHARSLIST)
+                    {
+                        case 16:
+                            lastLchars.CGVSType = currentLchar.SIGNIFICANCE;
+                            break;
+                        default:
+                            throw new Exception("Неизвестная характеристика " + currentLchar.KODLCHARSLIST);
+                    }
+                }
+                tempLchars.Add(lastLchars);
+                tempLchars.RemoveAt(0);
+                abonentLchars = tempLchars.ToArray();
+                StepFinish();
+
+                sql =
+                    @"INSERT INTO DOCUMENTS (DOCUMENTCD, ORGANIZATIONCD, REGISTERUSERCD, OTVETSTVUSERCD, DOCTYPEID, DOCNAME, DOC_NUMBER, DOC_SER, DOCDATE, INPUTDATE, OUTPUTDATE, FACTDOCUMENTDATE, DOCUMENTIDENTIFER, INTERNALUSEONLY, EMPLOYEE, FROMSUPERIOR, STATUS, REASONID, DEPARTMENTCODE)
+                        VALUES (gen_id(documents_gen, 1) , NULL, 1, 1, 2, 'Массовый перерасчет повышающего коэффициента за июль-август 2016 года', '', '', '2016-11-30', NULL, NULL, Null, Null, NULL, NULL, NULL, NULL, NULL, NULL);";
+
+                sql += "\r\nINSERT INTO NOTES(NOTEID, NOTE) VALUES(gen_id(NOTES_G, 1),'Массовый перерасчет повышающего коэффициента за июль-август 2016 года');";
+                var abonentsWithPere = new List<string>();
+                StringBuilder sb = new StringBuilder(sql);
+                StepStart(pereInfo.Length);
+                for (int i = 0; i < pereInfo.Length; i++)
+                {
+                    var pere = pereInfo[i];
+                    var abnLchars = abonentLchars.SingleOrDefault(a => a.Lshet == pere.Lshet);
+                    if (abnLchars == null)
+                    {
+                        abnLchars = new AbonentLchars
+                        {
+                            Lshet = pere.Lshet,
+                        };
+                    }
+
+                    if (!abonentsWithPere.Contains(abnLchars.Lshet))
+                    {
+                        sb.Append(GeneratePereSql(abnLchars.Lshet));
+                        abonentsWithPere.Add(abnLchars.Lshet);
+                    }
+                    //sql += GeneratePereSql(abnLchars.Lshet, pere.Month);
+                    if (pere.GvsGkal != 0)
+                    {
+                        int servicecd = 105;
+                        int regimcd = abnLchars.CGVSType + 100700 ?? 10;
+                        sb.Append(GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.GvsGkal));
+                        //sql += GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.GvsGkal);
+                    }
+                    if (pere.OdnGkal != 0)
+                    {
+                        int servicecd = 115;
+                        int regimcd = abnLchars.CGVSType + 110700 ?? 10;
+                        sb.Append(GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnGkal));
+                        //sql += GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnGkal);
+                    }
+                    if (pere.OdnTn != 0)
+                    {
+                        int servicecd = 115;
+                        int regimcd = abnLchars.CGVSType + 10400 ?? 10;
+                        sb.Append(GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnTn));
+                        //sql += GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnTn);
+                    }
+                    if (pere.OdnKubm != 0)
+                    {
+                        int servicecd = 115;
+                        int regimcd = abnLchars.CGVSType + 14200 ?? 10;
+                        sb.Append(GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnKubm));
+                        //sql += GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnKubm);
+                    }
+                    Iterate();
+                }
+                StepFinish();
+                Clipboard.SetText(sb.ToString());
+            }
+        }
+
+        public static string GeneratePereSql(string lshet)
+        {
+            return String.Format("\r\nINSERT INTO PERERASHETCASE (CASEID, LSHET, NACHISLCASEID, BEGINDATE, AUTOUSE, IZMEN, FYEAR, FMONTH, FDAY, ISMONTH, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, CASETYPE, NOTEID, DATE4PENI) " +
+                                "VALUES (gen_id(documents_gen, 0),'{0}',gen_id(documents_gen, 0),'2016-11-30', 0,1, 2016,11,30,0,2016,11,30,2016,11,30,NULL, gen_id(NOTES_G, 0), NULL);", lshet);
+        }
+
+        public static string GenerateNachSql(string lshet, int regimcd, int servicecd, int month, decimal summa)
+        {
+            return String.Format("\r\nINSERT INTO NACHISLSUMMA (LSHET, CASEID, KODREGIM, BALANCE_KOD, SUMMATYPE, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, SUMMA, NORMTYPE, SUPPLIERID, KNOTLEVELONEID, KNOTLEVELTWOID) " +
+                                    "VALUES('{0}', gen_id(documents_gen, 0), {2}, {3}, 0, 2016, {4}, 1, 2016, 11, 30, {5}, 0, NULL, Null, NULL);", lshet, 0, regimcd, servicecd, month, summa.ToString().Replace(",", "."));
+        }
+
+        private class AbonentLchars
+        {
+            public string Lshet;
+            public int? CGVSType;
+        }
+
+        private class CurrentAbonentLchars
+        {
+            public string LSHET { get; set; }
+            public int KODLCHARSLIST { get; set; }
+            public int SIGNIFICANCE { get; set; }
+        }
+
+        private class PereRecord
+        {
+            public string Lshet;
+            public decimal GvsGkal;
+            public decimal OdnGkal;
+            public decimal OdnTn;
+            public decimal OdnKubm;
+            public int Month;
+
+            public PereRecord(DataRow dr, int month)
+            {
+                Lshet = String.Format("01{0:D8}", Int64.Parse(dr[0].ToString()));
+                GvsGkal = Decimal.Parse(dr[1].ToString());
+                OdnGkal = Decimal.Parse(dr[2].ToString());
+                OdnTn = Decimal.Parse(dr[3].ToString());
+                OdnKubm = Decimal.Parse(dr[4].ToString());
+                Month = month;
+            }
         }
     }
 }
