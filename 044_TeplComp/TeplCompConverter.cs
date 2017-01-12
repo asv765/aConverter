@@ -4,6 +4,8 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM;
@@ -60,6 +62,14 @@ namespace _044_TeplComp
             new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_02.16.xls", SheetName = "662209", Date = new DateTime(2016,02,01)},
             new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_03.16.xls", SheetName = "662209", Date = new DateTime(2016,03,01)},
             new {FileName = @"D:\Work\C#\C#Projects\aConverter\044_TeplComp\Sources\Показания_04.16.xls", SheetName = "662209", Date = new DateTime(2016,04,01)},
+        };
+
+        public static readonly dynamic VisokoeFile = new
+        {
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\база высокое.xlsx",
+            ListName = "Лист1",
+            StartRow = 2,
+            EndRow = 431
         };
     }
 
@@ -282,7 +292,7 @@ namespace _044_TeplComp
         {
             ConvertCaseName = "Создать таблицы для конвертации";
             Position = 10;
-            IsChecked = false;
+            IsChecked = true;
         }
 
         public override void DoConvert()
@@ -751,6 +761,275 @@ namespace _044_TeplComp
         }
     }
 
+    public class ConvertVisokoe : ConvertCase
+    {
+        public ConvertVisokoe()
+        {
+            ConvertCaseName = "30.12.2016 Перенос базы Высокого #18038";
+            Position = 11;
+            IsChecked = true;
+        }
+
+        private static readonly Regex HouseRegex = new Regex(@"(?<number>\d+)(?<prefix>[^\d]*)");
+
+        public override void DoConvert()
+        {
+            SetStepsCount(9999);
+            long currentLshet = 96220000;
+            long currentCounterId = 19000;
+            DataTable table = Utils.ReadExcelFile(Consts.VisokoeFile.FileName, Consts.VisokoeFile.ListName);
+            var abonents = new List<CNV_ABONENT>();
+            var cchars = new List<CNV_CHAR>();
+            var lchars = new List<CNV_LCHAR>();
+            var counters = new List<CNV_COUNTER>();
+            var cntinds = new List<CNV_CNTRSIND>();
+            StepStart(table.Rows.Count);
+            for (int i = Consts.VisokoeFile.StartRow - 2; i <= Consts.VisokoeFile.EndRow - 2; i++)
+            {
+                var row = new VisokoeFileRow(table.Rows[i]);
+                var abonent = new CNV_ABONENT
+                {
+                    LSHET = (++currentLshet).ToString(),
+                    RAYONKOD = 2,
+                    RAYONNAME = "Рязанский район",
+                    TOWNSKOD = 27,
+                    TOWNSNAME = "ВЫСОКОЕ",
+                    DISTKOD = 78,
+                    DISTNAME = null,
+                    DUCD = 2,
+                    DUNAME = "МКП \"ЖКХ Рязанское\"",
+                    ISDELETED = 0,
+                    PRIM_ = row.Prim,
+                };
+                switch (row.StreetName.ToLower())
+                {
+                    case "центральная":
+                        abonent.ULICAKOD = null;
+                        abonent.ULICANAME = "Центральная ул.";
+                        break;
+                    case "луговая":
+                        abonent.ULICAKOD = 3434;
+                        abonent.ULICANAME = "Луговая ул.";
+                        break;
+                    case "солнечная":
+                        abonent.ULICAKOD = 3435;
+                        abonent.ULICANAME = "Солнечная ул.";
+                        break;
+                    case "речная":
+                        abonent.ULICAKOD = 3436;
+                        abonent.ULICANAME = "Речная ул.";
+                        break;
+                    default:
+                        throw new Exception("Неизвестная улица " + row.StreetName);
+                }
+                if (!String.IsNullOrWhiteSpace(row.House))
+                {
+                    var match = HouseRegex.Match(row.House);
+                    if (!match.Success)
+                        throw new Exception("Не удалось распаристь дом " + row.House);
+                    abonent.HOUSENO = match.Groups["number"].Value.Trim();
+                    abonent.HOUSEPOSTFIX = match.Groups["prefix"].Value.Trim();
+                    abonent.HOUSECD = FindHouseCd(abonent.ULICAKOD, abonent.HOUSENO, abonent.HOUSEPOSTFIX);
+                }         
+                if (!String.IsNullOrWhiteSpace(row.Flat))
+                {
+                    var match = HouseRegex.Match(row.Flat);
+                    if (!match.Success) throw new Exception("Не удалось распарсить квартиру " + row.Flat);
+                    abonent.FLATNO = Int32.Parse(match.Groups["number"].Value);
+                    abonent.FLATPOSTFIX = match.Groups["prefix"].Value.Trim();
+                }
+                ParseFio(row.FIO, ref abonent);
+                
+                abonents.Add(abonent);
+
+                cchars.Add(new CNV_CHAR
+                {
+                    LSHET = currentLshet.ToString(),
+                    CHARCD = 1,
+                    CHARNAME = "Число проживающих",
+                    DATE_ = new DateTime(2016, 10, 01),
+                    VALUE_ = row.PeopleCount
+                });
+                lchars.AddRange(new[] { new CNV_LCHAR
+                {   
+                    LSHET = currentLshet.ToString(),
+                    LCHARCD = 22,
+                    LCHARNAME = "Благоустройство",
+                    DATE_ = new DateTime(2016, 10, 01),
+                    VALUE_ = 9, 
+                    VALUEDESC = "7.52 Водопровод, нагреватель, ванна, унитаз"
+                }, new CNV_LCHAR
+                {  
+                    LSHET = currentLshet.ToString(),
+                    LCHARCD = 30,
+                    LCHARNAME = "Скважина",
+                    DATE_ = new DateTime(2016, 10, 01),
+                    VALUE_ = 0,
+                    VALUEDESC = "Нет"
+                }, new CNV_LCHAR
+                {
+                    LSHET = currentLshet.ToString(),
+                    LCHARCD = 12,
+                    LCHARNAME = "Тариф",
+                    DATE_ = new DateTime(2016, 10, 01),
+                    VALUE_ = 9,
+                    VALUEDESC = "Высокое"
+                }});
+
+                if (row.Indications != null)
+                {
+                    lchars.Add(new CNV_LCHAR
+                    {
+                        LSHET = currentLshet.ToString(),
+                        LCHARCD = 18,
+                        LCHARNAME = "Тип учета ХВС",
+                        DATE_ = new DateTime(2016, 10, 01),
+                        VALUE_ = 1,
+                        VALUEDESC = "По счетчику"
+                    });
+                    foreach (var indication in row.Indications)
+                    {
+                        counters.Add(new CNV_COUNTER
+                        {
+                            LSHET = currentLshet.ToString(),
+                            COUNTERID = (++currentCounterId).ToString(),
+                            CNTTYPE = 1,
+                            CNTNAME = "схв-15",
+                            SETUPDATE = new DateTime(2016, 10, 01)
+                        });
+                        cntinds.Add(new CNV_CNTRSIND
+                        {
+                            COUNTERID = currentCounterId.ToString(),
+                            DOCUMENTCD = $"{currentLshet}_{currentCounterId}",
+                            INDDATE = new DateTime(2016, 10, 01),
+                            INDICATION = indication,
+                            OLDIND = indication,
+                            OB_EM = 0,
+                            INDTYPE = 0
+                        });
+                    }
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(2);
+            AbonentRecordUtils.SetUniqueUlicakod(abonents, 3500);
+            Iterate();
+            AbonentRecordUtils.SetUniqueHouseCd(abonents, 6700);
+            StepFinish();
+
+            StepStart(5);
+            SaveList(abonents, Consts.InsertRecordCount, false);
+            Iterate();
+            SaveList(cchars, Consts.InsertRecordCount, false);
+            Iterate();
+            SaveList(lchars, Consts.InsertRecordCount, false);
+            Iterate();
+            SaveList(counters, Consts.InsertRecordCount, false);
+            Iterate();
+            SaveList(cntinds, Consts.InsertRecordCount, false);
+            Iterate();
+            StepFinish();
+        }
+
+        private static int? FindHouseCd(int? streetcd, string houseno, string housepostfix)
+        {
+            switch (streetcd)
+            {
+                case null: return null;
+                case 3434:
+                    if (!String.IsNullOrWhiteSpace(housepostfix)) return null;
+                    switch (houseno)
+                    {
+                        case "6504": return 15;
+                        case "6505": return 21;
+                        case "6506": return 22;
+                        default: return null;
+                    }
+                case 3435:
+                    if (!String.IsNullOrWhiteSpace(housepostfix)) return null;
+                    switch (houseno)
+                    {
+                        case "6507": return 4;
+                        case "6508": return 35;
+                        default: return null;
+                    }
+                case 3436:
+                    if (!String.IsNullOrWhiteSpace(housepostfix)) return null;
+                    switch (houseno)
+                    {
+                        case "6509": return 36;
+                        case "6510": return 37;
+                        case "6511": return 63;
+                        case "6512": return 75;
+                        case "6513": return 81;
+                        case "6514": return 83;
+                        case "6515": return 86;
+                        case "6516": return 110;
+                        default: return null;
+                    }
+                default: return null;
+            }
+        }
+
+        private static readonly Regex FioRegex = new Regex(@"(?<f>[а-яА-Я]+) (?<i>[а-яА-Я]{1})\.(?<o>[а-яА-Я]{1})\.");
+
+
+        private static void ParseFio(string fio, ref CNV_ABONENT abonent)
+        {
+            if (String.IsNullOrWhiteSpace(fio)) return;
+            if (fio == "-") return;
+            if (fio.Contains('.') && fio != "Лапочкин В. Александров")
+            {
+                var match = FioRegex.Match(fio);
+                if (!match.Success) throw new Exception("Не удалось распарсить фио " + fio);
+                abonent.F = match.Groups["f"].Value;
+                abonent.I = match.Groups["i"].Value;
+                abonent.O = match.Groups["o"].Value;
+            }
+            else
+            {
+                var fullname = fio.Split(' ');
+                if (fullname.Length > 3)
+                    throw new Exception("Не удалось распарсить фио " + fio);
+                //if (fullname.Length != 3) Task.Run(() => { MessageBox.Show("Странное фио " + fio); });
+                abonent.F = fullname[0];
+                if (fullname.Length > 1) abonent.I = fullname[1];
+                if (fullname.Length > 2) abonent.O = fullname[2];
+            }
+        }
+    }
+
+    public class VisokoeFileRow
+    {
+        public string StreetName;
+        public string House;
+        public string Flat;
+        public string FIO;
+        public int PeopleCount;
+        public int[] Indications;
+        public string Prim;
+
+        public VisokoeFileRow(DataRow dr)
+        {
+            try
+            {
+                StreetName = dr[1].ToString().Trim();
+                House = dr[2].ToString().Trim();
+                Flat = dr[3].ToString().Trim();
+                FIO = Regex.Replace(dr[4].ToString().Trim(), @"\s+", " ");
+                PeopleCount = Int32.Parse(dr[5].ToString());
+                Indications = String.IsNullOrWhiteSpace(dr[8].ToString()) ? null : dr[8].ToString().Split(';').Select(Int32.Parse).ToArray();
+                Prim = String.IsNullOrWhiteSpace(dr[8].ToString()) ? null : dr[8].ToString().Trim();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+    }
+
     public class TransferAddressObjects : ConvertCase
     {
         public TransferAddressObjects()
@@ -862,7 +1141,7 @@ namespace _044_TeplComp
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             //fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
             //Iterate();
-            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0" });
             Iterate();
         }
     }

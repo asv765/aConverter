@@ -111,3 +111,5 @@ begin
     values (:LSHET, 0, :PHONE);
   end
 end^
+
+SET TERM ; ^

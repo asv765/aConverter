@@ -43,3 +43,5 @@ begin
     end
   end
 end^
+
+SET TERM ; ^

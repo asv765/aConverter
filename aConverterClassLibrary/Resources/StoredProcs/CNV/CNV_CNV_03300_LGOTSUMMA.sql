@@ -64,3 +64,5 @@ begin
 	end
   END
 end^
+
+SET TERM ; ^

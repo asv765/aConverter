@@ -28,3 +28,5 @@ begin
     values (:DOCUMENTCD, :CITYZENID, :MIGRATIONDATE, :MIGRATIONTYPE, :DIRECTION);
   end
 end^
+
+SET TERM ; ^
