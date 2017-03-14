@@ -133,6 +133,9 @@
     <Compile Include="RecordsDataAccessORM\CNV_CITIZENMIGRATION.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_CITYZENLGOTA.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
     <Compile Include="RecordsDataAccessORM\CNV_CNTRSIND.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
@@ -152,6 +155,9 @@
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
     <Compile Include="RecordsDataAccessORM\CNV_LCHAR.generated.cs">
+      <DependentUpon>EntitiesModel.rlinq</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_LGOTSUMMA.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
     <Compile Include="RecordsDataAccessORM\CNV_NACH.generated.cs">
@@ -257,6 +263,8 @@
     <Content Include="Resources\CNV_CITIZENMIGRATION_d.sql" />
     <Content Include="Resources\CNV_CITIZENS.sql" />
     <Content Include="Resources\CNV_CITIZENS_d.sql" />
+    <None Include="Resources\CNV_CITYZENLGOTA.sql" />
+    <None Include="Resources\CNV_CITYZENLGOTA_d.sql" />
     <Content Include="Resources\CNV_CNTRSIND.sql" />
     <Content Include="Resources\CNV_CNTRSIND_d.sql" />
     <Content Include="Resources\CNV_COUNTERS.sql" />
@@ -272,6 +280,8 @@
     <Content Include="Resources\CNV_GCOUNTER_d.sql" />
     <Content Include="Resources\CNV_HADDCHAR.sql" />
     <Content Include="Resources\CNV_HADDCHAR_d.sql" />
+    <None Include="Resources\CNV_LGOTSUMMA.sql" />
+    <None Include="Resources\CNV_LGOTSUMMA_d.sql" />
     <Content Include="Resources\CNV_NACH.sql" />
     <Content Include="Resources\CNV_NACHOPL.sql" />
     <Content Include="Resources\CNV_NACHOPL_d.sql" />
@@ -297,6 +307,8 @@
     <None Include="Resources\StoredProcs\CC\CNV_CC_SALDOHISTORYGAP.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_00950_COUNTERSTYPES.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01000_COUNTERS.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_CCHARSDUPLICATION.sql" />
+    <None Include="Resources\StoredProcs\CC\CNV_CC_LCHARSDUPLICATION.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHNOTFOUNDINNACHOPL.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLNACHMISMATCH.sql" />
     <Content Include="Resources\StoredProcs\CC\CNV_CC_NACHOPLNACHNOTFOUND.sql" />
@@ -312,6 +324,9 @@
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_02100_EXTLSHETS.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_03000_CITIZENS_TVER.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03100_TVER_ABONENTDOLYA.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03200_CITYZENLGOTA_TVER.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03050_CITIZENSMIGR_TVER.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03300_LGOTSUMMA.sql" />
     <Content Include="Resources\StoredProcs\CNV\cnv_cnv_documentnumerator.sql" />
     <Content Include="Resources\StoredProcs\CNV_ADD_WRONG_PARAMETER_EXCEPTION.sql" />
   </ItemGroup>

@@ -192,66 +192,67 @@
         </orm:identity>
         <orm:concurrency strategy="changed" />
         <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="df18351b-b06f-4c7d-a627-08d9a9eb5887" type="System.Int32">
-          <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+          <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
         </orm:field>
         <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="d6f7b1ad-4b6e-45d1-bceb-b7476df4c0b0" type="System.String">
-          <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="LSHET" sql-type="varchar" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_dOCUMENTCD" property="DOCUMENTCD" behavior="readwrite" uniqueId="aa14fe03-f950-4991-add8-e265f77b23f5" type="System.String">
-          <orm:column name="DOCUMENTCD" sql-type="VARCHAR" nullable="false" length="20" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="DOCUMENTCD" sql-type="varchar" nullable="false" length="20" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_mONTH_" property="MONTH_" behavior="readwrite" uniqueId="3b97961e-8249-4230-863e-13937687f58c" type="System.Int32">
-          <orm:column name="MONTH_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="MONTH_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_yEAR_" property="YEAR_" behavior="readwrite" uniqueId="e7890c99-b51e-4e70-bed1-05975a50b5ef" type="System.Int32">
-          <orm:column name="YEAR_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="YEAR_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_mONTH2" property="MONTH2" behavior="readwrite" uniqueId="37b08c87-a2ff-4f36-a22f-f202eddfc06c" type="System.Int32">
-          <orm:column name="MONTH2" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="MONTH2" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_yEAR2" property="YEAR2" behavior="readwrite" uniqueId="f93ab0b6-0acd-45a6-80fd-5c039802f91e" type="System.Int32">
-          <orm:column name="YEAR2" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="YEAR2" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_fNATH" property="FNATH" behavior="readwrite" uniqueId="fcfe79dc-9083-4552-9b4a-aa5e8d930782" type="System.Decimal">
-          <orm:column name="FNATH" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
+          <orm:column name="FNATH" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
         </orm:field>
         <orm:field name="_pROCHL" property="PROCHL" behavior="readwrite" uniqueId="db02a508-3c79-41de-982b-5a7ffc9c9dcb" type="System.Decimal">
-          <orm:column name="PROCHL" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
+          <orm:column name="PROCHL" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
         </orm:field>
         <orm:field name="_vOLUME" property="VOLUME" behavior="readwrite" uniqueId="41feed6b-21bb-4d2d-bc6b-7a3ad56271a0" type="System.Decimal">
-          <orm:column name="VOLUME" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
+          <orm:column name="VOLUME" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
         </orm:field>
         <orm:field name="_rEGIMCD" property="REGIMCD" behavior="readwrite" uniqueId="1469606e-8ba3-4025-b56e-3e5dd4a4be58" type="System.Int32">
-          <orm:column name="REGIMCD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="REGIMCD" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_rEGIMNAME" property="REGIMNAME" behavior="readwrite" uniqueId="4951e342-d3cb-4709-9359-97198ea44d10" type="System.String">
-          <orm:column name="REGIMNAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="REGIMNAME" sql-type="varchar" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_sERVICECD" property="SERVICECD" behavior="readwrite" uniqueId="dfb64495-e44d-41f0-90ce-818dd1122334" type="System.Int32">
-          <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="SERVICECD" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_dATE_VV" property="DATE_VV" behavior="readwrite" uniqueId="7ebc9ad5-f793-4f3f-80b1-9cc30234abcd" type="System.DateTime">
-          <orm:column name="DATE_VV" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
+          <orm:column name="DATE_VV" sql-type="timestamp" nullable="false" length="0" scale="0" ado-type="DateTime" />
         </orm:field>
         <orm:field name="_tYPE_" property="TYPE_" behavior="readwrite" uniqueId="7780b6e8-f622-4e64-a021-1472926c50fd" type="System.Int32">
-          <orm:column name="TYPE_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="TYPE_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_dOCNAME" property="DOCNAME" behavior="readwrite" uniqueId="57bbd7e9-940a-4bbc-ab9d-37dfb7eb509c" type="System.String">
-          <orm:column name="DOCNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="DOCNAME" sql-type="varchar" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_dOCNUMBER" property="DOCNUMBER" behavior="readwrite" uniqueId="50947dbc-9df9-4dc5-afa0-b9bbc1e65f33" type="System.String">
-          <orm:column name="DOCNUMBER" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="DOCNUMBER" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_dOCDATE" property="DOCDATE" behavior="readwrite" uniqueId="6aa60fb0-b777-473e-b425-4f3575d8c43f" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="DOCDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+          <orm:column name="DOCDATE" sql-type="timestamp" nullable="true" length="0" scale="0" ado-type="DateTime" />
         </orm:field>
         <orm:field name="_sERVICENAME" property="SERVICENAME" behavior="readwrite" uniqueId="40ad90f5-c573-4014-88a9-0e21713cb7e4" type="System.String">
-          <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="SERVICENAME" sql-type="varchar" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_pROCHLVOLUME" property="PROCHLVOLUME" uniqueId="a370db5a-a160-4382-8321-65eda216b400" type="System.Decimal" />
+        <orm:field name="_vTYPE_" property="VTYPE_" uniqueId="5104686b-98ba-4d0f-a19a-8c3568820bdb" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
         <orm:index name="CNV$NACH_IDX1">
           <orm:columnMapping>
-            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
+            <orm:column name="LSHET" sql-type="varchar" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
       </orm:class>
@@ -683,92 +684,93 @@
         </orm:identity>
         <orm:concurrency strategy="changed" />
         <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="4d5514e1-5202-4062-ac7b-dbdeabc2f796" type="System.Int32">
-          <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+          <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
         </orm:field>
         <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="bca80eb9-d6f4-4580-ab62-9de7a407c5b5" type="System.String">
-          <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_hOUSECD" property="HOUSECD" behavior="readwrite" uniqueId="354f9ba2-3ff1-408b-af0e-acbb57f7a283" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="HOUSECD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="HOUSECD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_dISTKOD" property="DISTKOD" behavior="readwrite" uniqueId="b9db5f64-5ae3-46ef-8272-20cb9bb979bf" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="DISTKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="DISTKOD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_dISTNAME" property="DISTNAME" behavior="readwrite" uniqueId="3874b912-76c9-485a-a821-e1e9bcb0fb59" type="System.String">
-          <orm:column name="DISTNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="DISTNAME" sql-type="varchar" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_rAYONKOD" property="RAYONKOD" behavior="readwrite" uniqueId="36053307-dd2c-4881-9f95-1d0f57a0a9e8" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="RAYONKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="RAYONKOD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_rAYONNAME" property="RAYONNAME" behavior="readwrite" uniqueId="099d42c1-d4ad-4c66-83f9-fa4b9b5af0d4" type="System.String">
-          <orm:column name="RAYONNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="RAYONNAME" sql-type="varchar" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_tOWNSKOD" property="TOWNSKOD" behavior="readwrite" uniqueId="4efa17fb-c270-48ce-8519-a42d116712bd" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="TOWNSKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="TOWNSKOD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_tOWNSNAME" property="TOWNSNAME" behavior="readwrite" uniqueId="fb06b6bf-6cb7-4a05-87e8-f984c3b76688" type="System.String">
-          <orm:column name="TOWNSNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="TOWNSNAME" sql-type="varchar" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_uLICAKOD" property="ULICAKOD" behavior="readwrite" uniqueId="93d1bb54-72cf-4ca3-a68e-7e785b4445c9" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="ULICAKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="ULICAKOD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_uLICANAME" property="ULICANAME" behavior="readwrite" uniqueId="06673c24-0fad-4718-a502-c6f54d0a62be" type="System.String">
-          <orm:column name="ULICANAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="ULICANAME" sql-type="varchar" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_f" property="F" behavior="readwrite" uniqueId="9c2effea-de76-4139-8043-86ca6660529b" type="System.String">
-          <orm:column name="F" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="F" sql-type="varchar" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_i" property="I" behavior="readwrite" uniqueId="a1e3867b-39ee-44b1-85ca-00d8217db555" type="System.String">
-          <orm:column name="I" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="I" sql-type="varchar" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_o" property="O" behavior="readwrite" uniqueId="6d494497-37bf-40ac-a457-a86e0489fce9" type="System.String">
-          <orm:column name="O" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="O" sql-type="varchar" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_pRIM_" property="PRIM_" behavior="readwrite" uniqueId="11158349-8b2f-4fbf-9a4b-537505a80b7c" type="System.String">
-          <orm:column name="PRIM_" sql-type="VARCHAR" nullable="true" length="250" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="PRIM_" sql-type="varchar" nullable="true" length="250" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_eXTLSHET" property="EXTLSHET" behavior="readwrite" uniqueId="5fb414c8-8150-4768-a0c8-c58dacf633e3" type="System.String">
-          <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="EXTLSHET" sql-type="varchar" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_eXTLSHET2" property="EXTLSHET2" behavior="readwrite" uniqueId="3ad96090-5fb0-4521-9286-55ba5686fb55" type="System.String">
-          <orm:column name="EXTLSHET2" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="EXTLSHET2" sql-type="varchar" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_pHONENUM" property="PHONENUM" behavior="readwrite" uniqueId="c08a4483-0d4e-49c3-aebd-f26979b5ddf8" type="System.String">
-          <orm:column name="PHONENUM" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="PHONENUM" sql-type="varchar" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_pOSTINDEX" property="POSTINDEX" behavior="readwrite" uniqueId="08f67fa8-67ed-4fc7-9dbf-6be8f5175911" type="System.String">
-          <orm:column name="POSTINDEX" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="POSTINDEX" sql-type="varchar" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_dUCD" property="DUCD" behavior="readwrite" uniqueId="6fb5c6af-e6aa-4c97-a81b-be0cc2159bc0" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="DUCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="DUCD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_dUNAME" property="DUNAME" behavior="readwrite" uniqueId="fa905287-c808-4e20-8f6d-bbebdd0b2b58" type="System.String">
-          <orm:column name="DUNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="DUNAME" sql-type="varchar" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_iSDELETED" property="ISDELETED" behavior="readwrite" uniqueId="d801e0d8-a6ca-4f35-bef0-cd76dfd0dfb8" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="ISDELETED" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="ISDELETED" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_kORPUSPOSTFIX" property="KORPUSPOSTFIX" behavior="readwrite" uniqueId="777b9c64-30e9-4d61-a340-f1f801ab4793" type="System.String">
-          <orm:column name="KORPUSPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="KORPUSPOSTFIX" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_kORPUSNO" property="KORPUSNO" behavior="readwrite" uniqueId="dbf50ca5-3581-4df2-9261-568dce0f9def" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
-          <orm:column name="KORPUSNO" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          <orm:column name="KORPUSNO" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_hOUSEPOSTFIX" property="HOUSEPOSTFIX" behavior="readwrite" uniqueId="8d5b9cc4-756a-4f3e-909e-c2a95b6a8329" type="System.String">
-          <orm:column name="HOUSEPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="HOUSEPOSTFIX" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_hOUSENO" property="HOUSENO" behavior="readwrite" uniqueId="53022a8a-0a2e-4028-a120-1aefc8ecfe5b" type="System.String">
-          <orm:column name="HOUSENO" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="HOUSENO" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_fLATPOSTFIX" property="FLATPOSTFIX" behavior="readwrite" uniqueId="adf59acb-f434-41f6-95cf-348130b0339d" type="System.String">
-          <orm:column name="FLATPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="FLATPOSTFIX" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_rOOMNO" property="ROOMNO" uniqueId="ae74589d-b163-4aad-9c7d-db571d1aa019" type="System.Int16" />
-        <orm:field name="_fLATNO" property="FLATNO" uniqueId="c23db484-61d7-45be-a097-ea9c244f98b5" type="System.Int32" />
+        <orm:field name="_fLATNO" property="FLATNO" uniqueId="c23db484-61d7-45be-a097-ea9c244f98b5" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
         <orm:field name="_rOOMPOSTFIX" property="ROOMPOSTFIX" uniqueId="cacd0a19-20d8-4bf8-84a1-8e441c107cc7" type="System.String" />
+        <orm:field name="_cLOSEDATE" property="CLOSEDATE" uniqueId="6fa0766f-b188-49f7-a521-316f75bc4d70" type="DateTime?" />
         <orm:index name="CNV$ABONENT_IDX1">
           <orm:columnMapping>
-            <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+            <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
       </orm:class>
@@ -1412,6 +1414,108 @@
           <orm:column name="VALUE_" sql-type="numeric" nullable="true" length="18" scale="8" converter="OpenAccessRuntime.Data.FirebirdDecimalConverter" ado-type="Numeric" />
         </orm:field>
       </orm:class>
+      <orm:class name="CNV_CITYZENLGOTA" uniqueId="e45244fb-a805-4add-8752-ff28c33f04a7">
+        <orm:table name="CNV$CITYZENLGOTA" />
+        <orm:identity>
+          <orm:single-field field-name="_iD" />
+        </orm:identity>
+        <orm:field name="_iD" property="ID" uniqueId="b1aff168-bb13-4ccd-a8a5-329ea69a65d3" type="System.Int32">
+          <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cITYZENID" property="CITYZENID" uniqueId="fb2ef15c-b539-4c54-99a3-d3af4b4a8b3c" type="System.Int32">
+          <orm:column name="CITYZENID" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lGOTACD" property="LGOTACD" uniqueId="bd136a3f-dab1-47fb-b0c0-80bf0c720cad" type="System.Int32">
+          <orm:column name="LGOTACD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lGOTANAME" property="LGOTANAME" uniqueId="39d198f2-d192-4a19-a92c-a1d3c2fe227f" type="System.String">
+          <orm:column name="LGOTANAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sTARTDATE" property="STARTDATE" uniqueId="dc12e819-80b1-428e-b84f-df679e07889f" type="System.DateTime">
+          <orm:column name="STARTDATE" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_eNDDATE" property="ENDDATE" uniqueId="3eb3678a-7a72-46b9-a414-fe8eac56db6f" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ENDDATE" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_pRIORITY" property="PRIORITY" uniqueId="b1cc3784-6c43-464e-a14c-e8ec010a7cf3" type="System.Int32">
+          <orm:column name="PRIORITY" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_iSDELETED" property="ISDELETED" uniqueId="ff66c260-dfd0-4158-9b6a-5b3043d7811f" type="System.Int32">
+          <orm:column name="ISDELETED" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+      </orm:class>
+      <orm:class name="CNV_LGOTSUMMA" uniqueId="da5cdfe4-4e4b-4a20-b4f5-be9a5c7a4cd2">
+        <orm:table name="CNV$LGOTSUMMA" />
+        <orm:identity>
+          <orm:single-field field-name="_iD" />
+        </orm:identity>
+        <orm:field name="_iD" property="ID" uniqueId="d35bcb97-1f32-4594-84c6-f4bcc88160f4" type="System.Int32">
+          <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lSHET" property="LSHET" uniqueId="83e757b8-e925-48eb-a250-4f1e5f6e0900" type="System.String">
+          <orm:column name="LSHET" sql-type="varchar" nullable="false" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_cITYZENID" property="CITYZENID" uniqueId="b17bf874-8218-401a-908d-c1e59d11feed" type="System.Int32">
+          <orm:column name="CITYZENID" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lGOTACD" property="LGOTACD" uniqueId="0ac9bb81-414c-4302-9500-82301b95861c" type="System.Int32">
+          <orm:column name="LGOTACD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lGOTANAME" property="LGOTANAME" uniqueId="643036bd-4d8f-4aa7-831f-4c14eb95e0a6" type="System.String">
+          <orm:column name="LGOTANAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_rEGIMCD" property="REGIMCD" uniqueId="309e2880-47e8-4729-a3d4-0255104bd384" type="System.Int32">
+          <orm:column name="REGIMCD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_rEGIMNAME" property="REGIMNAME" uniqueId="02818b32-6f7e-4c23-b888-cd743bd66e37" type="System.String">
+          <orm:column name="REGIMNAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sERVICECD" property="SERVICECD" uniqueId="c32eec57-2209-4efa-89be-76734405c149" type="System.Int32">
+          <orm:column name="SERVICECD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sERVICENAME" property="SERVICENAME" uniqueId="5972bab2-dd5d-4280-bafd-1b4797ddfa3a" type="System.String">
+          <orm:column name="SERVICENAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_sUMMA" property="SUMMA" uniqueId="8b93303e-2fb2-4d82-a751-6cb6cd7cf2e1" type="System.Decimal">
+          <orm:column name="SUMMA" sql-type="numeric" nullable="false" length="18" scale="8" converter="OpenAccessRuntime.Data.FirebirdDecimalConverter" ado-type="Numeric" />
+        </orm:field>
+        <orm:field name="_mONTH_" property="MONTH_" uniqueId="2b1e6e0a-3a21-497c-9316-ce762058dc4e" type="System.Int32">
+          <orm:column name="MONTH_" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_yEAR_" property="YEAR_" uniqueId="2e58bab3-68e6-49f0-8597-e08c346c7353" type="System.Int32">
+          <orm:column name="YEAR_" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_mONTH2" property="MONTH2" uniqueId="573cce47-35fb-4185-8899-7fdb74abe8c4" type="System.Int32">
+          <orm:column name="MONTH2" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_yEAR2" property="YEAR2" uniqueId="ecc26ab7-1c2c-4d83-9f1f-890a45f9a23d" type="System.Int32">
+          <orm:column name="YEAR2" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dATE_VV" property="DATE_VV" uniqueId="fb85e33b-7d93-46f9-b8a1-e024c21cc974" type="System.DateTime">
+          <orm:column name="DATE_VV" sql-type="timestamp" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_tYPE_" property="TYPE_" uniqueId="93bfaaf0-9ca5-4c1b-a283-413969605d87" type="System.Int32">
+          <orm:column name="TYPE_" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cOUNTERCD" property="COUNTERCD" uniqueId="54a2008b-8415-4e4f-af9c-03cb31ea19ed" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="COUNTERCD" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sUPPLIERID" property="SUPPLIERID" uniqueId="b23c955a-5c6d-4662-8be6-5ee33d46837e" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="SUPPLIERID" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dOCUMENTCD" property="DOCUMENTCD" uniqueId="faf72834-4f77-48aa-9488-ef21c0403d42" type="System.Int32">
+          <orm:column name="DOCUMENTCD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dOCNAME" property="DOCNAME" uniqueId="5b303b58-1eb3-4a3f-b9e1-fdd54cdca71f" type="System.String">
+          <orm:column name="DOCNAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_dOCNUMBER" property="DOCNUMBER" uniqueId="b0aa1c5b-8ed9-46d8-8631-09292d65d59f" type="System.String">
+          <orm:column name="DOCNUMBER" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_dOCDATE" property="DOCDATE" uniqueId="9bafeb1e-3b51-45bf-8ac4-d8ff074d5d39" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DOCDATE" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        </orm:field>
+      </orm:class>
     </orm:namespace>
     <orm:schema schema="">
       <orm:table name="CNV$SUPPLNET">
@@ -1483,28 +1587,29 @@
         </orm:index>
       </orm:table>
       <orm:table name="CNV$NACH">
-        <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
-        <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="DOCUMENTCD" sql-type="VARCHAR" nullable="false" length="20" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="MONTH_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="YEAR_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="MONTH2" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="YEAR2" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="FNATH" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
-        <orm:column name="PROCHL" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
-        <orm:column name="VOLUME" sql-type="NUMERIC" nullable="false" length="18" scale="4" ado-type="Numeric" />
-        <orm:column name="REGIMCD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="REGIMNAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="SERVICECD" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="DATE_VV" sql-type="TIMESTAMP" nullable="false" length="0" scale="0" ado-type="DateTime" />
-        <orm:column name="TYPE_" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="DOCNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="DOCNUMBER" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="DOCDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
-        <orm:column name="SERVICENAME" sql-type="VARCHAR" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="varchar" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOCUMENTCD" sql-type="varchar" nullable="false" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="MONTH_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="YEAR_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="MONTH2" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="YEAR2" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="FNATH" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="PROCHL" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="VOLUME" sql-type="numeric" nullable="false" length="18" scale="4" ado-type="Numeric" />
+        <orm:column name="REGIMCD" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="REGIMNAME" sql-type="varchar" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="SERVICECD" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DATE_VV" sql-type="timestamp" nullable="false" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="TYPE_" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DOCNAME" sql-type="varchar" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOCNUMBER" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOCDATE" sql-type="timestamp" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="SERVICENAME" sql-type="varchar" nullable="false" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="VTYPE_" sql-type="integer" nullable="true" length="0" scale="0" ado-type="" />
         <orm:index name="CNV$NACH_IDX1">
           <orm:columnMapping>
-            <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
+            <orm:column name="LSHET" sql-type="varchar" nullable="false" length="10" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
       </orm:table>
@@ -1676,38 +1781,39 @@
         </orm:index>
       </orm:table>
       <orm:table name="CNV$ABONENT">
-        <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
-        <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="HOUSECD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="DISTKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="DISTNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="RAYONKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="RAYONNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="TOWNSKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="TOWNSNAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="ULICAKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="ULICANAME" sql-type="VARCHAR" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="F" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="I" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="O" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="PRIM_" sql-type="VARCHAR" nullable="true" length="250" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="EXTLSHET" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="EXTLSHET2" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="PHONENUM" sql-type="VARCHAR" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="POSTINDEX" sql-type="VARCHAR" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="DUCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="DUNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="ISDELETED" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="KORPUSPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="KORPUSNO" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="HOUSEPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="HOUSENO" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="ROOMNO" sql-type="SMALLINT" nullable="true" length="0" scale="0" ado-type="Int16" />
-        <orm:column name="FLATPOSTFIX" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
-        <orm:column name="FLATNO" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="HOUSECD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DISTKOD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DISTNAME" sql-type="varchar" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="RAYONKOD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="RAYONNAME" sql-type="varchar" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="TOWNSKOD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="TOWNSNAME" sql-type="varchar" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ULICAKOD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ULICANAME" sql-type="varchar" nullable="true" length="40" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="F" sql-type="varchar" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="I" sql-type="varchar" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="O" sql-type="varchar" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="PRIM_" sql-type="varchar" nullable="true" length="250" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="EXTLSHET" sql-type="varchar" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="EXTLSHET2" sql-type="varchar" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="PHONENUM" sql-type="varchar" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="POSTINDEX" sql-type="varchar" nullable="true" length="6" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DUCD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DUNAME" sql-type="varchar" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ISDELETED" sql-type="integer" nullable="false" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="KORPUSPOSTFIX" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="KORPUSNO" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="HOUSEPOSTFIX" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="HOUSENO" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ROOMNO" sql-type="smallint" nullable="true" length="0" scale="0" ado-type="Int16" />
+        <orm:column name="FLATPOSTFIX" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="FLATNO" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="CLOSEDATE" sql-type="date" nullable="true" length="0" scale="0" ado-type="" />
         <orm:index name="CNV$ABONENT_IDX1">
           <orm:columnMapping>
-            <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+            <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
           </orm:columnMapping>
         </orm:index>
       </orm:table>
@@ -1938,6 +2044,40 @@
         <orm:column name="HOUSECD" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
         <orm:column name="VALUE_" sql-type="numeric" nullable="true" length="18" scale="8" converter="OpenAccessRuntime.Data.FirebirdDecimalConverter" ado-type="Numeric" />
       </orm:table>
+      <orm:table name="CNV$CITYZENLGOTA">
+        <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="CITYZENID" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="LGOTACD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="LGOTANAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        <orm:column name="STARTDATE" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        <orm:column name="ENDDATE" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        <orm:column name="PRIORITY" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="ISDELETED" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+      </orm:table>
+      <orm:table name="CNV$LGOTSUMMA">
+        <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="varchar" nullable="false" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        <orm:column name="CITYZENID" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="LGOTACD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="LGOTANAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        <orm:column name="REGIMCD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="REGIMNAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        <orm:column name="SERVICECD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="SERVICENAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        <orm:column name="SUMMA" sql-type="numeric" nullable="false" length="18" scale="8" converter="OpenAccessRuntime.Data.FirebirdDecimalConverter" ado-type="Numeric" />
+        <orm:column name="MONTH_" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="YEAR_" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="MONTH2" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="YEAR2" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="DATE_VV" sql-type="timestamp" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+        <orm:column name="TYPE_" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="COUNTERCD" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="SUPPLIERID" sql-type="integer" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="DOCUMENTCD" sql-type="integer" nullable="false" length="0" scale="0" converter="OpenAccessRuntime.Data.IntConverter" ado-type="Int32" />
+        <orm:column name="DOCNAME" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        <orm:column name="DOCNUMBER" sql-type="varchar" nullable="true" length="190" scale="0" converter="OpenAccessRuntime.Data.VariableLengthAnsiStringConverter" ado-type="StringVariableLength" />
+        <orm:column name="DOCDATE" sql-type="timestamp" nullable="true" length="0" scale="0" converter="OpenAccessRuntime.Data.Timestamp2DateTimeConverter" ado-type="DateTime" />
+      </orm:table>
     </orm:schema>
     <orm:relational-naming-settings>
       <orm:source-strategy>Property</orm:source-strategy>
@@ -2042,6 +2182,7 @@
       <Property Id="f93ab0b6-0acd-45a6-80fd-5c039802f91e" name="YEAR2" type="Int32" label="YEAR2 : Int32" kind="Persistent" fieldName="_yEAR2" />
       <Property Id="40ad90f5-c573-4014-88a9-0e21713cb7e4" name="SERVICENAME" label="SERVICENAME : String" kind="Persistent" fieldName="_sERVICENAME" />
       <Property Id="a370db5a-a160-4382-8321-65eda216b400" name="PROCHLVOLUME" type="Decimal" label="PROCHLVOLUME : Decimal" fieldName="_pROCHLVOLUME" />
+      <Property Id="5104686b-98ba-4d0f-a19a-8c3568820bdb" name="VTYPE_" type="Int32" label="VTYPE_ : Int32" nullable="true" fieldName="_vTYPE_" />
     </DomainClass>
     <DomainClass Id="28d3d09e-675e-4116-bd0b-e54dba7ec378" name="CNV_LCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="ae228361-4967-4568-a1fa-0d70c342ca59" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
@@ -2183,8 +2324,9 @@
       <Property Id="53022a8a-0a2e-4028-a120-1aefc8ecfe5b" name="HOUSENO" label="HOUSENO : String" kind="Persistent" fieldName="_hOUSENO" />
       <Property Id="adf59acb-f434-41f6-95cf-348130b0339d" name="FLATPOSTFIX" label="FLATPOSTFIX : String" kind="Persistent" fieldName="_fLATPOSTFIX" />
       <Property Id="ae74589d-b163-4aad-9c7d-db571d1aa019" name="ROOMNO" type="Int16" label="ROOMNO : Int16" fieldName="_rOOMNO" />
-      <Property Id="c23db484-61d7-45be-a097-ea9c244f98b5" name="FLATNO" type="Int32" label="FLATNO : Int32" fieldName="_fLATNO" />
+      <Property Id="c23db484-61d7-45be-a097-ea9c244f98b5" name="FLATNO" type="Int32" label="FLATNO : Int32" nullable="true" fieldName="_fLATNO" />
       <Property Id="cacd0a19-20d8-4bf8-84a1-8e441c107cc7" name="ROOMPOSTFIX" label="ROOMPOSTFIX : String" fieldName="_rOOMPOSTFIX" />
+      <Property Id="6fa0766f-b188-49f7-a521-316f75bc4d70" name="CLOSEDATE" type="DateTime?" label="CLOSEDATE : DateTime?" fieldName="_cLOSEDATE" />
     </DomainClass>
     <DomainClass Id="fa550a6a-fed8-48c9-9bdc-96746380bf5e" name="EXTORGSTREET" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
       <Property Id="0090bd92-43f0-47ef-93d6-5b8aa0181f61" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" kind="Persistent" identity="true" fieldName="_eXTORGCD" />
@@ -2520,6 +2662,40 @@
       <Property Id="981b39f2-419b-4710-b578-b25798da551d" name="HOUSECD" type="Int32" label="HOUSECD : Int32" fieldName="_hOUSECD" />
       <Property Id="cde6407f-29e4-48ef-a992-db69e4b8c50e" name="VALUE_" type="Decimal" label="VALUE_ : Decimal" fieldName="_vALUE_" />
     </DomainClass>
+    <DomainClass Id="e45244fb-a805-4add-8752-ff28c33f04a7" name="CNV_CITYZENLGOTA" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="b1aff168-bb13-4ccd-a8a5-329ea69a65d3" name="ID" type="Int32" label="ID : Int32" identity="true" fieldName="_iD" />
+      <Property Id="fb2ef15c-b539-4c54-99a3-d3af4b4a8b3c" name="CITYZENID" type="Int32" label="CITYZENID : Int32" fieldName="_cITYZENID" />
+      <Property Id="bd136a3f-dab1-47fb-b0c0-80bf0c720cad" name="LGOTACD" type="Int32" label="LGOTACD : Int32" fieldName="_lGOTACD" />
+      <Property Id="39d198f2-d192-4a19-a92c-a1d3c2fe227f" name="LGOTANAME" label="LGOTANAME : String" fieldName="_lGOTANAME" />
+      <Property Id="dc12e819-80b1-428e-b84f-df679e07889f" name="STARTDATE" type="DateTime" label="STARTDATE : DateTime" fieldName="_sTARTDATE" />
+      <Property Id="3eb3678a-7a72-46b9-a414-fe8eac56db6f" name="ENDDATE" type="DateTime" label="ENDDATE : DateTime" nullable="true" fieldName="_eNDDATE" />
+      <Property Id="b1cc3784-6c43-464e-a14c-e8ec010a7cf3" name="PRIORITY" type="Int32" label="PRIORITY : Int32" fieldName="_pRIORITY" />
+      <Property Id="ff66c260-dfd0-4158-9b6a-5b3043d7811f" name="ISDELETED" type="Int32" label="ISDELETED : Int32" fieldName="_iSDELETED" />
+    </DomainClass>
+    <DomainClass Id="da5cdfe4-4e4b-4a20-b4f5-be9a5c7a4cd2" name="CNV_LGOTSUMMA" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" showNavigationCompartment="true" showImplementationCompartment="true">
+      <Property Id="d35bcb97-1f32-4594-84c6-f4bcc88160f4" name="ID" type="Int32" label="ID : Int32" identity="true" fieldName="_iD" />
+      <Property Id="83e757b8-e925-48eb-a250-4f1e5f6e0900" name="LSHET" label="LSHET : String" fieldName="_lSHET" />
+      <Property Id="b17bf874-8218-401a-908d-c1e59d11feed" name="CITYZENID" type="Int32" label="CITYZENID : Int32" fieldName="_cITYZENID" />
+      <Property Id="0ac9bb81-414c-4302-9500-82301b95861c" name="LGOTACD" type="Int32" label="LGOTACD : Int32" fieldName="_lGOTACD" />
+      <Property Id="643036bd-4d8f-4aa7-831f-4c14eb95e0a6" name="LGOTANAME" label="LGOTANAME : String" fieldName="_lGOTANAME" />
+      <Property Id="309e2880-47e8-4729-a3d4-0255104bd384" name="REGIMCD" type="Int32" label="REGIMCD : Int32" fieldName="_rEGIMCD" />
+      <Property Id="02818b32-6f7e-4c23-b888-cd743bd66e37" name="REGIMNAME" label="REGIMNAME : String" fieldName="_rEGIMNAME" />
+      <Property Id="c32eec57-2209-4efa-89be-76734405c149" name="SERVICECD" type="Int32" label="SERVICECD : Int32" fieldName="_sERVICECD" />
+      <Property Id="5972bab2-dd5d-4280-bafd-1b4797ddfa3a" name="SERVICENAME" label="SERVICENAME : String" fieldName="_sERVICENAME" />
+      <Property Id="8b93303e-2fb2-4d82-a751-6cb6cd7cf2e1" name="SUMMA" type="Decimal" label="SUMMA : Decimal" fieldName="_sUMMA" />
+      <Property Id="2b1e6e0a-3a21-497c-9316-ce762058dc4e" name="MONTH_" type="Int32" label="MONTH_ : Int32" fieldName="_mONTH_" />
+      <Property Id="2e58bab3-68e6-49f0-8597-e08c346c7353" name="YEAR_" type="Int32" label="YEAR_ : Int32" fieldName="_yEAR_" />
+      <Property Id="573cce47-35fb-4185-8899-7fdb74abe8c4" name="MONTH2" type="Int32" label="MONTH2 : Int32" fieldName="_mONTH2" />
+      <Property Id="ecc26ab7-1c2c-4d83-9f1f-890a45f9a23d" name="YEAR2" type="Int32" label="YEAR2 : Int32" fieldName="_yEAR2" />
+      <Property Id="fb85e33b-7d93-46f9-b8a1-e024c21cc974" name="DATE_VV" type="DateTime" label="DATE_VV : DateTime" fieldName="_dATE_VV" />
+      <Property Id="93bfaaf0-9ca5-4c1b-a283-413969605d87" name="TYPE_" type="Int32" label="TYPE_ : Int32" fieldName="_tYPE_" />
+      <Property Id="54a2008b-8415-4e4f-af9c-03cb31ea19ed" name="COUNTERCD" type="Int32" label="COUNTERCD : Int32" nullable="true" fieldName="_cOUNTERCD" />
+      <Property Id="b23c955a-5c6d-4662-8be6-5ee33d46837e" name="SUPPLIERID" type="Int32" label="SUPPLIERID : Int32" nullable="true" fieldName="_sUPPLIERID" />
+      <Property Id="faf72834-4f77-48aa-9488-ef21c0403d42" name="DOCUMENTCD" type="Int32" label="DOCUMENTCD : Int32" fieldName="_dOCUMENTCD" />
+      <Property Id="5b303b58-1eb3-4a3f-b9e1-fdd54cdca71f" name="DOCNAME" label="DOCNAME : String" fieldName="_dOCNAME" />
+      <Property Id="b0aa1c5b-8ed9-46d8-8631-09292d65d59f" name="DOCNUMBER" label="DOCNUMBER : String" fieldName="_dOCNUMBER" />
+      <Property Id="9bafeb1e-3b51-45bf-8ac4-d8ff074d5d39" name="DOCDATE" type="DateTime" label="DOCDATE : DateTime" nullable="true" fieldName="_dOCDATE" />
+    </DomainClass>
   </Types>
   <domainContext>
     <domainModelHasDomainContext Id="45252271-1885-496c-bfb7-6169c8a416fe">
@@ -2551,6 +2727,8 @@
         <entitySetProperty name="EXTORGACCOUNTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="EXTORGACCOUNT" label="EXTORGACCOUNTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.EXTORGACCOUNT&gt;" />
         <entitySetProperty name="CNV_CITIZENMIGRATIONs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CITIZENMIGRATION" label="CNV_CITIZENMIGRATIONs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CITIZENMIGRATION&gt;" />
         <entitySetProperty name="CNV_CHARSHOUSEs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CHARSHOUSES" label="CNV_CHARSHOUSEs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CHARSHOUSES&gt;" />
+        <entitySetProperty name="CNV_CITYZENLGOTAs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CITYZENLGOTA" label="CNV_CITYZENLGOTAs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CITYZENLGOTA&gt;" />
+        <entitySetProperty name="CNV_LGOTSUMMAs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_LGOTSUMMA" label="CNV_LGOTSUMMAs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_LGOTSUMMA&gt;" />
       </domainContainer>
     </domainModelHasDomainContext>
   </domainContext>

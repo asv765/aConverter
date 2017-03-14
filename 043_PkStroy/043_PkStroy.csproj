@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DbfClassLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\DbfClassLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,7 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PkStroyConvert.cs" />
+    <Compile Include="PkStroyNewConvert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Records\AbonentRecord.cs" />
+    <Compile Include="Records\CharsRecord.cs" />
+    <Compile Include="Records\CntrindRecord.cs" />
+    <Compile Include="Records\CountersRecord.cs" />
+    <Compile Include="Records\LcharsRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\aConverterClassLibrary\aConverterClassLibrary.csproj">
@@ -50,6 +60,7 @@
       <Name>aConverterClassLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

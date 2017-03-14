@@ -149,6 +149,33 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
+        ///create or alter procedure CNV$CC_CCHARSDUPLICATION (
+        ///    ACTIONTYPE smallint)
+        ///returns (
+        ///    ID integer,
+        ///    LSHET varchar(10),
+        ///    CHARCD integer,
+        ///    CHARNAME varchar(50),
+        ///    VALUE_ numeric(11,4),
+        ///    DATE_ timestamp)
+        ///as
+        ///declare variable CURID integer;
+        ///declare variable CURLSHET varchar(10);
+        ///declare variable CURCHARCD integer;
+        ///declare variable CURCHARNAME varchar(50);
+        ///declare variable CURVALUE numeric(11,4);
+        ///declare variable CURDATE timestamp;
+        ///declare variable OLDLSHET varch [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CC_CCHARSDUPLICATION {
+            get {
+                return ResourceManager.GetString("CNV_CC_CCHARSDUPLICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
         ///create or alter procedure CNV$CC_FIO (
         ///    ACTIONTYPE smallint = 0)
         ///returns (
@@ -169,6 +196,34 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_CC_FIO {
             get {
                 return ResourceManager.GetString("CNV_CC_FIO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
+        ///create or alter procedure CNV$CC_LCHARSDUPLICATION (
+        ///    ACTIONTYPE smallint)
+        ///returns (
+        ///    ID integer,
+        ///    LSHET varchar(10),
+        ///    LCHARCD integer,
+        ///    LCHARNAME varchar(100),
+        ///    VALUE_ integer,
+        ///    VALUEDESC varchar(100),
+        ///    DATE_ timestamp)
+        ///as
+        ///declare variable CURID integer;
+        ///declare variable CURLSHET varchar(10);
+        ///declare variable CURLCHARCD integer;
+        ///declare variable CURLCHARNAME varchar(100);
+        ///declare variable CURVALUE integer;
+        ///declare variable CURVALUEDESC varchar(100);
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CC_LCHARSDUPLICATION {
+            get {
+                return ResourceManager.GetString("CNV_CC_LCHARSDUPLICATION", resourceCulture);
             }
         }
         
@@ -690,6 +745,50 @@ namespace aConverterClassLibrary.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CREATE TABLE CNV$CITYZENLGOTA (
+        ///  ID INTEGER NOT NULL,
+        ///  CITYZENID INTEGER NOT NULL,
+        ///  LGOTACD INTEGER NOT NULL,
+        ///  LGOTANAME VARCHAR(100),
+        ///  STARTDATE TIMESTAMP,
+        ///  ENDDATE TIMESTAMP,
+        ///  PRIORITY INTEGER,
+        ///  ISDELETED INTEGER, 
+        ///  PRIMARY KEY (ID)
+        ///);
+        ///CREATE INDEX CNV$CITYZENLGOTA_IDX1 ON CNV$CITYZENLGOTA (CITYZENID);
+        ///CREATE SEQUENCE GEN_CNV$CITYZENLGOTA_ID;
+        ///
+        ///SET TERM ^ ;
+        ///CREATE TRIGGER CNV$CITYZENLGOTA_BI FOR CNV$CITYZENLGOTA
+        ///ACTIVE BEFORE INSERT POSITION 0
+        ///AS
+        ///BEGIN
+        ///  IF (NEW.ID IS NULL or NEW.ID = 0) THEN
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CITYZENLGOTA {
+            get {
+                return ResourceManager.GetString("CNV_CITYZENLGOTA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DROP TRIGGER CNV$CITYZENLGOTA_BI;
+        ///DROP SEQUENCE GEN_CNV$CITYZENLGOTA_ID;
+        ///DROP INDEX CNV$CITYZENLGOTA_IDX1;
+        ///DROP TABLE CNV$CITYZENLGOTA;
+        ///
+        ///
+        ///.
+        /// </summary>
+        internal static string CNV_CITYZENLGOTA_d {
+            get {
+                return ResourceManager.GetString("CNV_CITYZENLGOTA_d", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$CNTRSIND (
         ///  ID INTEGER NOT NULL,
         ///  COUNTERID varchar(20),
@@ -997,7 +1096,8 @@ namespace aConverterClassLibrary.Properties {
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
         ///CREATE OR ALTER procedure CNV$CNV_01000_COUNTERS (
-        ///    NEEDDELETE smallint)
+        ///    NEEDDELETE smallint,
+        ///	GENERATECD smallint = 1)
         ///as
         ///declare variable LSHET varchar(10);
         ///declare variable COUNTERID varchar(20);
@@ -1009,7 +1109,7 @@ namespace aConverterClassLibrary.Properties {
         ///declare variable PLOMBNAME varchar(40);
         ///declare variable PLOMBDATE timestamp;
         ///declare variable LASTPOV date;
-        ///declare variable NEXTPOV timesta [rest of string was truncated]&quot;;.
+        ///decla [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_CNV_01000_COUNTERS {
             get {
@@ -1178,9 +1278,8 @@ namespace aConverterClassLibrary.Properties {
         ///declare variable PHONE varchar(100) = null;
         ///declare variable ENDDATE timestamp = null;
         ///declare variable STARTDATE timestamp = null;
-        ///declare variable F varchar(50) = null;
-        ///declare variable O varchar(50) = null;
-        ///declare v [rest of string was truncated]&quot;;.
+        ///declare variable UNIQUECITYZENID varchar(45) = null;
+        ///declare variable F varchar(50) = nu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_CNV_03000_CITIZENS_TVER {
             get {
@@ -1190,23 +1289,96 @@ namespace aConverterClassLibrary.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
-        ///create or alter procedure CNV$CNV_03100_TVER_ABONENTDOLYA
+        ///create or alter procedure CNV$CNV_03050_CITIZENSMIGR_TVER (
+        ///    NEEDDELETE smallint)
         ///as
+        ///declare variable CITYZENID integer = null;
+        ///declare variable MIGRATIONDATE timestamp = null;
+        ///declare variable MIGRATIONTYPE integer = null;
+        ///declare variable DIRECTION integer = null;
+        ///declare variable DOCUMENTCD integer = null;
+        ///begin
+        ///  if (NEEDDELETE = 1) then
+        ///  begin
+        ///    delete from CITYZENMIGRATION
+        ///    where CITYZEN_ID in (select distinct CITIZENID
+        ///                         from CNV$CITIZENMIGRA [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_03050_CITIZENSMIGR_TVER {
+            get {
+                return ResourceManager.GetString("CNV_CNV_03050_CITIZENSMIGR_TVER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///create or alter procedure CNV$CNV_03100_TVER_ABONENTDOLYA (
+        ///    NEEDDELETE smallint = 0)
+        ///as
+        ///declare variable CURHOUSECD integer;
+        ///declare variable PREHOUSECD integer;
         ///declare variable ABONENTSQUARE numeric(11,4);
         ///declare variable HOUSETOTALSQUARE numeric(11,4);
         ///declare variable HOUSEHEATINGSQUARE numeric(11,4);
         ///declare variable DOCUMENTCD integer;
         ///declare variable DATE_ timestamp;
         ///declare variable LSHET varchar(10);
+        ///declare variable CLOSEDATE timestamp;
         ///begin
-        ///  for select A.LSHET, C.VALUE_, CH1.VALUE_, CH2.VALUE_, C.DATE_
-        ///      from CNV$ABONENT A
-        ///      inner join CNV$CHARS C on C.LSHET = A.LSHET and
-        ///            C.CHARCD =  [rest of string was truncated]&quot;;.
+        ///  if (NEEDDELETE = 1)  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_CNV_03100_TVER_ABONENTDOLYA {
             get {
                 return ResourceManager.GetString("CNV_CNV_03100_TVER_ABONENTDOLYA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///create or alter procedure CNV$CNV_03200_CITYZENLGOTA_TVER (
+        ///    NEEDDELETE smallint)
+        ///as
+        ///declare variable CITYZENID integer;
+        ///declare variable LGOTACD integer;
+        ///declare variable STARTDATE timestamp;
+        ///declare variable ENDDATE timestamp;
+        ///declare variable ISDELETED integer;
+        ///declare variable PRIORITY integer;
+        ///declare variable DOCUMENTCD integer;
+        ///begin
+        ///  if (NEEDDELETE = 1) then
+        ///  begin
+        ///    delete from CITYZENLGOTA
+        ///    where CITYZEN_ID in (select CITYZENID
+        ///                         from C [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_03200_CITYZENLGOTA_TVER {
+            get {
+                return ResourceManager.GetString("CNV_CNV_03200_CITYZENLGOTA_TVER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///create or alter procedure CNV$CNV_03300_LGOTSUMMA
+        ///as
+        ///declare variable YEAR_ integer;
+        ///declare variable MONTH_ integer;
+        ///declare variable YEAR2 integer;
+        ///declare variable MONTH2 integer;
+        ///declare variable LSHET varchar(10);
+        ///declare variable SUMMA numeric(18,4);
+        ///declare variable REGIMCD integer;
+        ///declare variable SERVICECD integer;
+        ///declare variable DATE_ date;
+        ///declare variable FYEAR integer;
+        ///declare variable FMONTH integer;
+        ///declare variable FDAY integer;
+        ///declare variable DOCUMENTCD varc [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_03300_LGOTSUMMA {
+            get {
+                return ResourceManager.GetString("CNV_CNV_03300_LGOTSUMMA", resourceCulture);
             }
         }
         
@@ -1540,6 +1712,48 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_LCHARS_d {
             get {
                 return ResourceManager.GetString("CNV_LCHARS_d", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CREATE TABLE CNV$LGOTSUMMA (
+        ///  ID INTEGER NOT NULL,
+        ///  LSHET varchar(10) NOT NULL,
+        ///  CITYZENID INTEGER NOT NULL,
+        ///  LGOTACD INTEGER NOT NULL,
+        ///  LGOTANAME VARCHAR(100),
+        ///  REGIMCD INTEGER NOT NULL,
+        ///  REGIMNAME varchar(50) NOT NULL,
+        ///  SERVICECD INTEGER NOT NULL,
+        ///  SERVICENAME varchar(50) NOT NULL,
+        ///  SUMMA NUMERIC(18,4) NOT NULL,
+        ///  MONTH_ INTEGER NOT NULL,
+        ///  YEAR_ INTEGER NOT NULL,
+        ///  MONTH2 INTEGER NOT NULL,
+        ///  YEAR2 INTEGER NOT NULL,
+        ///  DATE_VV timestamp NOT NULL,
+        ///  TYPE_ INTEGER NOT NULL,
+        ///  COUNTERCD INTEGER,
+        ///  S [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_LGOTSUMMA {
+            get {
+                return ResourceManager.GetString("CNV_LGOTSUMMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DROP TRIGGER CNV$LGOTSUMMA_BI;
+        ///DROP SEQUENCE GEN_CNV$LGOTSUMMA_ID;
+        ///DROP INDEX CNV$LGOTSUMMA_IDX1;
+        ///DROP TABLE CNV$LGOTSUMMA;
+        ///
+        ///
+        ///.
+        /// </summary>
+        internal static string CNV_LGOTSUMMA_d {
+            get {
+                return ResourceManager.GetString("CNV_LGOTSUMMA_d", resourceCulture);
             }
         }
         

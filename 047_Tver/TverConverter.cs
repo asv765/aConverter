@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM;
@@ -15,39 +18,47 @@ namespace _047_Tver
 {
     public class Consts
     {
-        public static ExcelFileInfo RoomingReportFile  = new ExcelFileInfo
+        public static readonly ExcelFileInfo RoomingReportFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath +  @"\учет жильцов на 25.07.16 для загрузки (3).xls",
-            ListName = "паспортный стол",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\учет жильцов на 09.09.16 для загрузки.xls",
+            ListName = "учет жильцов",
             StartDataRow = 6,
-            EndDataRow = 38719
+            EndDataRow = 41026
         };
 
-        public static ExcelFileInfo LsInfoFile = new ExcelFileInfo
+        public static readonly ExcelFileInfo LsInfoFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ЛС на 29.07.16_для загрузки_корр.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ЛС на 09.09.16_для загрузки_кор1.xls",
             ListName = "66184",
             StartDataRow = 3,
-            EndDataRow = 17701
+            EndDataRow = 18449
         };
 
-        public static ExcelFileInfo CountersInfoFile = new ExcelFileInfo
+        public static readonly ExcelFileInfo CountersInfoFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ИПУ с историей показаний_для загрузки.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\информация по ИПУ с историей показаний_для загрузки кор1.xls",
             ListName = "610",
             StartDataRow = 3,
-            EndDataRow = 4878
+            EndDataRow = 5190
         };
 
-        public static ExcelFileInfo RecodeTableFile = new ExcelFileInfo
+        public static readonly ExcelFileInfo RecodeTableFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировкиv1.6.xlsx",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировкиv1.7.xlsx",
             ListName = "Лист1",
             StartDataRow = 2,
             EndDataRow = 27
         };
 
-        public static ExcelFileInfo RecodeEmptyHousesTableFile = new ExcelFileInfo
+        public static readonly ExcelFileInfo NewRecodeTableFile = new ExcelFileInfo
+        {
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировки_newv2.xlsx",
+            ListName = "Лист1",
+            StartDataRow = 2,
+            EndDataRow = 91
+        };
+
+        public static readonly ExcelFileInfo RecodeEmptyHousesTableFile = new ExcelFileInfo
         {
             FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировки_юрv1.1.xlsx",
             ListName = "Лист1",
@@ -55,26 +66,50 @@ namespace _047_Tver
             EndDataRow = 10
         };
 
-        public static ExcelFileInfo OplataFile = new ExcelFileInfo
+        public static readonly ExcelFileInfo OplataFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\свод по оплатам в разрезе ЛС.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Оплата с 01.07.14-31.07.16 общ. кор2.xls",
             StartDataRow = 3,
         };
 
-        public static ExcelFileInfo HousesCharsFile = new ExcelFileInfo
+        public static readonly ExcelFileInfo HousesCharsFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки.xls",
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки_кор3.xls",
             ListName = "общие данные по жилым домам",
             StartDataRow = 5,
-            EndDataRow = 217
+            EndDataRow = 242
         };
 
-        public static ExcelFileInfo EmptyHousesCharsFile = new ExcelFileInfo
+        public static readonly ExcelFileInfo EmptyHousesCharsFile = new ExcelFileInfo
         {
-            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\общие данные по жилым домам и нежилым помещениям для загрузки.xls",
-            ListName = "нежилые помещения",
-            StartDataRow = 4,
-            EndDataRow = 25
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\данные по жилым домам ФЛ с нежилыми помещениями_без ОДПУ_кор3.xls",
+            ListName = "без ОДПУ для загрузки",
+            StartDataRow = 7,
+            EndDataRow = 250
+        };
+
+        public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
+        {
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\1.1 Отчет по льготникам за август 2016.xls",
+            ListName = "66181",
+            StartDataRow = 3,
+            EndDataRow = 2462
+        };
+
+        //public static readonly ExcelFileInfo LgotaReportFile = new ExcelFileInfo
+        //{
+        //    FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Отчет по льготникам за июль 2016 (2).xls",
+        //    ListName = "66181",
+        //    StartDataRow = 3,
+        //    EndDataRow = 2433
+        //};
+
+        public static readonly ExcelFileInfo LgotaRecodeTableFile = new ExcelFileInfo
+        {
+            FileName = aConverter_RootSettings.SourceDbfFilePath + @"\Таблица перекодировки льгот 2.xlsx",
+            ListName = "Лист1",
+            StartDataRow = 2,
+            EndDataRow = 18
         };
 
         public static readonly string SpravkaFolder = aConverter_RootSettings.SourceDbfFilePath + "\\";
@@ -92,16 +127,19 @@ namespace _047_Tver
         public const int BaseServiceCd = 3;
         public const string BaseServiceName = "Отопление";
 
+        public const int BaseCoefCd = 105;
+        public const string BaseCoefName = "Гор. водоснабжение пов. коэф.";
+
         public static string FixLs(string lshet, DateTime date)
         {
             long lshetLg = Int64.Parse(lshet);
 
-            if (date.Year == 2015 &&
-                (lshetLg >= 5000001 &&
-                 (lshetLg < 5007001 || lshetLg > 5007021) &&
-                 (lshetLg < 5011001 || lshetLg > 5011019) &&
-                 lshetLg <= 5016062))
-                lshet = "5" + lshet;
+            //if (date.Year == 2015 &&
+            //    (lshetLg >= 5000001 &&
+            //     (lshetLg < 5007001 || lshetLg > 5007021) &&
+            //     (lshetLg < 5011001 || lshetLg > 5011019) &&
+            //     lshetLg <= 5016062))
+            //    lshet = "5" + lshet;
 
             //if (date.Year == 2015 &&
             //    (lshetLg >= 5000001 && lshetLg <= 5016062) &&
@@ -113,7 +151,7 @@ namespace _047_Tver
         }
 
         public static readonly DateTime FirstDate = new DateTime(2014, 07, 01);
-        public static readonly string[] Prefixes = { "улица", "ул.", "пр-д.", "б-р.", "ш.", "пр-т.", "пер.", "ул", "проезд." };
+        public static readonly string[] Prefixes = { "улица", "ул.", "пр-д.", "б-р.", "ш.", "пр-т.", "пер.", "ул", "проезд.", "пр.", "пр-т" };
     }
 
     public class ExcelFileInfo
@@ -177,7 +215,8 @@ namespace _047_Tver
                         ? 1
                         : 0,
                     DUCD = lsInfo.InformationOwnerId,
-                    DUNAME = lsInfo.InformationOwner
+                    DUNAME = lsInfo.InformationOwner,
+                    CLOSEDATE = lsInfo.LsCloseDate
                 };
                 lsInfo.ExtractFio(ref abonent);
                 lsInfo.ExctractAddress(ref abonent);
@@ -208,21 +247,14 @@ namespace _047_Tver
                 abonentsAtHouse = house.KORPUSNO.HasValue
                     ? abonentsAtHouse.Where(a => a.KORPUSNO == house.KORPUSNO)
                     : abonentsAtHouse.Where(a => a.KORPUSNO == null);
-                CNV_ABONENT abonentEtalon;
-                try
-                {
-                    abonentEtalon = abonentsAtHouse.First();
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
 
-                house.TOWNSNAME = abonentEtalon.TOWNSNAME;
-                house.RAYONNAME = abonentEtalon.RAYONNAME;
-                house.RAYONKOD = abonentEtalon.RAYONKOD;
-                house.DISTNAME = abonentEtalon.DISTNAME;
-                house.ULICANAME = abonentEtalon.ULICANAME;
+
+               var abonentEtalon = abonentsAtHouse.First();
+               house.TOWNSNAME = abonentEtalon.TOWNSNAME;
+               house.RAYONNAME = abonentEtalon.RAYONNAME;
+               house.RAYONKOD = abonentEtalon.RAYONKOD;
+               house.DISTNAME = abonentEtalon.DISTNAME;
+               house.ULICANAME = abonentEtalon.ULICANAME;
 
 
                 houseInfo.ExtractFio(ref house);
@@ -265,12 +297,40 @@ namespace _047_Tver
             for (int i = lsFileInfo.StartDataRow - 2; i <= lsFileInfo.EndDataRow - 2; i++)
             {
                 var lsInfo = new LsInfo(lsInfoTable.Rows[i]);
+                string lshet = Consts.GetLs(lsInfo.Lshet);
+                if (lsInfo.LsCloseDate.HasValue)
+                {
+                    lc.Add(new CNV_CHAR
+                    {
+                        CHARCD = 1,
+                        CHARNAME = "Число проживающих",
+                        LSHET = lshet,
+                        DATE_ = lsInfo.LsCloseDate,
+                        VALUE_ = 0
+                    });
+                    lc.Add(new CNV_CHAR
+                    {
+                        CHARCD = 2,
+                        CHARNAME = "Общая площадь",
+                        LSHET = lshet,
+                        DATE_ = lsInfo.LsCloseDate,
+                        VALUE_ = 0
+                    });
+                    lc.Add(new CNV_CHAR
+                    {
+                        CHARCD = 150,
+                        CHARNAME = "Доля площади МОП",
+                        LSHET = lshet,
+                        DATE_ = lsInfo.LsCloseDate,
+                        VALUE_ = 0
+                    });
+                }
                 if (lsInfo.Square == null) continue;
                 lc.Add(new CNV_CHAR
                 {
                     CHARCD = 2,
-                    CHARNAME = "Отапливаемая площадь",
-                    LSHET = Consts.GetLs(lsInfo.Lshet),
+                    CHARNAME = "Общая площадь",
+                    LSHET = lshet,
                     DATE_ = Consts.FirstDate,
                     VALUE_ = lsInfo.Square
                 });
@@ -284,22 +344,24 @@ namespace _047_Tver
             for (int i = emptyHousesFileInfo.StartDataRow - 2; i <= emptyHousesFileInfo.EndDataRow - 2; i++)
             {
                 var houseInfo = new EmptyHouseInfo(emptyHousesInfoTable.Rows[i]);
-                lc.Add(new CNV_CHAR //Отапливаемая площадь арендаторы
-                {
-                    CHARCD = 2,
-                    CHARNAME = "Отапливаемая площадь",
-                    LSHET = Consts.GetLs(houseInfo.Lshet),
-                    DATE_ = Consts.FirstDate,
-                    VALUE_ = houseInfo.Square
-                });
-                lc.Add(new CNV_CHAR //Часы
-                {
-                    CHARCD = 231,
-                    CHARNAME = "Часы",
-                    LSHET = Consts.GetLs(houseInfo.Lshet),
-                    DATE_ = Consts.FirstDate,
-                    VALUE_ = houseInfo.HoursPerWeek*houseInfo.HoursPerDay
-                });
+                if (houseInfo.Square.HasValue)
+                    lc.Add(new CNV_CHAR //Отапливаемая площадь арендаторы
+                    {
+                        CHARCD = 2,
+                        CHARNAME = "Общая площадь",
+                        LSHET = Consts.GetLs(houseInfo.Lshet),
+                        DATE_ = Consts.FirstDate,
+                        VALUE_ = houseInfo.Square
+                    });
+                if (houseInfo.HoursPerDay.HasValue && houseInfo.HoursPerWeek.HasValue)
+                    lc.Add(new CNV_CHAR //Часы
+                    {
+                        CHARCD = 231,
+                        CHARNAME = "Часы",
+                        LSHET = Consts.GetLs(houseInfo.Lshet),
+                        DATE_ = Consts.FirstDate,
+                        VALUE_ = houseInfo.HoursPerWeek*houseInfo.HoursPerDay
+                    });
                 lc.Add(new CNV_CHAR //Дог.нагрузка на ГВС по закр.схеме (Гкал/ч) 
                 {
                     CHARCD = 232,
@@ -371,11 +433,25 @@ namespace _047_Tver
 
         public override void DoConvert()
         {
-            SetStepsCount(4);
+            SetStepsCount(5);
             var lc = new List<CNV_CHAR>();
             StepStart(1);
             var roomers = RoomerInfo.ReadRoomers(Consts.RoomingReportFile);
             StepFinish();
+
+            StepStart(1);
+            var abonentCloseDates = new Dictionary<string, DateTime?>();
+            ExcelFileInfo lsFileInfo = Consts.LsInfoFile;
+            DataTable lsInfoTable = Utils.ReadExcelFile(lsFileInfo.FileName, lsFileInfo.ListName);
+            StepStart(lsInfoTable.Rows.Count);
+            for (int i = lsFileInfo.StartDataRow - 2; i <= lsFileInfo.EndDataRow - 2; i++)
+            {
+                var lsInfo = new LsInfo(lsInfoTable.Rows[i]);
+                abonentCloseDates.Add(lsInfo.Lshet, lsInfo.LsCloseDate);
+            }
+            lsInfoTable.Dispose();
+            StepFinish();
+
 
             StepStart(roomers.Count + 1);
             foreach (var roomer in roomers)
@@ -407,9 +483,13 @@ namespace _047_Tver
                     .OrderBy(d => d)
                     .ToList();
 
+                DateTime? abonentCloseDate;
+                abonentCloseDates.TryGetValue(roomer.Key, out abonentCloseDate);
+
                 foreach (var date in allDates)
                 {
                     DateTime checkingDate = date;
+                    if (checkingDate == abonentCloseDate) continue;
 
                     var roomersToDate = roomer.Value
                         .Where(r => r.RegisteredStartDate <= checkingDate &&
@@ -472,18 +552,16 @@ namespace _047_Tver
             SetStepsCount(5);
             var lc = new List<CNV_CHAR>();
 
-            var minDate = new DateTime(2015, 05, 01);
-            //var minDate = new DateTime(2016, 07, 01);
-            //var maxDate = new DateTime(2016, 07, 01);
-            var maxDate = new DateTime(2016, 07, 01);
+            var minDate = new DateTime(2014, 07, 01);
+            var maxDate = new DateTime(2016, 08, 01);
 
 
-            DateTime[] dates = { new DateTime(2016, 03, 01)/*, new DateTime(2016, 04, 01)*/, new DateTime(2016, 07, 01) };
+            DateTime[] dates = { /*new DateTime(2016, 03, 01), new DateTime(2016, 04, 01),*/ new DateTime(2016, 08, 01) };
 
-            //StepStart((maxDate.Month - minDate.Month) + 12*(maxDate.Year - minDate.Year) + 1);
-            StepStart(dates.Length);
-            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
-            foreach (var date in dates)
+            StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
+            //StepStart(dates.Length);
+            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            //foreach (var date in dates)
             {
                 DataTable moneyTable = Utils.ReadExcelFile(
                     Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
@@ -605,6 +683,43 @@ namespace _047_Tver
             for (int i = lsFileInfo.StartDataRow - 2; i <= lsFileInfo.EndDataRow - 2; i++)
             {
                 var lsInfo = new LsInfo(lsInfoTable.Rows[i]);
+                string lshet = Consts.GetLs(lsInfo.Lshet);
+                if (lsInfo.LsCloseDate.HasValue)
+                {
+                    lc.Add(new CNV_LCHAR
+                    {
+                        LSHET = lshet,
+                        DATE_ = lsInfo.LsCloseDate,
+                        LCHARCD = 40,
+                        LCHARNAME = "Закрытый л/сч",
+                        VALUE_ = 1
+                    });
+                    lc.Add(new CNV_LCHAR
+                    {
+                        LSHET = lshet,
+                        DATE_ = lsInfo.LsCloseDate,
+                        LCHARCD = 6,
+                        LCHARNAME = "ЦГВС",
+                        VALUE_ = 0
+                    });
+                    lc.Add(new CNV_LCHAR
+                    {
+                        LSHET = lshet,
+                        DATE_ = lsInfo.LsCloseDate,
+                        LCHARCD = 25,
+                        LCHARNAME = "Включено отопление",
+                        VALUE_ = 0
+                    });
+                    lc.Add(new CNV_LCHAR
+                    {
+                        LSHET = lshet,
+                        DATE_ = lsInfo.LsCloseDate,
+                        LCHARCD = 11,
+                        LCHARNAME = "Тип отопления",
+                        VALUE_ = 0
+                    });
+                }
+
                 for (int j = 0; j < recodeTable.Count; j++)
                 {
                     var recode = recodeTable[j];
@@ -652,7 +767,7 @@ namespace _047_Tver
 
                     lc.Add(new CNV_LCHAR
                     {
-                        LSHET = Consts.GetLs(lsInfo.Lshet),
+                        LSHET = lshet,
                         DATE_ = Consts.FirstDate,
                         LCHARCD = recode.LcharCd,
                         VALUE_ = recode.LcharValue
@@ -881,6 +996,15 @@ namespace _047_Tver
                     roomerInfo.ExtractFio(ref cityzen);
                     cityzens.Add(cityzen);
 
+                    if (!roomerInfo.RegisteredEndDate.HasValue && !roomerInfo.IsLiving)
+                        migrationList.Add(new CNV_CITIZENMIGRATION
+                        {
+                            CITIZENID = cityzenId,
+                            DATE_ = roomerInfo.RegisteredStartDate,
+                            DIRECTION = 2,
+                            MIGRATIONTYPE = roomerInfo.IsRegistered ? 1 : 0
+                        });
+
                     if (roomerInfo.MissingInfoList == null) continue;
                     foreach (var missingInfo in roomerInfo.MissingInfoList)
                     {
@@ -914,6 +1038,10 @@ namespace _047_Tver
 
     public class ConvertNachopl : ConvertCase
     {
+        public static LsInfo[] Abonents;
+        public static Recode[] RecodeTable;
+        public static string NotFoundedAbonents = "";
+
         public ConvertNachopl()
         {
             ConvertCaseName = "Nachopl - история оплат и начислений";
@@ -929,42 +1057,71 @@ namespace _047_Tver
             BufferEntitiesManager.DropTableData("CNV$OPLATA");
             BufferEntitiesManager.DropTableData("CNV$NACHOPL");
 
-            //var minDate = new DateTime(2015, 05, 01);
-            //var minDate = new DateTime(2016, 04, 01);
-            //var maxDate = new DateTime(2016, 04, 01);
-            //var maxDate = new DateTime(2016, 07, 01);
+            var minDate = new DateTime(2014, 07, 01);
+            var maxDate = new DateTime(2016, 08, 01);
 
-            //DateTime[] dates = { new DateTime(2016, 03, 01), new DateTime(2016, 07, 01) };
+            //DateTime[] dates = { new DateTime(2016, 08, 01) };
             DateTime[] dates =
             {
-                new DateTime(2015, 05, 01),
-                new DateTime(2015, 06, 01),
-                new DateTime(2015, 07, 01),
-                new DateTime(2015, 08, 01),
-                new DateTime(2015, 09, 01),
-                new DateTime(2015, 10, 01),
-                new DateTime(2015, 11, 01),
-                new DateTime(2015, 12, 01),
-                new DateTime(2016, 01, 01),
-                new DateTime(2016, 02, 01),
-                new DateTime(2016, 03, 01),
-                new DateTime(2016, 04, 01),
-                new DateTime(2016, 05, 01),
                 new DateTime(2016, 06, 01),
-                new DateTime(2016, 07, 01)
             };
 
-            var minPayDate = new DateTime(2015, 04, 01);
-            var maxPayDate = new DateTime(2016, 07, 01);
+            var minPayDate = new DateTime(2014, 07, 01);
+            var maxPayDate = new DateTime(2016, 08, 01);
+            var minPkDate = new DateTime(2015, 07, 01);
+            var maxPkDate = new DateTime(2016, 08, 01);
 
             var nm = new NachoplManager(NachoplCorrectionType.Не_корректировать_сальдо);
 
+            {
+                var tempList = new List<LsInfo>();
+                ExcelFileInfo lsFileInfo = Consts.LsInfoFile;
+                DataTable lsInfoTable = Utils.ReadExcelFile(lsFileInfo.FileName, lsFileInfo.ListName);
+                StepStart(lsInfoTable.Rows.Count);
+                for (int i = lsFileInfo.StartDataRow - 2; i <= lsFileInfo.EndDataRow - 2; i++)
+                {
+                    tempList.Add(new LsInfo(lsInfoTable.Rows[i]));
+                }
+                Abonents = tempList.ToArray();
+                StepFinish();
+            }
+
+            {
+                ExcelFileInfo recodeTableInfo = Consts.NewRecodeTableFile;
+                DataTable recodeDataTable = Utils.ReadExcelFile(recodeTableInfo.FileName, recodeTableInfo.ListName);
+                var tempRecode = new List<Recode>();
+                for (int i = recodeTableInfo.StartDataRow - 2; i <= recodeTableInfo.EndDataRow - 2; i++)
+                {
+                    tempRecode.Add(new Recode(recodeDataTable.Rows[i]));
+                }
+                recodeDataTable.Dispose();
+                RecodeTable = tempRecode.ToArray();
+            }
+
             long recno = 0;
-            StepStart(dates.Length);
-            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
-            foreach (var date in dates)
+            //StepStart(dates.Length);
+            StepStart((maxDate.Month - minDate.Month) + 12 * (maxDate.Year - minDate.Year) + 1);
+            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            //foreach (var date in dates)
             {
                 DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
+
+                var pkList = new List<PKCoef>();
+                PKCoef.Date = date;
+                if (minPkDate <= date && date <= maxPkDate)
+                {
+                    DataTable pkTable = Utils.ReadExcelFile(Consts.SpravkaFolder + PKCoef.GetFileName(date), "Лист1");
+                    for (int j = 0; j < pkTable.Rows.Count; j++)
+                    {
+                        long tempLs;
+                        if (!Int64.TryParse(moneyTable.Rows[j][0].ToString(), out tempLs)) continue;
+
+                        if (String.IsNullOrWhiteSpace(pkTable.Rows[j][0].ToString()) ||
+                            pkTable.Rows[j][0].ToString().Trim().ToLower() == "общий итог") break;
+                        pkList.Add(new PKCoef(pkTable.Rows[j]));
+                    }
+                    pkTable.Dispose();
+                }
                 for (int i = 0; i < moneyTable.Rows.Count; i++)
                 {
                     long ls;
@@ -972,15 +1129,35 @@ namespace _047_Tver
 
                     var money = new Spravka(moneyTable.Rows[i], date);
 
+                    var pk = pkList.SingleOrDefault(p => p.Lshet == money.Lshet);
+                    if (pk == null)
+                    {
+                        pk = new PKCoef
+                        {
+                            Lshet = money.Lshet,
+                            EndSaldoInd = 0,
+                            EndSaldoOdn = 0,
+                            PereOdn = 0,
+                            PereInd = 0
+                        };
+                    }
+
                     string lshet = Consts.FixLs(money.Lshet, date);
+
                     for (int j = 0; j < money.Services.Length; j++)
                     {
                         var serviceMoney = money.Services[j];
 
+                        var reculc = serviceMoney.RecalcSum;
+                        if (minPkDate <= date && date <= maxPkDate)
+                        {
+                            if (serviceMoney.ServiceCd == 105) reculc = pk.PereInd;
+                            if (serviceMoney.ServiceCd == 115) reculc = pk.PereOdn;
+                        }
                         if (serviceMoney.Volume != 0 ||
                             serviceMoney.RecalcVol != 0 ||
                             serviceMoney.Nach != 0 ||
-                            serviceMoney.RecalcSum != 0)
+                            reculc != 0)
                         {
                             nm.RegisterNach(new CNV_NACH
                             {
@@ -988,27 +1165,34 @@ namespace _047_Tver
                                 REGIMNAME = serviceMoney.RegimName,
                                 SERVICECD = serviceMoney.ServiceCd,
                                 SERVICENAME = serviceMoney.ServiceName,
-                                TYPE_ = 0,
+                                TYPE_ = serviceMoney.SummaType,
+                                VTYPE_ = serviceMoney.VolumeType,
                                 VOLUME = Math.Round(serviceMoney.Volume, 4),
                                 PROCHLVOLUME = Math.Round(serviceMoney.RecalcVol, 4)
-                            }, lshet, date.Month, date.Year, serviceMoney.Nach, serviceMoney.RecalcSum, date,
-                                String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd")));
+                            }, lshet, date.Month, date.Year, serviceMoney.Nach, reculc, date,
+                                String.Format("{0}_{1}", money.Lshet, date.ToString("yyMMdd"))); // TODO Документ должен быть по услуге, а не по дате
                         }
                     }
 
                     nm.RegisterEndSaldo(lshet, date.Month, date.Year, Consts.BaseServiceCd, Consts.BaseServiceName,
-                        money.EndSaldo);
+                        money.EndSaldo - (pk.EndSaldoInd + pk.EndSaldoOdn));
+                    nm.RegisterEndSaldo(lshet, date.Month, date.Year, 105, "Гор. водоснабжение пов. коэф.",
+                        pk.EndSaldoInd);
+                    nm.RegisterEndSaldo(lshet, date.Month, date.Year, 115, "Гор. водоснабжение ОДН пов. коэф",
+                        pk.EndSaldoOdn);
                 }
                 if (minPayDate <= date && date <= maxPayDate)
                 {
+                    Oplata.Date = date;
                     DataTable oplataTable = Utils.ReadExcelFile(Consts.OplataFile.FileName, Oplata.GetListName(date));
-                    for (int i = Consts.OplataFile.StartDataRow; i < oplataTable.Rows.Count; i++)
+                    for (int i = 0; i < oplataTable.Rows.Count; i++)
                     {
+                        long ls;
+                        if (!Int64.TryParse(oplataTable.Rows[i][0].ToString(), out ls)) continue;
                         recno++;
                         if (String.IsNullOrWhiteSpace(oplataTable.Rows[i][0].ToString()) ||
                             oplataTable.Rows[i][0].ToString().Trim().ToUpper() == "ИТОГО") break;
                         var oplata = new Oplata(oplataTable.Rows[i]);
-
                         string lshet = Consts.FixLs(oplata.Lshet, date);
                         if (lshet.Length <= 10)
                         {
@@ -1023,7 +1207,31 @@ namespace _047_Tver
                             DateTime payDate = oplata.PayDate ?? date;
 
                             nm.RegisterOplata(odef, lshet, date.Month, date.Year,
-                                oplata.Summa, payDate, payDate,
+                                oplata.ServicesSumma, payDate, date,
+                                String.Format("{0}_{1}", oplata.Lshet, recno));
+
+                            odef = new CNV_OPLATA
+                            {
+                                SERVICECD = 105,
+                                SERVICENAME = "Гор. водоснабжение пов. коэф.",
+                                SOURCECD = oplata.SourceCd,
+                                SOURCENAME = oplata.Source
+                            };
+
+                            nm.RegisterOplata(odef, lshet, date.Month, date.Year,
+                                oplata.IndCoefSumma, payDate, date,
+                                String.Format("{0}_{1}", oplata.Lshet, recno));
+
+                            odef = new CNV_OPLATA
+                            {
+                                SERVICECD = 115,
+                                SERVICENAME = "Гор. водоснабжение ОДН пов. коэф",
+                                SOURCECD = oplata.SourceCd,
+                                SOURCENAME = oplata.Source
+                            };
+
+                            nm.RegisterOplata(odef, lshet, date.Month, date.Year,
+                                oplata.OdnCoefSumma, payDate, date,
                                 String.Format("{0}_{1}", oplata.Lshet, recno));
                         }
                     }
@@ -1036,56 +1244,65 @@ namespace _047_Tver
                 Iterate();
             }
 
+            StepStart(3);
             nm.SaveNachRecords(aConverter_RootSettings.FirebirdStringConnection);
-            nm.SaveOplataRecords(aConverter_RootSettings.FirebirdStringConnection);
-            nm.SaveNachoplRecords(aConverter_RootSettings.FirebirdStringConnection);
+            //Iterate();
+            //nm.SaveOplataRecords(aConverter_RootSettings.FirebirdStringConnection);
+            //Iterate();
+            //nm.SaveNachoplRecords(aConverter_RootSettings.FirebirdStringConnection);
+            StepFinish();
 
             StepFinish();
 
-            //if (record.StringNumber == 1)
-            //    {
-            //        var ndef = new CNV_NACH
-            //        {
-            //            REGIMCD = regimcd,
-            //            REGIMNAME = regimname,
-            //            SERVICECD = servicecd,
-            //            SERVICENAME = servicename,
-            //            TYPE_ = 0
-            //        };
-            //        nm.RegisterNach(ndef, record.Lshet, record.FileDate.Month,
-            //            record.FileDate.Year, record.NachSum, record.Reculc, record.FileDate,
-            //            String.Format("N{0}{1}", i, record.Lshet));
+            StepStart(1);
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                // Снятие удаления у абонентов
+                context.ExecuteNonQuery(
+                    @"update CNV$ABONENT
+                    set ISDELETED = 0
+                    where LSHET in (select NOP.LSHET
+                                    from CNV$NACHOPL NOP
+                                    inner join CNV$ABONENT AB on AB.LSHET = NOP.LSHET and
+                                          AB.ISDELETED = 1
+                                    where (NOP.YEAR_ * 12 + NOP.MONTH_) = (select max(NOP1.YEAR_ * 12 + NOP1.MONTH_)
+                                                                           from CNV$NACHOPL NOP1
+                                                                           where NOP1.LSHET = NOP.LSHET)
+                                    group by NOP.LSHET
+                                    having sum(NOP.EDEBET) <> 0);");
+                context.SaveChanges();
+            }
+            StepFinish();
+        }
 
-            //        nm.RegisterBeginSaldo(record.Lshet, record.FileDate.Month, record.FileDate.Year, servicecd,
-            //            servicename,
-            //            record.BegSaldo);
-            //        nm.RegisterEndSaldo(record.Lshet, record.FileDate.Month, record.FileDate.Year, servicecd,
-            //            servicename,
-            //            record.EndSaldo);
-            //    }
-            //    else
-            //    {
-            //        Record prevRecord = allRecrods[i - (record.StringNumber - 1)];
-            //        record.FileDate = prevRecord.FileDate;
-            //        record.Lshet = prevRecord.Lshet;
-            //    }
+        public class Recode
+        {
+            public string Scheme;
+            public decimal Blago;
+            public string HasCounter;
+            public string Unknown;
+            
+            public bool GKal;
+            public int ServiceCD;
 
-            //    if (record.PaySum != 0)
-            //    {
-            //        var odef = new CNV_OPLATA
-            //        {
-            //            SERVICECD = servicecd,
-            //            SERVICENAME = servicename,
-            //            SOURCECD = 999,
-            //            SOURCENAME = "Корректировка"
-            //        };
+            public int Regim;
+            public int SummaType;
+            public int VolumeType;
 
-            //        DateTime payTo = record.PayTo ?? record.FileDate;
-            //        DateTime payDate = record.PayDate ?? record.FileDate;
+            public Recode(DataRow dr)
+            {
+                Scheme = String.IsNullOrWhiteSpace(dr[1].ToString()) ? null : dr[1].ToString().ToLower().Trim();
+                Blago = Decimal.Parse(dr[3].ToString());
+                HasCounter = String.IsNullOrWhiteSpace(dr[5].ToString()) ? null : dr[5].ToString().ToLower().Trim();
+                Unknown = String.IsNullOrWhiteSpace(dr[7].ToString()) ? null : dr[7].ToString().ToLower().Trim();
 
-            //        nm.RegisterOplata(odef, record.Lshet, payTo.Month, payTo.Year,
-            //            record.PaySum, payDate, payDate, String.Format("P{0}{1}", i, record.Lshet));
-            //    }
+                GKal = Int32.Parse(dr[8].ToString()) == 1;
+                ServiceCD = Int32.Parse(dr[9].ToString());
+
+                Regim = Int32.Parse(dr[10].ToString());
+                SummaType = Int32.Parse(dr[11].ToString());
+                VolumeType = Int32.Parse(dr[12].ToString());
+            }
         }
     }
 
@@ -1107,6 +1324,7 @@ namespace _047_Tver
             ExcelFileInfo houseFileInfo = Consts.HousesCharsFile;
             DataTable houseCharsTable = Utils.ReadExcelFile(houseFileInfo.FileName, houseFileInfo.ListName);
             StepStart(houseCharsTable.Rows.Count);
+            string notFounded = "";
             using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
             {
                 for (int i = houseFileInfo.StartDataRow - 2; i <= houseFileInfo.EndDataRow - 2; i++)
@@ -1129,13 +1347,14 @@ namespace _047_Tver
                             "UPDATE CNV$ABONENT SET HOUSECD = {0} WHERE HOUSECD = {1}", houseChars.HouseId,
                             result[0].HOUSECD));
                         context.SaveChanges();
-                        lch.Add(new CNV_CHARSHOUSES
-                        {
-                            CHARCD = 206001,
-                            DATE_ = Consts.FirstDate,
-                            VALUE_ = houseChars.TotalSquare,
-                            HOUSECD = houseChars.HouseId
-                        });
+                        if (houseChars.TotalSquare.HasValue)
+                            lch.Add(new CNV_CHARSHOUSES
+                            {
+                                CHARCD = 206001,
+                                DATE_ = Consts.FirstDate,
+                                VALUE_ = houseChars.TotalSquare.Value,
+                                HOUSECD = houseChars.HouseId
+                            });
                         if (houseChars.HeatingSquare.HasValue)
                             lch.Add(new CNV_CHARSHOUSES
                             {
@@ -1158,14 +1377,321 @@ namespace _047_Tver
                                 });
                             }
                     }
+                    else
+                    {
+                        notFounded += houseChars.Address + "\r\n";
+                    }
+
+                    Iterate();
+                }
+            }
+            if (!String.IsNullOrWhiteSpace(notFounded))
+            {
+                File.WriteAllText(aConverter_RootSettings.SourceDbfFilePath + "\\housesNotFounded.txt", notFounded);
+                Task.Run(() => MessageBox.Show(
+                    "Обнаружены дома, в которых отсутсвуют абоненты (см. файл в директории с исходными данными housesNotFounded.txt)"));
+            }
+            StepFinish();
+
+            SaveList(lch, Consts.InsertRecordCount);
+            SaveList(lca, Consts.InsertRecordCount);
+        }
+    }
+
+    public class ConvetLgotaPeople : ConvertCase
+    {
+        public ConvetLgotaPeople()
+        {
+            ConvertCaseName = "LGOTA - информация о льготниках";
+            Position = 110;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(2);
+            BufferEntitiesManager.DropTableData("CNV$CITYZENLGOTA");
+            var lg = new List<CNV_CITYZENLGOTA>();
+            ExcelFileInfo lgotaFileInfo = Consts.LgotaReportFile;
+            DataTable lgotaTable = Utils.ReadExcelFile(lgotaFileInfo.FileName, lgotaFileInfo.ListName);
+
+            ExcelFileInfo recodeTableFile = Consts.LgotaRecodeTableFile;
+            DataTable recodeDt = Utils.ReadExcelFile(recodeTableFile.FileName, recodeTableFile.ListName);
+            var recodeTable = new List<Recode>();
+            for (int i = recodeTableFile.StartDataRow - 2; i <= recodeTableFile.EndDataRow - 2; i++)
+            {
+                recodeTable.Add(new Recode(recodeDt.Rows[i]));
+            }
+            recodeDt.Dispose();
+            string badPeople = "";
+            StepStart(lgotaTable.Rows.Count);
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = lgotaFileInfo.StartDataRow - 2; i <= lgotaFileInfo.EndDataRow - 2; i++)
+                {
+                    var lgota = new Lgota(lgotaTable.Rows[i]);
+
+                    var l = new CNV_CITYZENLGOTA
+                    {
+                        STARTDATE = lgota.StartDate,
+                        ENDDATE = lgota.EndDate,
+                        //ISDELETED = lgota.EndDate.HasValue && lgota.EndDate.Value < DateTime.Now ? 1 : 0,
+                    };
+
+                    bool founded = false;
+                    for (int j = 0; j < recodeTable.Count; j++)
+                    {
+                        if (recodeTable[j].LgotaName == lgota.Category)
+                        {
+                            l.LGOTACD = recodeTable[j].LgotaId;
+                            founded = true;
+                            break;
+                        }
+                    }
+                    if (!founded) throw new Exception("В таблице перекодировке не найдена льгота " + lgota.Category);
+
+                    string sql = String.Format(
+                        @"select CITIZENID from cnv$citizens cn where cn.lshet = '{0}' and (cn.f || ' ' || cn.i || iif(cn.o is not null, ' ' || cn.o, '')) = '{1}'",
+                        Consts.GetLs(lgota.Lshet), lgota.FIO.Replace("  ", " "));
+                    var result = context.ExecuteQuery<int>(sql, CommandType.Text, null);
+                    if (result.Count == 0)
+                    {
+                        badPeople += String.Format("Не найден льготник {0} {1}\r\n", lgota.Lshet, lgota.FIO);
+                        continue;
+                    }
+                    if (result.Count > 1)
+                    {
+                        badPeople += String.Format("Найдено несколько льготников ({2}) {0} {1}\r\n", lgota.Lshet,
+                            lgota.FIO, result.Count);
+                        continue;
+                    }
+
+                    l.CITYZENID = result[0];
+                    lg.Add(l);
+
+                    sql = String.Format(
+                        @"UPDATE CNV$CITIZENS SET NOMER = '{0}' WHERE CITIZENID = {1}",
+                        lgota.PKU, l.CITYZENID);
+                    context.ExecuteNonQuery(sql);
+                    context.SaveChanges();
+
+                    Iterate();
+                }
+            }
+            if (!String.IsNullOrWhiteSpace(badPeople))
+            {
+                File.WriteAllText(aConverter_RootSettings.SourceDbfFilePath + "\\badLgotaPeople.txt", badPeople);
+                Task.Run(() => MessageBox.Show(
+                    "Обнаружены проблемные льготники (см. файл в директории с исходными данными badLgotaPeople.txt)"));
+            }
+            StepFinish();
+
+            SaveList(lg, Consts.InsertRecordCount);
+        }
+
+        private class Recode
+        {
+            public string LgotaName;
+            public int LgotaId;
+
+            public Recode(DataRow dr)
+            {
+                LgotaName = dr[0].ToString().Trim();
+                LgotaId = Int32.Parse(dr[1].ToString());
+            }
+        }
+    }
+
+    public class ConvertGPU : ConvertCase
+    {
+        public ConvertGPU()
+        {
+            ConvertCaseName = "ГПУ - групповые приборы учета";
+            Position = 120;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(2);
+            var lca = new List<CNV_LCHAR>();
+            ExcelFileInfo houseFileInfo = Consts.HousesCharsFile;
+            DataTable houseCharsTable = Utils.ReadExcelFile(houseFileInfo.FileName, houseFileInfo.ListName);
+            StepStart(houseCharsTable.Rows.Count);
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = houseFileInfo.StartDataRow - 2; i <= houseFileInfo.EndDataRow - 2; i++)
+                {
+                    var houseChars = new HouseChars(houseCharsTable.Rows[i]);
+                    if (!houseChars.HasODNCounter || (
+                        String.IsNullOrWhiteSpace(houseChars.AlgorithmInNeOtoplPeriod) ||
+                        houseChars.AlgorithmInNeOtoplPeriod.ToLower() == "счетчик ипу" ||
+                        houseChars.AlgorithmInNeOtoplPeriod.ToLower() == "нет")) continue;
+                    string query = String.Format(@" select * from cnv$abonent where housecd = {0}", houseChars.HouseId);
+                    var result = context.ExecuteQuery<CNV_ABONENT>(query);
+                    for (int j = 0; j < result.Count; j++)
+                    {
+                        var abonent = result[j];
+                        var l = new CNV_LCHAR
+                        {
+                            LSHET = abonent.LSHET,
+                            DATE_ = new DateTime(2016, 06, 01),
+                            LCHARCD = 28,
+                            LCHARNAME = "Алгоритм ГПУ"
+                        };
+                        switch (houseChars.AlgorithmInNeOtoplPeriod.ToLower())
+                        {
+                            case "не указан":
+                                l.VALUE_ = 0;
+                                break;
+                            case "1,2":
+                                l.VALUE_ = 7;
+                                break;
+                            case "1":
+                            case "2":
+                            case "3":
+                            case "4":
+                            case "5":
+                            case "6":
+                                l.VALUE_ = Int32.Parse(houseChars.AlgorithmInNeOtoplPeriod);
+                                break;
+                            default:
+                                throw new Exception("Неизвестный алгоритм ГПУ " + houseChars.AlgorithmInNeOtoplPeriod);
+                        }
+                        lca.Add(l);
+                    }
+                    Iterate();
+                }
+            }
+            StepFinish();
+
+            SaveList(lca, Consts.InsertRecordCount);
+        }
+    }
+
+    public class ConvetLgotaTest : ConvertCase
+    {
+        public ConvetLgotaTest()
+        {
+            ConvertCaseName = "LGOTA TEST - начисления по льготам";
+            Position = 120;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(2);
+            BufferEntitiesManager.DropTableData("CNV$LGOTSUMMA");
+            var lg = new List<CNV_LGOTSUMMA>();
+            ExcelFileInfo lgotaFileInfo = Consts.LgotaReportFile;
+            DataTable lgotaTable = Utils.ReadExcelFile(lgotaFileInfo.FileName, lgotaFileInfo.ListName);
+
+            ExcelFileInfo recodeTableFile = Consts.LgotaRecodeTableFile;
+            DataTable recodeDt = Utils.ReadExcelFile(recodeTableFile.FileName, recodeTableFile.ListName);
+            var recodeTable = new List<Recode>();
+            for (int i = recodeTableFile.StartDataRow - 2; i <= recodeTableFile.EndDataRow - 2; i++)
+            {
+                recodeTable.Add(new Recode(recodeDt.Rows[i]));
+            }
+            recodeDt.Dispose();
+
+            StepStart(lgotaTable.Rows.Count);
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                for (int i = lgotaFileInfo.StartDataRow - 2; i <= lgotaFileInfo.EndDataRow - 2; i++)
+                {
+                    var lgota = new Lgota(lgotaTable.Rows[i]);
+
+                    DateTime date = new DateTime(2016,08,01);
+                    var l = new CNV_LGOTSUMMA
+                    {
+                        LSHET = Consts.GetLs(lgota.Lshet),
+                        MONTH_ = date.Month,
+                        YEAR_ = date.Year,
+                        MONTH2 = date.Month,
+                        YEAR2 = date.Year,
+                        DATE_VV = date,
+                        TYPE_ = 0,
+                        REGIMCD = 10,
+                        REGIMNAME = "Неизвестен"
+                    };
+
+                    bool founded = false;
+                    for (int j = 0; j < recodeTable.Count; j++)
+                    {
+                        if (recodeTable[j].LgotaName == lgota.Category)
+                        {
+                            l.LGOTACD = recodeTable[j].LgotaId;
+                            //l.LGOTANAME = recodeTable[j].LgotaName;
+                            founded = true;
+                            break;
+                        }
+                    }
+                    if (!founded) throw new Exception("В таблице перекодировке не найдена льгота " + lgota.Category);
+
+                    string sql = String.Format(
+                        @"select CITIZENID from cnv$citizens cn where cn.lshet = '{0}' and (cn.f || ' ' || cn.i || iif(cn.o is not null, ' ' || cn.o, '')) = '{1}'",
+                        Consts.GetLs(lgota.Lshet), lgota.FIO.Replace("  ", " "));
+                    var result = context.ExecuteQuery<int>(sql, CommandType.Text, null);
+                    if (result.Count == 0)
+                    {
+                        Task.Run(
+                            () => MessageBox.Show(String.Format("Не найден льготник {0} {1}", lgota.Lshet, lgota.FIO)));
+                        continue;
+                    }
+                    if (result.Count > 1)
+                    {
+                        Task.Run(
+                            () =>
+                                MessageBox.Show(String.Format("Найдено несколько льготников ({2}) {0} {1}", lgota.Lshet,
+                                    lgota.FIO, result.Count)));
+                        continue;
+                    }
+
+                    l.CITYZENID = result[0];
+
+                    l.SERVICECD = 3;
+                    l.SUMMA = lgota.SummaOtopl;
+                    l.SERVICENAME = "Отопление";
+                    lg.Add(l);
+
+                    lg.Add(new CNV_LGOTSUMMA
+                    {
+                        SERVICECD = 5,
+                        SUMMA = lgota.SummaGVS,
+                        SERVICENAME = "Гор. водоснабжение",
+                        LSHET = l.LSHET,
+                        MONTH_ = date.Month,
+                        YEAR_ = date.Year,
+                        MONTH2 = date.Month,
+                        YEAR2 = date.Year,
+                        DATE_VV = date,
+                        TYPE_ = 0,
+                        REGIMCD = 10,
+                        REGIMNAME = "Неизвестен",
+                        CITYZENID = l.CITYZENID,
+                        LGOTACD = l.LGOTACD,
+                        LGOTANAME = l.LGOTANAME
+                    });;
 
                     Iterate();
                 }
             }
             StepFinish();
 
-            SaveList(lch, Consts.InsertRecordCount);
-            SaveList(lca, Consts.InsertRecordCount);
+            SaveList(lg, Consts.InsertRecordCount);
+        }
+
+        private class Recode
+        {
+            public string LgotaName;
+            public int LgotaId;
+
+            public Recode(DataRow dr)
+            {
+                LgotaName = dr[0].ToString().Trim();
+                LgotaId = Int32.Parse(dr[1].ToString());
+            }
         }
     }
 
@@ -1323,69 +1849,84 @@ namespace _047_Tver
         public decimal? Square;
         public string NachGvsOdn;
         public string NachOtopl;
+        public string NachPkTeplEnergy;
         public string NachPkInd;
         public string NachPkOdn;
 
         public LsInfo(DataRow dr)
         {
-            Lshet = dr[0].ToString();
-            FIO = dr[1].ToString();
-            InformationOwner = dr[2].ToString();
-            ContractNumber = String.IsNullOrWhiteSpace(dr[3].ToString()) ? (int?) null : Int32.Parse(dr[3].ToString());
-            Address = dr[5].ToString();
-            Active = dr[6].ToString().ToLower().Trim() == "действующий";
-            LsOpenDate = DateTime.Parse(dr[7].ToString());
-            LsCloseDate = String.IsNullOrWhiteSpace(dr[8].ToString())
-                ? (DateTime?) null
-                : DateTime.Parse(dr[8].ToString());
-            HasCounter = dr[9].ToString().ToLower().Trim();
-            HasHVS = dr[10].ToString().ToLower().Trim();
-            IndividualNorm = String.IsNullOrWhiteSpace(dr[11].ToString())
-                ? (decimal?) null
-                : Decimal.Parse(dr[11].ToString());
-            GVSTypeOpen = dr[12].ToString().ToLower().Trim();
-            Square = String.IsNullOrWhiteSpace(dr[13].ToString())
-                ? (decimal?) null
-                : Decimal.Parse(dr[13].ToString());
-            NachGvsOdn = dr[14].ToString().ToLower().Trim();
-            NachOtopl = dr[15].ToString().ToLower().Trim();
-            NachPkInd = dr[16].ToString().ToLower().Trim();
-            NachPkOdn = dr[17].ToString().ToLower().Trim();
-
-            switch (InformationOwner.Trim().ToLower())
+            try
             {
-                case "непосредственное управление":
-                    InformationOwnerId = 1;
-                    break;
-                case "нереализованный способ управления":
-                    InformationOwnerId = 8;
-                    break;
-                case "ооо фирма \"энергия\"":
-                    InformationOwnerId = 2;
-                    break;
-                case "ооо \"новый дом\"":
-                    InformationOwnerId = 3;
-                    break;
-                case "ооо \"фаворит+\"":
-                    InformationOwnerId = 4;
-                    break;
-                case "ооо \"фаворит\"":
-                    InformationOwnerId = 7;
-                    break;
-                case "ооо ук \"рэп-17\"":
-                    InformationOwnerId = 5;
-                    break;
-                case "ооо ук \"верхневолжский град\"":
-                    InformationOwnerId = 6;
-                    break;
-                default:
-                    if (String.IsNullOrWhiteSpace(InformationOwner))
-                    {
-                        InformationOwnerId = null;
-                        InformationOwner = null;
+                Lshet = dr[0].ToString().Trim();
+                FIO = dr[1].ToString();
+                InformationOwner = dr[2].ToString();
+                ContractNumber = String.IsNullOrWhiteSpace(dr[3].ToString())
+                    ? (int?) null
+                    : Int32.Parse(dr[3].ToString());
+                Address = dr[5].ToString();
+                Active = dr[6].ToString().ToLower().Trim() == "действующий";
+                LsOpenDate = DateTime.Parse(dr[7].ToString());
+                LsCloseDate = String.IsNullOrWhiteSpace(dr[8].ToString())
+                    ? (DateTime?) null
+                    : DateTime.Parse(dr[8].ToString());
+                HasCounter = dr[9].ToString().ToLower().Trim();
+                HasHVS = dr[10].ToString().ToLower().Trim();
+                IndividualNorm = String.IsNullOrWhiteSpace(dr[11].ToString())
+                    ? (decimal?) null
+                    : Decimal.Parse(dr[11].ToString());
+                GVSTypeOpen = dr[12].ToString().ToLower().Trim();
+                Square = String.IsNullOrWhiteSpace(dr[13].ToString())
+                    ? (decimal?) null
+                    : Decimal.Parse(dr[13].ToString());
+                NachGvsOdn = dr[14].ToString().ToLower().Trim();
+                NachOtopl = dr[15].ToString().ToLower().Trim();
+                NachPkTeplEnergy = dr[16].ToString().ToLower().Trim();
+                NachPkInd = dr[17].ToString().ToLower().Trim();
+                NachPkOdn = dr[18].ToString().ToLower().Trim();
+
+                switch (InformationOwner.Trim().ToLower())
+                {
+                    case "непосредственное управление":
+                        InformationOwnerId = 225;
                         break;
-                    }
-                    throw new Exception("Неизвестная УК " + InformationOwner);
+                    //case "нереализованный способ управления":
+                    //    InformationOwnerId = 8;
+                    //    break;
+                    case "ооо фирма \"энергия\"":
+                        InformationOwnerId = 203;
+                        break;
+                    case "ооо \"новый дом\"":
+                        InformationOwnerId = 224;
+                        break;
+                    case "ооо \"фаворит+\"":
+                        InformationOwnerId = 243;
+                        break;
+                    case "ооо \"фаворит\"":
+                        InformationOwnerId = 242;
+                        break;
+                    case "ооо ук \"рэп-17\"":
+                        InformationOwnerId = 244;
+                        break;
+                    case "ооо ук \"верхневолжский град\"":
+                        InformationOwnerId = 202;
+                        break;
+                    case "общество с ограниченной ответственностью \"ук расцвет\"":
+                        InformationOwner = "ООО \"УК Расцвет\"";
+                        InformationOwnerId = 11;
+                        break;
+                    default:
+                        if (String.IsNullOrWhiteSpace(InformationOwner))
+                        {
+                            InformationOwnerId = null;
+                            InformationOwner = null;
+                            break;
+                        }
+                        throw new Exception("Неизвестная УК " + InformationOwner);
+                }
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
 
@@ -1428,7 +1969,7 @@ namespace _047_Tver
             if (!String.IsNullOrWhiteSpace(abonent.O)) abonent.O = abonent.O.Trim();
         }
 
-        private static Regex addressRegex = new Regex(@"(?<index>\d{6}).+г\. Тверь,(?<district>[^,]+),(?<street>[^,]+)");
+        private static Regex addressRegex = new Regex(@"(?<index>\d{6}).+г\. ?Тверь,(?<district>[^,]+),(?<street>[^,]+)");
         private static Regex houseRegex = new Regex(@"д[\., ]+([^ ,]+)");
         private static Regex korpusRegex = new Regex(@"корп[\., ]+([^ ,]+)");
         private static Regex flatRegex = new Regex(@"кв[\., ]+([^ ,]+)");
@@ -1438,6 +1979,7 @@ namespace _047_Tver
         public void ExctractAddress(ref CNV_ABONENT abonent)
         {
             if (String.IsNullOrWhiteSpace(Address)) return;
+            Address = Address.Replace("  ", " ");
             abonent.TOWNSNAME = "Тверь";
             abonent.RAYONNAME = "Тверская область";
             abonent.RAYONKOD = 69;
@@ -1560,6 +2102,9 @@ namespace _047_Tver
                     case "в кармане":
                         SetupPlaceId = 18;
                         break;
+                    case "в рукаве":
+                        SetupPlaceId = 19;
+                        break;
                     default:
                         throw new Exception("Неизвестное место установки " + SetupPlace);
                 }
@@ -1606,18 +2151,26 @@ namespace _047_Tver
         {
             FileDate = fileDate;
             Date = fileDate;
-            Lshet = dr[0].ToString();
+            Lshet = dr[0].ToString().Trim();
+
+            LsInfo abonent = null;
+            for (int i = 0; i < ConvertNachopl.Abonents.Length; i++)
+            {
+                var abonentCheck = ConvertNachopl.Abonents[i];
+                if (abonentCheck.Lshet == Lshet) abonent = abonentCheck;
+            }
+            if (abonent == null) ConvertNachopl.NotFoundedAbonents += Lshet + "\r\n";
             Services = new[]
             {
-                new ServiceMoney(dr, 12, 26, 5, "Гор. водоснабжение", 10, "Неизвестен"), // ГВС Гкал
-                new ServiceMoney(dr, 14, 28, 5, "Гор. водоснабжение", 10, "Неизвестен"), // Гвс Тн
-                new ServiceMoney(dr, 16, 30, 5, "Гор. водоснабжение", 10, "Неизвестен"), // ХВС куб.м
-                new ServiceMoney(dr, 18, 33, 3, "Отопление", 10, "Неизвестен"), // Отопление Гкал
-                new ServiceMoney(dr, 20, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН Гкал
-                new ServiceMoney(dr, 22, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН Тн
-                new ServiceMoney(dr, 24, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен"), // ОДН куб.м
-                new ServiceMoney(dr, 39, 41, 105, "Гор. водоснабжение пов. коэф.", 10, "Неизвестен", false), // коеф. инд.
-                new ServiceMoney(dr, 40, 0, 115, "Гор. водоснабжение ОДН пов. коэф", 10, "Неизвестен", false), // коеф. одн
+                new ServiceMoney(dr, 12, 26, 5, "Гор. водоснабжение", 10, "Неизвестен", true, true, abonent), // ГВС Гкал
+                new ServiceMoney(dr, 14, 28, 5, "Гор. водоснабжение", 10, "Неизвестен", false, true, abonent), // Гвс Тн
+                new ServiceMoney(dr, 16, 30, 5, "Гор. водоснабжение", 10, "Неизвестен", false, true, abonent), // ХВС куб.м
+                new ServiceMoney(dr, 18, 33, 3, "Отопление", 10, "Неизвестен", true, true, abonent), // Отопление Гкал
+                new ServiceMoney(dr, 20, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен", true, true, abonent), // ОДН Гкал
+                new ServiceMoney(dr, 22, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен", false, true, abonent), // ОДН Тн
+                new ServiceMoney(dr, 24, 0, 15, "Гор. водоснабжение ОДН", 10, "Неизвестен", false, true, abonent), // ОДН куб.м
+                new ServiceMoney(dr, 39, 41, 105, "Гор. водоснабжение пов. коэф.", 10, "Неизвестен", true, false, null), // коеф. инд.
+                new ServiceMoney(dr, 40, 0, 115, "Гор. водоснабжение ОДН пов. коэф", 10, "Неизвестен", true, false, null), // коеф. одн
             };
             
             EndSaldo = String.IsNullOrWhiteSpace(dr[45 - 1].ToString()) ? 0 : Decimal.Parse(dr[45 - 1].ToString().Replace('.', ','));
@@ -1633,42 +2186,73 @@ namespace _047_Tver
             public string ServiceName;
             public int RegimCd;
             public string RegimName;
+            public int SummaType;
+            public int? VolumeType;
 
             public decimal Volume;
             public decimal Nach;
             public decimal RecalcVol;
             public decimal RecalcSum;
 
-            public ServiceMoney(DataRow dr, int volumeId, int recalcId, int servicecd, string servicename, int regimcd, string regimname, bool withVolume = true)
+            public ServiceMoney(DataRow dr, int volumeId, int recalcId, int servicecd, string servicename, int regimcd,
+                string regimname, bool gkal, bool withVolume, LsInfo abonent = null)
             {
-                try
-                {
-                    ServiceCd = servicecd;
-                    ServiceName = servicename;
-                    RegimCd = regimcd;
-                    RegimName = regimname;
+                ServiceCd = servicecd;
+                ServiceName = servicename;
+                RegimCd = regimcd;
+                RegimName = regimname;
+                SummaType = 0;
 
-                    if (withVolume)
-                        Volume = String.IsNullOrWhiteSpace(dr[volumeId - 1].ToString())
-                            ? 0
-                            : Decimal.Parse(dr[volumeId - 1].ToString(), NumberStyles.Float);
-                    Nach = String.IsNullOrWhiteSpace(dr[volumeId].ToString())
-                        ? 0
-                        : Decimal.Parse(dr[volumeId].ToString(), NumberStyles.Float);
-                    if (recalcId != 0)
-                    {
-                        if (withVolume)
-                            RecalcVol = String.IsNullOrWhiteSpace(dr[recalcId - 1].ToString())
-                                ? 0
-                                : Decimal.Parse(dr[recalcId - 1].ToString(), NumberStyles.Float);
-                        RecalcSum = String.IsNullOrWhiteSpace(dr[recalcId].ToString())
-                            ? 0
-                            : Decimal.Parse(dr[recalcId].ToString(), NumberStyles.Float);
-                    }
-                }
-                catch (Exception ex)
+                if (withVolume)
                 {
-                    
+                    Volume = String.IsNullOrWhiteSpace(dr[volumeId - 1].ToString())
+                        ? 0
+                        : Decimal.Parse(dr[volumeId - 1].ToString(), NumberStyles.Float);
+                    VolumeType = 1;
+                }
+                Nach = String.IsNullOrWhiteSpace(dr[volumeId].ToString())
+                    ? 0
+                    : Decimal.Parse(dr[volumeId].ToString(), NumberStyles.Float);
+                if (recalcId != 0)
+                {
+                    if (withVolume)
+                        RecalcVol = String.IsNullOrWhiteSpace(dr[recalcId - 1].ToString())
+                            ? 0
+                            : Decimal.Parse(dr[recalcId - 1].ToString(), NumberStyles.Float);
+                    RecalcSum = String.IsNullOrWhiteSpace(dr[recalcId].ToString())
+                        ? 0
+                        : Decimal.Parse(dr[recalcId].ToString(), NumberStyles.Float);
+                }
+
+                if ((Nach != 0 || Volume != 0 || RecalcSum != 0 || RecalcVol != 0) && abonent != null && abonent.IndividualNorm != null)
+                {
+                    if (abonent.IndividualNorm.Value == 0.0257m || abonent.IndividualNorm.Value == 0) return;
+                    if (servicecd == 3)
+                    {
+                        RegimCd = 301;
+                        SummaType = 0;
+                        VolumeType = 1;
+                        return;
+                    }
+                    bool founded = false;
+                    for (int i = 0; i < ConvertNachopl.RecodeTable.Length; i++)
+                    {
+                        var recode = ConvertNachopl.RecodeTable[i];
+                        if ((recode.Scheme == null || abonent.GVSTypeOpen == recode.Scheme) &&
+                            abonent.IndividualNorm == recode.Blago &&
+                            (recode.HasCounter == null || abonent.HasCounter == recode.HasCounter) &&
+                            gkal == recode.GKal &&
+                            servicecd == recode.ServiceCD)
+                        {
+                            founded = true;
+                            RegimCd = recode.Regim;
+                            SummaType = recode.SummaType;
+                            VolumeType = recode.VolumeType;
+                            break;
+                        }
+                    }
+                    if (!founded)
+                        throw new Exception(String.Format("Не найдено соответствие в таблице перекодировки\r\nЛС: {0}; Услуга: {1}; Гкал: {2}", abonent.Lshet, servicecd, gkal));
                 }
             }
         }
@@ -1676,6 +2260,38 @@ namespace _047_Tver
         public static string GetFileName(DateTime date)
         {
             return String.Format("справка расчет {0:D2}.{1}.xls",date.Month, date.Year);
+        }
+    }
+
+    public class PKCoef
+    {
+        public string Lshet;
+        public decimal PereInd;
+        public decimal PereOdn;
+        public decimal EndSaldoInd;
+        public decimal EndSaldoOdn;
+
+        public PKCoef() { }
+        public static DateTime Date;
+        public PKCoef(DataRow dr)
+        {
+            try
+            {
+                Lshet = dr[0].ToString().Trim();
+                PereInd = Math.Round(Decimal.Parse(dr[17].ToString(), NumberStyles.Float), 4);
+                PereOdn = Math.Round(Decimal.Parse(dr[18].ToString(), NumberStyles.Float), 4);
+                EndSaldoInd = Math.Round(Decimal.Parse(dr[24].ToString(), NumberStyles.Float), 4);
+                EndSaldoOdn = Math.Round(Decimal.Parse(dr[25].ToString(), NumberStyles.Float), 4);
+            }
+            catch (Exception xe)
+            {
+                throw;
+            }
+        }
+
+        public static string GetFileName(DateTime date)
+        {
+            return String.Format("ПК_{0:D2}_{1}.xlsx", date.Month, date.Year);
         }
     }
 
@@ -1688,12 +2304,15 @@ namespace _047_Tver
         public decimal ServicesSumma;
         public decimal CoefSumma;
         public decimal Summa;
+        public decimal IndCoefSumma;
+        public decimal OdnCoefSumma;
+
+        public static DateTime Date;
 
         public Oplata(DataRow dr)
         {
             try
             {
-
                 Lshet = dr[0].ToString().Trim();
                 Source = dr[3].ToString().Trim();
                 if (String.IsNullOrWhiteSpace(dr[4].ToString()))
@@ -1704,9 +2323,11 @@ namespace _047_Tver
                         PayDate = DateTime.Parse(dr[6].ToString());
                 }
                 else PayDate = DateTime.Parse(dr[4].ToString());
-                ServicesSumma = Decimal.Parse(dr[7].ToString());
-                CoefSumma = Decimal.Parse(dr[8].ToString());
-                Summa = Decimal.Parse(dr[9].ToString());
+                ServicesSumma = String.IsNullOrWhiteSpace(dr[7].ToString()) ? 0 : Decimal.Parse(dr[7].ToString());
+                IndCoefSumma = String.IsNullOrWhiteSpace(dr[8].ToString()) ? 0 : Decimal.Parse(dr[8].ToString());
+                OdnCoefSumma = String.IsNullOrWhiteSpace(dr[9].ToString()) ? 0 : Decimal.Parse(dr[9].ToString());
+                CoefSumma = String.IsNullOrWhiteSpace(dr[10].ToString()) ? 0 : Decimal.Parse(dr[10].ToString());
+                Summa = String.IsNullOrWhiteSpace(dr[11].ToString()) ? 0 : Decimal.Parse(dr[11].ToString());
 
                 if (String.IsNullOrWhiteSpace(Source))
                 {
@@ -1757,10 +2378,12 @@ namespace _047_Tver
     {
         public string District;
         public string Address;
-        public decimal TotalSquare;
+        public decimal? TotalSquare;
         public decimal? HeatingSquare;
         public int HouseId;
         public bool HasODNCounter;
+        public string AlgorithmInOtoplPeriod;
+        public string AlgorithmInNeOtoplPeriod;
 
         public string Street;
         public string HouseNo;
@@ -1772,40 +2395,38 @@ namespace _047_Tver
 
         public HouseChars(DataRow dr)
         {
-            try
-            {
-                District = dr[2].ToString().Trim();
-                Address = dr[4].ToString().Trim();
-                TotalSquare = Decimal.Parse(dr[14].ToString());
-                HeatingSquare = String.IsNullOrWhiteSpace(dr[15].ToString())
-                    ? (decimal?) null
-                    : Decimal.Parse(dr[15].ToString());
-                HouseId = Int32.Parse(dr[31].ToString());
-                HasODNCounter = dr[11].ToString().ToLower().Trim() == "да";
 
-                string[] separetedAddress = Address.Split(',');
-                if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
-                Street = separetedAddress[0].Trim();
-                for (int i = 0; i < Consts.Prefixes.Length; i++)
-                {
-                    Street = Street.Replace(Consts.Prefixes[i], "");
-                }
-                Street = Street.Replace(".", "").Trim();
-                string house = separetedAddress[1];
-                var korpusMatch = KorpusRegex.Match(house);
-                if (korpusMatch.Success)
-                {
-                    KorpusNo = Int32.Parse(korpusMatch.Groups[1].Value);
-                    house = house.Replace(korpusMatch.Value, "").Trim();
-                }
-                var groups = HouseRegex.Match(house).Groups;
-                HouseNo = groups[1].Value.Trim();
-                HousePostfix = groups[2].Value.Trim();
-            }
-            catch (Exception ex)
+            District = dr[2].ToString().Trim();
+            Address = dr[4].ToString().Trim();
+            TotalSquare = String.IsNullOrWhiteSpace(dr[16].ToString())
+                ? (decimal?)null
+                : Decimal.Parse(dr[16].ToString());
+            HeatingSquare = String.IsNullOrWhiteSpace(dr[17].ToString())
+                ? (decimal?) null
+                : Decimal.Parse(dr[17].ToString());
+            HouseId = Int32.Parse(dr[33].ToString());
+            HasODNCounter = dr[13].ToString().ToLower().Trim() == "да";
+            AlgorithmInOtoplPeriod = dr[11].ToString().Trim();
+            AlgorithmInNeOtoplPeriod = dr[12].ToString().Trim();
+
+            string[] separetedAddress = Address.Split(',');
+            if (separetedAddress.Length != 2) throw new Exception("Запятая не одна " + Address);
+            Street = separetedAddress[0].Trim();
+            for (int i = 0; i < Consts.Prefixes.Length; i++)
             {
-                throw;
+                Street = Street.Replace(Consts.Prefixes[i], "");
             }
+            Street = Street.Replace(".", "").Trim();
+            string house = separetedAddress[1];
+            var korpusMatch = KorpusRegex.Match(house);
+            if (korpusMatch.Success)
+            {
+                KorpusNo = Int32.Parse(korpusMatch.Groups[1].Value);
+                house = house.Replace(korpusMatch.Value, "").Trim();
+            }
+            var groups = HouseRegex.Match(house).Groups;
+            HouseNo = groups[1].Value.Trim();
+            HousePostfix = groups[2].Value.Trim();
         }
     }
 
@@ -1818,9 +2439,9 @@ namespace _047_Tver
         public string WatercaptureType;
         public string HasIPU;
         public string NachODPU;
-        public decimal Square;
-        public int HoursPerWeek;
-        public int HoursPerDay;
+        public decimal? Square;
+        public int? HoursPerWeek;
+        public int? HoursPerDay;
         public string HouseType;
 
         public decimal DopGVSCloseGKal;
@@ -1838,32 +2459,38 @@ namespace _047_Tver
             ContractId = Int32.Parse(dr[1].ToString());
             FullName = dr[2].ToString();
             Address = dr[3].ToString();
-            WatercaptureType = dr[18].ToString().ToLower().Trim();
-            HasIPU = dr[19].ToString().ToLower().Trim();
-            NachODPU = dr[20].ToString().ToLower().Trim();
-            Square = Decimal.Parse(dr[22].ToString(), NumberStyles.Float);
-            HoursPerWeek = Int32.Parse(dr[16].ToString());
-            HoursPerDay = Int32.Parse(dr[17].ToString());
-            HouseType = dr[24].ToString().ToLower().Trim();
+            WatercaptureType = dr[19].ToString().ToLower().Trim();
+            HasIPU = dr[20].ToString().ToLower().Trim();
+            NachODPU = dr[21].ToString().ToLower().Trim();
+            Square = String.IsNullOrWhiteSpace(dr[22].ToString())
+                ? (decimal?) null
+                : Decimal.Parse(dr[22].ToString().Replace('.',','), NumberStyles.Float);
+            HoursPerWeek = String.IsNullOrWhiteSpace(dr[17].ToString())
+                ? (int?) null
+                : Int32.Parse(dr[17].ToString());
+            HoursPerDay = String.IsNullOrWhiteSpace(dr[18].ToString())
+                ? (int?) null
+                : Int32.Parse(dr[18].ToString());
+            HouseType = dr[23].ToString().ToLower().Trim();
 
-            DopGVSCloseGKal = String.IsNullOrWhiteSpace(dr[10].ToString())
-                ? 0
-                : Math.Round(Decimal.Parse(dr[10].ToString(), NumberStyles.Float), 4);
-            DopGVSCloseTn = String.IsNullOrWhiteSpace(dr[11].ToString())
+            DopGVSCloseGKal = String.IsNullOrWhiteSpace(dr[11].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[11].ToString(), NumberStyles.Float), 4);
-            DopGVSOpenGKal = String.IsNullOrWhiteSpace(dr[12].ToString())
+            DopGVSCloseTn = String.IsNullOrWhiteSpace(dr[12].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[12].ToString(), NumberStyles.Float), 4);
-            DopGVSOpenTn = String.IsNullOrWhiteSpace(dr[13].ToString())
+            DopGVSOpenGKal = String.IsNullOrWhiteSpace(dr[13].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[13].ToString(), NumberStyles.Float), 4);
-            DopOtoplGKal = String.IsNullOrWhiteSpace(dr[14].ToString())
+            DopGVSOpenTn = String.IsNullOrWhiteSpace(dr[14].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[14].ToString(), NumberStyles.Float), 4);
-            DopOtoplTn = String.IsNullOrWhiteSpace(dr[15].ToString())
+            DopOtoplGKal = String.IsNullOrWhiteSpace(dr[15].ToString())
                 ? 0
                 : Math.Round(Decimal.Parse(dr[15].ToString(), NumberStyles.Float), 4);
+            DopOtoplTn = String.IsNullOrWhiteSpace(dr[16].ToString())
+                ? 0
+                : Math.Round(Decimal.Parse(dr[16].ToString(), NumberStyles.Float), 4);
             Lshet = Id.ToString();
         }
 
@@ -1890,11 +2517,43 @@ namespace _047_Tver
             var groups = HouseRegex.Match(house).Groups;
             abonent.HOUSENO = groups[1].Value.Trim();
             abonent.HOUSEPOSTFIX = groups[2].Value.Trim();
+            if (String.IsNullOrWhiteSpace(abonent.HOUSENO)) abonent.HOUSENO = null;
+            if (String.IsNullOrWhiteSpace(abonent.HOUSEPOSTFIX)) abonent.HOUSEPOSTFIX = null;
         }
 
         public void ExtractFio(ref CNV_ABONENT house)
         {
-            house.F = FullName.Split(',')[0].Trim();
+            //house.F = FullName.Split(',')[0].Trim();
+            house.F = FullName;
+        }
+    }
+
+    public class Lgota
+    {
+        public string Lshet;
+        public string FIO;
+        public string Category;
+        public int LgotaPeopleCount;
+        public long PKU;
+        public DateTime StartDate;
+        public DateTime? EndDate;
+
+        public decimal SummaGVS;
+        public decimal SummaOtopl;
+        public decimal SummaTotal;
+
+        public Lgota(DataRow dr)
+        {
+            Lshet = dr[1].ToString().Trim();
+            FIO = dr[3].ToString().Trim();
+            Category = dr[4].ToString().Trim();
+            LgotaPeopleCount = Int32.Parse(dr[5].ToString());
+            PKU = Int64.Parse(dr[6].ToString());
+            StartDate = DateTime.Parse(dr[7].ToString());
+            EndDate = String.IsNullOrWhiteSpace(dr[8].ToString()) ? (DateTime?) null : DateTime.Parse(dr[8].ToString());
+            SummaGVS = Decimal.Parse(dr[9].ToString());
+            SummaOtopl = Decimal.Parse(dr[10].ToString());
+            SummaTotal = Decimal.Parse(dr[11].ToString());
         }
     }
 
@@ -1911,28 +2570,112 @@ namespace _047_Tver
         {
             SetStepsCount(99);
 
-            // тест измененных ЛС
-            var minDate = new DateTime(2015, 05, 01);
-            var maxDate = new DateTime(2016, 07, 01);
-            
+            // поиск дубликатов по инициалам граждарн
             StepStart(1);
-            for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
-            {
-                DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
-                for (int i = 0; i < moneyTable.Rows.Count; i++)
-                {
-                    long ls;
-                    if (!Int64.TryParse(moneyTable.Rows[i][0].ToString(), out ls)) continue;
+            var roomers = RoomerInfo.ReadRoomers(Consts.RoomingReportFile);
+            StepFinish();
 
-                    var money = new Spravka(moneyTable.Rows[i], date);
-                    if (money.Lshet == "5007001")
+            var fewFounded = new List<KeyValuePair<string, List<RoomerInfo>>>();
+
+            foreach (var roomer in roomers)
+            {
+                foreach (var roomerInfo in roomer.Value)
+                {
+                    int fouded = 0;
+                    var cityzen = new CNV_CITIZEN();
+                    roomerInfo.ExtractFio(ref cityzen);
+                    if ((!String.IsNullOrWhiteSpace(cityzen.I) && cityzen.I.Length == 1) &&
+                        (!String.IsNullOrWhiteSpace(cityzen.O) && cityzen.O.Length == 1))
                     {
-                        int a = 10;
+                        foreach (var checkRoomer in roomer.Value)
+                        {
+                            var checkCityzen = new CNV_CITIZEN();
+                            checkRoomer.ExtractFio(ref checkCityzen);
+                            if ((!String.IsNullOrWhiteSpace(checkCityzen.I) && checkCityzen.I[0] == cityzen.I[0]) &&
+                                (!String.IsNullOrWhiteSpace(checkCityzen.O) && checkCityzen.O[0] == cityzen.O[0]))
+                                fouded++;
+                        }
                     }
-                    string lshet = Consts.FixLs(money.Lshet, date);
+                    if (fouded > 2) fewFounded.Add(roomer);
                 }
             }
-            StepFinish();
+            int a = 10;
+
+            //// поиск граждан по льготам
+            //ExcelFileInfo fileInfo = Consts.LgotaReportFile;
+            //DataTable lgotaTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
+            //StepStart(lgotaTable.Rows.Count + 1);
+            //var correctFounded = "";
+            //var notFounded = "";
+            //var fewFounded = "";
+            //var endedLgots = new List<Lgota>();
+            //using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            //{
+            //    for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
+            //    {
+            //        Iterate();
+            //        var lgota = new Lgota(lgotaTable.Rows[i]);
+
+            //        // поиск деактивированных льгот
+            //        //if (lgota.EndDate.HasValue && lgota.EndDate < DateTime.Now)
+            //        //    endedLgots.Add(lgota);
+
+            //        //continue;
+            //        string sql = String.Format(
+            //            @"select CITIZENID from cnv$citizens cn where cn.lshet = '{0}' and (cn.f || ' ' || cn.i || iif(cn.o is not null, ' ' || cn.o, '')) = '{1}'",
+            //            Consts.GetLs(lgota.Lshet), lgota.FIO.Replace("  ", " "));
+            //        var result = context.ExecuteQuery<int>(sql, CommandType.Text, null);
+            //        if (result.Count == 1)
+            //            correctFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
+            //        if (result.Count == 0)
+            //            notFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
+            //        if (result.Count > 1)
+            //            fewFounded += lgota.Lshet + "\t" + lgota.FIO + "\r\n";
+            //    }
+            //}
+
+            //// список льгот
+            //ExcelFileInfo fileInfo = Consts.LgotaReportFile;
+            //DataTable lgotaTable = Utils.ReadExcelFile(fileInfo.FileName, fileInfo.ListName);
+            //StepStart(lgotaTable.Rows.Count + 1);
+            //var ll = new List<string>();
+            //for (int i = fileInfo.StartDataRow - 2; i <= fileInfo.EndDataRow - 2; i++)
+            //{
+            //    Iterate();
+            //    string lgota = lgotaTable.Rows[i][4].ToString();
+            //    ll.Add(lgota);
+            //}
+
+            //string lgotaList = "";
+            //foreach (var lgota in ll.Distinct().ToArray())
+            //{
+            //    lgotaList += lgota + "\r\n";
+            //}
+            //int a = 10;
+
+
+            //// тест измененных ЛС
+            //var minDate = new DateTime(2015, 05, 01);
+            //var maxDate = new DateTime(2016, 07, 01);
+
+            //StepStart(1);
+            //for (var date = minDate; date <= maxDate; date = date.AddMonths(1))
+            //{
+            //    DataTable moneyTable = Utils.ReadExcelFile(Consts.SpravkaFolder + Spravka.GetFileName(date), "66186");
+            //    for (int i = 0; i < moneyTable.Rows.Count; i++)
+            //    {
+            //        long ls;
+            //        if (!Int64.TryParse(moneyTable.Rows[i][0].ToString(), out ls)) continue;
+
+            //        var money = new Spravka(moneyTable.Rows[i], date);
+            //        if (money.Lshet == "5007001")
+            //        {
+            //            int a = 10;
+            //        }
+            //        string lshet = Consts.FixLs(money.Lshet, date);
+            //    }
+            //}
+            //StepFinish();
 
 
 
@@ -2292,7 +3035,7 @@ namespace _047_Tver
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             //fbm.ExecuteProcedure("CNV$CNV_00950_COUNTERSTYPES");
             //Iterate();
-            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1" });
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "1", "0" });
             Iterate();
         }
     }
@@ -2365,6 +3108,7 @@ namespace _047_Tver
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_03000_CITIZENS_TVER", new[] { "1" });
+            fbm.ExecuteProcedure("CNV$CNV_03050_CITIZENSMIGR_TVER", new[] { "1" });
             Iterate();
             StepFinish();
         }
@@ -2407,6 +3151,211 @@ namespace _047_Tver
             fbm.ExecuteProcedure("CNV$CNV_03100_TVER_ABONENTDOLYA");
             Iterate();
             StepFinish();
+        }
+    }
+
+    public class TransferLgota : ConvertCase
+    {
+        public TransferLgota()
+        {
+            ConvertCaseName = "Перенос данных о льготах";
+            Position = 1330;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_03200_CITYZENLGOTA_TVER", new []{"1"});
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class ImportPere : ConvertCase
+    {
+        public ImportPere()
+        {
+            ConvertCaseName = "Перерасчет ПК за июль-август 2016";
+            Position = 1;
+            IsChecked = true;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(99);
+            StepStart(1);
+            PereRecord[] pereInfo;
+            {
+                var tempPereInfo = new List<PereRecord>();
+                ExcelFileInfo junePere = new ExcelFileInfo
+                {
+                    FileName =
+                        aConverter_RootSettings.SourceDbfFilePath + @"\файл для перерасчета ПК_07.2016_по услугам.xlsx",
+                    StartDataRow = 2,
+                    EndDataRow = 8548,
+                    ListName = "Лист1"
+                };
+                DataTable pereTable = Utils.ReadExcelFile(junePere.FileName, junePere.ListName);
+                for (int i = junePere.StartDataRow - 2; i <= junePere.EndDataRow - 2; i++)
+                {
+                    tempPereInfo.Add(new PereRecord(pereTable.Rows[i], 07));
+                }
+                ExcelFileInfo augPere = new ExcelFileInfo
+                {
+                    FileName =
+                        aConverter_RootSettings.SourceDbfFilePath + @"\файл для перерасчета ПК_08.2016_по услугам.xlsx",
+                    StartDataRow = 2,
+                    EndDataRow = 8464,
+                    ListName = "Лист1"
+                };
+                pereTable = Utils.ReadExcelFile(augPere.FileName, augPere.ListName);
+                for (int i = augPere.StartDataRow - 2; i <= augPere.EndDataRow - 2; i++)
+                {
+                    tempPereInfo.Add(new PereRecord(pereTable.Rows[i], 08));
+                }
+                pereInfo = tempPereInfo.ToArray();
+            }
+            StepFinish();
+
+            AbonentLchars[] abonentLchars;
+            using (var context = new AbonentConvertationEntitiesModel(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                StepStart(1);
+                string sql = @"select * from currentabonentlogicchars ca
+                               where ca.kodlcharslist = 16
+                               order by ca.lshet";
+                var result = context.ExecuteQuery<CurrentAbonentLchars>(sql);
+
+                var tempLchars = new List<AbonentLchars>();
+                var lastLchars = new AbonentLchars();
+                foreach (var currentLchar in result)
+                {
+                    if (currentLchar.LSHET != lastLchars.Lshet)
+                    {
+                        lastLchars = new AbonentLchars { Lshet = currentLchar.LSHET };
+                        tempLchars.Add(lastLchars);
+                    }
+                    switch (currentLchar.KODLCHARSLIST)
+                    {
+                        case 16:
+                            lastLchars.CGVSType = currentLchar.SIGNIFICANCE;
+                            break;
+                        default:
+                            throw new Exception("Неизвестная характеристика " + currentLchar.KODLCHARSLIST);
+                    }
+                }
+                tempLchars.Add(lastLchars);
+                tempLchars.RemoveAt(0);
+                abonentLchars = tempLchars.ToArray();
+                StepFinish();
+
+                sql =
+                    @"INSERT INTO DOCUMENTS (DOCUMENTCD, ORGANIZATIONCD, REGISTERUSERCD, OTVETSTVUSERCD, DOCTYPEID, DOCNAME, DOC_NUMBER, DOC_SER, DOCDATE, INPUTDATE, OUTPUTDATE, FACTDOCUMENTDATE, DOCUMENTIDENTIFER, INTERNALUSEONLY, EMPLOYEE, FROMSUPERIOR, STATUS, REASONID, DEPARTMENTCODE)
+                        VALUES (gen_id(documents_gen, 1) , NULL, 1, 1, 2, 'Массовый перерасчет повышающего коэффициента за июль-август 2016 года', '', '', '2016-11-30', NULL, NULL, Null, Null, NULL, NULL, NULL, NULL, NULL, NULL);";
+
+                sql += "\r\nINSERT INTO NOTES(NOTEID, NOTE) VALUES(gen_id(NOTES_G, 1),'Массовый перерасчет повышающего коэффициента за июль-август 2016 года');";
+                var abonentsWithPere = new List<string>();
+                StringBuilder sb = new StringBuilder(sql);
+                StepStart(pereInfo.Length);
+                for (int i = 0; i < pereInfo.Length; i++)
+                {
+                    var pere = pereInfo[i];
+                    var abnLchars = abonentLchars.SingleOrDefault(a => a.Lshet == pere.Lshet);
+                    if (abnLchars == null)
+                    {
+                        abnLchars = new AbonentLchars
+                        {
+                            Lshet = pere.Lshet,
+                        };
+                    }
+
+                    if (!abonentsWithPere.Contains(abnLchars.Lshet))
+                    {
+                        sb.Append(GeneratePereSql(abnLchars.Lshet));
+                        abonentsWithPere.Add(abnLchars.Lshet);
+                    }
+                    //sql += GeneratePereSql(abnLchars.Lshet, pere.Month);
+                    if (pere.GvsGkal != 0)
+                    {
+                        int servicecd = 105;
+                        int regimcd = abnLchars.CGVSType + 100700 ?? 10;
+                        sb.Append(GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.GvsGkal));
+                        //sql += GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.GvsGkal);
+                    }
+                    if (pere.OdnGkal != 0)
+                    {
+                        int servicecd = 115;
+                        int regimcd = abnLchars.CGVSType + 110700 ?? 10;
+                        sb.Append(GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnGkal));
+                        //sql += GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnGkal);
+                    }
+                    if (pere.OdnTn != 0)
+                    {
+                        int servicecd = 115;
+                        int regimcd = abnLchars.CGVSType + 10400 ?? 10;
+                        sb.Append(GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnTn));
+                        //sql += GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnTn);
+                    }
+                    if (pere.OdnKubm != 0)
+                    {
+                        int servicecd = 115;
+                        int regimcd = abnLchars.CGVSType + 14200 ?? 10;
+                        sb.Append(GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnKubm));
+                        //sql += GenerateNachSql(abnLchars.Lshet, regimcd, servicecd, pere.Month, pere.OdnKubm);
+                    }
+                    Iterate();
+                }
+                StepFinish();
+                Clipboard.SetText(sb.ToString());
+            }
+        }
+
+        public static string GeneratePereSql(string lshet)
+        {
+            return String.Format("\r\nINSERT INTO PERERASHETCASE (CASEID, LSHET, NACHISLCASEID, BEGINDATE, AUTOUSE, IZMEN, FYEAR, FMONTH, FDAY, ISMONTH, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, CASETYPE, NOTEID, DATE4PENI) " +
+                                "VALUES (gen_id(documents_gen, 0),'{0}',gen_id(documents_gen, 0),'2016-11-30', 0,1, 2016,11,30,0,2016,11,30,2016,11,30,NULL, gen_id(NOTES_G, 0), NULL);", lshet);
+        }
+
+        public static string GenerateNachSql(string lshet, int regimcd, int servicecd, int month, decimal summa)
+        {
+            return String.Format("\r\nINSERT INTO NACHISLSUMMA (LSHET, CASEID, KODREGIM, BALANCE_KOD, SUMMATYPE, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, SUMMA, NORMTYPE, SUPPLIERID, KNOTLEVELONEID, KNOTLEVELTWOID) " +
+                                    "VALUES('{0}', gen_id(documents_gen, 0), {2}, {3}, 0, 2016, {4}, 1, 2016, 11, 30, {5}, 0, NULL, Null, NULL);", lshet, 0, regimcd, servicecd, month, summa.ToString().Replace(",", "."));
+        }
+
+        private class AbonentLchars
+        {
+            public string Lshet;
+            public int? CGVSType;
+        }
+
+        private class CurrentAbonentLchars
+        {
+            public string LSHET { get; set; }
+            public int KODLCHARSLIST { get; set; }
+            public int SIGNIFICANCE { get; set; }
+        }
+
+        private class PereRecord
+        {
+            public string Lshet;
+            public decimal GvsGkal;
+            public decimal OdnGkal;
+            public decimal OdnTn;
+            public decimal OdnKubm;
+            public int Month;
+
+            public PereRecord(DataRow dr, int month)
+            {
+                Lshet = String.Format("01{0:D8}", Int64.Parse(dr[0].ToString()));
+                GvsGkal = Decimal.Parse(dr[1].ToString());
+                OdnGkal = Decimal.Parse(dr[2].ToString());
+                OdnTn = Decimal.Parse(dr[3].ToString());
+                OdnKubm = Decimal.Parse(dr[4].ToString());
+                Month = month;
+            }
         }
     }
 }

@@ -387,8 +387,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private int _fLATNO;
-		public virtual int FLATNO
+		private int? _fLATNO;
+		public virtual int? FLATNO
 		{
 			get
 			{
@@ -410,6 +410,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			set
 			{
 				this._rOOMPOSTFIX = value;
+			}
+		}
+		
+		private DateTime? _cLOSEDATE;
+		public virtual DateTime? CLOSEDATE
+		{
+			get
+			{
+				return this._cLOSEDATE;
+			}
+			set
+			{
+				this._cLOSEDATE = value;
 			}
 		}
 		

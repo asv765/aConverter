@@ -1,7 +1,8 @@
 SET TERM ^ ;
 
 CREATE OR ALTER procedure CNV$CNV_01000_COUNTERS (
-    NEEDDELETE smallint)
+    NEEDDELETE smallint,
+	GENERATECD smallint = 1)
 as
 declare variable LSHET varchar(10);
 declare variable COUNTERID varchar(20);
@@ -56,7 +57,8 @@ BEGIN
        INTO :lshet, :counterid, :cnttype, :serialnum, :setupdate, :deactdate,
         :setupplace, :plombdate, :plombname, :lastpov, :nextpov, :prim_, :name
     DO BEGIN
-        equipmentid = GEN_ID(parentequi_gen, 1);
+		IF (generatecd = 1 ) THEN equipmentid = GEN_ID(parentequi_gen, 1);
+		ELSE equipmentid = :counterid;
         INSERT INTO parentequipment (equipmentid, serialnumber, importtag, note, unitingid)
             VALUES (:equipmentid, :serialnum, :counterid, :prim_, :equipmentid);
         INSERT INTO resourcecounters (kod, kodcounterstypes, setupdate, counter_level, counterplace, dateppr, lastpprdate, name)

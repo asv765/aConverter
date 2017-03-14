@@ -21,7 +21,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             for (int i = 0; i < crl.Count; i++)
             {
                 if (crl[i].LSHET != oldlshet || crl[i].CHARCD != oldcharcd || crl[i].VALUE_ != oldcharvalue)
-                {
+                {   
                     rcrl.Add(crl[i]);
                     oldlshet = crl[i].LSHET;
                     oldcharcd = (Int32)crl[i].CHARCD;

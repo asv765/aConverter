@@ -17,6 +17,7 @@ declare variable FMONTH integer;
 declare variable FDAY integer;
 declare variable DOCUMENTCD varchar(20);
 declare variable TYPE_ integer;
+declare variable VTYPE_ integer;
 declare variable OLDYEAR integer;
 declare variable OLDMONTH integer;
 declare variable OLDLSHET varchar(10);
@@ -30,12 +31,12 @@ begin
   olddocumentcd = '-1';
   SELECT extorgcd FROM extorgspr eos WHERE eos.isbaseorganization = 1 INTO :baseorg;
   FOR SELECT YEAR_, MONTH_, YEAR2, MONTH2, LSHET, FNATH, REGIMCD, SERVICECD, DATE_VV AS DATE_,
-    EXTRACT(YEAR FROM DATE_VV) AS FYEAR, EXTRACT(MONTH FROM DATE_VV) AS FMONTH, EXTRACT(DAY FROM DATE_VV) AS FDAY, DOCUMENTCD, TYPE_, volume
+    EXTRACT(YEAR FROM DATE_VV) AS FYEAR, EXTRACT(MONTH FROM DATE_VV) AS FMONTH, EXTRACT(DAY FROM DATE_VV) AS FDAY, DOCUMENTCD, TYPE_, volume, VTYPE_
     FROM CNV$NACH
     WHERE FNATH <> 0
     order by year_,  month_, lshet, documentcd
     INTO :YEAR_, :MONTH_, :YEAR2, :MONTH2, :lshet,  :fnath,  :regimcd,  :servicecd, :date_,
-      :fyear,  :fmonth, :fday, :documentcd, :type_, :volume
+      :fyear,  :fmonth, :fday, :documentcd, :type_, :volume, :VTYPE_
   DO BEGIN
     if ((:oldyear <> :year_) or (:oldmonth <> :month_) or (:oldlshet <> :lshet) or (:olddocumentcd <> :documentcd) ) then begin
        select documentcd from cnv$cnv_documentnumerator(:DOCUMENTCD, 'Импорт данных о начислениях', :DATE_, :DATE_, :baseorg) into :ncaseid;
@@ -49,8 +50,8 @@ begin
     INSERT INTO NACHISLSUMMA (LSHET, CASEID, KODREGIM, BALANCE_KOD, SUMMATYPE, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, SUMMA, NORMTYPE)
     VALUES (:LSHET, :NCASEID, :REGIMCD, :SERVICECD, :TYPE_, :YEAR_, :MONTH_, 1, :YEAR2, :MONTH2, 1, :FNATH, 0);
 	if (:volume <> 0) then
-	    INSERT INTO NACHISLVOLUMS (LSHET, CASEID, KODREGIM, BALANCE_KOD, VOLUME, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, VOLUMETYPE, NORMTYPE)
-		VALUES (:LSHET, :NCASEID, :REGIMCD, :SERVICECD, :volume, :YEAR_, :MONTH_, 1, :YEAR2, :MONTH2, 1, 1, 0);
+	    INSERT INTO NACHISLVOLUMS (LSHET, CASEID, KODREGIM, BALANCE_KOD, VOLUMETYPE, VOLUME, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, NORMTYPE)
+		VALUES (:LSHET, :NCASEID, :REGIMCD, :SERVICECD, :VTYPE_, :volume, :YEAR_, :MONTH_, 1, :YEAR2, :MONTH2, 1, 0);
   END
 end^
 

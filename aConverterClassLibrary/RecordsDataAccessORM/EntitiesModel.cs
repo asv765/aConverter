@@ -266,6 +266,22 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
+		public IQueryable<CNV_CITYZENLGOTA> CNV_CITYZENLGOTAs 
+		{
+			get
+			{
+				return this.GetAll<CNV_CITYZENLGOTA>();
+			}
+		}
+		
+		public IQueryable<CNV_LGOTSUMMA> CNV_LGOTSUMMAs 
+		{
+			get
+			{
+				return this.GetAll<CNV_LGOTSUMMA>();
+			}
+		}
+		
 		public static BackendConfiguration GetBackendConfiguration()
 		{
 			BackendConfiguration backend = new BackendConfiguration();
@@ -392,6 +408,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			get;
 		}
 		IQueryable<CNV_CHARSHOUSES> CNV_CHARSHOUSEs
+		{
+			get;
+		}
+		IQueryable<CNV_CITYZENLGOTA> CNV_CITYZENLGOTAs
+		{
+			get;
+		}
+		IQueryable<CNV_LGOTSUMMA> CNV_LGOTSUMMAs
 		{
 			get;
 		}

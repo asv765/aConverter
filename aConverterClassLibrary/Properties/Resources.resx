@@ -133,8 +133,14 @@
   <data name="CNV_ADD_WRONG_PARAMETER_EXCEPTION" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv_add_wrong_parameter_exception.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CC_CCHARSDUPLICATION" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_CCHARSDUPLICATION.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CC_FIO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CC\CNV_CC_FIO.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CC_LCHARSDUPLICATION" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CC\CNV_CC_LCHARSDUPLICATION.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_CC_NACHNOTFOUNDINNACHOPL" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cc\cnv_cc_nachnotfoundinnachopl.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
@@ -199,6 +205,12 @@
   <data name="CNV_CITIZENS_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_citizens_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CITYZENLGOTA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_CITYZENLGOTA.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CITYZENLGOTA_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_CITYZENLGOTA_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CNTRSIND" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_cntrsind.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -262,8 +274,17 @@
   <data name="CNV_CNV_03000_CITIZENS_TVER" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_03000_CITIZENS_TVER.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="CNV_CNV_03050_CITIZENSMIGR_TVER" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_03050_CITIZENSMIGR_TVER.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="CNV_CNV_03100_TVER_ABONENTDOLYA" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_03100_TVER_ABONENTDOLYA.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="CNV_CNV_03200_CITYZENLGOTA_TVER" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_03200_CITYZENLGOTA_TVER.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="CNV_CNV_03300_LGOTSUMMA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_03300_LGOTSUMMA.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="CNV_CNV_DOCUMENTNUMERATOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_documentnumerator.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
@@ -315,6 +336,12 @@
   </data>
   <data name="CNV_LCHARS_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_LCHARS_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_LGOTSUMMA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_LGOTSUMMA.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_LGOTSUMMA_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_LGOTSUMMA_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_NACH" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_nach.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

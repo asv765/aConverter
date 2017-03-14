@@ -104,6 +104,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             var nr = new CNV_NACH
             {
                 TYPE_ = defaultNachRecord.TYPE_,
+                VTYPE_ = defaultNachRecord.VTYPE_,
                 VOLUME = defaultNachRecord.VOLUME,
                 REGIMCD = defaultNachRecord.REGIMCD,
                 REGIMNAME = defaultNachRecord.REGIMNAME,
@@ -252,9 +253,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 var fbt = fbc.BeginTransaction();
                 var command = fbc.CreateCommand();
                 command.Transaction = fbt;
-                foreach (CNV_NACH nr in NachRecords)
+                for (int i = 0; i < NachRecords.Count; i++)
                 {
-                    command.CommandText = nr.InsertSQL;
+                    command.CommandText = NachRecords[i].InsertSQL;
                     command.ExecuteNonQuery();
                     if ((++counter % 5000) == 0)
                     {
@@ -282,9 +283,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 var fbt = fbc.BeginTransaction();
                 var command = fbc.CreateCommand();
                 command.Transaction = fbt;
-                foreach (CNV_OPLATA or in OplataRecords)
+                for (int i = 0; i < OplataRecords.Count; i++)
                 {
-                    command.CommandText = or.InsertSQL;
+                    command.CommandText = OplataRecords[i].InsertSQL;
                     command.ExecuteNonQuery();
                     if ((++counter%5000) == 0)
                     {

@@ -321,6 +321,26 @@ namespace aConverterClassLibrary
             };
             checkCaseList.Add(ccNotUniqueLcharsValues);
 
+            var ccCcharsDuplication = new CheckCase
+            {
+                StoredProcName = "CNV$CC_CCHARSDUPLICATION",
+                Description = "Проверка, что в CNV$CHARS не встречается одинаковых значений LSHET, CHARCD и VALUE в подряд идущих датах",
+                NormalRows = 0,
+                AnalyzeQuery = "SELECT * FROM CNV$CC_CCHARSDUPLICATION(1)",
+                FixCommand = "EXECUTE PROCEDURE CNV$CC_CCHARSDUPLICATION(2)"
+            };
+            checkCaseList.Add(ccCcharsDuplication);
+
+            var ccLcharsDuplication = new CheckCase
+            {
+                StoredProcName = "CNV$CC_LCHARSDUPLICATION",
+                Description = "Проверка, что в CNV$LCHARS не встречается одинаковых значений LSHET, LCHARCD и VALUE в подряд идущих датах",
+                NormalRows = 0,
+                AnalyzeQuery = "SELECT * FROM CNV$CC_LCHARSDUPLICATION(1)",
+                FixCommand = "EXECUTE PROCEDURE CNV$CC_LCHARSDUPLICATION(2)"
+            };
+            checkCaseList.Add(ccLcharsDuplication);
+
             var ccHouseCd = new CheckCase
             {
                 Description = "Проверка в CNV$ABONENT уникальность значений HOUSECD для домов",
