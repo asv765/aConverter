@@ -5,6 +5,10 @@ using aConverterClassLibrary.Class;
 using FirebirdSql.Data.FirebirdClient;
 using FirebirdSql.Data.Isql;
 using System.Data;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.IO;
+using System.Diagnostics;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
 {
@@ -198,6 +202,95 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             foreach (var s in l) CreateDatabaseObject(s);
         }
 
+        public static void SaveDataToBuffer(IEnumerable<ISQLInsertable> list, IterateDelegate IterateCallBack)
+        {
+            using (var fbc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                fbc.Open();
+
+                var sb = new StringBuilder();
+                int cnt = 0;
+                FbScript fbs;
+                FbBatchExecution fbe;
+                foreach (ISQLInsertable cc in list)
+                {
+                    sb.AppendLine(cc.InsertSQL);
+                    if (++cnt % 50000 == 0)
+                    {
+                        fbs = new FbScript(sb.ToString());
+                        fbs.Parse();
+                        fbe = new FbBatchExecution(fbc, fbs);
+                        fbe.Execute(true);
+                        sb.Clear();
+                    }
+                    IterateCallBack();
+                }
+                if (sb.Length > 0)
+                {
+                    fbs = new FbScript(sb.ToString());
+                    fbs.Parse();
+                    fbe = new FbBatchExecution(fbc, fbs);
+                    fbe.Execute(true);
+                }
+            }
+        }
+
+        public static void SaveDataToBufferIBScript(IEnumerable<ISQLInsertable> list)
+        {
+            #region Готовим скрипт и сохраняем его во временном файле
+            string tmpScriptFile = Path.GetTempFileName();
+            using (var sw = new StreamWriter(tmpScriptFile, false, Encoding.GetEncoding(1251)))
+            {
+                sw.WriteLine("SET SQL DIALECT 3;");
+                sw.WriteLine("SET NAMES WIN1251;");
+                sw.WriteLine(
+                    String.Format(@"CONNECT '{0}' USER 'SYSDBA' PASSWORD 'masterkey';",
+                        aConverter_RootSettings.FirebirdDatabasePath));
+
+                int counter = 0;
+                foreach (var cc in list)
+                {
+                    if (++counter % 10000 == 0)
+                        sw.WriteLine("COMMIT WORK;");
+                    sw.WriteLine(cc.InsertSQL);
+                }
+                sw.WriteLine("COMMIT WORK;");
+            }
+            #endregion
+
+            #region Грузим скрипт через IBScript.exe
+            ProcessStartInfo stInfo = new ProcessStartInfo(aConverter_RootSettings.IBScriptPath);
+
+            stInfo.UseShellExecute = false;
+            stInfo.CreateNoWindow = true;
+            string tmpOutputFile = Path.GetTempFileName();
+            stInfo.Arguments = String.Format(" {0} -E -S -V{1}",
+                tmpScriptFile, tmpOutputFile);
+
+            Process proc = new Process();
+            proc.StartInfo = stInfo;
+            proc.Start();
+            proc.WaitForExit();
+            #endregion
+
+            #region Анализируем результаты
+            if (proc.ExitCode != 0)
+                throw new Exception(
+                    String.Format("Ошибка выполнения скрипта {0}! ExitCode = {1}\r\n{2}",
+                    tmpScriptFile, proc.ExitCode,
+                    File.ReadAllText(tmpOutputFile)));
+            // Анализ результатов
+            string results = File.ReadAllText(tmpOutputFile);
+            if (!results.Contains("Script executed successfully."))
+                throw new Exception(
+                    String.Format("Ошибка выполнения скрипта {0}!\r\n{1}",
+                    tmpScriptFile,
+                    results));
+
+            File.Delete(tmpScriptFile);
+            File.Delete(tmpOutputFile);
+            #endregion
+        }
     }
 
     // Также - поле PROCTYPE в CNV$CHECKCASESPDESC
@@ -206,4 +299,6 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         ПроверкаЦелостности,
         Конвертация
     }
+
+    public delegate void IterateDelegate();
 }

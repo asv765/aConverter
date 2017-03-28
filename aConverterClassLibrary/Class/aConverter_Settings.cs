@@ -5,13 +5,20 @@ using System.IO;
 using System.Reflection;
 using System.Globalization;
 using System.Xml.Serialization;
-
-
+using System.Text.RegularExpressions;
 
 namespace aConverterClassLibrary
 {
     public class aConverter_RootSettings
     {
+        public static string IBScriptPath
+        {
+            get
+            {
+                return @"C:\Program Files\HK-Software\IBExpert\IBEScript.exe";
+            }
+        }
+
         public static int SettingsCaseId
         {
             get { return GetValue<int>(aConverter_RootSettings.SettingsFileName, "SettingsCaseId", -1); }// ??????????????????????????
@@ -36,6 +43,20 @@ namespace aConverterClassLibrary
                 List<SettingsCase> lsc = ReadSettingsCase();
                 lsc[SettingsCaseId].FirebirdStringConnection = value;
                 WriteSettingsCase(lsc);
+            }
+        }
+
+        public static string FirebirdDatabasePath
+        {
+            get
+            {
+                if (!String.IsNullOrEmpty(aConverter_RootSettings.FirebirdStringConnection))
+                {
+                    var m = Regex.Match(aConverter_RootSettings.FirebirdStringConnection, @"(?<=Database=).*?(?=;)");
+                    if (m.Success)
+                        return m.Value;
+                }
+                return "";
             }
         }
 

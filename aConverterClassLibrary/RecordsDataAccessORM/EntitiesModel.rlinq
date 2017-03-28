@@ -473,6 +473,9 @@
         <orm:field name="_tAG" property="TAG" behavior="readwrite" uniqueId="015958e2-efa0-4cd7-9228-62d8048dfbe7" type="System.String">
           <orm:column name="TAG" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
         </orm:field>
+        <orm:field name="_gUID_" property="GUID_" behavior="readwrite" uniqueId="015958e2-efa0-4cd7-9228-62d8048dfbe8" type="System.String">
+          <orm:column name="GUID_" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
         <orm:field name="_nAME" property="NAME" behavior="readwrite" uniqueId="5a70ecfb-6d83-446d-908b-b45da6f0eb7d" type="System.String">
           <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
         </orm:field>

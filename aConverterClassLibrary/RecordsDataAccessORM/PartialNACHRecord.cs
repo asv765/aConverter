@@ -1,9 +1,10 @@
-﻿using System;
+﻿using aConverterClassLibrary.RecordsDataAccessORM.Utils;
+using System;
 using System.Globalization;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM
 {
-    public partial class CNV_NACH
+    public partial class CNV_NACH : ISQLInsertable
     {
         public string InsertSQL
         {

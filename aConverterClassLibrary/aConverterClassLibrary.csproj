@@ -13,6 +13,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +26,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,6 +46,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <DebugType>pdbonly</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
@@ -189,9 +192,14 @@
     <Compile Include="RecordsDataAccessORM\HOUSE.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\ISqlInsertable.cs" />
     <Compile Include="RecordsDataAccessORM\LCHARSLIST.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\PartialCHARRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialCNTRSINDRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialCOUNTERRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialLCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialNACHRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialOPLATARecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialSUPPLNETRecord.cs" />
@@ -199,6 +207,7 @@
     <Compile Include="RecordsDataAccessORM\STREET.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\Utils\RecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\SupplnetRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\AbonentRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\BufferEntitiesManager.cs" />

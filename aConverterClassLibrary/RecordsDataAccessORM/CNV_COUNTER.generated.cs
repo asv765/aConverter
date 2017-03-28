@@ -217,8 +217,21 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._tAG = value;
 			}
 		}
-		
-		private string _nAME;
+
+        private string _gUID_;
+        public virtual string GUID_
+        {
+            get
+            {
+                return this._gUID_;
+            }
+            set
+            {
+                this._gUID_ = value;
+            }
+        }
+
+        private string _nAME;
 		public virtual string NAME
 		{
 			get
