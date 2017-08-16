@@ -249,7 +249,7 @@ namespace aConverter.Forms
                     try
                     {
                         cc.SetStepsCount(1);
-                        cc.InitializeManager(aConverter_RootSettings.SourceDbfFilePath);//////////--папки  Не во всех случаях исходная база в DBF. Следует вызывать напрямую из конвертера DBF файлов
+                        //cc.InitializeManager(aConverter_RootSettings.SourceDbfFilePath);//////////--папки  Не во всех случаях исходная база в DBF. Следует вызывать напрямую из конвертера DBF файлов
 
                         File.AppendAllText(LogFileName, $"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} INFO] {cc.ConvertCaseName}\r\nНачало выполнения\r\n");
 
@@ -258,7 +258,7 @@ namespace aConverter.Forms
                         File.AppendAllText(LogFileName, $"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} INFO] {cc.ConvertCaseName}\r\nУспешно выполнено\r\n");
 
                         cc.Result = ConvertCaseStatus.Шаг_выполнен_успешно;
-                        cc.Dispose();
+                        //cc.Dispose();
                     }
                     catch (Exception ex)
                     {
