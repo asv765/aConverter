@@ -1,29 +1,20 @@
-﻿using aConverterClassLibrary.RecordsDataAccessORM.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using static aConverterClassLibrary.RecordsDataAccessORM.Utils.OrmRecordUtils;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM
 {
-    public partial class CNV_CHAR: ISQLInsertable
+    public partial class CNV_CHAR : IOrmRecord
     {
-        public string InsertSQL
-        {
-            get
-            {
-                // INSERT INTO CNV$CHARS(ID, LSHET, CHARCD, CHARNAME, VALUE_, DATE_)
-                //     VALUES(1, '6201000001', 3, 'Количество комнат', 3, '1-JAN-2017 00:00:00');
+        public const string InsertSqlTemplate =
+            "INSERT INTO CNV$CHARS (LSHET, CHARCD, CHARNAME, VALUE_, DATE_) " +
+            "VALUES ({0}, {1}, {2}, {3}, {4});";
 
-                var insertCharTemplate =
-                    "INSERT INTO CNV$CHARS (ID, LSHET, CHARCD, CHARNAME, VALUE_, DATE_) " +
-                    "VALUES(NULL, '{0}', {1}, '{2}', {3}, '{4}');";
+        public string InsertSql => string.Format(InsertSqlTemplate,
+            ToSql(_lSHET),
+            ToSql(_cHARCD),
+            ToSql(_cHARNAME),
+            ToSql(_vALUE_),
+            ToSql(_dATE_));
 
-                var sql = String.Format(insertCharTemplate,
-                    LSHET, CHARCD, CHARNAME, VALUE_.ToString().Replace(',','.'),
-                    DATE_.Value.ToString("d.MM.yyyy HH:mm:ss"));
-                return sql;
-            }
-        }
+        public long SortLshet;
     }
 }

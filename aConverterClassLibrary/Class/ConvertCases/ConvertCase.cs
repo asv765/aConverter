@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using aConverterClassLibrary.RecordsDataAccessORM;
+using System.Windows.Forms;
 using DbfClassLibrary;
+using FirebirdSql.Data.FirebirdClient;
+using System.IO;
+using System.Text;
+using FirebirdSql.Data.Isql;
 
 namespace aConverterClassLibrary
 {
@@ -145,6 +150,41 @@ namespace aConverterClassLibrary
 
         public abstract void DoConvert();
 
+        public void SaveListInsertSQL<T>(IList<T> listToSave, int commitStep, bool countSteps = true) where T : IOrmRecord
+        {
+            int counter = 0;
+            using (var fbc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
+            {
+                fbc.Open();
+
+                var fbt = fbc.BeginTransaction();
+                var command = fbc.CreateCommand();
+                command.Transaction = fbt;
+                int count = listToSave.Count;
+                int stepsCount = (count / commitStep) + 1;
+                if (countSteps) StepStart(stepsCount);
+                for (int i = 0; i < count; i++)
+                {
+                    command.CommandText = listToSave[i].InsertSql;
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception(command.CommandText + "\r\n" + e.ToString());
+                    }
+                    if ((++counter % commitStep) == 0)
+                    {
+                        fbt.CommitRetaining();
+                        if (countSteps) Iterate();
+                    }
+                }
+                fbt.Commit();
+                if (countSteps) StepFinish();
+            }
+        }
+
         public void SaveList<T>(IEnumerable<T> listToSave, int commitStep, bool countSteps = true)
         {
             var list = listToSave.ToList();
@@ -173,7 +213,6 @@ namespace aConverterClassLibrary
                 context.SaveChanges();
             }
         }
-
 
         public void Dispose()
         {

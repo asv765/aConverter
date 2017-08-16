@@ -1,47 +1,37 @@
-﻿using aConverterClassLibrary.RecordsDataAccessORM.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using static aConverterClassLibrary.RecordsDataAccessORM.Utils.OrmRecordUtils;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM
 {
-    public partial class CNV_COUNTER: ISQLInsertable
+    public partial class CNV_COUNTER : IOrmRecord
     {
-        public string InsertSQL
-        {
-            get
-            {
-                // INSERT INTO CNV$COUNTERS(ID, COUNTERID, LSHET, CNTTYPE, CNTNAME, SETUPDATE, SERIALNUM, SETUPPLACE, PLOMBDATE, PLOMBNAME, LASTPOV, NEXTPOV, PRIM_, DEACTDATE, TAG, NAME) 
-                // VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        public const string InsertSqlTemplate =
+            "INSERT INTO CNV$COUNTERS (COUNTERID, LSHET, CNTTYPE, CNTNAME, SETUPDATE, SERIALNUM, SETUPPLACE, PLOMBDATE, PLOMBNAME, LASTPOV, NEXTPOV, PRIM_, DEACTDATE, TAG, NAME, STATUSID, STATUSDATE, COUNTER_LEVEL, TARGETBALANCE_KOD, DISTRIBUTINGMETHOD, TARGETNEGATIVEBALANCE_KOD, GROUPCOUNTERMODULEID, KODREGIM, NOCALCCHILDBALANCES) " +
+            "VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23});";
 
-                var insertCharTemplate =
-                    "INSERT INTO CNV$COUNTERS(ID, COUNTERID, LSHET, CNTTYPE, CNTNAME, SETUPDATE, SERIALNUM, SETUPPLACE, PLOMBDATE, PLOMBNAME, LASTPOV, NEXTPOV, PRIM_, DEACTDATE, TAG, NAME, GUID_) " +
-                    "VALUES(NULL, {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15} );";
-
-                var sql = String.Format(insertCharTemplate,
-                    RecordUtils.GetSafeStringWithNull(COUNTERID),
-                    LSHET,
-                    RecordUtils.GetSafeIntWithNull(CNTTYPE),
-                    RecordUtils.GetSafeStringWithNull(CNTNAME),
-                    RecordUtils.GetSafeDateTimeWithNull(SETUPDATE),
-                    RecordUtils.GetSafeStringWithNull(SERIALNUM),
-                    RecordUtils.GetSafeIntWithNull(SETUPPLACE),
-                    RecordUtils.GetSafeDateTimeWithNull(PLOMBDATE),
-                    RecordUtils.GetSafeStringWithNull(PLOMBNAME),
-                    RecordUtils.GetSafeDateWithNull(LASTPOV),
-                    RecordUtils.GetSafeDateWithNull(NEXTPOV),
-                    RecordUtils.GetSafeStringWithNull(PRIM_),
-                    RecordUtils.GetSafeDateTimeWithNull(DEACTDATE),
-                    RecordUtils.GetSafeStringWithNull(TAG),
-                    RecordUtils.GetSafeStringWithNull(NAME),
-                    RecordUtils.GetSafeStringWithNull(GUID_));
-                return sql;
-            }
-        }
-
-
-
-
+        public string InsertSql => string.Format(InsertSqlTemplate,
+            ToSql(_cOUNTERID), 
+            ToSql(_lSHET), 
+            ToSql(_cNTTYPE), 
+            ToSql(_cNTNAME), 
+            ToSql(_sETUPDATE), 
+            ToSql(_sERIALNUM),
+            ToSql(_sETUPPLACE),
+            ToSql(_pLOMBDATE), 
+            ToSql(_pLOMBNAME),
+            ToSql(_lASTPOV),
+            ToSql(_nEXTPOV),
+            ToSql(_pRIM_), 
+            ToSql(_dEACTDATE),
+            ToSql(_tAG),
+            ToSql(_nAME),
+            ToSql(_sTATUSID),
+            ToSql(_sTATUSDATE),
+            _cOUNTER_LEVEL,
+            ToSql(_tARGETBALANCE_KOD),
+            ToSql(_dISTRIBUTINGMETHOD),
+            ToSql(_tARGETNEGATIVEBALANCE_KOD),
+            ToSql(_gROUPCOUNTERMODULEID),
+            ToSql(_kODREGIM),
+            ToSql(_nOCALCCHILDBALANCES));
     }
 }

@@ -204,8 +204,21 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._dOCUMENTNAME = value;
 			}
 		}
-		
-		private string _sERIA;
+
+        private int? _dOCTYPEID;
+        public virtual int? DOCTYPEID
+        {
+            get
+            {
+                return this._dOCTYPEID;
+            }
+            set
+            {
+                this._dOCTYPEID = value;
+            }
+        }
+
+        private string _sERIA;
 		public virtual string SERIA
 		{
 			get
@@ -256,17 +269,30 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._dORGNAME = value;
 			}
 		}
-		
-		private int? _kOLLG;
-		public virtual int? KOLLG
-		{
+
+        private int? _kOLLG;
+        public virtual int? KOLLG
+        {
+            get
+            {
+                return this._kOLLG;
+            }
+            set
+            {
+                this._kOLLG = value;
+            }
+        }
+
+        private int? _dORGCD;
+		public virtual int? DORGCD
+        {
 			get
 			{
-				return this._kOLLG;
+				return this._dORGCD;
 			}
 			set
 			{
-				this._kOLLG = value;
+				this._dORGCD = value;
 			}
 		}
 		
@@ -360,7 +386,292 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._vREMREG = value;
 			}
 		}
-		
-	}
+
+        private int? _sEX;
+        public virtual int? SEX
+        {
+            get
+            {
+                return this._sEX;
+            }
+            set
+            {
+                this._sEX = value;
+            }
+        }
+
+        private int? _sTATUSID;
+        public virtual int? STATUSID
+        {
+            get
+            {
+                return this._sTATUSID;
+            }
+            set
+            {
+                this._sTATUSID = value;
+            }
+        }
+
+        private int? _oWNERSHIPTYPE;
+        public virtual int? OWNERSHIPTYPE
+        {
+            get
+            {
+                return this._oWNERSHIPTYPE;
+            }
+            set
+            {
+                this._oWNERSHIPTYPE = value;
+            }
+        }
+
+        private int? _oWNERSHIPNUMERATOR;
+        public virtual int? OWNERSHIPNUMERATOR
+        {
+            get
+            {
+                return this._oWNERSHIPNUMERATOR;
+            }
+            set
+            {
+                this._oWNERSHIPNUMERATOR = value;
+            }
+        }
+
+        private int? _oWNERSHIPDENOMINATOR;
+        public virtual int? OWNERSHIPDENOMINATOR
+        {
+            get
+            {
+                return this._oWNERSHIPDENOMINATOR; ;
+            }
+            set
+            {
+                this._oWNERSHIPDENOMINATOR = value;
+            }
+        }
+
+        private string _bIRTHCOUNTRY;
+        public virtual string BIRTHCOUNTRY
+        {
+            get
+            {
+                return this._bIRTHCOUNTRY;
+            }
+            set
+            {
+                this._bIRTHCOUNTRY = value;
+            }
+        }
+
+        private string _bIRTHDISTRICT;
+        public virtual string BIRTHDISTRICT
+        {
+            get
+            {
+                return this._bIRTHDISTRICT;
+            }
+            set
+            {
+                this._bIRTHDISTRICT = value;
+            }
+        }
+
+        private string _bIRTHREGION;
+        public virtual string BIRTHREGION
+        {
+            get
+            {
+                return this._bIRTHREGION;
+            }
+            set
+            {
+                this._bIRTHREGION = value;
+            }
+        }
+
+        private string _bIRTHCITY;
+        public virtual string BIRTHCITY
+        {
+            get
+            {
+                return this._bIRTHCITY;
+            }
+            set
+            {
+                this._bIRTHCITY = value;
+            }
+        }
+
+        private string _bIRTHVILLAGE;
+        public virtual string BIRTHVILLAGE
+        {
+            get
+            {
+                return this._bIRTHVILLAGE;
+            }
+            set
+            {
+                this._bIRTHVILLAGE = value;
+            }
+        }
+
+        private int? _cITIZENSHIP;
+        public virtual int? CITIZENSHIP
+        {
+            get
+            {
+                return this._cITIZENSHIP;
+            }
+            set
+            {
+                this._cITIZENSHIP = value;
+            }
+        }
+
+        private int _iSMAINCITYZEN;
+        public virtual int ISMAINCITYZEN
+        {
+            get
+            {
+                return this._iSMAINCITYZEN;
+            }
+            set
+            {
+                this._iSMAINCITYZEN = value;
+            }
+        }
+
+        private int _hIDDEN;
+        public virtual int HIDDEN
+        {
+            get
+            {
+                return this._hIDDEN;
+            }
+            set
+            {
+                this._hIDDEN = value;
+            }
+        }
+
+        private int _rEGISTRATIONTYPE;
+        public virtual int REGISTRATIONTYPE
+        {
+            get
+            {
+                return this._rEGISTRATIONTYPE;
+            }
+            set
+            {
+                this._rEGISTRATIONTYPE = value;
+            }
+        }
+
+        private DateTime? _aRRIVEDATE;
+        public virtual DateTime? ARRIVEDATE
+        {
+            get
+            {
+                return this._aRRIVEDATE;
+            }
+            set
+            {
+                this._aRRIVEDATE = value;
+            }
+        }
+
+        private DateTime? _lEAVEDATE;
+        public virtual DateTime? LEAVEDATE
+        {
+            get
+            {
+                return this._lEAVEDATE;
+            }
+            set
+            {
+                this._lEAVEDATE = value;
+            }
+        }
+
+        private int? _lEAVECASEID;
+        public virtual int? LEAVECASEID
+        {
+            get
+            {
+                return this._lEAVECASEID;
+            }
+            set
+            {
+                this._lEAVECASEID = value;
+            }
+        }
+
+        private DateTime? _dEATHDATE;
+        public virtual DateTime? DEATHDATE
+        {
+            get
+            {
+                return this._dEATHDATE;
+            }
+            set
+            {
+                this._dEATHDATE = value;
+            }
+        }
+
+	    private DateTime? _sTATUSDATE;
+        public virtual DateTime? STATUSDATE
+        {
+            get
+            {
+                return this._sTATUSDATE;
+            }
+            set
+            {
+                this._sTATUSDATE = value;
+            }
+        }
+
+        private string _eGRPNUMBER;
+        public virtual string EGRPNUMBER
+        {
+            get
+            {
+                return this._eGRPNUMBER;
+            }
+            set
+            {
+                this._eGRPNUMBER = value;
+            }
+        }
+
+        private DateTime? _eGRPDATE;
+        public virtual DateTime? EGRPDATE
+        {
+            get
+            {
+                return this._eGRPDATE;
+            }
+            set
+            {
+                this._eGRPDATE = value;
+            }
+        }
+
+        private string _uNIQUECITIZENID;
+        public virtual string UNIQUECITIZENID
+        {
+            get
+            {
+                return this._uNIQUECITIZENID;
+            }
+            set
+            {
+                this._uNIQUECITIZENID = value;
+            }
+        }
+    }
 }
 #pragma warning restore 1591

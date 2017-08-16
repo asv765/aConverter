@@ -8,14 +8,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
     public class AbonentRecordUtils
     {
         /// <summary>
-        /// Заполняет уникальными значениями поле RAYONKOD списка абонентов
+        /// Заполняет уникальными значениями поле DISTKOD списка абонентов
         /// </summary>
         /// <param name="list"></param>
         public static void SetUniqueDistkod(IEnumerable<CNV_ABONENT> list, int startValue)
         {
             int counter = 0;
             var keysdic = new Dictionary<object, int>();
-            foreach (CNV_ABONENT ar in list.Where(p => p.DISTKOD == null))
+            foreach (CNV_ABONENT ar in list.Where(p => p.DISTKOD == null && p.DISTNAME != null))
             {
                 object o = new
                 {
@@ -34,6 +34,30 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         }
 
         /// <summary>
+        /// Заполняет уникальными значениями поле SETTLEMENTKOD списка абонентов
+        /// </summary>
+        /// <param name="list"></param>
+        public static void SetUniqueSettlementkod(IEnumerable<CNV_ABONENT> list, int startValue)
+        {
+            int counter = 0;
+            var keysdic = new Dictionary<object, int>();
+            foreach (CNV_ABONENT ar in list.Where(p => p.SETTLEMENTKOD == null && p.SETTLEMENTNAME != null))
+            {
+                object o = new
+                {
+                    SettlementName = ar.SETTLEMENTNAME,
+                };
+                int settlementKod;
+                if (!keysdic.TryGetValue(o, out settlementKod))
+                {
+                    settlementKod = startValue + (++counter);
+                    keysdic.Add(o, settlementKod);
+                }
+                ar.SETTLEMENTKOD = settlementKod;
+            }
+        }
+
+        /// <summary>
         /// Заполняет уникальными значениями поле TOWNSKOD списка абонентов
         /// </summary>
         /// <param name="list"></param>
@@ -46,6 +70,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 object o = new
                 {
                     RayonKod = ar.RAYONKOD,
+                    SettlementKod = ar.SETTLEMENTKOD,
                     TownName = ar.TOWNSNAME
                 };
                 int townsKod;
@@ -55,6 +80,30 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                     keysdic.Add(o, townsKod);
                 }
                 ar.TOWNSKOD = townsKod;
+            }
+        }
+
+        /// <summary>
+        /// Заполняет уникальными значениями поле RAYONKOD списка абонентов
+        /// </summary>
+        /// <param name="list"></param>
+        public static void SetUniqueRayonkod(IEnumerable<CNV_ABONENT> list, int startValue)
+        {
+            int counter = 0;
+            var keysdic = new Dictionary<object, int>();
+            foreach (CNV_ABONENT ar in list.Where(p => p.RAYONKOD == null))
+            {
+                object o = new
+                {
+                    RayonName = ar.RAYONNAME,
+                };
+                int rayonKod;
+                if (!keysdic.TryGetValue(o, out rayonKod))
+                {
+                    rayonKod = startValue + (++counter);
+                    keysdic.Add(o, rayonKod);
+                }
+                ar.RAYONKOD = rayonKod;
             }
         }
 
@@ -101,6 +150,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                     UlicaKod = ar.ULICAKOD,
                     Houseno = ar.HOUSENO,
                     Housepostfix = ar.HOUSEPOSTFIX,
+                    Housenote = ar.HOUSENOTE,
                     Korpusno = ar.KORPUSNO,
                     Korpuspostfix = ar.KORPUSPOSTFIX
                 };

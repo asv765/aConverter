@@ -283,8 +283,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			}
 		}
 		
-		private int? _vTYPE_;
-		public virtual int? VTYPE_
+		private int _vTYPE_;
+		public virtual int VTYPE_
 		{
 			get
 			{
@@ -295,7 +295,32 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._vTYPE_ = value;
 			}
 		}
-		
-	}
+
+        private int _aUTOUSE;
+        public virtual int AUTOUSE
+        {
+            get
+            {
+                return this._aUTOUSE;
+            }
+            set
+            {
+                this._aUTOUSE = value;
+            }
+        }
+
+        private int? _cASETYPE;
+        public virtual int? CASETYPE
+        {
+            get
+            {
+                return this._cASETYPE;
+            }
+            set
+            {
+                this._cASETYPE = value;
+            }
+        }
+    }
 }
 #pragma warning restore 1591

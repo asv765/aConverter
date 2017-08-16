@@ -1,4 +1,4 @@
-SET TERM ^ ;
+п»їSET TERM ^ ;
 
 create or alter procedure CNV$CC_FIO (
     ACTIONTYPE smallint = 0)
@@ -30,7 +30,7 @@ BEGIN
        SUSPEND;
   END
   ELSE
-     EXCEPTION cnv$wrong_paramater_value 'Значение ACTIONTYPE отличное от 0 или 1 не поддерживается процедурой';
+     EXCEPTION cnv$wrong_paramater_value 'Р—РЅР°С‡РµРЅРёРµ ACTIONTYPE РѕС‚Р»РёС‡РЅРѕРµ РѕС‚ 0 РёР»Рё 1 РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ РїСЂРѕС†РµРґСѓСЂРѕР№';
   
 END^
 

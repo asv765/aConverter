@@ -15,7 +15,7 @@ namespace aConverterClassLibrary
         {
             get
             {
-                return @"C:\Program Files\HK-Software\IBExpert\IBEScript.exe";
+                return @"C:\Program Files\IbExpert\IBEScript.exe";
             }
         }
 
@@ -30,14 +30,14 @@ namespace aConverterClassLibrary
         /// </summary>
         public static string FirebirdStringConnection
         {
-            get 
+            get
             {
                 if (SettingsCaseId == -1) return "";
                 List<SettingsCase> lsc = ReadSettingsCase();
                 string rv = lsc[SettingsCaseId].FirebirdStringConnection;
                 return rv;
             }
-            set 
+            set
             {
                 if (SettingsCaseId == -1) return;
                 List<SettingsCase> lsc = ReadSettingsCase();
@@ -72,7 +72,7 @@ namespace aConverterClassLibrary
                 string rv = lsc[SettingsCaseId].SourceDbfFilePath;
                 return rv;
             }
-            set 
+            set
             {
                 if (SettingsCaseId == -1) return;
                 List<SettingsCase> lsc = ReadSettingsCase();
@@ -308,7 +308,7 @@ namespace aConverterClassLibrary
             var fmt = new XmlSerializer(settingsCase.GetType());
             fmt.Serialize(sw, settingsCase);
             sw.Close();
-        } 
+        }
 
         /// <summary>
         /// Строка подключения для VFPOLEDB
@@ -342,7 +342,7 @@ namespace aConverterClassLibrary
         {
 
             ConfigFile.SetVariable(SettingsFileName,
-                aVariableName, aValue.ToString().Replace("\r\n","\\r\\n"));
+                aVariableName, aValue.ToString().Replace("\r\n", "\\r\\n"));
         }
 
         /// <summary>
@@ -438,7 +438,7 @@ namespace aConverterClassLibrary
         {
             if (File.Exists(aFileName))
             {
-                string[] sa = File.ReadAllLines(aFileName,Encoding.GetEncoding(1251));
+                string[] sa = File.ReadAllLines(aFileName, Encoding.GetEncoding(1251));
                 for (int i = 0; i < sa.Length; i++)
                 {
                     string[] configVariable = sa[i].Split((new[] { '=' }), 2);

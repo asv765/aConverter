@@ -1,41 +1,35 @@
-﻿using aConverterClassLibrary.RecordsDataAccessORM.Utils;
-using System;
-using System.Globalization;
+﻿using static aConverterClassLibrary.RecordsDataAccessORM.Utils.OrmRecordUtils;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM
 {
-    public partial class CNV_NACH : ISQLInsertable
+    public partial class CNV_NACH : IOrmRecord
     {
-        public string InsertSQL
-        {
-            get
-            {
-                // INSERT INTO CNV$NACH (ID, LSHET, DOCUMENTCD, MONTH_, YEAR_, MONTH2, YEAR2, 
-                // FNATH, PROCHL, PROCHLVOLUME, VOLUME, REGIMCD, REGIMNAME, SERVICECD, SERVICENAME, 
-                // DATE_VV, TYPE_, DOCNAME, DOCNUMBER, DOCDATE) 
-                // VALUES (NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        public const string InsertSqlTemplate =
+            "INSERT INTO CNV$NACH (LSHET, DOCUMENTCD, MONTH_, YEAR_, MONTH2, YEAR2, FNATH, PROCHL, PROCHLVOLUME, VOLUME, REGIMCD, REGIMNAME, SERVICECD, SERVICENAME, DATE_VV, TYPE_, DOCNAME, DOCNUMBER, DOCDATE, VTYPE_, AUTOUSE, CASETYPE) " +
+            "VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21});";
 
-                var insertNachTemplate =
-                    "INSERT INTO CNV$NACH (ID, LSHET, DOCUMENTCD, MONTH_, YEAR_, MONTH2, YEAR2, FNATH, PROCHL, PROCHLVOLUME, VOLUME, REGIMCD, REGIMNAME, SERVICECD, SERVICENAME, DATE_VV, TYPE_, DOCNAME, DOCNUMBER, DOCDATE, VTYPE_) " +
-                    "VALUES (NULL, '{0}', '{1}', {2}, {3}, {4}, {5}, " +
-                    "{6}, {7}, {8}, {9}, {10}, '{11}', {12}, '{13}', " +
-                    "'{14}', {15}, {16}, {17}, {18}, {19});";
-
-                var sql = String.Format(insertNachTemplate,
-                    LSHET, DOCUMENTCD, MONTH_, YEAR_, MONTH2, YEAR2,
-                    FNATH.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    PROCHL.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    PROCHLVOLUME.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    VOLUME.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    REGIMCD, REGIMNAME, SERVICECD, SERVICENAME,
-                    DATE_VV.ToString("d.MM.yyyy HH:mm:ss"), TYPE_,
-                    String.IsNullOrEmpty(DOCNAME) ? "NULL" : "'" + DOCNAME + "'",
-                    String.IsNullOrEmpty(DOCNUMBER) ? "NULL" : "'" + DOCNUMBER + "'",
-                    DOCDATE.HasValue ?  DOCDATE.Value.ToString("d.MM.yyyy HH:mm:ss") : "NULL", 
-                    VTYPE_.HasValue ? VTYPE_.Value.ToString() : "NULL"
-                    );
-                return sql;
-            }
-        }
+        public string InsertSql => string.Format(InsertSqlTemplate,
+            ToSql(_lSHET),
+            ToSql(_dOCUMENTCD),
+            _mONTH_,
+            _yEAR_,
+            _mONTH2,
+            _yEAR2,
+            ToSql(_fNATH),
+            ToSql(_pROCHL),
+            ToSql(_pROCHLVOLUME),
+            ToSql(_vOLUME),
+            _rEGIMCD,
+            ToSql(_rEGIMNAME),
+            _sERVICECD,
+            ToSql(_sERVICENAME),
+            ToSql(_dATE_VV),
+            _tYPE_,
+            ToSql(_dOCNAME),
+            ToSql(_dOCNUMBER),
+            ToSql(_dOCDATE),
+            _vTYPE_,
+            _aUTOUSE,
+            ToSql(_cASETYPE));
     }
 }

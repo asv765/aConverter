@@ -1,32 +1,20 @@
-﻿using aConverterClassLibrary.RecordsDataAccessORM.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using static aConverterClassLibrary.RecordsDataAccessORM.Utils.OrmRecordUtils;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM
 {
-    public partial class CNV_CNTRSIND : ISQLInsertable
+    public partial class CNV_CNTRSIND : IOrmRecord
     {
-        public string InsertSQL
-        {
-            get
-            {
-                var insertCharTemplate =
-                    "INSERT INTO CNV$CNTRSIND(ID, COUNTERID, DOCUMENTCD, OLDIND, OB_EM, INDICATION, INDDATE, INDTYPE)  " +
-                    "VALUES(NULL, {0}, {1}, {2}, {3}, {4}, {5}, {6});";
+        public const string InsertSqlTemplate =
+            "INSERT INTO CNV$CNTRSIND (COUNTERID, DOCUMENTCD, OLDIND, OB_EM, INDICATION, INDDATE, INDTYPE) " +
+            "VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6});";
 
-                var sql = String.Format(insertCharTemplate,
-                    RecordUtils.GetSafeStringWithNull(COUNTERID),
-                    RecordUtils.GetSafeStringWithNull(DOCUMENTCD),
-                    RecordUtils.GetSafeDecimalWithNull(OLDIND),
-                    RecordUtils.GetSafeDecimalWithNull(OB_EM),
-                    RecordUtils.GetSafeDecimalWithNull(INDICATION),
-                    RecordUtils.GetSafeDateTimeWithNull(INDDATE),
-                    RecordUtils.GetSafeIntWithNull(INDTYPE));
-
-                return sql;
-            }
-        }
+        public string InsertSql => string.Format(InsertSqlTemplate,
+            ToSql(_cOUNTERID),
+            ToSql(_dOCUMENTCD),
+            ToSql(_oLDIND),
+            ToSql(_oB_EM),
+            ToSql(_iNDICATION),
+            ToSql(_iNDDATE),
+            ToSql(_iNDTYPE));
     }
 }

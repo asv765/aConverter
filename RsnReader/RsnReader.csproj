@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5F005508-033D-4909-A31B-7BF4C2F34359}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RsnReader</RootNamespace>
+    <AssemblyName>RsnReader</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DbfClassLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RsnReader\RsnReader\bin\Debug\DbfClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnalyzeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AnalyzeForm.Designer.cs">
+      <DependentUpon>AnalyzeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CcAbonent.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LsKvc.cs" />
+    <Compile Include="ReadCcForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReadCcForm.Designer.cs">
+      <DependentUpon>ReadCcForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReadChangesGGMMForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReadChangesGGMMForm.Designer.cs">
+      <DependentUpon>ReadChangesGGMMForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReadIdomForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReadIdomForm.Designer.cs">
+      <DependentUpon>ReadIdomForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReadIschForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReadIschForm.Designer.cs">
+      <DependentUpon>ReadIschForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReadRsnForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReadRsnForm.Designer.cs">
+      <DependentUpon>ReadRsnForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadSutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReadSutForm.Designer.cs">
+      <DependentUpon>ReadSutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RsnAbonent.cs" />
+    <Compile Include="RsnFile.cs" />
+    <Compile Include="RsnHelper.cs" />
+    <Compile Include="RsnRecords.cs" />
+    <Compile Include="Spr.cs" />
+    <Compile Include="SutRecord.cs" />
+    <EmbeddedResource Include="AnalyzeForm.resx">
+      <DependentUpon>AnalyzeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReadCcForm.resx">
+      <DependentUpon>ReadCcForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReadChangesGGMMForm.resx">
+      <DependentUpon>ReadChangesGGMMForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReadIdomForm.resx">
+      <DependentUpon>ReadIdomForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReadIschForm.resx">
+      <DependentUpon>ReadIschForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReadRsnForm.resx">
+      <DependentUpon>ReadRsnForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="ReadSutForm.resx">
+      <DependentUpon>ReadSutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

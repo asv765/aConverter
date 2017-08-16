@@ -10,24 +10,53 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// Прореживает список качественных характеристик
         /// </summary>
         /// <param name="lrl"></param>
-        public static List<CNV_LCHAR> ThinOutList(List<CNV_LCHAR> lrl)// -----------------------------
+        public static List<CNV_LCHAR> ThinOutList(List<CNV_LCHAR> lrl, bool useIntLs = false)// -----------------------------
         {
             // Сортируем список
             var rlrl = new List<CNV_LCHAR>();
-            lrl.Sort(CompareLchars);
+            if (useIntLs) lrl.Sort(CompareLcharsUsingIntLs);
+            else lrl.Sort(CompareLchars);
             // Удалем дублирующиеся строки
-            string oldlshet = ""; long oldlcharcd = -1; decimal oldlcharvalue = -1;
-            foreach (CNV_LCHAR t in lrl)
+            string oldlshet = ""; long oldlcharcd = -1; long oldlcharvalue = -1;
+            for (int i = 0; i < lrl.Count; i++)
             {
+                var t = lrl[i];
                 if (t.LSHET != oldlshet || t.LCHARCD != oldlcharcd || t.VALUE_ != oldlcharvalue)
                 {
                     rlrl.Add(t);
                     oldlshet = t.LSHET;
-                    oldlcharcd = (Int32)t.LCHARCD;
-                    oldlcharvalue = (Int32)t.VALUE_;
+                    oldlcharcd = (int)t.LCHARCD;
+                    oldlcharvalue = (int)t.VALUE_;
                 }
             }
+            lrl.Clear();
+            lrl.TrimExcess();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             return rlrl;
+        }
+
+        /// <summary>
+        /// Метод-делегат для сравнения двух характеристи LcharsRecord----------------------------------------------- н в 4
+        /// </summary>
+        /// <param name="lr1"></param>
+        /// <param name="lr2"></param>
+        /// <returns></returns>
+        public static int CompareLcharsUsingIntLs(CNV_LCHAR lr1, CNV_LCHAR lr2)
+        {
+            if (lr1.SortLshet < lr2.SortLshet)
+                return -1;
+            if (lr1.SortLshet > lr2.SortLshet)
+                return 1;
+            if (lr1.LCHARCD < lr2.LCHARCD)
+                return -1;
+            if (lr1.LCHARCD > lr2.LCHARCD)
+                return 1;
+            if (lr1.DATE_ < lr2.DATE_)
+                return -1;
+            if (lr1.DATE_ > lr2.DATE_)
+                return 1;
+            return 0;
         }
 
         /// <summary>
@@ -38,9 +67,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <returns></returns>
         public static int CompareLchars(CNV_LCHAR lr1, CNV_LCHAR lr2)
         {
-            if (Convert.ToUInt64(lr1.LSHET) < Convert.ToUInt64(lr2.LSHET))
+            if (long.Parse(lr1.LSHET) < long.Parse(lr2.LSHET))
                 return -1;
-            if (Convert.ToUInt64(lr1.LSHET) > Convert.ToUInt64(lr2.LSHET))
+            if (long.Parse(lr1.LSHET) > long.Parse(lr2.LSHET))
                 return 1;
             if (lr1.LCHARCD < lr2.LCHARCD)
                 return -1;

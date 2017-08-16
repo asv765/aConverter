@@ -24,29 +24,31 @@ declare variable OLDLSHET varchar(10);
 declare variable OLDDOCUMENTCD varchar(20);
 declare variable NCASEID integer;
 declare variable BASEORG integer;
+declare variable AUTOUSE integer;
+declare variable CASETYPE integer;
 begin
   oldyear = -1;
   oldmonth = -1;
   oldlshet = '-1';
   olddocumentcd = '-1';
-  SELECT extorgcd FROM extorgspr eos WHERE eos.isbaseorganization = 1 INTO :baseorg;
+  SELECT first 1 extorgcd FROM extorgspr eos WHERE eos.isbaseorganization = 1 INTO :baseorg;
   FOR SELECT YEAR_, MONTH_, YEAR2, MONTH2, LSHET, FNATH, REGIMCD, SERVICECD, DATE_VV AS DATE_,
-    EXTRACT(YEAR FROM DATE_VV) AS FYEAR, EXTRACT(MONTH FROM DATE_VV) AS FMONTH, EXTRACT(DAY FROM DATE_VV) AS FDAY, DOCUMENTCD, TYPE_, volume, VTYPE_
+    EXTRACT(YEAR FROM DATE_VV) AS FYEAR, EXTRACT(MONTH FROM DATE_VV) AS FMONTH, EXTRACT(DAY FROM DATE_VV) AS FDAY, DOCUMENTCD, TYPE_, volume, VTYPE_, AUTOUSE, CASETYPE
     FROM CNV$NACH
     WHERE FNATH <> 0
     order by year_,  month_, lshet, documentcd
     INTO :YEAR_, :MONTH_, :YEAR2, :MONTH2, :lshet,  :fnath,  :regimcd,  :servicecd, :date_,
-      :fyear,  :fmonth, :fday, :documentcd, :type_, :volume, :VTYPE_
+      :fyear,  :fmonth, :fday, :documentcd, :type_, :volume, :VTYPE_, :AUTOUSE, :CASETYPE
   DO BEGIN
-    if ((:oldyear <> :year_) or (:oldmonth <> :month_) or (:oldlshet <> :lshet) or (:olddocumentcd <> :documentcd) ) then begin
+    if ((:oldyear <> :year_) or (:oldmonth <> :month_) or /*(:oldlshet <> :lshet) or*/ (:olddocumentcd <> :documentcd) ) then begin
        select documentcd from cnv$cnv_documentnumerator(:DOCUMENTCD, 'Импорт данных о начислениях', :DATE_, :DATE_, :baseorg) into :ncaseid;
-       UPDATE OR INSERT INTO PERERASHETCASE (CASEID, LSHET, NACHISLCASEID, AUTOUSE, IZMEN, FYEAR, FMONTH, FDAY, ISMONTH, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY)
-         VALUES (:ncaseid, :LSHET, :ncaseid, 1, 0, :FYEAR, :FMONTH, :FDAY, 0, :YEAR2, :MONTH2, 1, :YEAR2, :MONTH2, 1);
        oldyear = :year_;
        oldmonth = :month_;
        oldlshet = :lshet;
        olddocumentcd = :documentcd;
     end
+	UPDATE OR INSERT INTO PERERASHETCASE (CASEID, LSHET, NACHISLCASEID, AUTOUSE, IZMEN, FYEAR, FMONTH, FDAY, ISMONTH, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, CASETYPE)
+      VALUES (:ncaseid, :LSHET, :ncaseid, :AUTOUSE, 0, :FYEAR, :FMONTH, :FDAY, 0, :YEAR2, :MONTH2, 1, :YEAR2, :MONTH2, 1, :CASETYPE);
     INSERT INTO NACHISLSUMMA (LSHET, CASEID, KODREGIM, BALANCE_KOD, SUMMATYPE, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, SUMMA, NORMTYPE)
     VALUES (:LSHET, :NCASEID, :REGIMCD, :SERVICECD, :TYPE_, :YEAR_, :MONTH_, 1, :YEAR2, :MONTH2, 1, :FNATH, 0);
 	if (:volume <> 0) then

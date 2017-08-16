@@ -1166,7 +1166,7 @@ namespace _047_Tver
                                 SERVICECD = serviceMoney.ServiceCd,
                                 SERVICENAME = serviceMoney.ServiceName,
                                 TYPE_ = serviceMoney.SummaType,
-                                VTYPE_ = serviceMoney.VolumeType,
+                                VTYPE_ = (int)serviceMoney.VolumeType,
                                 VOLUME = Math.Round(serviceMoney.Volume, 4),
                                 PROCHLVOLUME = Math.Round(serviceMoney.RecalcVol, 4)
                             }, lshet, date.Month, date.Year, serviceMoney.Nach, reculc, date,

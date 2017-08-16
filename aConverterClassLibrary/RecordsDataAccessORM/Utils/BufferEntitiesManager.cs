@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
 {
@@ -39,6 +40,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "CHARS",
                 "CHARVALS",
                 "CITIZENMIGRATION",
+                "CITIZENRELATIONS",
                 "CITIZENS",
                 "CITYZENLGOTA",
                 "LGOTSUMMA",
@@ -48,12 +50,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "EQUIPMENT",
                 "GCOUNTER",
                 "CHARSHOUSES",
+                "LCHARHOUSES",
                 "HADDCHAR",
                 "LCHARS",
                 "NACH",
                 "NACHOPL",
                 "OPLATA",
                 "PENI",
+                "PENISUMMA",
                 "SUPPLNET",
                 "DOCUMENTNUMERATORTABLE",
             };
@@ -132,6 +136,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             {
                 l.Add("CNV_DOCUMENTNUMERATOR");
                 l.Add("CNV_00100_REGIONDISTRICTS");
+                l.Add("CNV_00150_SETTLEMENT");
                 l.Add("CNV_00200_PUNKT");
                 l.Add("CNV_00300_STREET");
                 l.Add("CNV_00400_DISTRICT");
@@ -140,20 +145,27 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_00700_ABONENTS");
                 l.Add("CNV_00800_CHARS");
                 l.Add("CNV_00850_CHARSHOUSES");
+                l.Add("CNV_00855_LCHARSHOUSES");
                 l.Add("CNV_00900_LCHARS");
                 l.Add("CNV_00950_COUNTERSTYPES");
                 l.Add("CNV_01000_COUNTERS");
+                l.Add("CNV_01050_GROUPCOUNTERS");
                 l.Add("CNV_01300_SOURCEDOC");
                 l.Add("CNV_01400_OPLATA");
                 l.Add("CNV_01500_SALDO");
                 l.Add("CNV_01600_NACHISLIMPORT");
                 l.Add("CNV_01700_PERERASHETIMPORT");
+                l.Add("CNV_01800_CITIZENS");
+                l.Add("CNV_01810_CITIZENRELATIONS");
+                l.Add("CNV_01820_CITIZENMIGRATION");
+                l.Add("CNV_01900_PENISUMMA");
                 l.Add("CNV_02100_EXTLSHETS");
                 l.Add("CNV_03000_CITIZENS_TVER");
+                l.Add("CNV_03000_CITIZENS_KVC");
                 l.Add("CNV_03050_CITIZENSMIGR_TVER");
                 l.Add("CNV_03100_TVER_ABONENTDOLYA");
                 l.Add("CNV_03200_CITYZENLGOTA_TVER");
-                l.Add("CNV_03300_LGOTSUMMA");   
+                l.Add("CNV_03300_LGOTSUMMA");
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {
@@ -186,6 +198,29 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             return true;
         }
 
+        public static bool DropProcedureByFullName(string procedureName)
+        {
+            string checkName = procedureName.ToUpper();
+            // Проверяем, существует ли соответствующая сущность
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            DataTable dt = fbm.GetSchema("Procedures");
+            bool procedurePresent = false;
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                if (dataRow[2].ToString() == checkName)
+                {
+                    procedurePresent = true;
+                    break;
+                }
+            }
+            if (!procedurePresent) return false;
+
+            string dropCommand = "DROP PROCEDURE " + procedureName;
+            fbm.ExecuteNonQuery(dropCommand);
+
+            return true;
+        }
+
         public static void DropAllProcedures()
         {
             var l = GetAllProcedures();
@@ -202,7 +237,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             foreach (var s in l) CreateDatabaseObject(s);
         }
 
-        public static void SaveDataToBuffer(IEnumerable<ISQLInsertable> list, IterateDelegate IterateCallBack)
+        public static void SaveDataToBuffer(IEnumerable<IOrmRecord> list, IterateDelegate IterateCallBack)
         {
             using (var fbc = new FbConnection(aConverter_RootSettings.FirebirdStringConnection))
             {
@@ -212,9 +247,9 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 int cnt = 0;
                 FbScript fbs;
                 FbBatchExecution fbe;
-                foreach (ISQLInsertable cc in list)
+                foreach (IOrmRecord cc in list)
                 {
-                    sb.AppendLine(cc.InsertSQL);
+                    sb.AppendLine(cc.InsertSql);
                     if (++cnt % 50000 == 0)
                     {
                         fbs = new FbScript(sb.ToString());
@@ -235,7 +270,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             }
         }
 
-        public static void SaveDataToBufferIBScript(IEnumerable<ISQLInsertable> list)
+        public static void SaveDataToBufferIBScript(IEnumerable<IOrmRecord> list)
         {
             #region Готовим скрипт и сохраняем его во временном файле
             string tmpScriptFile = Path.GetTempFileName();
@@ -252,7 +287,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 {
                     if (++counter % 10000 == 0)
                         sw.WriteLine("COMMIT WORK;");
-                    sw.WriteLine(cc.InsertSQL);
+                    sw.WriteLine(cc.InsertSql);
                 }
                 sw.WriteLine("COMMIT WORK;");
             }

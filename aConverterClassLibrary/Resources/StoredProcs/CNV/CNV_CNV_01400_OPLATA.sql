@@ -28,7 +28,7 @@ begin
     olddate_vv = date '1-Jan-1990';
     oldsourcecd = -1;
     oldlshet = '-1';
-    SELECT extorgcd FROM extorgspr eos WHERE eos.isbaseorganization = 1 INTO :baseorg;
+    SELECT first 1 extorgcd FROM extorgspr eos WHERE eos.isbaseorganization = 1 INTO :baseorg;
     for select lshet, documentcd, month_, year_, summa, date_, date_vv, sourcecd, servicecd,
             extract(day from date_vv) as dvday, extract(month from date_vv) as dvmonth, extract(year from date_vv) as dvyear,
             extract(day from date_) as dday, extract(month from date_) as dmonth, extract(year from date_) as dyear

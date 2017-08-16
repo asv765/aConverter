@@ -35,6 +35,9 @@
             this.textBoxSourceDBFFilePath = new System.Windows.Forms.TextBox();
             this.labelSourceDBFFilePath = new System.Windows.Forms.Label();
             this.dataGridViewConvertCase = new System.Windows.Forms.DataGridView();
+            this.isCheckedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.convertCaseNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bindingSourceConvertCase = new System.Windows.Forms.BindingSource(this.components);
             this.buttonExit = new System.Windows.Forms.Button();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
@@ -54,16 +57,16 @@
             this.labelSteps = new System.Windows.Forms.Label();
             this.labelProcess = new System.Windows.Forms.Label();
             this.progressBarProcess = new System.Windows.Forms.ProgressBar();
-            this.bindingSourceConvertCase = new System.Windows.Forms.BindingSource(this.components);
-            this.isCheckedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.convertCaseNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.labelFBConnection = new System.Windows.Forms.Label();
+            this.textBoxFBConnection = new System.Windows.Forms.TextBox();
+            this.checkBoxStopOnError = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConvertCase)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceConvertCase)).BeginInit();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigatorConvertCase)).BeginInit();
             this.bindingNavigatorConvertCase.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceConvertCase)).BeginInit();
             this.SuspendLayout();
             // 
             // labelConvertPath
@@ -83,7 +86,7 @@
             this.textBoxConvertPath.Name = "textBoxConvertPath";
             this.textBoxConvertPath.ReadOnly = true;
             this.textBoxConvertPath.Size = new System.Drawing.Size(787, 20);
-            this.textBoxConvertPath.TabIndex = 1;
+            this.textBoxConvertPath.TabIndex = 13;
             // 
             // textBoxSourceDBFFilePath
             // 
@@ -94,7 +97,6 @@
             this.textBoxSourceDBFFilePath.ReadOnly = true;
             this.textBoxSourceDBFFilePath.Size = new System.Drawing.Size(784, 20);
             this.textBoxSourceDBFFilePath.TabIndex = 14;
-            this.textBoxSourceDBFFilePath.Text = "123";
             // 
             // labelSourceDBFFilePath
             // 
@@ -120,15 +122,35 @@
             this.dataGridViewConvertCase.DataSource = this.bindingSourceConvertCase;
             this.dataGridViewConvertCase.Location = new System.Drawing.Point(3, 28);
             this.dataGridViewConvertCase.Name = "dataGridViewConvertCase";
-            this.dataGridViewConvertCase.Size = new System.Drawing.Size(784, 324);
-            this.dataGridViewConvertCase.TabIndex = 15;
+            this.dataGridViewConvertCase.Size = new System.Drawing.Size(784, 291);
+            this.dataGridViewConvertCase.TabIndex = 1;
             this.dataGridViewConvertCase.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewConvertCase_CellDoubleClick);
             this.dataGridViewConvertCase.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dataGridViewConvertCase_RowPrePaint);
+            // 
+            // isCheckedDataGridViewCheckBoxColumn
+            // 
+            this.isCheckedDataGridViewCheckBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.isCheckedDataGridViewCheckBoxColumn.DataPropertyName = "IsChecked";
+            this.isCheckedDataGridViewCheckBoxColumn.HeaderText = "";
+            this.isCheckedDataGridViewCheckBoxColumn.Name = "isCheckedDataGridViewCheckBoxColumn";
+            this.isCheckedDataGridViewCheckBoxColumn.Width = 5;
+            // 
+            // convertCaseNameDataGridViewTextBoxColumn
+            // 
+            this.convertCaseNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.convertCaseNameDataGridViewTextBoxColumn.DataPropertyName = "ConvertCaseName";
+            this.convertCaseNameDataGridViewTextBoxColumn.HeaderText = "Наименование шага конвертации";
+            this.convertCaseNameDataGridViewTextBoxColumn.Name = "convertCaseNameDataGridViewTextBoxColumn";
+            this.convertCaseNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // bindingSourceConvertCase
+            // 
+            this.bindingSourceConvertCase.DataSource = typeof(aConverterClassLibrary.ConvertCase);
             // 
             // buttonExit
             // 
             this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExit.Location = new System.Drawing.Point(724, 539);
+            this.buttonExit.Location = new System.Drawing.Point(724, 575);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(75, 23);
             this.buttonExit.TabIndex = 16;
@@ -139,7 +161,7 @@
             // buttonConvert
             // 
             this.buttonConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonConvert.Location = new System.Drawing.Point(615, 539);
+            this.buttonConvert.Location = new System.Drawing.Point(615, 575);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(103, 23);
             this.buttonConvert.TabIndex = 17;
@@ -158,10 +180,10 @@
             this.toolStripContainer1.ContentPanel.Controls.Add(this.toolStrip1);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.dataGridViewConvertCase);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.bindingNavigatorConvertCase);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(787, 355);
-            this.toolStripContainer1.Location = new System.Drawing.Point(12, 90);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(787, 322);
+            this.toolStripContainer1.Location = new System.Drawing.Point(12, 134);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(787, 355);
+            this.toolStripContainer1.Size = new System.Drawing.Size(787, 347);
             this.toolStripContainer1.TabIndex = 18;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -209,14 +231,14 @@
             this.bindingNavigatorConvertCase.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigatorConvertCase.Name = "bindingNavigatorConvertCase";
             this.bindingNavigatorConvertCase.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigatorConvertCase.Size = new System.Drawing.Size(209, 25);
+            this.bindingNavigatorConvertCase.Size = new System.Drawing.Size(217, 25);
             this.bindingNavigatorConvertCase.TabIndex = 0;
             // 
             // bindingNavigatorCountItem
             // 
             this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
-            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(35, 22);
-            this.bindingNavigatorCountItem.Text = "of {0}";
+            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(43, 22);
+            this.bindingNavigatorCountItem.Text = "для {0}";
             this.bindingNavigatorCountItem.ToolTipText = "Общее число элементов";
             // 
             // bindingNavigatorMoveFirstItem
@@ -283,7 +305,7 @@
             // 
             this.progressBarSteps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarSteps.Location = new System.Drawing.Point(15, 464);
+            this.progressBarSteps.Location = new System.Drawing.Point(15, 500);
             this.progressBarSteps.Name = "progressBarSteps";
             this.progressBarSteps.Size = new System.Drawing.Size(784, 14);
             this.progressBarSteps.TabIndex = 19;
@@ -292,7 +314,7 @@
             // 
             this.labelSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelSteps.AutoSize = true;
-            this.labelSteps.Location = new System.Drawing.Point(12, 448);
+            this.labelSteps.Location = new System.Drawing.Point(12, 484);
             this.labelSteps.Name = "labelSteps";
             this.labelSteps.Size = new System.Drawing.Size(63, 13);
             this.labelSteps.TabIndex = 20;
@@ -302,7 +324,7 @@
             // 
             this.labelProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelProcess.AutoSize = true;
-            this.labelProcess.Location = new System.Drawing.Point(12, 481);
+            this.labelProcess.Location = new System.Drawing.Point(12, 517);
             this.labelProcess.Name = "labelProcess";
             this.labelProcess.Size = new System.Drawing.Size(104, 13);
             this.labelProcess.TabIndex = 21;
@@ -312,36 +334,50 @@
             // 
             this.progressBarProcess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarProcess.Location = new System.Drawing.Point(15, 497);
+            this.progressBarProcess.Location = new System.Drawing.Point(15, 533);
             this.progressBarProcess.Name = "progressBarProcess";
             this.progressBarProcess.Size = new System.Drawing.Size(784, 14);
             this.progressBarProcess.TabIndex = 19;
             // 
-            // bindingSourceConvertCase
+            // labelFBConnection
             // 
-            this.bindingSourceConvertCase.DataSource = typeof(aConverterClassLibrary.ConvertCase);
+            this.labelFBConnection.AutoSize = true;
+            this.labelFBConnection.Location = new System.Drawing.Point(12, 92);
+            this.labelFBConnection.Name = "labelFBConnection";
+            this.labelFBConnection.Size = new System.Drawing.Size(192, 13);
+            this.labelFBConnection.TabIndex = 13;
+            this.labelFBConnection.Text = "Строка подключения к базе данных:";
             // 
-            // isCheckedDataGridViewCheckBoxColumn
+            // textBoxFBConnection
             // 
-            this.isCheckedDataGridViewCheckBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.isCheckedDataGridViewCheckBoxColumn.DataPropertyName = "IsChecked";
-            this.isCheckedDataGridViewCheckBoxColumn.HeaderText = "";
-            this.isCheckedDataGridViewCheckBoxColumn.Name = "isCheckedDataGridViewCheckBoxColumn";
-            this.isCheckedDataGridViewCheckBoxColumn.Width = 5;
+            this.textBoxFBConnection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxFBConnection.Location = new System.Drawing.Point(15, 108);
+            this.textBoxFBConnection.Name = "textBoxFBConnection";
+            this.textBoxFBConnection.ReadOnly = true;
+            this.textBoxFBConnection.Size = new System.Drawing.Size(784, 20);
+            this.textBoxFBConnection.TabIndex = 14;
             // 
-            // convertCaseNameDataGridViewTextBoxColumn
+            // checkBoxStopOnError
             // 
-            this.convertCaseNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.convertCaseNameDataGridViewTextBoxColumn.DataPropertyName = "ConvertCaseName";
-            this.convertCaseNameDataGridViewTextBoxColumn.HeaderText = "Наименование шага конвертации";
-            this.convertCaseNameDataGridViewTextBoxColumn.Name = "convertCaseNameDataGridViewTextBoxColumn";
-            this.convertCaseNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.checkBoxStopOnError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxStopOnError.AutoSize = true;
+            this.checkBoxStopOnError.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxStopOnError.Checked = true;
+            this.checkBoxStopOnError.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxStopOnError.Location = new System.Drawing.Point(360, 579);
+            this.checkBoxStopOnError.Name = "checkBoxStopOnError";
+            this.checkBoxStopOnError.Size = new System.Drawing.Size(249, 17);
+            this.checkBoxStopOnError.TabIndex = 22;
+            this.checkBoxStopOnError.Text = "Приостанавливать выполнение при ошибке";
+            this.checkBoxStopOnError.UseVisualStyleBackColor = true;
             // 
             // FormConvert
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(811, 574);
+            this.ClientSize = new System.Drawing.Size(811, 610);
+            this.Controls.Add(this.checkBoxStopOnError);
             this.Controls.Add(this.labelProcess);
             this.Controls.Add(this.labelSteps);
             this.Controls.Add(this.progressBarProcess);
@@ -349,7 +385,9 @@
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.buttonConvert);
             this.Controls.Add(this.buttonExit);
+            this.Controls.Add(this.textBoxFBConnection);
             this.Controls.Add(this.textBoxSourceDBFFilePath);
+            this.Controls.Add(this.labelFBConnection);
             this.Controls.Add(this.labelSourceDBFFilePath);
             this.Controls.Add(this.textBoxConvertPath);
             this.Controls.Add(this.labelConvertPath);
@@ -357,6 +395,7 @@
             this.Text = "Конвертация";
             this.Load += new System.EventHandler(this.FormConvert_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewConvertCase)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceConvertCase)).EndInit();
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
             this.toolStripContainer1.ContentPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
@@ -366,7 +405,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigatorConvertCase)).EndInit();
             this.bindingNavigatorConvertCase.ResumeLayout(false);
             this.bindingNavigatorConvertCase.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceConvertCase)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -401,5 +439,8 @@
         private System.Windows.Forms.ProgressBar progressBarProcess;
         private System.Windows.Forms.DataGridViewCheckBoxColumn isCheckedDataGridViewCheckBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn convertCaseNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Label labelFBConnection;
+        private System.Windows.Forms.TextBox textBoxFBConnection;
+        private System.Windows.Forms.CheckBox checkBoxStopOnError;
     }
 }

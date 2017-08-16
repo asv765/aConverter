@@ -243,7 +243,123 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._nAME = value;
 			}
 		}
-		
-	}
+
+        private int? _sTATUSID;
+        public virtual int? STATUSID
+        {
+            get
+            {
+                return this._sTATUSID;
+            }
+            set
+            {
+                this._sTATUSID = value;
+            }
+        }
+
+        private DateTime? _sTATUSDATE;
+        public virtual DateTime? STATUSDATE
+        {
+            get
+            {
+                return this._sTATUSDATE;
+            }
+            set
+            {
+                this._sTATUSDATE = value;
+            }
+        }
+
+        private int _cOUNTER_LEVEL;
+        public virtual int COUNTER_LEVEL
+        {
+            get
+            {
+                return this._cOUNTER_LEVEL;
+            }
+            set
+            {
+                this._cOUNTER_LEVEL = value;
+            }
+        }
+
+        private int? _tARGETBALANCE_KOD;
+        public virtual int? TARGETBALANCE_KOD
+        {
+            get
+            {
+                return this._tARGETBALANCE_KOD;
+            }
+            set
+            {
+                this._tARGETBALANCE_KOD = value;
+            }
+        }
+
+        private int? _dISTRIBUTINGMETHOD;
+        public virtual int? DISTRIBUTINGMETHOD
+        {
+            get
+            {
+                return this._dISTRIBUTINGMETHOD;
+            }
+            set
+            {
+                this._dISTRIBUTINGMETHOD = value;
+            }
+        }
+
+        private int? _tARGETNEGATIVEBALANCE_KOD;
+        public virtual int? TARGETNEGATIVEBALANCE_KOD
+        {
+            get
+            {
+                return this._tARGETNEGATIVEBALANCE_KOD;
+            }
+            set
+            {
+                this._tARGETNEGATIVEBALANCE_KOD = value;
+            }
+        }
+
+        private int? _gROUPCOUNTERMODULEID;
+        public virtual int? GROUPCOUNTERMODULEID
+        {
+            get
+            {
+                return this._gROUPCOUNTERMODULEID;
+            }
+            set
+            {
+                this._gROUPCOUNTERMODULEID = value;
+            }
+        }
+
+        private int? _kODREGIM;
+        public virtual int? KODREGIM
+        {
+            get
+            {
+                return this._kODREGIM;
+            }
+            set
+            {
+                this._kODREGIM = value;
+            }
+        }
+
+        private int? _nOCALCCHILDBALANCES;
+        public virtual int? NOCALCCHILDBALANCES
+        {
+            get
+            {
+                return this._nOCALCCHILDBALANCES;
+            }
+            set
+            {
+                this._nOCALCCHILDBALANCES = value;
+            }
+        }
+    }
 }
 #pragma warning restore 1591

@@ -6,20 +6,21 @@ declare variable HOUSECD integer;
 declare variable DISTKOD integer;
 declare variable ULICAKOD integer;
 declare variable TOWNSKOD integer;
-declare variable HOUSENO integer;
+declare variable HOUSENO varchar(10);
 declare variable HOUSEPOSTFIX varchar(30);
 declare variable KORPUSNO integer;
 declare variable KORPUSPOSTFIX varchar(30);
 declare variable CNT integer;
 declare variable POSTINDEX varchar(10);
+declare variable HOUSENOTE varchar(4000);
 BEGIN
-    FOR SELECT housecd, distkod, ulicakod, townskod, houseno, housepostfix, korpusno, korpuspostfix, MAX(postindex) AS postindex, COUNT(*) AS cnt
+    FOR SELECT housecd, distkod, ulicakod, townskod, houseno, housepostfix, korpusno, korpuspostfix, MAX(postindex) AS postindex, COUNT(*) AS cnt, housenote
     FROM cnv$abonent
-    GROUP BY housecd, distkod, ulicakod, townskod, houseno, housepostfix, korpusno, korpuspostfix
-    INTO :housecd, :distkod, :ulicakod, :townskod, :houseno, :housepostfix, :korpusno, :korpuspostfix, :postindex, :cnt
+    GROUP BY housecd, distkod, ulicakod, townskod, houseno, housepostfix, korpusno, korpuspostfix, housenote
+    INTO :housecd, :distkod, :ulicakod, :townskod, :houseno, :housepostfix, :korpusno, :korpuspostfix, :postindex, :cnt, :housenote
     DO BEGIN
-        UPDATE OR INSERT INTO houses ( housecd,  distcd,   streetcd,  punktcd,   houseno,  housepostfix,  postindex,  korpusno,  korpuspostfix)
-                              VALUES (:housecd, :distkod, :ulicakod, :townskod, :houseno, :housepostfix, :postindex, :korpusno, :korpuspostfix)
+        UPDATE OR INSERT INTO houses ( housecd,  distcd,   streetcd,  punktcd,   houseno,  housepostfix,  postindex,  korpusno,  korpuspostfix, note)
+                              VALUES (:housecd, :distkod, :ulicakod, :townskod, :houseno, :housepostfix, :postindex, :korpusno, :korpuspostfix, :housenote)
         MATCHING (housecd);
     END
     EXECUTE STATEMENT 'ALTER SEQUENCE HOUSES_G RESTART WITH 0';

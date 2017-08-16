@@ -74,7 +74,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._vALUE_ = value;
 			}
 		}
-		
-	}
+
+    }
 }
 #pragma warning restore 1591

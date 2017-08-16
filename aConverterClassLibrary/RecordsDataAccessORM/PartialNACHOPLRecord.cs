@@ -1,13 +1,9 @@
-﻿using aConverterClassLibrary.RecordsDataAccessORM.Utils;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System;
+using static aConverterClassLibrary.RecordsDataAccessORM.Utils.OrmRecordUtils;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM
 {
-    public partial class CNV_NACHOPL: ISQLInsertable
+    public partial class CNV_NACHOPL : IOrmRecord
     {
 
         public NachoplKeySet NachoplKeySet
@@ -56,27 +52,23 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
             }
         }
 
-        public string InsertSQL
-        {
-            get
-            {
-                // INSERT INTO CNV$NACHOPL (ID, LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME) VALUES (NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-                var insertNachoplTemplate =
-                    "INSERT INTO CNV$NACHOPL (ID, LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME) " +
-                    "VALUES (NULL, '{0}', {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, '{11}');";
+        public const string InsertSqlTemplate =
+            "INSERT INTO CNV$NACHOPL (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME) " +
+            "VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11});";
 
-                var sql = String.Format(insertNachoplTemplate,
-                    LSHET, MONTH_, YEAR_, MONTH2, YEAR2,
-                    BDEBET.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    FNATH.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    PROCHL.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    OPLATA.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    EDEBET.ToString(CultureInfo.InvariantCulture).Replace(',', '.'),
-                    SERVICECD,
-                    SERVICENAME);
-                return sql;
-            }
-        }
+        public string InsertSql => string.Format(InsertSqlTemplate,
+            ToSql(_lSHET),
+            _mONTH_,
+            _yEAR_,
+            _mONTH2,
+            _yEAR2,
+            ToSql(_bDEBET),
+            ToSql(_fNATH),
+            ToSql(_pROCHL),
+            ToSql(_oPLATA),
+            ToSql(_eDEBET),
+            _sERVICECD,
+            ToSql(_sERVICENAME));
     }
 
     public struct NachoplKeySet

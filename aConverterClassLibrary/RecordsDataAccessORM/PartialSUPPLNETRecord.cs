@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace aConverterClassLibrary.RecordsDataAccessORM
+﻿namespace aConverterClassLibrary.RecordsDataAccessORM
 {
     public partial class CNV_SUPPLNET
     {

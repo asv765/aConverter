@@ -9,7 +9,8 @@ using System.Windows.Forms;
 using aConverterClassLibrary;
 using System.IO;
 using System.Reflection;
-using System.Threading;
+using System.Threading.Tasks;
+using aConverterClassLibrary.Class.ConvertCases;
 
 namespace aConverter.Forms
 {
@@ -55,6 +56,8 @@ namespace aConverter.Forms
             }
             textBoxSourceDBFFilePath.Text = aConverter_RootSettings.SourceDbfFilePath;
 
+            textBoxFBConnection.Text = aConverter_RootSettings.FirebirdStringConnection;
+
             labelSteps.Text = String.Format(labelStepsText, 0, 0);
             labelProcess.Text = String.Format(labelProcessText, 0, 0);
 
@@ -69,7 +72,7 @@ namespace aConverter.Forms
                     {
                         if (t.IsClass)
                         {
-                            if (t.IsSubclassOf(typeof (ConvertCase)))
+                            if (t.IsSubclassOf(typeof (ConvertCase)) && !t.IsAbstract)
                             {
                                 ConvertCase cc = (ConvertCase) extAssemblyFile.CreateInstance(t.FullName);
                                 if (cc.Visible)
@@ -97,6 +100,7 @@ namespace aConverter.Forms
             #endregion
 
             this.WindowState = FormWindowState.Maximized;
+            this.dataGridViewConvertCase.Focus();
         }
 
         bool cc_ErrorOpenFileEvent(object sender, Exception errorMessage)
@@ -220,6 +224,8 @@ namespace aConverter.Forms
             dataGridViewConvertCase.Refresh();
         }
 
+        private const string LogFileName = "logs.txt";
+
         private void buttonConvert_Click(object sender, EventArgs e)
         {
             progressBarProcess.Step = 1000;
@@ -236,31 +242,34 @@ namespace aConverter.Forms
             {
                 if (cc.IsChecked)
                 {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
                     labelSteps.Text = String.Format(labelStepsText, 1, 1);
                     labelSteps.Refresh();
                     try
                     {
                         cc.SetStepsCount(1);
-                        cc.InitializeManager(aConverter_RootSettings.SourceDbfFilePath);//////////--папки
+                        cc.InitializeManager(aConverter_RootSettings.SourceDbfFilePath);//////////--папки  Не во всех случаях исходная база в DBF. Следует вызывать напрямую из конвертера DBF файлов
+
+                        File.AppendAllText(LogFileName, $"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} INFO] {cc.ConvertCaseName}\r\nНачало выполнения\r\n");
 
                         cc.DoConvert();// ------------------------после 23
 
-                        cc.Dispose();
+                        File.AppendAllText(LogFileName, $"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} INFO] {cc.ConvertCaseName}\r\nУспешно выполнено\r\n");
+
                         cc.Result = ConvertCaseStatus.Шаг_выполнен_успешно;
+                        cc.Dispose();
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var innerExeption = ex.InnerException;
-                        while (innerExeption != null)
-                        {
-                            errorMessage += "; " + innerExeption.Message;
-                            innerExeption = innerExeption.InnerException;
-                        }
-                        MessageBox.Show(ex.ToString(), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error,
-                            MessageBoxDefaultButton.Button1);
+                        string errorMessage = ex.ToString();
+                        Action displayError = () => MessageBox.Show(errorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                        if (checkBoxStopOnError.Checked) displayError();
+                        else new Task(displayError).Start();
                         cc.Result = ConvertCaseStatus.Ошибка_при_выполнении_шага;
-                        cc.ErrorMessage = ex.ToString();
+                        cc.ErrorMessage = errorMessage;
+                        File.AppendAllText(LogFileName, $"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")} ERROR] {cc.ConvertCaseName}\r\nОшибка при выполнении:\r\n{errorMessage}\r\n");
+                        File.AppendAllText("errors.txt", $"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}] {cc.ConvertCaseName}\r\n{errorMessage} \r\n");
                     }
                     dataGridViewConvertCase.Refresh();// -------------после 23
                 }

@@ -65,8 +65,16 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				return this.GetAll<CNV_PENI>();
 			}
 		}
-		
-		public IQueryable<CNV_OPLATA> CNV_OPLATAs 
+
+        public IQueryable<CNV_PENISUMMA> CNV_PENISUMMAs
+        {
+            get
+            {
+                return this.GetAll<CNV_PENISUMMA>();
+            }
+        }
+
+        public IQueryable<CNV_OPLATA> CNV_OPLATAs 
 		{
 			get
 			{
@@ -153,8 +161,16 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				return this.GetAll<CNV_CITIZEN>();
 			}
 		}
-		
-		public IQueryable<CNV_CHARVAL> CNV_CHARVALs 
+
+        public IQueryable<CNV_CITIZENRELATIONS> CNV_CITIZENRELATIONSs
+        {
+            get
+            {
+                return this.GetAll<CNV_CITIZENRELATIONS>();
+            }
+        }
+
+        public IQueryable<CNV_CHARVAL> CNV_CHARVALs 
 		{
 			get
 			{
@@ -311,7 +327,11 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 		{
 			get;
 		}
-		IQueryable<CNV_OPLATA> CNV_OPLATAs
+        IQueryable<CNV_PENISUMMA> CNV_PENISUMMAs
+        {
+            get;
+        }
+        IQueryable<CNV_OPLATA> CNV_OPLATAs
 		{
 			get;
 		}
@@ -355,7 +375,11 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 		{
 			get;
 		}
-		IQueryable<CNV_CHARVAL> CNV_CHARVALs
+        IQueryable<CNV_CITIZENRELATIONS> CNV_CITIZENRELATIONSs
+        {
+            get;
+        }
+        IQueryable<CNV_CHARVAL> CNV_CHARVALs
 		{
 			get;
 		}

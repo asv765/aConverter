@@ -9,6 +9,7 @@ declare variable CNT integer;
 BEGIN
     FOR SELECT townskod, distkod, MAX(distname) AS distname, COUNT(*) AS cnt
       FROM cnv$abonent
+	  where distkod is not null
       GROUP BY townskod, distkod
       INTO :townskod, :distkod, :distname, :cnt
       DO BEGIN

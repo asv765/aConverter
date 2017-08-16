@@ -1,9 +1,11 @@
 SET TERM ^ ;
 
 create or alter procedure CNV$CNV_00800_CHARS (
-    NEEDDELETE smallint)
+    NEEDDELETE smallint = 0,
+	GENCHANGEDOC smallint = 1)
 as
 declare variable LSHET varchar(10);
+declare variable OLDLSHET varchar(10);
 declare variable CHARCD integer;
 declare variable VALUE_ numeric(11,4);
 declare variable DATE_ timestamp;
@@ -21,16 +23,25 @@ BEGIN
     WHERE rdb$generators.rdb$generator_name = 'DOCUMENTS_GEN'
     INTO :cnt;
     */
+	oldlshet = '-1';
     FOR SELECT lshet, charcd, value_, date_
         FROM cnv$chars
         ORDER BY lshet, charcd, date_
         INTO :lshet, :charcd, :value_, :date_
     DO BEGIN
-        documentcd = GEN_ID(DOCUMENTS_GEN, 1);
-        INSERT INTO documents (documentcd, registerusercd, otvetstvusercd, docname, factdocumentdate)
-            VALUES (:documentcd, 1, 1, 'Импорт количественных характеристик', :date_);
+		if (GENCHANGEDOC = 1) then
+		begin
+		if (lshet <> oldlshet) then
+		begin
+			documentcd = GEN_ID(DOCUMENTS_GEN, 1);
+			INSERT INTO documents (documentcd, registerusercd, otvetstvusercd, docname, factdocumentdate)
+				VALUES (:documentcd, 1, 1, 'Импорт количественных характеристик', :date_);
+		end
+		end
+		else documentcd = null;
         INSERT INTO ccharsabonentlist (lshet, kodccharslist, abonentcchardate, documentcd, significance)
             VALUES (:lshet, :charcd, :date_, :documentcd, :value_);
+		oldlshet = :lshet;
     END
 
 END^

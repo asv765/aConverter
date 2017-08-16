@@ -113,8 +113,34 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._rAYONNAME = value;
 			}
 		}
-		
-		private int? _tOWNSKOD;
+
+        private int? _sETTLEMENTKOD;
+        public virtual int? SETTLEMENTKOD
+        {
+            get
+            {
+                return this._sETTLEMENTKOD;
+            }
+            set
+            {
+                this._sETTLEMENTKOD = value;
+            }
+        }
+
+        private string _sETTLEMENTNAME;
+        public virtual string SETTLEMENTNAME
+        {
+            get
+            {
+                return this._sETTLEMENTNAME;
+            }
+            set
+            {
+                this._sETTLEMENTNAME = value;
+            }
+        }
+
+        private int? _tOWNSKOD;
 		public virtual int? TOWNSKOD
 		{
 			get
@@ -423,6 +449,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 			set
 			{
 				this._cLOSEDATE = value;
+			}
+		}
+		
+		private string _hOUSENOTE;
+		public virtual string HOUSENOTE
+		{
+			get
+			{
+				return this._hOUSENOTE;
+			}
+			set
+			{
+				this._hOUSENOTE = value;
 			}
 		}
 		

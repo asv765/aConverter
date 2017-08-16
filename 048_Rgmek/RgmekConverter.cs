@@ -419,7 +419,7 @@ namespace _048_Rgmek
             StepFinish();
 
             StepStart(1);
-            string s = lc[0].InsertSQL;
+            string s = lc[0].InsertSql;
             BufferEntitiesManager.SaveDataToBufferIBScript(lc);
             StepFinish();
         }
@@ -493,7 +493,7 @@ namespace _048_Rgmek
             StepFinish();
 
             StepStart(1);
-            string s = lc[0].InsertSQL;
+            string s = lc[0].InsertSql;
             BufferEntitiesManager.SaveDataToBufferIBScript(lc);
             StepFinish();
         }
@@ -560,7 +560,7 @@ namespace _048_Rgmek
                         var c = new CNV_CNTRSIND()
                         {
                             COUNTERID = counterid.ToString(),
-                            DOCUMENTCD = GetDocumentCd(cr.Doc),
+                            //DOCUMENTCD = GetDocumentCd(cr.Doc),  //TODO
                             INDDATE = cr.Date,
                             INDICATION = cr.Indication
                         };
@@ -584,7 +584,7 @@ namespace _048_Rgmek
             StepFinish();
 
             StepStart(1);
-            string s = lc[0].InsertSQL;
+            string s = lc[0].InsertSql;
             BufferEntitiesManager.SaveDataToBufferIBScript(lc);
             StepFinish();
         }

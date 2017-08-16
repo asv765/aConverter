@@ -119,7 +119,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 YEAR2 = year,
                 DATE_VV = dateVv,
                 DOCUMENTCD = documentcd,
-                PROCHLVOLUME = defaultNachRecord.PROCHLVOLUME
+                PROCHLVOLUME = defaultNachRecord.PROCHLVOLUME,
+                AUTOUSE = defaultNachRecord.AUTOUSE
             };
             NachRecords.Add(nr);
             UpdateNachoplDicByNachRecord(nr);
@@ -225,7 +226,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 command.Transaction = fbt;
                 foreach (CNV_NACHOPL nor in NachoplRecords.Values)
                 {
-                    command.CommandText = nor.InsertSQL;
+                    command.CommandText = nor.InsertSql;
                     command.ExecuteNonQuery();
                     if ((++counter % 5000) == 0)
                     {
@@ -255,7 +256,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 command.Transaction = fbt;
                 for (int i = 0; i < NachRecords.Count; i++)
                 {
-                    command.CommandText = NachRecords[i].InsertSQL;
+                    command.CommandText = NachRecords[i].InsertSql;
                     command.ExecuteNonQuery();
                     if ((++counter % 5000) == 0)
                     {
@@ -285,7 +286,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 command.Transaction = fbt;
                 for (int i = 0; i < OplataRecords.Count; i++)
                 {
-                    command.CommandText = OplataRecords[i].InsertSQL;
+                    command.CommandText = OplataRecords[i].InsertSql;
                     command.ExecuteNonQuery();
                     if ((++counter%5000) == 0)
                     {
