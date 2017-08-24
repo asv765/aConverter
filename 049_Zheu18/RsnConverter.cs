@@ -17,7 +17,9 @@ using aConverterClassLibrary.Class.ConvertCases;
 using System.IO;
 using FirebirdSql.Data.FirebirdClient;
 using FirebirdSql.Data.Isql;
+using OpenAccessRuntime.common;
 using static _049_Zheu18.Consts;
+using Utils = aConverterClassLibrary.Utils;
 
 namespace _049_Zheu18
 {
@@ -31,7 +33,7 @@ namespace _049_Zheu18
         /// <summary>
         /// В порядке убывания
         /// </summary>
-        public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01)/*, new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01)/*, new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01)/**/};
+        public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01), new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01)/**/};
         public const int InsertRecordCount = 1000;
         public const int CurrentYear = 2017;
         public const int CurrentMonth = 06;
@@ -6260,6 +6262,90 @@ where c1.value_ = 0 and c1.date_ = (select min(c2.date_) from cnv$lcharhouses c2
             Task.Factory.StartNew(() => MessageBox.Show($"Не найдено {notFoundedLs.Count} лс"));
 
             SaveListInsertSQL(indList, InsertRecordCount);
+        }
+    }
+
+    public class GetCitizenMigrationExit : KvcConvertCase
+    {
+        public GetCitizenMigrationExit()
+        {
+            ConvertCaseName = "Получить миграцию граждан, которые выбыли после временного отсутствия";
+            Position = 100015;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(3 - 1 + ConvertingDates.Length);
+            var lcm = new List<CNV_CITIZENMIGRATION>();
+
+            var exitedLs = new Dictionary<int, DateTime>();
+            ConvertCcFiles(ccAbonent =>
+            {
+                string lshet = LsDic[ccAbonent.LsKvc.Ls];
+                for (int i = 0; i < ccAbonent.Жители.Count; i++)
+                {
+                    var citizen = ccAbonent.Жители[i];
+                    int citizenid = Int32.Parse($"{lshet.Substring(2, 6)}{citizen.НомерЖителя:D2}");
+
+                    if (citizen.СтатусРегистрации == 3)
+                    {
+                        //lcm.Add(new CNV_CITIZENMIGRATION
+                        //{
+                        //    CITIZENID = citizenid,
+                        //    DATE_ = CurrnetConvertDate,
+                        //    DIRECTION = 2,
+                        //    MIGRATIONTYPE = 3
+                        //});
+
+                        var curDate = citizen.ДатаОкончанияВыбытия != null
+                            ? citizen.ДатаОкончанияВыбытия.Value.AddMonths(1)
+                            : DateTime.MaxValue;
+                        if (exitedLs.ContainsKey(citizenid)) exitedLs[citizenid] = curDate;
+                        else exitedLs.Add(citizenid, curDate);
+                    }
+                    else
+                    {
+                        DateTime exitedDate;
+                        if (exitedLs.TryGetValue(citizenid, out exitedDate))
+                        {
+                            int migrType;
+                            if (exitedDate >= CurrnetConvertDate)
+                            {
+                                switch (citizen.СтатусРегистрации)
+                                {
+                                    case 0:
+                                    case 9:
+                                        migrType = 0;
+                                        break;
+                                    case 2:
+                                        migrType = 2;
+                                        break;
+                                    case 1:
+                                        continue;
+                                    default:
+                                        throw new Exception("Неизвестный тип регистрации");
+                                }
+                                lcm.Add(new CNV_CITIZENMIGRATION
+                                {
+                                    CITIZENID = citizenid,
+                                    DATE_ = CurrnetConvertDate,
+                                    DIRECTION = 1,
+                                    MIGRATIONTYPE = migrType
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            , () =>
+            {
+                lcm = lcm.GroupBy(cm => new { cm.CITIZENID, cm.DATE_ }).Select(gcm => gcm.Last()).ToList();
+                lcm = CitizenRecordUtils.ThinOutList(lcm);
+            }
+            , CcFileName, false, ConvertingDates, WithRsn3);
+
+            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcm, InsertRecordCount);
         }
     }
 

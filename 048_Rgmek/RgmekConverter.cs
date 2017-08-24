@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.IO;
+using System.Text.RegularExpressions;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
+using aConverterClassLibrary.Class.ConvertCases;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using DbfClassLibrary;
-using System.IO;
-using FirebirdSql.Data.FirebirdClient;
-using FirebirdSql.Data.Isql;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
+using static _048_Rgmek.Consts;
 
 namespace _048_Rgmek
 {
@@ -24,14 +21,24 @@ namespace _048_Rgmek
         /// </summary>
         public const int InsertRecordCount = 1000;
 
-        public const string LsRecodeFileName = @"C:\Work\aConverter_Data\048_Rgmek\Docs\lsrecode.csv";
-        public const string DuRecodeFileName = @"C:\Work\aConverter_Data\048_Rgmek\Docs\durecode.csv";
-        public const string HouseRecodeFileName = @"C:\Work\aConverter_Data\048_Rgmek\Docs\houserecode.csv";
-        public const string CnttypeRecodeFileName = @"C:\Work\aConverter_Data\048_Rgmek\Docs\cnttyperecode.csv";
-        public const string CounterIdRecodeFileName = @"C:\Work\aConverter_Data\048_Rgmek\Docs\counteridrecode.csv";
-        public const string IndtypeRecodeFileName = @"C:\Work\aConverter_Data\048_Rgmek\Docs\indtyperecode.csv";
+        public static readonly string LsRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\lsrecode.csv";
+        public static readonly string DuRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\durecode.csv";
+        public static readonly string HouseRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\houserecode.csv";
+        public static readonly string CnttypeRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\cnttyperecode.csv";
+        public static readonly string CounterIdRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\counteridrecode.csv";
+        public static readonly string IndtypeRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\indtyperecode.csv";
 
-        public static readonly int CurrentMonth = 03;
+        public static readonly Dictionary<long, int> CcharRecode = new Dictionary<long, int>
+        {
+            {1, 2}, // Общая площадь
+            {2, 4}, // Полезная площадь
+            {3, 23}, // Число комнат
+            {4, 5}, // Площадь нежилых помещений
+            {5, 1}, // Число зарегистрированных
+            {6, 3}, // Число проживающих
+        };
+
+        public static readonly int CurrentMonth = 09;
 
         public static readonly int CurrentYear = 2017;
 
@@ -75,6 +82,7 @@ namespace _048_Rgmek
         }
     }
 
+    #region Конвертация во временные таблицы
 
     public class CreateAllFiles : ConvertCase
     {
@@ -100,7 +108,7 @@ namespace _048_Rgmek
         }
     }
 
-    public class ConvertAbonent : ConvertCase
+    public class ConvertAbonent : DbfConvertCase
     {
         public ConvertAbonent()
         {
@@ -109,10 +117,9 @@ namespace _048_Rgmek
             IsChecked = false;
         }
 
-        public override void DoConvert()
+        public override void DoDbfConvert()
         {
             SetStepsCount(2);
-
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
@@ -123,7 +130,7 @@ namespace _048_Rgmek
             //SaveList(lca, Consts.InsertRecordCount);
 
             var lsrecode = new Dictionary<string, long>();
-            long lastls = 6201000000;
+            long lastls = 1010000000;
             var durecode = new Dictionary<string, long>();
             long lastducd = 0;
             var houserecode = new Dictionary<string, long>();
@@ -204,12 +211,12 @@ namespace _048_Rgmek
             //AbonentRecordUtils.SetUniqueHouseCd(lca, 0);
             //StepFinish();
 
-            Utils.SaveDictionary(lsrecode, Consts.LsRecodeFileName);
-            Utils.SaveDictionary(durecode, Consts.DuRecodeFileName);
-            Utils.SaveDictionary(houserecode, Consts.HouseRecodeFileName);
+            Utils.SaveDictionary(lsrecode, LsRecodeFileName);
+            Utils.SaveDictionary(durecode, DuRecodeFileName);
+            Utils.SaveDictionary(houserecode, HouseRecodeFileName);
 
             StepStart(1);
-            SaveList(lca, Consts.InsertRecordCount);
+            SaveListInsertSQL(lca, InsertRecordCount);
             Iterate();
 
             //StepStart(lca.Count);
@@ -227,7 +234,7 @@ namespace _048_Rgmek
         }
     }
 
-    public class ConvertChars : ConvertCase
+    public class ConvertChars : DbfConvertCase
     {
         public ConvertChars()
         {
@@ -236,7 +243,7 @@ namespace _048_Rgmek
             IsChecked = false;
         }
 
-        public override void DoConvert()
+        public override void DoDbfConvert()
         {
             SetStepsCount(3);
 
@@ -249,7 +256,7 @@ namespace _048_Rgmek
 
             //SaveList(lca, Consts.InsertRecordCount);
 
-            var lsrecode = Utils.ReadDictionary(Consts.LsRecodeFileName);
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
 
             StepStart(dt.Rows.Count);
             var cold = new CharsRecord();
@@ -263,7 +270,7 @@ namespace _048_Rgmek
                     var c = new CNV_CHAR()
                     {
                         LSHET = lshet.ToString(),
-                        CHARCD = (int)cold.Charcd,
+                        CHARCD = CcharRecode[cold.Charcd],
                         CHARNAME = cold.Charname.Trim(),
                         DATE_ = cold.Date,
                         VALUE_ = cold.Value_
@@ -284,7 +291,7 @@ namespace _048_Rgmek
         }
     }
 
-    public class ConvertLChars : ConvertCase
+    public class ConvertLChars : DbfConvertCase
     {
         public ConvertLChars()
         {
@@ -293,7 +300,7 @@ namespace _048_Rgmek
             IsChecked = false;
         }
 
-        public override void DoConvert()
+        public override void DoDbfConvert()
         {
             SetStepsCount(3);
 
@@ -306,7 +313,7 @@ namespace _048_Rgmek
 
             //SaveList(lca, Consts.InsertRecordCount);
 
-            var lsrecode = Utils.ReadDictionary(Consts.LsRecodeFileName);
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
 
             StepStart(dt.Rows.Count);
             var lcold = new LcharsRecord();
@@ -342,7 +349,7 @@ namespace _048_Rgmek
         }
     }
 
-    public class ConvertCounters : ConvertCase
+    public class ConvertCounters : DbfConvertCase
     {
         public ConvertCounters()
         {
@@ -351,7 +358,7 @@ namespace _048_Rgmek
             IsChecked = false;
         }
 
-        public override void DoConvert()
+        public override void DoDbfConvert()
         {
             SetStepsCount(2);
 
@@ -367,8 +374,7 @@ namespace _048_Rgmek
             var counteridrecode = new Dictionary<string, long>();
             long counterid = 0;
 
-
-            var lsrecode = Utils.ReadDictionary(Consts.LsRecodeFileName);
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
 
             StepStart(dt.Rows.Count);
             var lcold = new CountersRecord();
@@ -401,7 +407,7 @@ namespace _048_Rgmek
                     if (lcold.Rgresid > 0)
                         prim += (prim == "" ? "" : ", ") + "RGRESID=" + lcold.Rgresid.ToString();
                     if (lcold.Precision > 0)
-                        prim += (prim == "" ? "" : ", ") + "PRECISION=" + lcold.Precision.ToString().Replace(',','.');
+                        prim += (prim == "" ? "" : ", ") + "PRECISION=" + lcold.Precision.ToString().Replace(',', '.');
                     if (!String.IsNullOrEmpty(lcold.Amperage))
                         prim += (prim == "" ? "" : ", ") + "AMPERAG=" + lcold.Amperage.Trim();
                     if (!String.IsNullOrEmpty(lcold.Instplace))
@@ -414,8 +420,8 @@ namespace _048_Rgmek
                 }
                 Iterate();
             }
-            Utils.SaveDictionary(cnttyperecode, Consts.CnttypeRecodeFileName);
-            Utils.SaveDictionary(counteridrecode, Consts.CounterIdRecodeFileName);
+            Utils.SaveDictionary(cnttyperecode, CnttypeRecodeFileName);
+            Utils.SaveDictionary(counteridrecode, CounterIdRecodeFileName);
             StepFinish();
 
             StepStart(1);
@@ -425,7 +431,7 @@ namespace _048_Rgmek
         }
     }
 
-    public class ConvertCntrsind : ConvertCase
+    public class ConvertCntrsind : DbfConvertCase
     {
         public ConvertCntrsind()
         {
@@ -434,7 +440,7 @@ namespace _048_Rgmek
             IsChecked = false;
         }
 
-        public override void DoConvert()
+        public override void DoDbfConvert()
         {
             SetStepsCount(4);
 
@@ -446,7 +452,7 @@ namespace _048_Rgmek
 
             var indtyperecode = new Dictionary<string, long>();
             long indtypecd = 0;
-            var counteridrecode = Utils.ReadDictionary(Consts.CounterIdRecodeFileName);
+            var counteridrecode = Utils.ReadDictionary(CounterIdRecodeFileName);
             long counterid = 0;
 
             StepStart(Convert.ToInt32(Tmsource.ExecuteScalar("SELECT COUNT(*) FROM CNTRSIND WHERE Indication > 0")));
@@ -454,7 +460,7 @@ namespace _048_Rgmek
             {
                 //StepStart(dt.Rows.Count);
                 var cr = new CntrsindRecord();
-                while(reader.Read())
+                while (reader.Read())
                 // foreach (DataRow dataRow in dt.Rows)
                 {
                     //cr.ReadDataRow(dataRow);
@@ -481,7 +487,7 @@ namespace _048_Rgmek
                     Iterate();
                 }
             }
-            Utils.SaveDictionary(indtyperecode, Consts.IndtypeRecodeFileName);
+            Utils.SaveDictionary(indtyperecode, IndtypeRecodeFileName);
             StepFinish();
 
             StepStart(1);
@@ -516,82 +522,271 @@ namespace _048_Rgmek
         }
     }
 
-    public class ConvertMoney : ConvertCase
+    public class ConvertMoney : DbfConvertCase
     {
         public ConvertMoney()
         {
-            ConvertCaseName = "SUMS.DBF, PAYMENT.DBF, NACH.DBF - конвертация денег";
+            ConvertCaseName = "SUMS, PAYMENT, NACH - конвертация денег";
             Position = 70;
+            IsChecked = false;
+        }
+
+        public override void DoDbfConvert()
+        {
+            SetStepsCount(2);
+
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            BufferEntitiesManager.DropTableData("CNV$NACH");
+            BufferEntitiesManager.DropTableData("CNV$NACHOPL");
+            BufferEntitiesManager.DropTableData("CNV$OPLATA");
+
+            var nom = new NachoplManager(NachoplCorrectionType.Пересчитать_сальдо_на_конец);
+
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+
+            CNV_NACH defcn = new CNV_NACH();
+            defcn.REGIMCD = 10;
+            defcn.REGIMNAME = "Неизвестен";
+            defcn.SERVICECD = 9;
+            defcn.SERVICENAME = "Электроэнергия";
+
+            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar("SELECT COUNT(*) FROM NACH")));
+            using (var reader = Tmsource.ExecuteQueryToReader("SELECT * FROM NACH"))
+            {
+                var nr = new NachRecord();
+                while (reader.Read())
+                {
+                    //cr.ReadDataRow(dataRow);
+                    nr.Lshet = reader["Lshet"].ToString().Trim();
+                    string doc = reader["Doc"].ToString().Trim();
+
+                    nr.Doc = Regex.Match(doc, "(?<= счета).*(?= от)").Value;
+
+                    nr.Date = Convert.ToDateTime(reader["Date"].ToString());
+                    nr.Date_rasch = Convert.ToDateTime(reader["Date_rasch"].ToString());
+                    nr.Resourcd = Convert.ToInt32(reader["Resourcd"]);
+                    nr.Resournm = reader["Resournm"].ToString().Trim();
+                    nr.Nachtype = reader["Nachtype"].ToString().Trim();
+                    nr.Summa = Convert.ToDecimal(reader["Summa"]);
+                    nr.Rasctype = reader["Rasctype"].ToString().Trim();
+
+                    long lshet;
+
+                    if (lsrecode.TryGetValue(nr.Lshet, out lshet))
+                    {
+                        decimal fnath = 0;
+                        decimal prochl = 0;
+                        if (nr.Nachtype == "Основной")
+                            fnath = nr.Summa;
+                        else
+                            prochl = nr.Summa;
+
+                        if (nr.Rasctype == "Аналитический" ||
+                            nr.Rasctype == "Общедомовые нужды" ||
+                            nr.Rasctype == "Без прибора")
+                            defcn.TYPE_ = 0;
+                        else
+                            defcn.TYPE_ = 1;
+
+                        nom.RegisterNach(defcn, lshet.ToString(), nr.Date.Month, nr.Date.Year,
+                            fnath, prochl, nr.Date, nr.Doc);
+                    }
+                    Iterate();
+                }
+            }
+            StepFinish();
+
+            StepStart(nom.NachRecords.Count);
+            BufferEntitiesManager.SaveDataToBufferIBScript(nom.NachRecords);
+            StepFinish();
+        }
+    }
+
+    #endregion
+
+    #region Перенос данных в целевые таблицы
+
+    public class SplitterTransfer : ConvertCase
+    {
+        public SplitterTransfer()
+        {
+            ConvertCaseName = "";
+            Position = 998;
             IsChecked = false;
         }
 
         public override void DoConvert()
         {
-            SetStepsCount(4);
 
-            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
-            tms.Init();
+        }
+    }
 
-            BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
-            var lc = new List<CNV_CNTRSIND>();
+    public class TransferAddressObjects : ConvertCase
+    {
+        public TransferAddressObjects()
+        {
+            ConvertCaseName = "Перенос данных об адресных объектах";
+            Position = 1000;
+            IsChecked = false;
+        }
 
-            var indtyperecode = new Dictionary<string, long>();
-            long indtypecd = 0;
-            var counteridrecode = Utils.ReadDictionary(Consts.CounterIdRecodeFileName);
-            long counterid = 0;
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(7);
 
-            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar("SELECT COUNT(*) FROM CNTRSIND WHERE Indication > 0")));
-            using (var reader = Tmsource.ExecuteQueryToReader("SELECT * FROM CNTRSIND WHERE Indication > 0"))
-            {
-                //StepStart(dt.Rows.Count);
-                var cr = new CntrsindRecord();
-                while (reader.Read())
-                // foreach (DataRow dataRow in dt.Rows)
-                {
-                    //cr.ReadDataRow(dataRow);
-                    cr.Counterid = reader["CounterID"].ToString().Trim();
-                    cr.Doc = reader["Doc"].ToString().Trim();
-                    cr.Date = Convert.ToDateTime(reader["Date"].ToString());
-                    cr.Indication = Convert.ToDecimal(reader["Indication"]);
-                    cr.Indtype = reader["Indtype"].ToString().Trim();
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
 
-                    if (counteridrecode.TryGetValue(cr.Counterid, out counterid))
-                    {
-                        var c = new CNV_CNTRSIND()
-                        {
-                            COUNTERID = counterid.ToString(),
-                            //DOCUMENTCD = GetDocumentCd(cr.Doc),  //TODO
-                            INDDATE = cr.Date,
-                            INDICATION = cr.Indication
-                        };
-                        c.INDTYPE = (int)Utils.GetValue(cr.Indtype, indtyperecode, ref indtypecd);
-                        //CounterSetupPlace 
-                        // c.SETUPPLACE 
-                        lc.Add(c);
-                    }
-                    Iterate();
-                }
-            }
-            Utils.SaveDictionary(indtyperecode, Consts.IndtypeRecodeFileName);
+            fbm.ExecuteProcedure("CNV$CNV_00100_REGIONDISTRICTS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00150_SETTLEMENT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00200_PUNKT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00300_STREET");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00400_DISTRICT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00500_INFORMATIONOWNERS");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00600_HOUSES");
             StepFinish();
+        }
+    }
 
-            StepStart(1);
-            var lc2 = CntrsindRecordUtils.ThinOutList(lc);
-            StepFinish();
+    public class TransferAbonents : KvcConvertCase
+    {
+        public TransferAbonents()
+        {
+            ConvertCaseName = "Перенос данных об абонентах";
+            Position = 1010;
+            IsChecked = false;
+        }
 
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(1);
             StepStart(1);
-            CntrsindRecordUtils.RestoreHistory(ref lc2, RestoreHistoryType.С_конца_по_конечным_показаниям);
-            StepFinish();
-
-            StepStart(1);
-            string s = lc[0].InsertSql;
-            BufferEntitiesManager.SaveDataToBufferIBScript(lc);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
+            Iterate();
             StepFinish();
         }
     }
 
 
-        public class KillMe
+    public class TransferExtlshet : KvcConvertCase
     {
+        public TransferExtlshet()
+        {
+            ConvertCaseName = "Перенос данных о внешних лицевых счетах";
+            Position = 1015;
+            IsChecked = false;
+
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_02100_EXTLSHETS", new[] { "1", "0" });
+            Iterate();
+        }
     }
+
+    public class TransferChars : KvcConvertCase
+    {
+        public TransferChars()
+        {
+            ConvertCaseName = "Перенос данных о количественных характеристиках";
+            Position = 1020;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00800_CHARS", new[] { "0", "0" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferLchars : KvcConvertCase
+    {
+        public TransferLchars()
+        {
+            ConvertCaseName = "Перенос данных о качественных характеристиках";
+            Position = 1030;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "0", "0" });
+            Iterate();
+            StepFinish();
+        }
+    }
+
+    public class TransferCounters : KvcConvertCase
+    {
+        public TransferCounters()
+        {
+            ConvertCaseName = "Перенос данных о счетчиках и показаниях";
+            Position = 1040;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(1);
+            StepStart(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0", "1", "0" });
+            StepFinish();
+        }
+    }
+
+    public class TransferNachopl : KvcConvertCase
+    {
+        public TransferNachopl()
+        {
+            ConvertCaseName = "Перенос данных о истории оплат и начислений";
+            Position = 1070;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(1);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            StepStart(5);
+            fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01300_SOURCEDOC");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01400_OPLATA");
+            Iterate();
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
+            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] { CurrentYear.ToString(CultureInfo.InvariantCulture),
+                CurrentMonth.ToString(CultureInfo.InvariantCulture) });
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
+            fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01700_PERERASHETIMPORT");
+            StepFinish();
+        }
+    }
+
+    #endregion
 }

@@ -350,7 +350,8 @@ $@" select * from
 from (
 select distinct ea.lshet as ls, ea.extlshet as lskvc, la.kodlcharslist as lchar from extorgaccounts ea
 inner join lcharsabonentlist la on la.lshet = ea.lshet
-where (la.kodlcharslist >= 100 and la.kodlcharslist <= 130)) as T) as TT
+where (la.kodlcharslist >= 100 and la.kodlcharslist <= 130)
+and ea.extorgcd = 1) as T) as TT
 where TT.Serviceid is not null";
                 var reader = cmd.ExecuteReader();
                 var tempList = new List<AbonentServiceOrm>();
@@ -415,7 +416,7 @@ $@"select ea.extlshet,
                 order by eqs.statusdate desc)) as counterCount
 from abonents a
 inner join resourceslist rl on rl.kod in (9, 4, 5)
-inner join extorgaccounts ea on ea.lshet = a.lshet";
+inner join extorgaccounts ea on ea.lshet = a.lshet and ea.extorgcd = 1";
                 var reader = cmd.ExecuteReader();
                 var tempList = new List<AbonentCounterOrm>();
                 while (reader.Read())
@@ -486,7 +487,7 @@ $@"select
     and la.abonentlchardate <= '{date}'
     order by la.abonentlchardate desc) as is02Active
 from abonents a
-inner join extorgaccounts ea on ea.lshet = a.lshet";
+inner join extorgaccounts ea on ea.lshet = a.lshet and ea.extorgcd = 1";
                 var reader = cmd.ExecuteReader();
                 var tempList = new List<AbonentActiveServices>();
                 while (reader.Read())
@@ -748,7 +749,7 @@ inner join extorgaccounts ea on ea.lshet = a.lshet";
                 var sqlResult = context.ExecuteQuery<ConvertHChars.HouseExt>(@"select HOUSECD, EXTLSHET from cnv$abonent
                                                                             union
                                                                             select housecd, extlshet from abonents a
-                                                                            inner join extorgaccounts ea on ea.lshet = a.lshet");
+                                                                            inner join extorgaccounts ea on ea.lshet = a.lshet and ea.extorgcd = 1");
                 StepStart(sqlResult.Count);
                 for (int i = 0; i < sqlResult.Count; i++)
                 {
@@ -1125,7 +1126,7 @@ $@"select ea.lshet as Lshet,
     where la.lshet = ea.lshet and la.kodlcharslist = {resource + 100}
     order by la.abonentlchardate desc) as Supplier
 from extorgaccounts ea
-where ea.extlshet like '{adr1:D8}%'");
+where ea.extlshet like '{adr1:D8}%' and ea.extorgcd = 1");
                 return sqlResult.FirstOrDefault(r => r.Supplier != null)?.Supplier.Value + resource * 10000;
             }
         }
