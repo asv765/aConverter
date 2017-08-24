@@ -140,7 +140,7 @@ namespace RsnReader
             return new RsnFile(fileName).ExtractAbonents()/*.ToArray()*/;
         }
 
-        public static string RsnFilePath = @"D:\Work\C#\C#Projects\aConverter-Kvc\Sources";
+        public static string RsnFilePath = @"D:\Projects\C#\aConverter\049_Zheu18\Sources";
         public static void FillLsDic(out Dictionary<string, string> lsDic, out List<LsNotInFile> lsNotInLastFile, bool withRsn3, params DateTime[] dates)
         {
             var allDates = dates.ToList();

@@ -38,6 +38,36 @@ namespace _048_Rgmek
             {6, 3}, // Число проживающих
         };
 
+        public static readonly Dictionary<KeyValuePair<long, long>, KeyValuePair<int, int>> LcharRecode =
+            new Dictionary<KeyValuePair<long, long>, KeyValuePair<int, int>>
+            {
+                {new KeyValuePair<long, long>(1, 0), new KeyValuePair<int, int>(2, 0)},
+                {new KeyValuePair<long, long>(1, 1), new KeyValuePair<int, int>(2, 1)},
+                {new KeyValuePair<long, long>(1, 2), new KeyValuePair<int, int>(2, 0)},
+                {new KeyValuePair<long, long>(2, 0), new KeyValuePair<int, int>(2, 0)},
+                {new KeyValuePair<long, long>(2, 1), new KeyValuePair<int, int>(2, 2)},
+                {new KeyValuePair<long, long>(2, 2), new KeyValuePair<int, int>(2, 0)},
+                {new KeyValuePair<long, long>(3, 0), new KeyValuePair<int, int>(2, 0)},
+                {new KeyValuePair<long, long>(3, 1), new KeyValuePair<int, int>(2, 3)},
+                {new KeyValuePair<long, long>(3, 2), new KeyValuePair<int, int>(2, 0)},
+                {new KeyValuePair<long, long>(4, 0), new KeyValuePair<int, int>(13, 0)},
+                {new KeyValuePair<long, long>(4, 1), new KeyValuePair<int, int>(13, 1)},
+                {new KeyValuePair<long, long>(4, 2), new KeyValuePair<int, int>(13, 0)},
+                {new KeyValuePair<long, long>(5, 1), new KeyValuePair<int, int>(5, 1)},
+                {new KeyValuePair<long, long>(5, 2), new KeyValuePair<int, int>(5, 2)},
+                {new KeyValuePair<long, long>(5, 3), new KeyValuePair<int, int>(5, 3)},
+                {new KeyValuePair<long, long>(5, 4), new KeyValuePair<int, int>(5, 4)},
+                {new KeyValuePair<long, long>(5, 5), new KeyValuePair<int, int>(5, 5)},
+                {new KeyValuePair<long, long>(5, 6), new KeyValuePair<int, int>(5, 6)},
+                {new KeyValuePair<long, long>(6, 1), new KeyValuePair<int, int>(6, 1)},
+                {new KeyValuePair<long, long>(6, 4), new KeyValuePair<int, int>(6, 2)},
+                {new KeyValuePair<long, long>(6, 7), new KeyValuePair<int, int>(6, 3)},
+                {new KeyValuePair<long, long>(6, 8), new KeyValuePair<int, int>(6, 4)},
+                {new KeyValuePair<long, long>(6, 9), new KeyValuePair<int, int>(6, 5)},
+                {new KeyValuePair<long, long>(6, 10), new KeyValuePair<int, int>(6, 6)},
+                {new KeyValuePair<long, long>(6, 11), new KeyValuePair<int, int>(6, 7)},
+            };
+
         public static readonly int CurrentMonth = 09;
 
         public static readonly int CurrentYear = 2017;
@@ -267,7 +297,7 @@ namespace _048_Rgmek
                 long lshet;
                 if (lsrecode.TryGetValue(cold.Lshet, out lshet))
                 {
-                    var c = new CNV_CHAR()
+                    var c = new CNV_CHAR
                     {
                         LSHET = lshet.ToString(),
                         CHARCD = CcharRecode[cold.Charcd],
@@ -324,13 +354,14 @@ namespace _048_Rgmek
                 long lshet;
                 if (lsrecode.TryGetValue(lcold.Lshet, out lshet))
                 {
-                    var c = new CNV_LCHAR()
+                    var recodeValue = LcharRecode[new KeyValuePair<long, long>(lcold.Lcharcd, lcold.Value_)];
+                    var c = new CNV_LCHAR
                     {
                         LSHET = lshet.ToString(),
-                        LCHARCD = (int)lcold.Lcharcd,
+                        LCHARCD = recodeValue.Key,
                         LCHARNAME = lcold.Lcharname.Trim(),
                         DATE_ = lcold.Date,
-                        VALUE_ = (int)lcold.Value_,
+                        VALUE_ = recodeValue.Value,
                         VALUEDESC = lcold.Valuedesc
                     };
                     lcc.Add(c);
