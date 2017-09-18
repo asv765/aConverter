@@ -7,7 +7,7 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
         public IChangeFile Create(string fileName)
         {
             string fn = fileName.ToLower();
-            if (fn.Contains(".dbf.xlsx")) return new CcChangeFileDbf(fileName);
+            if (fn.Contains(".dbf.xlsx") || fn.Contains(".dbf.xls")) return new CcChangeFileDbf(fileName);
             if (fn.Contains(".xls") || fn.Contains(".xlsx")) return new CcChangeOdantExcel(fileName);
             return new CcChangeFile(fileName);
         }

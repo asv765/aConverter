@@ -57,6 +57,9 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
                     }
                     StepCounter.Iterate();
                 }
+                var lastAbonent = CcChangeRecord.CreateFromOdantXls(rows, (ushort) ChangesConsts.ImportYear,
+                    (ushort) ChangesConsts.ImportMonth);
+                convertAction(lastAbonent);
                 StepCounter.StepFinish();
             }
         }

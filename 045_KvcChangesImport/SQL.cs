@@ -98,9 +98,14 @@ begin
             :DEATHDATE, :numberegrp, :dateegrp)
     matching (CITYZEN_ID);
      if (:STATUSDATE is not null) then
+    begin
         UPDATE OR INSERT INTO CITIZENSTATUSES (CITYZEN_ID, CITIZENSTATEID, STATUSDATE, DOCUMENTCD) 
         VALUES (:CITIZENID, :CITIZENSTATEID, :STATUSDATE, NULL)
         MATCHING (CITYZEN_ID, STATUSDATE);
+        DELETE FROM CITIZENSTATUSES WHERE CITYZEN_ID = :CITIZENID AND STATUSDATE > :STATUSDATE;
+        if (:CITIZENSTATEID <> 1) then 
+            update CITYZENS set OWNERSHIPTYPE = null, OWNERSHIPNUMERATOR = null, OWNERSHIPDENOMINATOR = null where CITYZEN_ID = :CITIZENID;
+    end
     if (:DOCTYPEID is not null) then
     begin
       DOCUMENTCD = (select gen_id(DOCUMENTS_GEN, 1)
@@ -117,22 +122,27 @@ begin
 
   /* Удаление граждан, отсутствующих в импорте */
   documentcd = (select * from createdocument('Удаление граждан при импорте из РМБ ' || :importdate));
-    for select distinct c.cityzen_id, c.startdate, c.registrationtype,
+    for select distinct c.cityzen_id, c.startdate, c.registrationtype, c.enddate,
             iif ((select first 1 cs.citizenstateid from citizenstatuses cs
             where cs.cityzen_id = c.cityzen_id and cs.statusdate <= :importdate
-            order by cs.statusdate desc) = 1, 1, 0)
+            order by cs.statusdate desc) in (1,4,6), 1, 0)
         from cityzens c
         left join cnv$citizens cc on iif(cc.uniquecitizenid is null, cast(cc.citizenid as varchar(45)), cc.uniquecitizenid) = c.uniquecityzenid
         where c.lshet in (select cc2.lshet from cnv$citizens cc2) and cc.citizenid is null
-            and (c.enddate is null or c.enddate >= :importdate)
-    into :citizenid, :startdate, :regtype, :isowner
+    into :citizenid, :startdate, :regtype, :enddate, :isowner
     do begin
-        if (startdate is null) then enddate = null;
-        else enddate = :importdate;
+        if (enddate is null or enddate > :importdate) then
+        begin
+            if (startdate is null) then enddate = null;
+            else enddate = :importdate;
+        end
     
         update cityzens c
         set c.enddate = :enddate,
-            c.hidden = 1
+            c.hidden = 1,
+            c.ownershiptype = null,
+            c.ownershipnumerator = null,
+            c.ownershipdenominator = null
         where c.cityzen_id = :citizenid;
 
         if (startdate is not null) then
@@ -142,14 +152,14 @@ begin
             else migrtype = 2;
             UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
             VALUES (:documentcd, :citizenid, :startdate, :migrtype, 1, NULL)
-            MATCHING (CITYZEN_ID, MIGRATIONTYPE);
+            MATCHING (CITYZEN_ID, MIGRATIONDATE);
         end
 
         if (enddate is not null) then
         begin
             UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
             VALUES (:documentcd, :citizenid, :enddate, 0, 2, NULL)
-            MATCHING (CITYZEN_ID, MIGRATIONTYPE);
+            MATCHING (CITYZEN_ID, MIGRATIONDATE);
         end
     
         if (isowner = 1) then
@@ -157,11 +167,10 @@ begin
             update or insert into citizenstatuses (CITYZEN_ID, CITIZENSTATEID, STATUSDATE, documentcd)
             values (:citizenid, 3, :importdate, :documentcd)
             matching (CITYZEN_ID, STATUSDATE);
-
-            delete from citizenstatuses cs
-            where cs.cityzen_id = :citizenid and cs.statusdate > :importdate;
         end
 
+        delete from citizenstatuses cs
+        where cs.cityzen_id = :citizenid and cs.statusdate > :importdate;
         delete from cityzenmigration cm
         where cm.cityzen_id = :citizenid and cm.migrationdate > :importdate;
     end
@@ -181,12 +190,12 @@ begin
                 where cm.cityzen_id = :citizenid and cm.migrationdate = :startdate)
                     is null) then
             begin*/
-                /* Если регистрация мпж, то прибытие пмж, в остальных случаях пмп */
+                /* Если регистрация пмж, то прибытие пмж, в остальных случаях пмп */
                 if (regtype = 1) then migrtype = 1;
                 else migrtype = 2;
                 UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
                 VALUES (:documentcd, :citizenid, :startdate, :migrtype, 1, NULL)
-                MATCHING (CITYZEN_ID, MIGRATIONTYPE);
+                MATCHING (CITYZEN_ID, MIGRATIONDATE);
             /*end*/
         end
 
@@ -199,7 +208,7 @@ begin
             begin*/
                 UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
                 VALUES (:documentcd, :citizenid, :enddate, 0, 2, NULL)
-                MATCHING (CITYZEN_ID, MIGRATIONTYPE);
+                MATCHING (CITYZEN_ID, MIGRATIONDATE);
             /*end*/
         end
     end

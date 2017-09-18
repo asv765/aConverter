@@ -511,6 +511,36 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             //File.Delete("MikroToMakro.csv");
             //File.WriteAllText("MikroToMakro.csv", sb.ToString());
 
+            //var rsnAbonents = new List<RsnAbonent>();
+            //ConvertRsnAbonent(rsnAbonent =>
+            //{
+            //    rsnAbonents.Add(rsnAbonent);
+            //}, 2017, 05, false, true);
+
+            //var allAlgs = rsnAbonents.SelectMany(a => a.Алгоритмы.Select(al => new {Lshet = a.LsKvc.Ls, Vid = al.Вид, Alg = al.Алгоритм, Owner = al.ХозяинВида})).ToArray();
+
+            //var oldResult = allAlgs
+            //    .Where(al => RsnHelper.PeniResources.Contains(al.Vid))
+            //    .GroupBy(al => resourceRecode[PeniRecode[al.Vid]]*10000 + OwnersRecode[PeniRecode[al.Vid]][al.Owner])
+            //    .Where(gal => gal.Any(al => al.Alg != 96))
+            //    .Select(gal => gal.Key)
+            //    .ToArray();
+
+            //var goodResult = allAlgs
+            //    .Where(al => RsnHelper.PeniResources.Contains(al.Vid))
+            //    .GroupBy(al => resourceRecode[PeniRecode[al.Vid]] * 10000 + OwnersRecode[PeniRecode[al.Vid]][al.Owner])
+            //    .Where(gal => gal.All(al => al.Alg != 96))
+            //    .Select(gal => gal.Key)
+            //    .ToArray();
+
+            //var badDelited = allAlgs
+            //    .Where(al => RsnHelper.PeniResources.Contains(al.Vid))
+            //    .GroupBy(al => resourceRecode[PeniRecode[al.Vid]] * 10000 + OwnersRecode[PeniRecode[al.Vid]][al.Owner])
+            //    .Where(gal => gal.Any(al => al.Alg != 96) && gal.Any(al => al.Alg == 96))
+            //    .Select(gal => gal.Key)
+            //    .ToArray();
+
+
             //List<int> result = new List<int>();
             //var sb = new StringBuilder("");
             //ConvertRsnAbonent(rsnAbonent =>
@@ -528,7 +558,7 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
 
             //foreach (var peni in RecodeOwners.PeniAlgs)
             //{
-            //    int balanceKod = resourceRecode[peni.Vid]*10000 + OwnersRecode[peni.Vid][peni.OwnerId];
+            //    int balanceKod = resourceRecode[peni.Vid] * 10000 + OwnersRecode[peni.Vid][peni.OwnerId];
             //    if (result.Contains(balanceKod)) continue;
             //    sb.AppendLine(balanceKod.ToString());
             //}
@@ -3420,7 +3450,7 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                     BIRTHDATE = kvcCitizen.ДатаРождения,
                     DOCTYPEID = kvcCitizen.КодДокумента != 0 ? kvcCitizen.КодДокумента - 1 + 200000 : (int?)null,
                     DEATHDATE = kvcCitizen.ДатаСмерти,
-                    HIDDEN = abonent.СостояниеЛс == 5 || kvcCitizen.СтатусРегистрации == 9 ? 1 : 0,
+                    HIDDEN = abonent.СостояниеЛс == 5 || kvcCitizen.СтатусРегистрации == 9 || kvcCitizen.СтатусСобственности == 2 || kvcCitizen.СтатусСобственности == 4 ? 1 : 0,
                     EGRPNUMBER = kvcCitizen.НомерЕГРП,
                     EGRPDATE = kvcCitizen.ДатаВыдачиЕГРП
                 };
@@ -3484,6 +3514,12 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                     {
                         citizen.STATUSID = 3;
                     }
+                }
+
+                if (kvcCitizen.ДатаОкончанияСобственности != null)
+                {
+                    citizen.STATUSID = 3;
+                    citizen.STATUSDATE = kvcCitizen.ДатаОкончанияСобственности;
                 }
 
                 citizen.OWNERSHIPTYPE = citizen.STATUSID == 1 ? 2 : (int?)null;

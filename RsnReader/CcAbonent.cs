@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.OleDb;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace RsnReader
 {
@@ -120,6 +122,8 @@ namespace RsnReader
 
             public string НомерЕГРП;
             public DateTime? ДатаВыдачиЕГРП;
+
+            public DateTime? ДатаОкончанияСобственности;
 
             public List<Relation> РодственныеСвязи;
             public LsKvc LsKvc;
@@ -324,8 +328,8 @@ namespace RsnReader
                     _currentCitizenNumbers.Add(lsKvc.Ls, 1);
 
                 citizen.НомерЖителя = _currentCitizenNumbers[lsKvc.Ls];
-                citizen.ПризнакОтветственного = DataRowStringToCheck(row[5]) == "да" ? (byte)1 : (byte)0;
-                switch (DataRowStringToCheck(row[10]))
+                citizen.ПризнакОтветственного = DataRowStringToCheck(row[(int)OdantExcelFields.IsMain]) == "да" ? (byte)1 : (byte)0;
+                switch (DataRowStringToCheck(row[(int)OdantExcelFields.OwnershipType]))
                 {
                     case "не собств.":
                         citizen.СтатусСобственности = 0;
@@ -348,19 +352,20 @@ namespace RsnReader
                         break;
                     default:
                         citizen.СтатусСобственности = 0;
+                        Task.Factory.StartNew(() => MessageBox.Show($"Необработанный вид собственности: {row[(int)OdantExcelFields.OwnershipType]}"));
                         break;
                 }
-                if (!String.IsNullOrWhiteSpace(row[24]?.ToString()))
+                if (!String.IsNullOrWhiteSpace(row[(int)OdantExcelFields.TempRegEndDate]?.ToString()))
                 {
                     ushort year, month;
-                    RsnHelper.ParseShortDate(Convert.ToUInt16(row[24]), out year, out month);
+                    RsnHelper.ParseShortDate(Convert.ToUInt16(row[(int)OdantExcelFields.TempRegEndDate]), out year, out month);
                     citizen.ДатаОкончанияВремРегистрации = new DateTime(year, month, 1);
                 }
-                if (!String.IsNullOrWhiteSpace(row[7]?.ToString())) citizen.ДатаРегистрации = Convert.ToDateTime(row[7]);
-                if (DataRowStringToCheck(row[8]) == "да") citizen.СтатусРегистрации = 3;
+                if (!String.IsNullOrWhiteSpace(row[(int)OdantExcelFields.RegDate]?.ToString())) citizen.ДатаРегистрации = Convert.ToDateTime(row[(int)OdantExcelFields.RegDate]);
+                //if (DataRowStringToCheck(row[8]) == "да") citizen.СтатусРегистрации = 3;
                 else
                 {
-                    switch (DataRowStringToCheck(row[21]))
+                    switch (DataRowStringToCheck(row[(int)OdantExcelFields.RegType]))
                     {
                         case "не зарегистрирован":
                             citizen.СтатусРегистрации = 0;
@@ -373,41 +378,46 @@ namespace RsnReader
                             break;
                         default:
                             citizen.СтатусРегистрации = 0;
+                            Task.Factory.StartNew(() => MessageBox.Show($"Необработанный вид регистрации: {row[(int)OdantExcelFields.RegType]}"));
                             break;
                     }
                 }
 
-                if (citizen.СтатусРегистрации == 3)
-                {
-                    ushort year, month;
-                    RsnHelper.ParseShortDate(Convert.ToUInt16(row[9]), out year, out month);
-                    citizen.ДатаОкончанияВыбытия = new DateTime(year, month, 1);
-                }
+                //if (citizen.СтатусРегистрации == 3)
+                //{
+                //    ushort year, month;
+                //    RsnHelper.ParseShortDate(Convert.ToUInt16(row[9]), out year, out month);
+                //    citizen.ДатаОкончанияВыбытия = new DateTime(year, month, 1);
+                //}
 
-                citizen.ФИО = row[2].ToString();
-                if (!IsEmptyExcelCell(row[4])) citizen.ДоляПлощади = row[4].ToString();
-                if (DataRowStringToCheck(row[6]) == "м") citizen.Пол = 1;
-                else if (DataRowStringToCheck(row[6]) == "ж") citizen.Пол = 2;
-                if (!String.IsNullOrWhiteSpace(row[3]?.ToString())) citizen.ДатаРождения = Convert.ToDateTime(row[3]);
-                if (!IsEmptyExcelCell(row[11]))
+                citizen.ФИО = row[(int)OdantExcelFields.Fio].ToString();
+                if (!IsEmptyExcelCell(row[(int)OdantExcelFields.OwnershipPart])) citizen.ДоляПлощади = row[(int)OdantExcelFields.OwnershipPart].ToString();
+                if (DataRowStringToCheck(row[(int)OdantExcelFields.Sex]) == "м") citizen.Пол = 1;
+                else if (DataRowStringToCheck(row[(int)OdantExcelFields.Sex]) == "ж") citizen.Пол = 2;
+                if (!String.IsNullOrWhiteSpace(row[(int)OdantExcelFields.BirthDate]?.ToString())) citizen.ДатаРождения = Convert.ToDateTime(row[(int)OdantExcelFields.BirthDate]);
+                if (!IsEmptyExcelCell(row[(int)OdantExcelFields.DocSeries]))
                 {
                     citizen.КодДокумента = 1;
-                    citizen.СерияДокумента = row[11].ToString();
-                    if (!IsEmptyExcelCell(row[12])) citizen.НомерПаспорта = Convert.ToUInt32(row[12]);
-                    if (!IsEmptyExcelCell(row[13])) citizen.ДатаВыдачиДокумента = Convert.ToDateTime(row[13]);
-                    if (!IsEmptyExcelCell(row[14])) citizen.КемВыданДокумент = row[14].ToString();
+                    citizen.СерияДокумента = row[(int)OdantExcelFields.DocSeries].ToString();
+                    if (!IsEmptyExcelCell(row[(int)OdantExcelFields.DocNumber])) citizen.НомерПаспорта = Convert.ToUInt32(row[(int)OdantExcelFields.DocNumber]);
+                    if (!IsEmptyExcelCell(row[(int)OdantExcelFields.DocDate])) citizen.ДатаВыдачиДокумента = Convert.ToDateTime(row[(int)OdantExcelFields.DocDate]);
+                    if (!IsEmptyExcelCell(row[(int)OdantExcelFields.WhoGaveDoc])) citizen.КемВыданДокумент = row[(int)OdantExcelFields.WhoGaveDoc].ToString();
                 }
-                else if (!IsEmptyExcelCell(row[16]))
+                else if (!IsEmptyExcelCell(row[(int)OdantExcelFields.CertificateSeries]))
                 {
                     citizen.КодДокумента = 2;
-                    citizen.СерияДокумента = row[16].ToString();
-                    if (!IsEmptyExcelCell(row[17])) citizen.НомерПаспорта = Convert.ToUInt32(row[17]);
-                    if (!IsEmptyExcelCell(row[18])) citizen.ДатаВыдачиДокумента = Convert.ToDateTime(row[18]);
+                    citizen.СерияДокумента = row[(int)OdantExcelFields.CertificateSeries].ToString();
+                    if (!IsEmptyExcelCell(row[(int)OdantExcelFields.CertificateNumber])) citizen.НомерПаспорта = Convert.ToUInt32(row[(int)OdantExcelFields.CertificateNumber]);
+                    if (!IsEmptyExcelCell(row[(int)OdantExcelFields.CertificateDate])) citizen.ДатаВыдачиДокумента = Convert.ToDateTime(row[(int)OdantExcelFields.CertificateDate]);
                 }
-                if (!IsEmptyExcelCell(row[20])) citizen.Гражданство = row[20].ToString();
-                if (!IsEmptyExcelCell(row[22])) citizen.НомерЕГРП = row[22].ToString();
-                if (!IsEmptyExcelCell(row[23])) citizen.ДатаВыдачиЕГРП = Convert.ToDateTime(row[23]);
-                if (!IsEmptyExcelCell(row[19])) citizen.МестоРождения = row[19].ToString();
+                if (!IsEmptyExcelCell(row[(int)OdantExcelFields.Citizenship])) citizen.Гражданство = row[(int)OdantExcelFields.Citizenship].ToString();
+                if (!IsEmptyExcelCell(row[(int)OdantExcelFields.Egrp])) citizen.НомерЕГРП = row[(int)OdantExcelFields.Egrp].ToString();
+                if (!IsEmptyExcelCell(row[(int)OdantExcelFields.EgrpDate])) citizen.ДатаВыдачиЕГРП = Convert.ToDateTime(row[(int)OdantExcelFields.EgrpDate]);
+                if (!IsEmptyExcelCell(row[(int)OdantExcelFields.BirthPlace])) citizen.МестоРождения = row[(int)OdantExcelFields.BirthPlace].ToString();
+
+                if (!IsEmptyExcelCell(row[(int)OdantExcelFields.DeleteDate])) citizen.ДатаСнятияСРегистрации = Convert.ToDateTime(row[(int)OdantExcelFields.DeleteDate]);
+                if (DataRowStringToCheck(row[(int) OdantExcelFields.IsDeleted]) == "да") citizen.СтатусРегистрации = 9;
+                if (!IsEmptyExcelCell(row[(int)OdantExcelFields.OwnerDeleteDate])) citizen.ДатаОкончанияСобственности = Convert.ToDateTime(row[(int)OdantExcelFields.OwnerDeleteDate]);
 
                 return citizen;
             }
@@ -420,6 +430,36 @@ namespace RsnReader
             private static bool IsEmptyExcelCell(object obj)
             {
                 return String.IsNullOrWhiteSpace(obj?.ToString());
+            }
+
+            private enum OdantExcelFields
+            {
+                Address = 0,
+                Ls,
+                Fio,
+                BirthDate,
+                OwnershipPart,
+                IsMain,
+                Sex,
+                RegDate,
+                OwnerDeleteDate,
+                DeleteDate,
+                IsDeleted,
+                OwnershipType,
+                DocSeries,
+                DocNumber,
+                DocDate,
+                WhoGaveDoc,
+                SubdivisionId,
+                CertificateSeries,
+                CertificateNumber,
+                CertificateDate,
+                BirthPlace,
+                Citizenship,
+                RegType,
+                Egrp,
+                EgrpDate,
+                TempRegEndDate
             }
         }
 
