@@ -23,6 +23,12 @@ BEGIN
     WHERE rdb$generators.rdb$generator_name = 'DOCUMENTS_GEN'
     INTO :cnt;
     */
+	if (GENCHANGEDOC <> 1) then
+	begin
+		documentcd = GEN_ID(DOCUMENTS_GEN, 1);
+		INSERT INTO documents (documentcd, registerusercd, otvetstvusercd, docname, factdocumentdate)
+			VALUES (:documentcd, 1, 1, 'Импорт количественных характеристик', :date_);
+	end
 	oldlshet = '-1';
     FOR SELECT lshet, charcd, value_, date_
         FROM cnv$chars
@@ -31,16 +37,15 @@ BEGIN
     DO BEGIN
 		if (GENCHANGEDOC = 1) then
 		begin
-		if (lshet <> oldlshet) then
-		begin
-			documentcd = GEN_ID(DOCUMENTS_GEN, 1);
-			INSERT INTO documents (documentcd, registerusercd, otvetstvusercd, docname, factdocumentdate)
-				VALUES (:documentcd, 1, 1, 'Импорт количественных характеристик', :date_);
+			if (lshet <> oldlshet) then
+			begin
+				documentcd = GEN_ID(DOCUMENTS_GEN, 1);
+				INSERT INTO documents (documentcd, registerusercd, otvetstvusercd, docname, factdocumentdate)
+					VALUES (:documentcd, 1, 1, 'Импорт количественных характеристик', :date_);
+			end
 		end
-		end
-		else documentcd = null;
-        INSERT INTO ccharsabonentlist (lshet, kodccharslist, abonentcchardate, documentcd, significance)
-            VALUES (:lshet, :charcd, :date_, :documentcd, :value_);
+		INSERT INTO ccharsabonentlist (lshet, kodccharslist, abonentcchardate, documentcd, significance)
+			VALUES (:lshet, :charcd, :date_, :documentcd, :value_);
 		oldlshet = :lshet;
     END
 
