@@ -46,6 +46,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "LGOTSUMMA",
                 "CNTRSIND",
                 "COUNTERS",
+                "COUNTERTYPES",
                 "DOGOVOR",
                 "EQUIPMENT",
                 "GCOUNTER",
@@ -150,6 +151,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_00950_COUNTERSTYPES");
                 l.Add("CNV_01000_COUNTERS");
                 l.Add("CNV_01050_GROUPCOUNTERS");
+                l.Add("CNV_01100_COUNTERTYPES");
                 l.Add("CNV_01300_SOURCEDOC");
                 l.Add("CNV_01400_OPLATA");
                 l.Add("CNV_01500_SALDO");

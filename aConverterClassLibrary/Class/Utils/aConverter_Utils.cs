@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Data;
 using System.Data.OleDb;
+using System.Management.Instrumentation;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using aConverterClassLibrary.Class.Utils;
+using DbfClassLibrary;
 
 namespace aConverterClassLibrary
 {
-    public class Utils
+    public static class Utils
     {
         public static string CurrentPath
         {
@@ -107,32 +112,96 @@ namespace aConverterClassLibrary
             }
         }
 
+        private static void ConnectToExcel(string fileName, string sheetName, out OleDbConnection odconn, out OleDbCommand cmd)
+        {
+            string excelProvider = GetExcelProvider();
+            if (excelProvider == null)
+                throw new Exception($"Не установлен ни один из поставщиков Excel\r\n{String.Join("\r\n", ExcelProviders)}");
+            string connectionString = String.Format("Provider={1};Data Source={0};Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=1\";", fileName, excelProvider);
+            odconn = null;
+            cmd = null;
+            try
+            {
+                odconn = new OleDbConnection(connectionString);
+                odconn.Open();
+                if (sheetName == null) sheetName = odconn.GetSchema("Tables").Rows[0][2].ToString().Replace("$", "");
+                cmd = new OleDbCommand(String.Format("select * from `{0}$`", sheetName.Replace(".", "#")), odconn);
+            }
+            catch
+            {
+                cmd?.Dispose();
+                odconn?.Dispose();
+            }
+        }
+
         /// <summary>
         /// Читает данные из Excel-листа
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="scheetName"></param>
+        /// <param name="fileName">Имя файла</param>
+        /// <param name="sheetName">Имя листа (если передать null, возмется первый лист)</param>
         /// <returns></returns>
-        public static DataTable ReadExcelFile(string fileName, string scheetName)
+        public static DataTable ReadExcelFile(string fileName, string sheetName)
         {
-            string connectionString = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=1\";", fileName);
-            using (OleDbConnection odconn = new OleDbConnection(connectionString))
+            OleDbConnection connection;
+            OleDbCommand cmd;
+            ConnectToExcel(fileName, sheetName, out connection, out cmd);
+            using (connection)
+            using (cmd)
             {
-                odconn.Open();
-                var _dt = odconn.GetSchema("Tables");
-                string s = "";
-                foreach (DataRow dr in _dt.Rows)
+                var odr = new OleDbDataAdapter(cmd);
+                var dt = new DataTable();
+                odr.Fill(dt);
+                return dt;
+            }
+        }
+
+        public static void ReadExcelFileByRow(string fileName, string sheetName, Action<DataRow> drAction)
+        {
+            OleDbConnection connection;
+            OleDbCommand cmd;
+            ConnectToExcel(fileName, sheetName, out connection, out cmd);
+            using (connection)
+            using (cmd)
+            using (var reader = cmd.ExecuteReader())
+            using (var readerToDataRow = new ReaderToDataRow(reader))
+            {
+                while (reader.Read())
                 {
-                    s += dr[2] + "\r\n";
-                }
-                using (OleDbCommand odc = new OleDbCommand(String.Format("select * from `{0}$`", scheetName.Replace(".","#")) , odconn))
-                {
-                    OleDbDataAdapter odr = new OleDbDataAdapter(odc);
-                    DataTable dt = new DataTable();
-                    odr.Fill(dt);
-                    return dt;
+                    drAction(readerToDataRow.GetDataRow(reader));
                 }
             }
+        }
+
+        private static readonly string[] ExcelProviders =
+        {
+            "Microsoft.ACE.OLEDB.16.0",
+            "Microsoft.ACE.OLEDB.15.0",
+            "Microsoft.ACE.OLEDB.12.0",
+            "Microsoft.Jet.OLEDB.4.0",
+        };
+
+        public static string GetExcelProvider()
+        {
+            string[] installedProviders;
+            using (var dt = new OleDbEnumerator().GetElements())
+            {
+                installedProviders = new string[dt.Rows.Count];
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    installedProviders[i] = dt.Rows[i]["SOURCES_NAME"].ToString().Trim().ToLower();
+                }
+            }
+
+            string resultProvider = null;
+            foreach (var excelProvider in ExcelProviders)
+            {
+                if (installedProviders.Contains(excelProvider.Trim().ToLower()))
+                {
+                    resultProvider = excelProvider;
+                    break;
+                }
+            }
+            return resultProvider;
         }
 
         public static string[] SplitFio(string fio)
@@ -144,7 +213,54 @@ namespace aConverterClassLibrary
             return fioa;
         }
 
+        public static string GetDescription<TEnum>(this TEnum enumValue)
+        {
+            FieldInfo fi = enumValue.GetType().GetField(enumValue.ToString());
+            var descriptionAttribute = (DescriptionAttribute[]) fi.GetCustomAttributes(typeof (DescriptionAttribute), false);
+            return descriptionAttribute.Length > 0 ? descriptionAttribute[0].Description : enumValue.ToString();
+        }
 
+        public static string GetMD5Hash(string input)
+        {
+            if (input == null) return null;
+
+            MD5 md5 = new MD5CryptoServiceProvider();
+
+            //compute hash from the bytes of text
+            md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            //get hash result after compute it
+            var result = md5.Hash;
+
+            var strBuilder = new StringBuilder();
+            for (var i = 0; i < result.Length; i++)
+            {
+                //change it into 2 hexadecimal digits
+                //for each byte
+                strBuilder.Append(result[i].ToString("x2"));
+            }
+
+            return strBuilder.ToString();
+        }
+
+        public static void ExecuteQueryByRow(this TableManager tmsource, string sql, Action<DataRow> drAction)
+        {
+            using (var reader = tmsource.ExecuteQueryToReader(sql))
+            using (var readerToDataRow = new ReaderToDataRow(reader))
+            {
+                while (reader.Read())
+                {
+                    drAction(readerToDataRow.GetDataRow(reader));
+                }
+            }
+        }
+
+        public static OleDbCommand CreateCommand(this OleDbConnection connection, string query)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = query;
+            return cmd;
+        }
     }
 
     public class ParseAddress

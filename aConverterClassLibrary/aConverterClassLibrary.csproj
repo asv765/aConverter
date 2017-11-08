@@ -134,7 +134,8 @@
     <Compile Include="Class\Statistic\FdbStatistic.cs" />
     <Compile Include="Class\Statistic\Statistic.cs" />
     <Compile Include="Class\Utils\aConverter_Utils.cs" />
-    <Compile Include="Class\Utils\RecodeTable.cs" />
+    <Compile Include="Class\Utils\DbfConnection.cs" />
+    <Compile Include="Class\Utils\ReaderToDataRow.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -180,6 +181,7 @@
     <Compile Include="RecordsDataAccessORM\CNV_COUNTER.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_COUNTERTYPE.generated.cs" />
     <Compile Include="RecordsDataAccessORM\CNV_DOGOVOR.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
@@ -237,6 +239,7 @@
     <Compile Include="RecordsDataAccessORM\PartialCITIZENRELATIONSRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCNTRSINDRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialCOUNTERTYPERecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialHADDCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialLCHARHOUSESRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialLCHARRecord.cs" />
@@ -248,6 +251,7 @@
     <Compile Include="RecordsDataAccessORM\STREET.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\Utils\AddCharsRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\CitizenRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\HcharsRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\OrmRecordUtils.cs" />
@@ -326,6 +330,8 @@
     <Content Include="Resources\CNV_CITIZENMIGRATION.sql" />
     <None Include="Resources\CNV_DOCUMENTNUMERATORTABLE.sql" />
     <None Include="Resources\CNV_DOCUMENTNUMERATORTABLE_d.sql" />
+    <None Include="Resources\CNV_COUNTERTYPES.SQL" />
+    <None Include="Resources\CNV_COUNTERTYPES_d.sql" />
     <Content Include="Resources\CNV_DOGOVOR.sql" />
     <Content Include="Resources\CNV_DOGOVOR_d.sql" />
     <Content Include="Resources\CNV_EQUIPMENT.sql" />
@@ -378,6 +384,7 @@
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_00855_LCHARSHOUSES.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01050_GROUPCOUNTERS.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_00150_SETTLEMENT.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_01100_COUNTERTYPES.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01400_OPLATA.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01500_SALDO.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01600_NACHISLIMPORT.sql" />

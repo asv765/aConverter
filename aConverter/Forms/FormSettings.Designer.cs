@@ -48,12 +48,14 @@
             this.labelFirebirdConnectionString = new System.Windows.Forms.Label();
             this.labelPatternsPath = new System.Windows.Forms.Label();
             this.textBoxPatternsPath = new System.Windows.Forms.TextBox();
+            this.labelIBEScriptPath = new System.Windows.Forms.Label();
+            this.textBoxIBEScriptPath = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Location = new System.Drawing.Point(552, 571);
+            this.buttonSave.Location = new System.Drawing.Point(552, 617);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 0;
@@ -64,7 +66,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(633, 571);
+            this.buttonCancel.Location = new System.Drawing.Point(633, 617);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -247,14 +249,34 @@
             this.textBoxPatternsPath.Size = new System.Drawing.Size(693, 20);
             this.textBoxPatternsPath.TabIndex = 37;
             // 
+            // labelIBEScriptPath
+            // 
+            this.labelIBEScriptPath.AutoSize = true;
+            this.labelIBEScriptPath.Location = new System.Drawing.Point(12, 569);
+            this.labelIBEScriptPath.Name = "labelIBEScriptPath";
+            this.labelIBEScriptPath.Size = new System.Drawing.Size(110, 13);
+            this.labelIBEScriptPath.TabIndex = 41;
+            this.labelIBEScriptPath.Text = "Путь к IBEScript.exe:";
+            // 
+            // textBoxIBEScriptPath
+            // 
+            this.textBoxIBEScriptPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxIBEScriptPath.Location = new System.Drawing.Point(12, 585);
+            this.textBoxIBEScriptPath.Name = "textBoxIBEScriptPath";
+            this.textBoxIBEScriptPath.Size = new System.Drawing.Size(690, 20);
+            this.textBoxIBEScriptPath.TabIndex = 42;
+            // 
             // FormSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(720, 606);
+            this.ClientSize = new System.Drawing.Size(720, 652);
             this.Controls.Add(this.labelCoverFileBodyPattern);
             this.Controls.Add(this.textBoxCoverFileBodyPattern);
+            this.Controls.Add(this.textBoxIBEScriptPath);
             this.Controls.Add(this.textBoxGeneratedFilePath);
+            this.Controls.Add(this.labelIBEScriptPath);
             this.Controls.Add(this.labelGeneratedFilePath);
             this.Controls.Add(this.textBoxSourceDBFFilePath);
             this.Controls.Add(this.labelSourceDBFFiles);
@@ -302,5 +324,7 @@
         private System.Windows.Forms.Label labelFirebirdConnectionString;
         private System.Windows.Forms.Label labelPatternsPath;
         private System.Windows.Forms.TextBox textBoxPatternsPath;
+        private System.Windows.Forms.Label labelIBEScriptPath;
+        private System.Windows.Forms.TextBox textBoxIBEScriptPath;
     }
 }

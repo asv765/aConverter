@@ -3,7 +3,8 @@ SET TERM ^ ;
 create or alter procedure CNV$CNV_01000_COUNTERS (
     NEEDDELETE smallint = 0,
     GENERATECD smallint = 1,
-	GENCHANGEDOC smallint = 1)
+	GENCHANGEDOC smallint = 1,
+	WITHPERERASHETCASE smallint = 1)
 as
 declare variable LSHET varchar(10);
 declare variable COUNTERID varchar(20);
@@ -38,6 +39,10 @@ declare variable TARGETNEGATIVEBALANCE_KOD integer;
 declare variable GROUPCOUNTERMODULEID integer;
 declare variable KODREGIM integer;
 declare variable NOCALCCHILDBALANCES integer;
+declare variable year_ integer;
+declare variable month_ integer;
+declare variable day_ integer;
+declare variable casetype integer;
 begin
 
   if (NEEDDELETE = 1) then
@@ -138,12 +143,12 @@ begin
   from EXTORGSPR EOS
   where EOS.ISBASEORGANIZATION = 1
   into :BASEORG;
-  for select PE.EQUIPMENTID, CI.OLDIND, CI.OB_EM, CI.INDICATION, CI.INDDATE, CI.DOCUMENTCD, CI.INDTYPE
+  for select PE.EQUIPMENTID, CI.OLDIND, CI.OB_EM, CI.INDICATION, CI.INDDATE, CI.DOCUMENTCD, CI.INDTYPE, CI.CASETYPE
       from CNV$CNTRSIND CI
       inner join PARENTEQUIPMENT PE on CI.COUNTERID = PE.IMPORTTAG
 	  inner join RESOURCECOUNTERS RC on RC.KOD = PE.EQUIPMENTID
 	  where RC.COUNTER_LEVEL <> 1
-      into :EQUIPMENTID, :OLDIND, :OB_EM, :INDICATION, :INDDATE, :DOCUMENTCD, :INDTYPE
+      into :EQUIPMENTID, :OLDIND, :OB_EM, :INDICATION, :INDDATE, :DOCUMENTCD, :INDTYPE, :CASETYPE
   do
   begin
   if (DOCUMENTCD is not null) then
@@ -157,6 +162,18 @@ begin
     insert into COUNTERINDICATION (COUNTERINDICATIONFACTID, KOD, INDICATIONDATE, DOCUMENTCD, INDICATIONVALUE,
                                    PREVIOUSINDICATION, VOLUME, INDICATIONTYPE, DEPENDFROMCNTINDICATIONFACTID)
     values (null, :EQUIPMENTID, :INDDATE, :NEWDOCUMENTCD, :INDICATION, :OLDIND, :OB_EM, :INDTYPE, null);
+
+	if (WITHPERERASHETCASE = 1) then
+	begin
+		if (not exists(select 0 from PERERASHETCASE where CASEID = :NEWDOCUMENTCD and LSHET = :LSHET)) then
+		begin
+			year_ = extract(year from :INDDATE);
+			month_ = extract(month from :INDDATE);
+			day_ = extract(day from :INDDATE);
+			INSERT INTO PERERASHETCASE (CASEID, LSHET, NACHISLCASEID, AUTOUSE, IZMEN, FYEAR, FMONTH, FDAY, ISMONTH, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, CASETYPE)
+			VALUES (:NEWDOCUMENTCD, :LSHET, :NEWDOCUMENTCD, 0, 0, :year_, :month_, :day_, 0, :year_, :month_, :day_, :year_, :month_, :day_, :CASETYPE);
+		end
+	end
   end
 end^
 

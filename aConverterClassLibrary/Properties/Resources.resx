@@ -268,6 +268,9 @@
   <data name="CNV_CNV_01050_GROUPCOUNTERS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_01050_GROUPCOUNTERS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CNV_01100_COUNTERTYPES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_01100_COUNTERTYPES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CNV_01300_SOURCEDOC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_01300_SOURCEDOC.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -324,6 +327,12 @@
   </data>
   <data name="CNV_COUNTERS_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_counters_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_COUNTERTYPES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_COUNTERTYPES.SQL;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_COUNTERTYPES_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_COUNTERTYPES_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_DOCUMENTNUMERATORTABLE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_DOCUMENTNUMERATORTABLE.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

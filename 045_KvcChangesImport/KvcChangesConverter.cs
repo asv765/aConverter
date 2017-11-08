@@ -569,6 +569,10 @@ inner join extorgaccounts ea on ea.lshet = a.lshet and ea.extorgcd = 1";
         protected override string FileDialogTitle => "Выберите файлы с изменениями граждан";
         protected override void DoKvcChangesConvert()
         {
+            BufferEntitiesManager.DropTableData("CNV$CITIZENS");
+            BufferEntitiesManager.DropTableData("CNV$CITIZENMIGRATION");
+            BufferEntitiesManager.DropTableData("CNV$CITIZENRELATIONS");
+
             var lc = new List<CNV_CITIZEN>();
             var lcr = new List<CNV_CITIZENRELATIONS>();
             var lcm = new List<CNV_CITIZENMIGRATION>();
@@ -629,7 +633,7 @@ inner join extorgaccounts ea on ea.lshet = a.lshet and ea.extorgcd = 1";
 
             ConvertChanges<CcChangeFactory>(changeRecord =>
             {
-                var record = (CcChangeRecord) changeRecord;
+                var record = (CcChangeRecord) changeRecord;              
 
                 string lshet;
                 if (!Consts.LsDic.TryGetValue(record.LsKvc.Ls, out lshet))

@@ -26,7 +26,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
             ToSql(_nAME),
             ToSql(_sTATUSID),
             ToSql(_sTATUSDATE),
-            _cOUNTER_LEVEL,
+            ToSql(_cOUNTER_LEVEL),
             ToSql(_tARGETBALANCE_KOD),
             ToSql(_dISTRIBUTINGMETHOD),
             ToSql(_tARGETNEGATIVEBALANCE_KOD),

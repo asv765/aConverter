@@ -109,7 +109,7 @@ begin
     documentcd = (select documentcd from createdocument('Установка миграции на основе сконвертированной регистрации'));
     for select c.cityzen_id, c.startdate, c.enddate, c.registrationtype
         from cityzens c
-        inner join cnv$citizens cc on iif(cc.uniquecitizenid is null, cast(cc.citizenid as varchar(45)), cc.uniquecitizenid) = c.uniquecityzenid
+        inner join cnv$citizens cc on iif(cc.uniquecitizenid is null, cast(cc.citizenid as varchar(45)), cc.uniquecitizenid) = c.uniquecityzenid and c.lshet = cc.lshet
         where c.startdate is not null or c.enddate is not null
     into :citizenid, :startdate, :enddate, :regtype
     do begin

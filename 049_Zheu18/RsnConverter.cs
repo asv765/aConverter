@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.Data;
+using System.Data.OleDb;
 using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using aConverterClassLibrary.Class.ConvertCases;
@@ -33,14 +34,15 @@ namespace _049_Zheu18
         /// <summary>
         /// В порядке убывания
         /// </summary>
-        public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01), new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01)/**/};
+        public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01)/*, new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01)/**/};
+        //public readonly static DateTime[] ConvertingDates = { new DateTime(2015, 08, 01), new DateTime(2015, 07, 01), new DateTime(2015, 06, 01), new DateTime(2015, 05, 01), new DateTime(2015, 04, 01), new DateTime(2015, 03, 01), new DateTime(2015, 02, 01), new DateTime(2015, 01, 01), new DateTime(2014, 12, 01), new DateTime(2014, 11, 01), new DateTime(2014, 10, 01),/**/};
         public const int InsertRecordCount = 1000;
         public const int CurrentYear = 2017;
-        public const int CurrentMonth = 06;
+        public const int CurrentMonth = 05;
         public static readonly int YearToConvert = ConvertingDates[0].Year;
         public static readonly int MonthToConvert = ConvertingDates[0].Month;
         public static readonly int NextYearToConvert = 2017;
-        public static readonly int NextMonthToConvert = 06;
+        public static readonly int NextMonthToConvert = 05;
         public static readonly int SprYearToConvert = 2017;
         public static readonly int SprMonthToConvert = 05;
         public static List<ReadRsnForm.LsNotInFile> LsNotInLastFile;
@@ -264,6 +266,21 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             IsChecked = false;
         }
 
+        public void SetLsFilter()
+        {
+            LsFilter = null;
+
+            //var tempFilter = new HashSet<string>();
+            //// Фильтр по тем, у кого найм жилья - Управление энергетики и жилищно-коммунального хозяйства г. Рязани.
+            //ConvertRsnFiles(rsnAbonent =>
+            //{
+            //    if (!rsnAbonent.Алгоритмы.Any(al => al.Вид == 16 && al.ХозяинВида == 1651)) return;
+            //    if (!tempFilter.Contains(rsnAbonent.LsKvc.Ls)) tempFilter.Add(rsnAbonent.LsKvc.Ls);
+            //}, null, RsnFilePath, true, ConvertingDates, WithRsn3);
+
+            //LsFilter = tempFilter;
+        }
+
         public override void DoKvcConvert()
         {
             LsDic = new Dictionary<string, string>();
@@ -327,17 +344,19 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             allDates = allDates.OrderByDescending(d => d).ToList();
             bool firstDate = WithRsn3;
             var allLs = LsDic.Select(l => l.Key).ToArray();
-            //foreach (var date in allDates)
-            //{
-            //    var allLsInFile = ReadRsnForm.GetAllLs(date, firstDate);
-            //    if (firstDate) firstDate = false;
-            //    LsLostedInFiles.Add(new ReadRsnForm.LsNotInFile
-            //    {
-            //        FileYear = date.Year,
-            //        FileMonth = date.Month,
-            //        LsList = allLs.Except(allLsInFile).ToArray()
-            //    });
-            //}
+            foreach (var date in allDates)
+            {
+                var allLsInFile = ReadRsnForm.GetAllLs(date, firstDate);
+                if (firstDate) firstDate = false;
+                LsLostedInFiles.Add(new ReadRsnForm.LsNotInFile
+                {
+                    FileYear = date.Year,
+                    FileMonth = date.Month,
+                    LsList = allLs.Except(allLsInFile).ToArray()
+                });
+            }
+
+            SetLsFilter();
 
             //var sb = new StringBuilder("");
             //foreach (var ls in LsDic)
@@ -735,7 +754,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             AbonentRecordUtils.SetUniqueHouseCd(la, 0);
             StepFinish();
 
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(la, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(la, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(la);
 
             FreeListMemory(la);
         }
@@ -1722,7 +1742,11 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                      }
                 }
             },
-            () => { if (ПроряжатьХарактеристики) lc = CharsRecordUtils.ThinOutList(lc, true); },
+                () =>
+                {
+                    if (ПроряжатьХарактеристики) lc = CharsRecordUtils.ThinOutList(lc, true);
+                    RemoveChars(lc);
+                },
             RsnFilePath, false, ConvertingDates, WithRsn3);
 
             StepStart(lc.Count);
@@ -1748,9 +1772,17 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             lc.RemoveAll(c => c == null);
             StepFinish();
 
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lc, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lc, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lc);
 
             FreeListMemory(lc);
+        }
+
+        private void RemoveChars(List<CNV_CHAR> lc)
+        {
+            //return;
+            int?[] needChars = {1, 2};
+            lc.RemoveAll(c => !needChars.Contains(c.CHARCD));
         }
     }
 
@@ -1793,8 +1825,9 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                             LcharLogicValues = groupByRegim.GroupBy(gr => gr.LcharId).Select(gr => new LogicValue(gr)).ToArray()
                         };
                     }
-                    regimRecode.Add(resourceRecode.First(rr => rr.Value == groupByResource.First().ResourceId).Key,
-                            regimLogicValues);
+
+                    var recode = resourceRecode.FirstOrDefault(rr => rr.Value == groupByResource.FirstOrDefault()?.ResourceId).Key;
+                    if (recode != 0) regimRecode.Add(recode,regimLogicValues);
                 }
             }
             StepFinish();
@@ -2135,7 +2168,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             },
             () =>
             {
-                if (ПроряжатьХарактеристики) lc = LcharsRecordUtils.ThinOutList(lc, true); 
+                if (ПроряжатьХарактеристики) lc = LcharsRecordUtils.ThinOutList(lc, true);
+                RemoveChars(lc);
             },
             RsnFilePath, false, ConvertingDates, WithRsn3);
 
@@ -2162,9 +2196,16 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             lc.RemoveAll(c => c == null);
             StepFinish();
 
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lc, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lc, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lc);
 
             FreeListMemory(lc);
+        }
+
+        private void RemoveChars(List<CNV_LCHAR> lc)
+        {
+            int?[] needChars = {101, 1, 37};
+            lc.RemoveAll(c => !needChars.Contains(c.LCHARCD));
         }
 
         public override void ActionAfterConvert()
@@ -2209,7 +2250,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
 
                 }, NextYearToConvert, NextMonthToConvert, false, true);
 
-                if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(llc, InsertRecordCount, false);
+                //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(llc, InsertRecordCount, false);
+                if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(llc);
             }
         }
 
@@ -2433,7 +2475,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
 
             lc = LcharsRecordUtils.ThinOutList(lc, true);
 
-            SaveListInsertSQL(lc, InsertRecordCount);
+            //SaveListInsertSQL(lc, InsertRecordCount);
+            BufferEntitiesManager.SaveDataToBufferIBScript(lc);
         }
     }
 
@@ -2573,7 +2616,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                     }
                 }, RsnFilePath, LsNotInLastFile, true, ConvertingDates, WithRsn3);
             }
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcc, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcc, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lcc);
 
             FreeListMemory(lcc);
         }
@@ -2777,7 +2821,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                     lci.Add(indication);
                 }
             }, null, RsnFilePath, false, ConvertingDates, WithRsn3);
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lci, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lci, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lci);
 
             FreeListMemory(lci);
         }
@@ -3154,6 +3199,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                     });
                 }
 
+                RemoveNach(lnach);
+
                 var allSaldoVids = rsnAbonent.СальдоНаНачало.Select(s => s.Вид).Union(rsnAbonent.СальдоНаКонец.Select(s => s.Вид)).ToArray();
 
                 for (int j = 0; j < allSaldoVids.Length; j++)
@@ -3175,11 +3222,15 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                         EDEBET = esaldo == null ? 0 : esaldo.Сумма
                     });
                 }
+
+                RemoveSaldo(lsaldo);
             }, () =>
             {
-                if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lnach, InsertRecordCount);
+                //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lnach, InsertRecordCount);
+                if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lnach);
                 FreeListMemory(lnach);
-                if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lsaldo, InsertRecordCount);
+                //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lsaldo, InsertRecordCount);
+                if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lsaldo);
                 FreeListMemory(lsaldo);
 
                 string oplataFileName = SutFile + RsnHelper.GetShortDate(CurrnetConvertDate.Year, CurrnetConvertDate.Month);
@@ -3231,7 +3282,10 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                     StepFinish();
                 }
 
-                if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lopl, InsertRecordCount);
+                RemoveOplata(lopl);
+
+                //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lopl, InsertRecordCount);
+                if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lopl);
                 FreeListMemory(lopl);
 
             }, RsnFilePath, false, ConvertingDates);
@@ -3274,10 +3328,26 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                         AUTOUSE = 0
                     });
                 }
-                SaveListInsertSQL(lnach, InsertRecordCount);
+                //SaveListInsertSQL(lnach, InsertRecordCount);
+                BufferEntitiesManager.SaveDataToBufferIBScript(lnach);
             }
         }
 
+
+        private void RemoveNach(List<CNV_NACH> ln)
+        {
+            ln.RemoveAll(n => n.SERVICECD != 11651);
+        }
+
+        private void RemoveOplata(List<CNV_OPLATA> lo)
+        {
+            lo.RemoveAll(o => o.SERVICECD != 11651);
+        }
+
+        private void RemoveSaldo(List<CNV_NACHOPL> ln)
+        {
+            ln.RemoveAll(n => n.SERVICECD != 11651);
+        }
 
         public static int CalcServiceCd(byte vid, RsnAbonent rsnAbonent)
         {
@@ -3397,8 +3467,10 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             CitizenRecordUtils.SetUniqueDorgcd(lc, maxOrgCd);
             StepFinish();
 
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lc, InsertRecordCount);
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcr, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lc, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lc);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcr, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lcr);
 
             FreeListMemory(lc);
             FreeListMemory(lcr);
@@ -3450,7 +3522,7 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                     BIRTHDATE = kvcCitizen.ДатаРождения,
                     DOCTYPEID = kvcCitizen.КодДокумента != 0 ? kvcCitizen.КодДокумента - 1 + 200000 : (int?)null,
                     DEATHDATE = kvcCitizen.ДатаСмерти,
-                    HIDDEN = abonent.СостояниеЛс == 5 || kvcCitizen.СтатусРегистрации == 9 || kvcCitizen.СтатусСобственности == 2 || kvcCitizen.СтатусСобственности == 4 ? 1 : 0,
+                    HIDDEN = /*abonent.СостояниеЛс == 5 ||*/ kvcCitizen.СтатусРегистрации == 9 /*|| kvcCitizen.СтатусСобственности == 2 || kvcCitizen.СтатусСобственности == 4*/ ? 1 : 0,
                     EGRPNUMBER = kvcCitizen.НомерЕГРП,
                     EGRPDATE = kvcCitizen.ДатаВыдачиЕГРП
                 };
@@ -3473,8 +3545,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
 
                 if (citizen.HIDDEN == 1)
                 {
-                    if (citizen.STARTDATE == null) citizen.STARTDATE = FakeStartDate;
-                    if (citizen.ENDDATE == null) citizen.ENDDATE = new DateTime(abonent.FileYear, abonent.FileMonth, 1);
+                    if (citizen.STARTDATE == null && citizen.ENDDATE != null) citizen.STARTDATE = FakeStartDate;
+                    if (citizen.ENDDATE == null && citizen.STARTDATE != null) citizen.ENDDATE = new DateTime(abonent.FileYear, abonent.FileMonth, 1);
                 }
 
                 string f, fi, o;
@@ -3668,6 +3740,7 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
                 case 4: return 5;
                 case 5: return 4;
                 case 9: return 3;
+                case 7: return 7;
                 default: throw new Exception($"Необработаный код статуса жителя квц {kvcStatus}");
             }
         }
@@ -3778,7 +3851,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             }
             , CcFileName, false, ConvertingDates, WithRsn3);
 
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcm, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcm, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lcm);
         }
     }
 
@@ -3825,7 +3899,8 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
 
             }, RsnFilePath, LsNotInLastFile, true, ConvertingDates, WithRsn3);
 
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcc, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcc, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lcc);
 
             FreeListMemory(lcc);
         }
@@ -4176,8 +4251,10 @@ delete from EXTORGSPR ex where ex.extorgcd <> 1;";
             llc.RemoveAll(c => c == null);
             StepFinish();
 
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcc, InsertRecordCount);
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(llc, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcc, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lcc);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(llc, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(llc);
 
             FreeListMemory(lcc);
             FreeListMemory(llc);
@@ -4211,7 +4288,6 @@ where c1.value_ = 0 and c1.date_ = (select min(c2.date_) from cnv$lcharhouses c2
 
         public override void DoKvcConvert()
         {
-            
             SetStepsCount(2 - 1 + ConvertingDates.Length);
             var lcc = new List<CNV_COUNTER>();
             var vids = spr1.GetSubSpr(Spr1.SubSpr.ВидыУслуг);
@@ -4550,7 +4626,8 @@ where c1.value_ = 0 and c1.date_ = (select min(c2.date_) from cnv$lcharhouses c2
                 }
             }
 
-            if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lp, InsertRecordCount);
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lp, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lp);
 
             FreeListMemory(lp);
         }
@@ -4995,15 +5072,15 @@ order by ae.lshet, er.equipmentid");
         public override void DoKvcConvert()
         {
             SetStepsCount(1);
-            StepStart(2);
+            StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            fbm.ExecuteQuery(@"insert into abonentadditionalchars (ADDITIONALCHARCD, LSHET, SIGNIFICANCE)
-                                select ADDCHARCD, lshet, ""VALUE"" from cnv$aaddchar ca
-                                where ca.addcharcd not in (6200602)");
-            Iterate();
-            fbm.ExecuteQuery(@"update abonentadditionalchars  aa
-                                set SIGNIFICANCE = (select ""VALUE"" from cnv$aaddchar ca where ca.lshet = aa.lshet and ca.addcharcd = 6200602)
-                                where aa.additionalcharcd = 6200602");
+            fbm.ExecuteQuery(@"merge into abonentadditionalchars ad
+using cnv$aaddchar ca on ca.lshet = ad.lshet and ca.addcharcd = ad.additionalcharcd
+when matched then
+    update set ad.significance = ca.""VALUE""
+when not matched then
+    insert(additionalcharcd, lshet, significance)
+    values(ca.addcharcd, ca.lshet, ca.""VALUE"")");
             StepFinish();
         }
     }
@@ -6382,6 +6459,194 @@ where c1.value_ = 0 and c1.date_ = (select min(c2.date_) from cnv$lcharhouses c2
             , CcFileName, false, ConvertingDates, WithRsn3);
 
             if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcm, InsertRecordCount);
+        }
+    }
+
+    public class GetRemovedOwner : KvcConvertCase
+    {
+        public GetRemovedOwner()
+        {
+            ConvertCaseName = "Получить отключенных поставщиков";
+            Position = 100016;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(4 + ConvertingDates.Length);
+            var lchars = new List<CNV_LCHAR>();
+            ConvertRsnFiles(rsnAbonent =>
+            {
+                var lshet = LsDic[rsnAbonent.LsKvc.Ls];
+                var longls = Int64.Parse(lshet);
+                foreach (var resource in resourceRecode)
+                {
+                    if (RsnHelper.PeniResources.Contains(resource.Key)) continue;
+                    var alg = rsnAbonent.Алгоритмы.FirstOrDefault(al => al.Вид == resource.Key);
+                    lchars.Add(new CNV_LCHAR
+                    {
+                        LSHET = lshet,
+                        SortLshet = longls,
+                        DATE_ = CurrnetConvertDate,
+                        LCHARCD = resourceRecode[resource.Key] + 100,
+                        VALUE_ = alg == null ? 0 : OwnersRecode[resource.Key][alg.ХозяинВида]
+                    });
+                }
+            },
+            () => lchars = LcharsRecordUtils.ThinOutList(lchars, true),
+            RsnFilePath, false, ConvertingDates, false);
+
+            /*  
+            StepStart(lchars.Count);
+            long lastLs = -1;
+            int? lastChar = -1;
+            for (int i = 0; i < lchars.Count; i++)
+            {
+                var chr = lchars[i];
+                if (chr.VALUE_ == 0 && (chr.SortLshet != lastLs || chr.LCHARCD != lastChar))
+                {
+                    lchars[i] = null;
+                }
+                else
+                {
+                    lastLs = chr.SortLshet;
+                    lastChar = chr.LCHARCD;
+                }
+                Iterate();
+            }
+            StepFinish();
+
+            StepStart(1);
+            lchars.RemoveAll(c => c == null);
+            StepFinish();
+
+            StepStart(1);
+            lchars = lchars
+                .GroupBy(lc => new {lc.LSHET, lc.LCHARCD})
+                .Select(glc =>
+                {
+                    var maxDate = glc.Max(lc => lc.DATE_);
+                    return glc.First(lc => lc.DATE_ == maxDate);
+                })
+                .ToList();
+            StepFinish();
+            */
+
+            StepStart(1);
+            BufferEntitiesManager.SaveDataToBufferIBScript(lchars);
+            //SaveListInsertSQL(lchars, InsertRecordCount);
+            StepFinish();
+
+            FreeListMemory(lchars);
+        }
+    }
+
+    public class AddMissingAddChars : KvcConvertCase
+    {
+        public AddMissingAddChars()
+        {
+            ConvertCaseName = "Дополнительные характеристики Специализированный ЖФ и Признак ТСЖ,ЖСК";
+            Position = 100017;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            if (LsDic == null || !LsDic.Any()) throw new Exception("Необходимо заполнить список лицевых счетов");
+
+            SetStepsCount(2 - 1 + ConvertingDates.Length);
+
+            var lcc = new List<CNV_AADDCHAR>();
+            ConvertUniqueRsnAbonents(rsnAbonent =>
+            {
+                string lshet;
+                if (!LsDic.TryGetValue(rsnAbonent.LsKvc.Ls, out lshet)) return;
+
+                lcc.Add(new CNV_AADDCHAR
+                {
+                    LSHET = lshet,
+                    ADDCHARCD = 756,
+                    VALUE = rsnAbonent.СпециализированныйЖилищныйФонд.ToString()
+                });
+                lcc.Add(new CNV_AADDCHAR
+                {
+                    LSHET = lshet,
+                    ADDCHARCD = 757,
+                    VALUE = rsnAbonent.ПризнакТсжЖск.ToString()
+                });
+
+            }, RsnFilePath, LsNotInLastFile, true, ConvertingDates, WithRsn3);
+
+            //if (ИнсертитьВоВременныеТаблицы) SaveListInsertSQL(lcc, InsertRecordCount);
+            if (ИнсертитьВоВременныеТаблицы) BufferEntitiesManager.SaveDataToBufferIBScript(lcc);
+
+            FreeListMemory(lcc);
+        }
+    }
+
+    public class FindEmptyFlats : KvcConvertCase
+    {
+        public FindEmptyFlats()
+        {
+            ConvertCaseName = "Поиск адресов без квартир (Задача 27845)";
+            Position = 100018;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            Spr[] flats = new Spr1(SprYearToConvert, SprMonthToConvert).GetSubSpr(Spr1.SubSpr.ОтклоненияДомовИКвартир).Where(s => s.R2 != 0).ToArray();
+            var fb = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            var badLs = new List<string>();
+            using (var dt = fb.ExecuteQuery(@"select a.lshet, ea.extlshet, a.flatno, a.flatpostfix
+from abonents a
+inner join extorgaccounts ea on ea.lshet = a.lshet and ea.extorgcd = 1"))
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    var abonent = new CNV_ABONENT
+                    {
+                        LSHET = dr["lshet"].ToString(),
+                        EXTLSHET = dr.IsNull("extlshet") ? null : dr["extlshet"].ToString(),
+                        FLATNO = dr.IsNull("flatno") ? (int?)null : Convert.ToInt32(dr["flatno"]),
+                        FLATPOSTFIX = dr.IsNull("flatpostfix") ? null : dr["flatpostfix"].ToString()
+                    };
+                    var lsKvc = new LsKvc(abonent.EXTLSHET, false);
+                    var flatKvc = flats.FirstOrDefault(f => f.R1 == lsKvc.Adr1 && f.R2 == lsKvc.Adr2);
+                    if (flatKvc == null) continue;
+                    if (String.IsNullOrWhiteSpace(flatKvc.Sr40) && (abonent.FLATNO != null || !String.IsNullOrWhiteSpace(abonent.FLATPOSTFIX)))
+                    {
+                        badLs.Add(abonent.LSHET);
+                    }
+                }
+            }
+            Clipboard.SetText(String.Join("\r\n", badLs));
+        }
+    }
+
+    public class FindBadGas : KvcConvertCase
+    {
+        public FindBadGas()
+        {
+            ConvertCaseName = "Поиск абонентов с газовым оборудованием, но без начислений (Задача 30230)";
+            Position = 100019;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(4 + ConvertingDates.Length);
+            var lsList = new List<string>();
+            ConvertRsnFiles(rsnAbonent =>
+            {
+                var alg = rsnAbonent.Алгоритмы.FirstOrDefault(al => al.Вид == 2);
+                if (alg == null) return;
+                if (rsnAbonent.ГазовоеОборудование == 0) return;
+                if (alg.Алгоритм > 0) return;
+                lsList.Add(rsnAbonent.LsKvc.ToString());
+            }, null, RsnFilePath, false, ConvertingDates, true);
+            lsList = lsList.Distinct().ToList();
+            Clipboard.SetText(String.Join("\r\n", lsList));
         }
     }
 

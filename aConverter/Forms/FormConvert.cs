@@ -272,6 +272,8 @@ namespace aConverter.Forms
                         File.AppendAllText("errors.txt", $"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}] {cc.ConvertCaseName}\r\n{errorMessage} \r\n");
                     }
                     dataGridViewConvertCase.Refresh();// -------------после 23
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
                 }
             }
             string finalMessage = "Конвертация выполнена успешно!\r\n" +

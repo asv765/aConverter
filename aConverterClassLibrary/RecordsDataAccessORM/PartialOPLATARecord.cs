@@ -11,14 +11,14 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
         public string InsertSql => string.Format(InsertSqlTemplate,
             ToSql(_lSHET),
             ToSql(_dOCUMENTCD),
-            _mONTH_,
-            _yEAR_,
+            ToSql(_mONTH_),
+            ToSql(_yEAR_),
             ToSql(_sUMMA),
             ToSql(_dATE_),
             ToSql(_dATE_VV),
-            _sOURCECD,
+            ToSql(_sOURCECD),
             ToSql(_sOURCENAME),
-            _sERVICECD,
+            ToSql(_sERVICECD),
             ToSql(_sERVICENAME),
             ToSql(_pRIM_));
     }

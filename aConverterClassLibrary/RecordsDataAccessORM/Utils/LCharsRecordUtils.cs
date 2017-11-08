@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
 {
@@ -109,6 +110,16 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             return rl;
         }
 
+        /// <summary>
+        /// Делает уникальный набор характеристик с ключом "лс,код характерстки, дата"
+        /// </summary>        
+        public static List<CNV_LCHAR> CreateUniqueLchars(List<CNV_LCHAR> llc)
+        {
+            return llc
+                .GroupBy(lc => new {lc.LSHET, lc.LCHARCD, lc.DATE_})
+                .Select(glc => glc.Last())
+                .ToList();
+        }
     }
 
     public class ClassLCharsRecode

@@ -58,16 +58,16 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 
         public string InsertSql => string.Format(InsertSqlTemplate,
             ToSql(_lSHET),
-            _mONTH_,
-            _yEAR_,
-            _mONTH2,
-            _yEAR2,
+            ToSql(_mONTH_),
+            ToSql(_yEAR_),
+            ToSql(_mONTH2),
+            ToSql(_yEAR2),
             ToSql(_bDEBET),
             ToSql(_fNATH),
             ToSql(_pROCHL),
             ToSql(_oPLATA),
             ToSql(_eDEBET),
-            _sERVICECD,
+            ToSql(_sERVICECD),
             ToSql(_sERVICENAME));
     }
 

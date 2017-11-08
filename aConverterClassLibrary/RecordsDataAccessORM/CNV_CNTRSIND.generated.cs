@@ -126,7 +126,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._iNDTYPE = value;
 			}
 		}
-		
-	}
+
+        private int? _cASETYPE;
+        public virtual int? CASETYPE
+        {
+            get
+            {
+                return this._cASETYPE;
+            }
+            set
+            {
+                this._cASETYPE = value;
+            }
+        }
+    }
 }
 #pragma warning restore 1591

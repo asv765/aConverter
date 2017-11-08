@@ -1394,9 +1394,9 @@ namespace RsnReader
         private void AbonentByLsKvcbutton_Click(object sender, EventArgs e)
         {
             RsnAbonent rsnAbonent = null;
-            int year = 2017;
-            int month = 05;
-            string fileName = ReadRsnForm.RsnFilePath + @"\rsn3";
+            int year = 2016;
+            int month = 07;
+            string fileName = ReadRsnForm.RsnFilePath + @"\rsn0";
             fileName += $"{year.ToString().Substring(2, 2)}{month:D2}";
             var rsnFile = new RsnFile(fileName);
             using (BinaryReader reader = new BinaryReader(File.OpenRead(fileName), System.Text.Encoding.GetEncoding(1251)))

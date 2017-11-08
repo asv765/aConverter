@@ -47,6 +47,7 @@ namespace aConverter.Forms
             aConverter_RootSettings.ConvertPath = textBoxConvertPath.Text;
             aConverter_RootSettings.CoverFileBodyPattern = textBoxCoverFileBodyPattern.Text;
             aConverter_RootSettings.GeneratedFilePath = textBoxGeneratedFilePath.Text;
+            aConverter_RootSettings.IBScriptPath = textBoxIBEScriptPath.Text;
         }
 
         private void loadConfigData()
@@ -66,6 +67,7 @@ namespace aConverter.Forms
             textBoxCoverFileBodyPattern.Text = aConverter_RootSettings.CoverFileBodyPattern; 
             textBoxPatternsPath.Text = aConverter_RootSettings.PatternsPath; // Путь к шаблонам
             textBoxConvertPath.Text = aConverter_RootSettings.ConvertPath; // Путь к модулям импорта
+            textBoxIBEScriptPath.Text = aConverter_RootSettings.IBScriptPath; // Путь к IBEScript
         }
 
         private void buttonCheckConnection_Click(object sender, EventArgs e)

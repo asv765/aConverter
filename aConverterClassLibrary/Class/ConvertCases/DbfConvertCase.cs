@@ -1,12 +1,16 @@
-﻿namespace aConverterClassLibrary
+﻿using aConverterClassLibrary.Class.Utils;
+
+namespace aConverterClassLibrary
 {
     public abstract class DbfConvertCase : ConvertCase
     {
-        public abstract void DoDbfConvert();
+        protected DbfManager DbfManager;
 
+        public abstract void DoDbfConvert();
 
         public sealed override void DoConvert()
         {
+            DbfManager = new DbfManager(aConverter_RootSettings.SourceDbfFilePath);
             InitializeManager(aConverter_RootSettings.SourceDbfFilePath);
             try
             {

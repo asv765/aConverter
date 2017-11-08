@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
 {
@@ -115,6 +116,13 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
             if (lr1.DATE_ > lr2.DATE_)
                 return 1;
             return 0;
+        }
+
+        public static List<CNV_HADDCHAR> ThinOutList(List<CNV_HADDCHAR> la)
+        {
+            return la.GroupBy(a => new { a.HOUSECD, a.ADDCHARCD })
+                .Select(ga => ga.Last())
+                .ToList();
         }
     }
 }

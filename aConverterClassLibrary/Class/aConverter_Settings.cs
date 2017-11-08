@@ -15,7 +15,17 @@ namespace aConverterClassLibrary
         {
             get
             {
-                return @"C:\Program Files\IbExpert\IBEScript.exe";
+                if (SettingsCaseId == -1) return "";
+                List<SettingsCase> lsc = ReadSettingsCase();
+                string rv = lsc[SettingsCaseId].IbescriptPath;
+                return rv;
+            }
+            set
+            {
+                if (SettingsCaseId == -1) return;
+                List<SettingsCase> lsc = ReadSettingsCase();
+                lsc[SettingsCaseId].IbescriptPath = value;
+                WriteSettingsCase(lsc);
             }
         }
 
@@ -585,6 +595,16 @@ namespace aConverterClassLibrary
         {
             get { return generatedFilePath; }
             set { generatedFilePath = value; }
+        }
+
+        private string ibescriptPath;
+        /// <summary>
+        /// Путь к IBEScript
+        /// </summary>
+        public string IbescriptPath
+        {
+            get { return ibescriptPath; }
+            set { ibescriptPath = value; }
         }
 
         public override string ToString()

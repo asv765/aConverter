@@ -31,7 +31,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
             ToSql(_pOSTINDEX),
             ToSql(_dUCD),
             ToSql(_dUNAME),
-            _iSDELETED,
+            ToSql(_iSDELETED),
             ToSql(_hOUSENO),
             ToSql(_hOUSEPOSTFIX),
             ToSql(_hOUSENOTE),

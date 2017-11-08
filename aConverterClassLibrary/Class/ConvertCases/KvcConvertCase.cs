@@ -13,6 +13,7 @@ namespace aConverterClassLibrary.Class.ConvertCases
     {
         public static Dictionary<string, long> LsMap;
         public static long FirstNotExistedLs;
+        public static HashSet<string> LsFilter;
 
         public int TotalConvertIterationCount;
         public int CurrentIteration;
@@ -76,7 +77,7 @@ namespace aConverterClassLibrary.Class.ConvertCases
             //return lsKvc.Ls == "001-001-01-001-0-33" || lsKvc.Ls == "212-022-11-002-0-04";
             //return lsKvc.StreetId == 226;
             //return lsKvc.StreetId == 110 && lsKvc.HouseId == 16;
-            return true;
+            return LsFilter == null || LsFilter.Count == 0 || LsFilter.Contains(lsKvc.Ls);
         }
 
         public virtual void ActionBeforeConvert() { }

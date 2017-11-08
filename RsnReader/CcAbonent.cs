@@ -281,7 +281,7 @@ namespace RsnReader
                 if (!row.IsNull(11) && row[11].ToString() != "0") ДатаРождения = row.ToDateTime(11);
                 if (!row.IsNull(12) && row[12].ToString() != "0") ДатаРегистрации = row.ToDateTime(12);
                 if (!row.IsNull(13) && row[13].ToString() != "0")
-                    if (СтатусРегистрации == 0)   // В выгрузке от ресурсников в эту дату проставлялось последнее выбытие (даже временное)
+                    if (СтатусРегистрации != 3)   // В выгрузке от ресурсников в эту дату проставлялось последнее выбытие (даже временное)
                         ДатаСнятияСРегистрации = row.ToDateTime(13);
                 if (!row.IsNull(14)) ПричинаВыписки = Convert.ToByte(row[14]);
                 if (!row.IsNull(15)) КодДокумента = Convert.ToByte(row[15]);
@@ -350,9 +350,13 @@ namespace RsnReader
                     case "ум.наним.":
                         citizen.СтатусСобственности = 4;
                         break;
+                    case "ум. не собственник":
+                        citizen.СтатусСобственности = 7;
+                        break;
                     default:
                         citizen.СтатусСобственности = 0;
-                        Task.Factory.StartNew(() => MessageBox.Show($"Необработанный вид собственности: {row[(int)OdantExcelFields.OwnershipType]}"));
+                        if (!String.IsNullOrWhiteSpace(DataRowStringToCheck(row[(int)OdantExcelFields.OwnershipType])))
+                            Task.Factory.StartNew(() => MessageBox.Show($"Необработанный вид собственности: {row[(int)OdantExcelFields.OwnershipType]}"));
                         break;
                 }
                 if (!String.IsNullOrWhiteSpace(row[(int)OdantExcelFields.TempRegEndDate]?.ToString()))
@@ -363,25 +367,26 @@ namespace RsnReader
                 }
                 if (!String.IsNullOrWhiteSpace(row[(int)OdantExcelFields.RegDate]?.ToString())) citizen.ДатаРегистрации = Convert.ToDateTime(row[(int)OdantExcelFields.RegDate]);
                 //if (DataRowStringToCheck(row[8]) == "да") citizen.СтатусРегистрации = 3;
-                else
+                //else
+                //{
+                switch (DataRowStringToCheck(row[(int)OdantExcelFields.RegType]))
                 {
-                    switch (DataRowStringToCheck(row[(int)OdantExcelFields.RegType]))
-                    {
-                        case "не зарегистрирован":
-                            citizen.СтатусРегистрации = 0;
-                            break;
-                        case "по месту жительства":
-                            citizen.СтатусРегистрации = 1;
-                            break;
-                        case "по месту пребывания":
-                            citizen.СтатусРегистрации = 2;
-                            break;
-                        default:
-                            citizen.СтатусРегистрации = 0;
+                    case "не зарегистрирован":
+                        citizen.СтатусРегистрации = 0;
+                        break;
+                    case "по месту жительства":
+                        citizen.СтатусРегистрации = 1;
+                        break;
+                    case "по месту пребывания":
+                        citizen.СтатусРегистрации = 2;
+                        break;
+                    default:
+                        citizen.СтатусРегистрации = 0;
+                        if (!String.IsNullOrWhiteSpace(DataRowStringToCheck(row[(int)OdantExcelFields.RegType])))
                             Task.Factory.StartNew(() => MessageBox.Show($"Необработанный вид регистрации: {row[(int)OdantExcelFields.RegType]}"));
-                            break;
-                    }
+                        break;
                 }
+                //}
 
                 //if (citizen.СтатусРегистрации == 3)
                 //{

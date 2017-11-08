@@ -9,8 +9,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
             "VALUES ({0}, {1}, {2}, {3});";
 
         public string InsertSql => string.Format(InsertSqlTemplate,
-            _cITIZENIDFROM,
-            _cITIZENIDTO,
+            ToSql(_cITIZENIDFROM),
+            ToSql(_cITIZENIDTO),
             ToSql(_rELATIONID),
             ToSql(_rELATIONNAME));
     }

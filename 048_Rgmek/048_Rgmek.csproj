@@ -42,6 +42,7 @@
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=3.0.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,14 +55,22 @@
     <Reference Include="Telerik.OpenAccess.35.Extensions, Version=2015.1.225.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddCharRecodeRecord.cs" />
+    <Compile Include="CommonAddCharRecord.cs" />
     <Compile Include="Records\AbonentRecord.cs" />
     <Compile Include="Records\CharsRecord.cs" />
     <Compile Include="Records\CntrsindRecord.cs" />
+    <Compile Include="Records\Cntrs_grRecord.cs" />
     <Compile Include="Records\CountersRecord.cs" />
+    <Compile Include="Records\FlCharsRecord.cs" />
+    <Compile Include="Records\HsCharsRecord.cs" />
     <Compile Include="Records\LCharsRecord.cs" />
+    <Compile Include="Records\LsCharsRecord.cs" />
+    <Compile Include="Records\NachExcelRecord.cs" />
     <Compile Include="Records\NachRecord.cs" />
     <Compile Include="Records\PaymentRecord.cs" />
     <Compile Include="Records\SummsRecord.cs" />
+    <Compile Include="Records\TarifRecord.cs" />
     <Compile Include="RgmekConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

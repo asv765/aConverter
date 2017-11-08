@@ -12,14 +12,49 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
     public struct CitizenCompare
     {
         public string Lshet;
-        public string Fio;
-        public DateTime BirthDate;
+        //public string Fio;
+        //public DateTime BirthDate;
+        public string CompareString;
 
         public CitizenCompare(CNV_CITIZEN cnvCitizen)
         {
             Lshet = cnvCitizen.LSHET;
-            Fio = GetFioForCompare((cnvCitizen.F ?? "") + (cnvCitizen.I ?? "") + (cnvCitizen.O ?? ""));
-            BirthDate = cnvCitizen.BIRTHDATE ?? DateTime.MinValue;
+            CompareString = GetCompareString(cnvCitizen);
+        }
+
+        private static string GetFioForCompare(string fio)
+        {
+            return fio.Replace(" ", "").ToLower();
+        }
+
+        private static string GetFioForCompare(string f, string i, string o)
+        {
+            return GetFioForCompare((f ?? "") + (i ?? "") + (o ?? ""));
+        }
+
+        private static string GetDateForComare(DateTime? date)
+        {
+            return (date ?? DateTime.MinValue).ToString("dd.MM.yyyy");
+        }
+
+        private static string GetHashString(string input)
+        {
+            return Utils.GetMD5Hash(input).ToLower();
+        }
+
+        public static string GetCompareString(string fio, DateTime? birthDate)
+        {
+            return GetHashString(GetFioForCompare(fio) + GetDateForComare(birthDate));
+        }
+
+        public static string GetCompareString(string f, string i, string o, DateTime? birthDate)
+        {
+            return GetHashString(GetFioForCompare(f, i, o) + GetDateForComare(birthDate));
+        }
+
+        public static string GetCompareString(CNV_CITIZEN c)
+        {
+            return GetCompareString(c.F, c.I, c.O, c.BIRTHDATE);
         }
 
         public static string GetNewUniqueId()
@@ -32,11 +67,6 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
 from systemvariables 
 where VARIABLENAME='DATABASE_IDENTIFER'")
                 .ToString();
-        }
-
-        public static string GetFioForCompare(string fio)
-        {
-            return fio.Replace(" ", "").Trim().ToLower();
         }
 
         public class CitizenIdForComare
@@ -81,12 +111,19 @@ where VARIABLENAME='DATABASE_IDENTIFER'")
                     var dr = dt.Rows[i];
                     tempCitizens[i] = new CityzenCompareOrm
                     {
-                        Compare = new CitizenCompare
+                        Compare = new CitizenCompare (new CNV_CITIZEN
                         {
-                            Lshet = dr[0].ToString(),
-                            Fio = GetFioForCompare((dr.IsNull(1) ? "" : dr[1].ToString()) + (dr.IsNull(2) ? "" : dr[2].ToString()) + (dr.IsNull(3) ? "" : dr[3].ToString())),
-                            BirthDate = dr.IsNull(4) ? DateTime.MinValue : Convert.ToDateTime(dr[4]),
-                        },
+                            LSHET = dr[0].ToString(),
+                            F = dr.IsNull(1) ? "" : dr[1].ToString(),
+                            I = dr.IsNull(2) ? "" : dr[2].ToString(),
+                            O = dr.IsNull(3) ? "" : dr[3].ToString(),
+                            BIRTHDATE = dr.IsNull(4) ? DateTime.MinValue : Convert.ToDateTime(dr[4]),
+                        }),
+                        //{
+                        //    Lshet = dr[0].ToString(),
+                        //    Fio = GetFioForCompare((dr.IsNull(1) ? "" : dr[1].ToString()) + (dr.IsNull(2) ? "" : dr[2].ToString()) + (dr.IsNull(3) ? "" : dr[3].ToString())),
+                        //    BirthDate = dr.IsNull(4) ? DateTime.MinValue : Convert.ToDateTime(dr[4]),
+                        //},
                         UniqueId = dr[5].ToString()
                     };
                 }
@@ -115,6 +152,7 @@ where VARIABLENAME='DATABASE_IDENTIFER'")
         public const string GetCitizensUniqueIdSql =
 @"select c.lshet, c.ctzfio, c.ctzname, c.ctzparentname, c.birthday, c.uniquecityzenid
 from cityzens c
-where c.hidden <> 1 and c.uniquecityzenid is not null";
+where c.uniquecityzenid is not null
+order by c.hidden asc";
     }
 }

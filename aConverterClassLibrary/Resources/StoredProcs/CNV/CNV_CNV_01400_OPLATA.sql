@@ -44,9 +44,9 @@ begin
               from cnv$cnv_documentnumerator(:pdkey, 'Пачка квитанций, сформирована при импорте оплаты', :date_vv, :date_vv, :baseorg)
               into :pdcd;
           update or insert into primarydoc
-               (primarydoccd, sourcedoccd, discountdateday, discountdatemonth, discountdateyear, savedtodb, savedwithwarnings)
+               (primarydoccd, sourcedoccd, discountdateday, discountdatemonth, discountdateyear, savedtodb, savedwithwarnings, paytotal, ticketscount)
              values
-               (:pdcd, :sourcecd, :dvday, :dvmonth, :dvyear, 1, 0);
+               (:pdcd, :sourcecd, :dvday, :dvmonth, :dvyear, 1, 0, -1, -1);
           olddate_vv = :date_vv;
           oldsourcecd = :sourcecd;
           oldlshet = '-1';
@@ -62,9 +62,9 @@ begin
        insert into PaySumma (PayFactCD, TicketCD, PrimaryDocCD, Balance_Kod, PayType, LShet, PaySum, PayMonth, PayYear, PayDateDay, PayDateMonth, PayDateYear, UserCD, Delta, Caseid)
           values (gen_id(PAYFACT_G,0), gen_id(PAYTICKET_G,0), :pdcd, :SERVICECD, 0, :LSHET, :SUMMA, :MONTH_, :YEAR_, :DDAY, :DMONTH, :DYEAR, 1, 0, :PSCASEID);
     end
-    update primarydoc set paytotal = (select sum(pf.paysum) from payticket pt inner join payfact pf on pt.ticketcd = pf.ticketcd where pt.primarydoccd = primarydoc.primarydoccd);
-    update primarydoc set ticketscount = (select count(pt.ticketcd) from payticket pt inner join payfact pf on pt.ticketcd = pf.ticketcd where pt.primarydoccd = primarydoc.primarydoccd);
-    update payfact set DISCOUNTRESOURCECD = (select balanceslist.kod from balanceslist where balanceslist.balance_kod = payfact.gazservicecd) where (payfact.gazservicecd is not null) and (payfact.gazservicecd <> 102);
+    update primarydoc set paytotal = (select sum(pf.paysum) from payticket pt inner join payfact pf on pt.ticketcd = pf.ticketcd where pt.primarydoccd = primarydoc.primarydoccd) where paytotal = -1;
+    update primarydoc set ticketscount = (select count(pt.ticketcd) from payticket pt inner join payfact pf on pt.ticketcd = pf.ticketcd where pt.primarydoccd = primarydoc.primarydoccd) where ticketscount = -1;
+    update payfact set DISCOUNTRESOURCECD = (select balanceslist.kod from balanceslist where balanceslist.balance_kod = payfact.gazservicecd) where (payfact.gazservicecd is not null) and (payfact.gazservicecd <> 102) and payfact.DISCOUNTRESOURCECD = -1;
 
 end^
 

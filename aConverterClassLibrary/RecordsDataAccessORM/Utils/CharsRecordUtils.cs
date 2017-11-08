@@ -96,5 +96,16 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 }
             }
         }
+
+        /// <summary>
+        /// Делает уникальный набор характеристик с ключом "лс,код характерстки, дата"
+        /// </summary>        
+        public static List<CNV_CHAR> CreateUniqueLchars(List<CNV_CHAR> lcc)
+        {
+            return lcc
+                .GroupBy(lc => new { lc.LSHET, lc.CHARCD, lc.DATE_ })
+                .Select(glc => glc.Last())
+                .ToList();
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     var row = dt.Rows[i];
-                    string currentLs = row[0].ToString();
+                    string currentLs = row[1].ToString();
                     if (currentLs == lastLs)
                     {
                         rows.Add(row);
