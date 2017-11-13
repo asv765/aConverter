@@ -93,7 +93,7 @@ namespace _048_Rgmek
             { 8, 6 }, //Электроплиты двуставочный
         };
 
-        public static readonly int CurrentMonth = 08;
+        public static readonly int CurrentMonth = 10;
         public static readonly int CurrentYear = 2017;
         public static readonly DateTime MinConvertDate = new DateTime(2017, 1, 1);
         public static readonly DateTime NullDate = new DateTime(1899, 12, 30);
@@ -188,8 +188,6 @@ namespace _048_Rgmek
             DataTable dt = Tmsource.GetDataTable("ABONENT");
             var lca = new List<CNV_ABONENT>();
 
-            //SaveList(lca, Consts.InsertRecordCount);
-
             var lsrecode = new Dictionary<string, long>();
             long lastls = 1010000000;
             var durecode = new Dictionary<string, long>();
@@ -213,9 +211,6 @@ namespace _048_Rgmek
                     RAYONNAME = abonent.Distname.Trim(),
                     PRIM_ = abonent.Address.Trim(),
                     POSTINDEX = abonent.Postindex.Trim(),
-                    //F = abonent.F?.Trim(),
-                    //I = abonent.I?.Trim(),
-                    //O = abonent.O?.Trim()
                 };
 
                 if (!String.IsNullOrWhiteSpace(abonent.Fio))
@@ -321,8 +316,6 @@ namespace _048_Rgmek
             DataTable dt = Tmsource.GetDataTable("CHARS");
             var lcc = new List<CNV_CHAR>();
 
-            //SaveList(lca, Consts.InsertRecordCount);
-
             var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
 
             StepStart(dt.Rows.Count);
@@ -330,7 +323,6 @@ namespace _048_Rgmek
             foreach (DataRow dataRow in dt.Rows)
             {
                 cold.ReadDataRow(dataRow);
-                //if (cold.Date < MinConvertDate) continue;
 
                 long lshet;
                 if (lsrecode.TryGetValue(cold.Lshet, out lshet))
@@ -387,7 +379,6 @@ namespace _048_Rgmek
                 foreach (DataRow dataRow in dt.Rows)
                 {
                     lcold.ReadDataRow(dataRow);
-                    //if (lcold.Date < MinConvertDate) continue;
 
                     long lshet;
                     if (lsrecode.TryGetValue(lcold.Lshet, out lshet))
@@ -432,11 +423,8 @@ namespace _048_Rgmek
             foreach (var file in nachFiles)
             {
                 var fileDate = ConvertNach.GetNachFileDate(file);
-                //using (var dt = aConverterClassLibrary.Utils.ReadExcelFile(file, null))
                 aConverterClassLibrary.Utils.ReadExcelFileByRow(file, null, dr =>
                 {
-                    //foreach (DataRow dr in dt.Rows)
-                    //{
                     var nachInfo = new NachExcelRecord(dr);
 
                     long lshet;
@@ -486,7 +474,6 @@ namespace _048_Rgmek
                                 VALUEDESC = nachInfo.Nach.ToString()
                             });
                     }
-                    //}
                 });
                 lcc = LcharsRecordUtils.CreateUniqueLchars(lcc);
                 lcc = LcharsRecordUtils.ThinOutList(lcc, true);
@@ -887,15 +874,6 @@ namespace _048_Rgmek
             int lastcnttypeid = 0;
             var lcold = new CountersRecord();
             StepStart(1);
-            //using (DataTable dt = Tmsource.ExecuteQuery(@"select c.*, d.enddate 
-            //from counters c
-            //left join (
-            //	select oldcntid, max(date) as enddate 
-            //	from cntrs_ac
-            //	where opertype in ('Замена', 'Снятие')
-            //	group by oldcntid
-            //) d on d.oldcntid = c.counterid"))
-            //StepStart(dt.Rows.Count);
 
             DbfManager.ExecuteQueryByRow(@"select c.*, d.enddate 
                 from counters c
@@ -907,8 +885,6 @@ namespace _048_Rgmek
                 ) d on d.oldcntid = c.counterid
                 where c.counterid is not null", dataRow =>
             { 
-                //foreach (DataRow dataRow in dt.Rows)
-                //{
                     lcold.ReadDataRow(dataRow);
 
                     CNV_COUNTERTYPE cnttype;
@@ -945,7 +921,6 @@ namespace _048_Rgmek
                             SERIALNUM = lcold.Serialnum.Trim(),
                             CNTNAME = lcold.Cntname,
                             SETUPDATE = lcold.Setupdate,
-                            //DEACTDATE = lcold.Deactdate == NullDate ? (DateTime?)null : lcold.Deactdate,
                             DEACTDATE = enddate == null || enddate == NullDate ? null : enddate,
                             GUID_ = lcold.Counterid.Trim(),
                             CNTTYPE = cnttype.ID,
@@ -972,8 +947,6 @@ namespace _048_Rgmek
 
                     lc.Add(c);
                 }
-                    //Iterate();
-                //}
             });
             Utils.SaveDictionary(cnttyperecode.ToDictionary(ct => ct.Key, ct => (long)ct.Value.ID), CnttypeRecodeFileName);
             Utils.SaveDictionary(counteridrecode, CounterIdRecodeFileName);
@@ -1095,7 +1068,6 @@ left join (
                                     SERIALNUM = cntRecord.Serialnum.Trim(),
                                     CNTNAME = cntRecord.Cntname,
                                     SETUPDATE = cntRecord.Setupdate,
-                                    //DEACTDATE = lcold.Deactdate == NullDate ? (DateTime?)null : lcold.Deactdate,
                                     DEACTDATE = enddate == null || enddate == NullDate ? null : enddate,
                                     GUID_ = cntRecord.Counterid.Trim(),
                                     CNTTYPE = cnttype.ID,
@@ -1177,48 +1149,33 @@ left join (
             BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
             var lc = new List<CNV_CNTRSIND>();
 
-            //var indtyperecode = new Dictionary<string, long>();
-            //long indtypecd = 0;
             var counteridrecode = Utils.ReadDictionary(CounterIdRecodeFileName);
             var groupcounteridrecode = Utils.ReadDictionary(GroupCounterIdRecodeFileName);
             long counterid = 0;
 
 
             StepStart(Convert.ToInt32(Tmsource.ExecuteScalar("SELECT COUNT(*) FROM CNTRSIND")));
-            //using (var reader = Tmsource.ExecuteQueryToReader("SELECT * FROM CNTRSIND"))
-            //Tmsource.ExecuteQueryByRow("SELECT * FROM CNTRSIND", dataRow =>
             DbfManager.ExecuteQueryByRow("SELECT * FROM CNTRSIND", dataRow =>
             {
-                //StepStart(dt.Rows.Count);
                 var cr = new CntrsindRecord();
-                //while (reader.Read())
-                    // foreach (DataRow dataRow in dt.Rows)
-                {
-                    cr.ReadDataRow(dataRow);
-                    //cr.Counterid = reader["CounterID"].ToString().Trim();
-                    //cr.Doc = reader["Doc"].ToString().Trim();
-                    //cr.Date = Convert.ToDateTime(reader["Date"].ToString());
-                    //cr.Indication = Convert.ToDecimal(reader["Indication"]);
-                    //cr.Indtype = reader["Indtype"].ToString().Trim();
+                cr.ReadDataRow(dataRow);
 
-                    if (counteridrecode.TryGetValue(cr.Counterid, out counterid) ||
-                        groupcounteridrecode.TryGetValue(cr.Counterid, out counterid))
+                if (counteridrecode.TryGetValue(cr.Counterid, out counterid) ||
+                    groupcounteridrecode.TryGetValue(cr.Counterid, out counterid))
+                {
+                    var c = new CNV_CNTRSIND()
                     {
-                        var c = new CNV_CNTRSIND()
-                        {
-                            COUNTERID = counterid.ToString(),
-                            DOCUMENTCD = GetDocumentCd(cr.Doc),
-                            INDDATE = cr.Date,
-                            INDICATION = cr.Indication,
-                            INDTYPE = 1,
-                            CASETYPE = cr.Indtype.Trim() == "Расчетное" ? 3 : (int?) null
-                        };
-                        lc.Add(c);
-                    }
-                    Iterate();
+                        COUNTERID = counterid.ToString(),
+                        DOCUMENTCD = GetDocumentCd(cr.Doc),
+                        INDDATE = cr.Date,
+                        INDICATION = cr.Indication,
+                        INDTYPE = 1,
+                        CASETYPE = cr.Indtype.Trim() == "Расчетное" ? 3 : (int?) null
+                    };
+                    lc.Add(c);
                 }
+                Iterate();
             });
-            //Utils.SaveDictionary(indtyperecode, IndtypeRecodeFileName);
             StepFinish();
 
             StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
@@ -1227,14 +1184,6 @@ left join (
 	(select count(0) from IND_2015 where indtype = 'От абонента (по квитанции)') 
 from TARIFS
 order by TARIFCD")));
-            //using (var reader = Tmsource.ExecuteQueryToReader(@"select * from CNTRSKVC_2017
-            //                                                    where indtype = 'От абонента (по квитанции)'
-            //                                                    union all
-            //                                                    select * from CNTRSKVC_2016
-            //                                                    where indtype = 'От абонента (по квитанции)'
-            //                                                    union all
-            //                                                    select * from CNTRSKVC_2015
-            //                                                    where indtype = 'От абонента (по квитанции)'"))
             DbfManager.ExecuteQueryByRow(@"select * from IND_2017
                                         where indtype = 'От абонента (по квитанции)'
                                         union all
@@ -1245,32 +1194,26 @@ order by TARIFCD")));
                                         where indtype = 'От абонента (по квитанции)'",
                 dataRow =>
                 {
-                    //StepStart(dt.Rows.Count);
                     var cr = new CntrsindRecord();
-                    //while (reader.Read())
-                        // foreach (DataRow dataRow in dt.Rows)
-                    {
-                        //cr.ReadDataRow(dataRow);
-                        cr.Counterid = dataRow["CounterID"].ToString().Trim();
-                        cr.Doc = dataRow["Doc"].ToString().Trim();
-                        cr.Date = Convert.ToDateTime(dataRow["DocDate"].ToString());
-                        cr.Indication = Convert.ToDecimal(dataRow["Indication"]);
+                    cr.Counterid = dataRow["CounterID"].ToString().Trim();
+                    cr.Doc = dataRow["Doc"].ToString().Trim();
+                    cr.Date = Convert.ToDateTime(dataRow["DocDate"].ToString());
+                    cr.Indication = Convert.ToDecimal(dataRow["Indication"]);
 
-                        if (counteridrecode.TryGetValue(cr.Counterid, out counterid) ||
-                            groupcounteridrecode.TryGetValue(cr.Counterid, out counterid))
+                    if (counteridrecode.TryGetValue(cr.Counterid, out counterid) ||
+                        groupcounteridrecode.TryGetValue(cr.Counterid, out counterid))
+                    {
+                        var c = new CNV_CNTRSIND()
                         {
-                            var c = new CNV_CNTRSIND()
-                            {
-                                COUNTERID = counterid.ToString(),
-                                DOCUMENTCD = GetDocumentCd(cr.Doc),
-                                INDDATE = cr.Date,
-                                INDICATION = cr.Indication,
-                                INDTYPE = 0,
-                            };
-                            lc.Add(c);
-                        }
-                        Iterate();
+                            COUNTERID = counterid.ToString(),
+                            DOCUMENTCD = GetDocumentCd(cr.Doc),
+                            INDDATE = cr.Date,
+                            INDICATION = cr.Indication,
+                            INDTYPE = 0,
+                        };
+                        lc.Add(c);
                     }
+                    Iterate();
                 });
             StepFinish();
 
@@ -1305,88 +1248,6 @@ order by TARIFCD")));
                     doc);
         }
     }
-
-    //public class ConvertMoney : DbfConvertCase
-    //{
-    //    public ConvertMoney()
-    //    {
-    //        ConvertCaseName = "SUMS, PAYMENT, NACH - конвертация денег";
-    //        Position = 70;
-    //        IsChecked = false;
-    //    }
-
-    //    public override void DoDbfConvert()
-    //    {
-    //        SetStepsCount(2);
-
-    //        var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
-    //        tms.Init();
-
-    //        BufferEntitiesManager.DropTableData("CNV$NACH");
-    //        BufferEntitiesManager.DropTableData("CNV$NACHOPL");
-    //        BufferEntitiesManager.DropTableData("CNV$OPLATA");
-
-    //        var nom = new NachoplManager(NachoplCorrectionType.Пересчитать_сальдо_на_конец);
-
-    //        var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
-
-    //        CNV_NACH defcn = new CNV_NACH();
-    //        defcn.REGIMCD = 10;
-    //        defcn.REGIMNAME = "Неизвестен";
-    //        defcn.SERVICECD = 9;
-    //        defcn.SERVICENAME = "Электроэнергия";
-
-    //        StepStart(Convert.ToInt32(Tmsource.ExecuteScalar("SELECT COUNT(*) FROM NACH")));
-    //        using (var reader = Tmsource.ExecuteQueryToReader("SELECT * FROM NACH"))
-    //        {
-    //            var nr = new NachRecord();
-    //            while (reader.Read())
-    //            {
-    //                //cr.ReadDataRow(dataRow);
-    //                nr.Lshet = reader["Lshet"].ToString().Trim();
-    //                string doc = reader["Doc"].ToString().Trim();
-
-    //                nr.Doc = Regex.Match(doc, "(?<= счета).*(?= от)").Value;
-
-    //                nr.Date = Convert.ToDateTime(reader["Date"].ToString());
-    //                nr.Date_rasch = Convert.ToDateTime(reader["Date_rasch"].ToString());
-    //                nr.Resourcd = Convert.ToInt32(reader["Resourcd"]);
-    //                nr.Resournm = reader["Resournm"].ToString().Trim();
-    //                nr.Nachtype = reader["Nachtype"].ToString().Trim();
-    //                nr.Summa = Convert.ToDecimal(reader["Summa"]);
-    //                nr.Rasctype = reader["Rasctype"].ToString().Trim();
-
-    //                long lshet;
-
-    //                if (lsrecode.TryGetValue(nr.Lshet, out lshet))
-    //                {
-    //                    decimal fnath = 0;
-    //                    decimal prochl = 0;
-    //                    if (nr.Nachtype == "Основной")
-    //                        fnath = nr.Summa;
-    //                    else
-    //                        prochl = nr.Summa;
-
-    //                    if (nr.Rasctype == "Аналитический" ||
-    //                        nr.Rasctype == "Общедомовые нужды" ||
-    //                        nr.Rasctype == "Без прибора")
-    //                        defcn.TYPE_ = 0;
-    //                    else
-    //                        defcn.TYPE_ = 1;
-
-    //                    nom.RegisterNach(defcn, lshet.ToString(), nr.Date.Month, nr.Date.Year,
-    //                        fnath, prochl, nr.Date, nr.Doc);
-    //                }
-    //                Iterate();
-    //            }
-    //        }
-    //        StepFinish();
-
-    //        StepStart(nom.NachRecords.Count);
-    //        BufferEntitiesManager.SaveDataToBufferIBScript(nom.NachRecords);
-    //        StepFinish();
-    //    }
-    //}
 
     public class ConvertPayment : DbfConvertCase
     {
@@ -1528,11 +1389,8 @@ order by TARIFCD")));
             foreach (var file in files)
             {
                 var fileDate = GetNachFileDate(file);
-                //using (var data = aConverterClassLibrary.Utils.ReadExcelFile(file, null))
                 aConverterClassLibrary.Utils.ReadExcelFileByRow(file, null, dr =>
                 {
-                    //foreach (DataRow dr in data.Rows)
-                    //{
                     var nachInfo = new NachExcelRecord(dr);
                     nachdoc++;
 
@@ -1596,7 +1454,6 @@ order by TARIFCD")));
                             ln.Add(nach);
                         }
                     }
-                    //}
                 });
                 Iterate();
             }
@@ -1880,38 +1737,6 @@ when not matched then
             Iterate();
         }
     }
-
-    //public class TransferNachopl : ConvertCase
-    //{
-    //    public TransferNachopl()
-    //    {
-    //        ConvertCaseName = "Перенос данных о истории оплат и начислений";
-    //        Position = 1070;
-    //        IsChecked = false;
-    //    }
-
-    //    public override void DoConvert()
-    //    {
-    //        SetStepsCount(1);
-    //        var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-    //        StepStart(5);
-    //        fbm.ExecuteProcedure("CNV$CNV_01600_NACHISLIMPORT");
-    //        Iterate();
-    //        fbm.ExecuteProcedure("CNV$CNV_01300_SOURCEDOC");
-    //        Iterate();
-    //        fbm.ExecuteProcedure("CNV$CNV_01400_OPLATA");
-    //        Iterate();
-    //        fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
-    //        fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
-    //        fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] { CurrentYear.ToString(CultureInfo.InvariantCulture),
-    //            CurrentMonth.ToString(CultureInfo.InvariantCulture) });
-    //        fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
-    //        fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
-    //        Iterate();
-    //        fbm.ExecuteProcedure("CNV$CNV_01700_PERERASHETIMPORT");
-    //        StepFinish();
-    //    }
-    //}
 
     public class TransferPayment : ConvertCase
     {
