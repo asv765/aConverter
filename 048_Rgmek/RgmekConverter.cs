@@ -412,11 +412,27 @@ namespace _048_Rgmek
             StepStart(1);
             BufferEntitiesManager.SaveDataToBufferIBScript(lcc);
             StepFinish();
+        }
+    }
 
-            lcc.Clear();
-            lcc.TrimExcess();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+    public class ConvertLCharsTarifs : DbfConvertCase
+    {
+        public ConvertLCharsTarifs()
+        {
+            ConvertCaseName = "LCHARS Tarifs - конвертация информации о качественных характеристиках тарифов";
+            Position = 41;
+            IsChecked = false;
+        }
+
+        public override void DoDbfConvert()
+        {
+            SetStepsCount(5);
+
+            var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
+            tms.Init();
+
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+            var lcc = new List<CNV_LCHAR>();
 
             var nachFiles = ConvertNach.GetNachFiles();
             StepStart(nachFiles.Length);
@@ -502,7 +518,7 @@ namespace _048_Rgmek
         public ConvertAddChars()
         {
             ConvertCaseName = "ADDCHARS - дополнительные характеристики";
-            Position = 41;
+            Position = 45;
             IsChecked = false;
         }
 
@@ -1178,20 +1194,25 @@ left join (
             });
             StepFinish();
 
+//            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
+//	(select count(0) from IND_2017 where indtype = 'От абонента (по квитанции)') +
+//	(select count(0) from IND_2016 where indtype = 'От абонента (по квитанции)') +
+//	(select count(0) from IND_2015 where indtype = 'От абонента (по квитанции)') 
+//from TARIFS
+//order by TARIFCD")));
+//            DbfManager.ExecuteQueryByRow(@"select * from IND_2017
+//                                        where indtype = 'От абонента (по квитанции)'
+//                                        union all
+//                                        select * from IND_2016
+//                                        where indtype = 'От абонента (по квитанции)'
+//                                        union all
+//                                        select * from IND_2015
+//                                        where indtype = 'От абонента (по квитанции)'",
             StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
-	(select count(0) from IND_2017 where indtype = 'От абонента (по квитанции)') +
-	(select count(0) from IND_2016 where indtype = 'От абонента (по квитанции)') +
-	(select count(0) from IND_2015 where indtype = 'От абонента (по квитанции)') 
+	(select count(0) from CNTRSKVC where indtype = 'От абонента (по квитанции)')
 from TARIFS
 order by TARIFCD")));
-            DbfManager.ExecuteQueryByRow(@"select * from IND_2017
-                                        where indtype = 'От абонента (по квитанции)'
-                                        union all
-                                        select * from IND_2016
-                                        where indtype = 'От абонента (по квитанции)'
-                                        union all
-                                        select * from IND_2015
-                                        where indtype = 'От абонента (по квитанции)'",
+            DbfManager.ExecuteQueryByRow(@"select * from CNTRSKVC where indtype = 'От абонента (по квитанции)'",
                 dataRow =>
                 {
                     var cr = new CntrsindRecord();
@@ -1426,7 +1447,7 @@ order by TARIFCD")));
                             nach.VOLUME = 0;
                             nach.PROCHL = nachInfo.Sum;
                             nach.PROCHLVOLUME = 0;
-                            nach.REGIMCD = (int) nachInfo.Tarif + (int) nachInfo.Zone;
+                            nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone;
                             nach.REGIMNAME = nachInfo.Nach.ToString();
                             ln.Add(nach);
                         }
@@ -1439,7 +1460,7 @@ order by TARIFCD")));
                             nach.VOLUME = nachInfo.Volume;
                             nach.PROCHL = 0;
                             nach.PROCHLVOLUME = 0;
-                            nach.REGIMCD = (int) nachInfo.Tarif + (int) nachInfo.Zone;
+                            nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone;
                             nach.REGIMNAME = nachInfo.Nach.ToString();
                             ln.Add(nach);
                         }
@@ -1449,7 +1470,7 @@ order by TARIFCD")));
                             nach.VOLUME = 0;
                             nach.PROCHL = 0;
                             nach.PROCHLVOLUME = 0;
-                            nach.REGIMCD = (int) nachInfo.Tarif + 100 + (int) nachInfo.Zone;
+                            nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + 100 + (int) nachInfo.Zone;
                             nach.REGIMNAME = nachInfo.Nach.ToString();
                             ln.Add(nach);
                         }

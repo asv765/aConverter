@@ -1,0 +1,140 @@
+﻿
+
+-- перенос сальдо с сентября на июль
+merge into cnv$nachopl nop
+using (
+    select nop2.lshet, nop2.servicecd, nop2.edebet
+    from cnv$nachopl nop2
+    where nop2.year_ = 2017 and nop2.month_ = 09
+) nop2 on nop2.lshet = nop.lshet and nop2.servicecd = nop2.servicecd and nop.year_ = 2017 and nop.month_ = 07
+when matched then
+    update set nop.edebet = nop2.edebet
+when not matched then
+    INSERT (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME)
+        VALUES (nop2.lshet, 07, 2017, 07, 2017, 0, 0, 0, 0, nop2.edebet, nop2.servicecd, nop2.servicecd);
+
+
+delete from cnv$nachopl nop where nop.year_ = 2017 and nop.month_ = 09
+-- конец переноса
+
+
+
+
+
+
+
+
+merge into cnv$nachopl nop
+using (
+    select cn.lshet, cn.servicecd, cn.year_, cn.month_, sum(cn.fnath) as nachsum, sum(cn.prochl) as recalcsum
+    from cnv$nach cn
+    group by cn.lshet, cn.servicecd, cn.year_, cn.month_
+) cn on nop.lshet = cn.lshet and nop.servicecd = cn.servicecd and nop.year_ = cn.year_ and nop.month_ = cn.month_
+when matched then
+    update set nop.fnath = cn.nachsum, nop.prochl = cn.recalcsum
+when not matched then
+    INSERT (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME)
+        VALUES (cn.lshet, cn.month_, cn.year_, cn.month_, cn.year_, 0, cn.nachsum, cn.recalcsum, 0, 0, cn.servicecd, cn.servicecd);
+
+
+merge into cnv$nachopl nop
+using (
+    select co.lshet, co.servicecd, co.year_, co.month_, sum(co.summa) as paysum
+    from cnv$oplata co
+    group by co.lshet, co.servicecd, co.year_, co.month_
+) co on nop.lshet = co.lshet and nop.servicecd = co.servicecd and nop.year_ = co.year_ and nop.month_ = co.month_
+when matched then
+    update set nop.oplata = co.paysum
+when not matched then
+    INSERT (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME)
+        VALUES (co.lshet, co.month_, co.year_, co.month_, co.year_, 0, 0, 0, co.paysum, 0, co.servicecd, co.servicecd);
+
+
+
+
+
+
+
+
+
+
+execute block as
+declare variable saldoyear integer = 2017;
+declare variable saldomonth integer = 09;
+
+declare variable lshet varchar(10);
+declare variable servicecd integer;
+declare variable year_ integer;
+declare variable month_ integer;
+declare variable begsaldo numeric(18,4);
+declare variable nach numeric(18,4);
+declare variable recalc numeric(18,4);
+declare variable paysum numeric(18,4);
+declare variable endsaldo numeric(18,4);
+declare variable nachid integer;
+
+declare variable prevlshet varchar(10);
+declare variable prevservice integer;
+declare variable prevsaldo numeric(18,4);
+declare variable checkdate date;
+begin
+    prevlshet = '';
+    prevservice = -1;
+    checkdate = cast('01.'||:saldomonth||'.'||:saldoyear as date);
+    for select nop.lshet, nop.servicecd, nop.year_, nop.month_
+        from cnv$nachopl nop
+        where nop.year_ * 12 + nop.month_ <= :saldoyear * 12 + :saldomonth
+        order by nop.lshet, nop.servicecd, nop.year_ desc, nop.month_ desc
+    into :lshet, :servicecd, :year_, :month_
+    do begin
+        if (:lshet <> :prevlshet or :servicecd <> :prevservice) then
+            checkdate = cast('01.'||:saldomonth||'.'||:saldoyear as date);
+        else
+            checkdate = dateadd(month, -1, :checkdate);
+        
+        while (extract(year from :checkdate) <> :year_ or extract(month from :checkdate) <> :month_)
+        do begin
+            INSERT INTO cnv$nachopl (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME)
+                VALUES (:lshet, extract(month from :checkdate), extract(year from :checkdate), extract(month from :checkdate), extract(year from :checkdate), 0, 0, 0, 0, 0, :servicecd, :servicecd);
+            checkdate = dateadd(month, -1, :checkdate);
+        end
+
+        prevlshet = :lshet;
+        prevservice = :servicecd;
+    end
+
+
+    prevlshet = '';
+    prevservice = -1;
+    for select nop.lshet, nop.servicecd, nop.year_, nop.month_, nop.bdebet, nop.fnath, nop.prochl, nop.oplata, nop.edebet, nop.id
+            from cnv$nachopl nop
+            where nop.year_ * 12 + nop.month_ <= :saldoyear * 12 + :saldomonth
+            order by nop.lshet, nop.servicecd, nop.year_ desc, nop.month_ desc
+    into :lshet, :servicecd, :year_, :month_, :begsaldo, :nach, :recalc, :paysum, :endsaldo, :nachid
+    do begin
+        if (:lshet <> prevlshet or :servicecd <> prevservice) then
+        begin
+            prevlshet = :lshet;
+            prevservice = :servicecd;
+            prevsaldo = :endsaldo + :paysum - :recalc - :nach;
+            update cnv$nachopl nop
+                set nop.bdebet = :prevsaldo
+                where nop.id = :nachid;
+        end
+        else
+        begin
+            endsaldo = :prevsaldo;
+            prevsaldo = :endsaldo + :paysum - :recalc - :nach;
+            update cnv$nachopl nop
+                set nop.edebet = :endsaldo,
+                    nop.bdebet = :prevsaldo
+                where nop.id = :nachid;
+        end
+    end
+end
+
+
+
+
+
+execute procedure  cnv$cnv_01500_saldo(2017, 08)
