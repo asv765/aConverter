@@ -496,12 +496,21 @@ namespace RsnReader
         private void Test_button_Click(object sender, EventArgs e)
         {
 
-            var result = RsnAbonent.Abonents
-                .Where(a => a.Алгоритмы.Any(al => al.Вид == 3
-                                                  && (al.Алгоритм == 101 || al.Алгоритм == 102 || al.Алгоритм == 103))
-                            && !a.УЗСнаНачМес.Any(c => c.Вид == 3))
+            var filter = RsnAbonent.Abonents
+                .Where(a => a.Регион == 1)
+                .Where(a => new[] {1, 2, 3, 4}.Contains(a.Округ))
+                .Where(a => a.ФормаСобственностиЖилогоПомещения == 6)
+                .Where(a => a.Алгоритмы.Any(al => al.Вид == 16 && al.ХозяинВида == 1651))
                 .ToArray();
+            Clipboard.SetText(String.Join("\r\n", filter.Select(a => a.LsKvc.Ls)));
             return;
+
+            //var result = RsnAbonent.Abonents
+            //    .Where(a => a.Алгоритмы.Any(al => al.Вид == 3
+            //                                      && (al.Алгоритм == 101 || al.Алгоритм == 102 || al.Алгоритм == 103))
+            //                && !a.УЗСнаНачМес.Any(c => c.Вид == 3))
+            //    .ToArray();
+            //return;
 
 
 //            List<string> notFoundedLs = new List<string>
