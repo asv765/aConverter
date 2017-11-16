@@ -50,6 +50,12 @@ declare variable NUMBEREGRP varchar(100);
 declare variable DATEEGRP date;
 declare variable laststateid integer;
 declare variable migrid integer;
+declare variable af varchar(100);
+declare variable ai varchar(50);
+declare variable ao varchar(50);
+declare variable cf varchar(30);
+declare variable ci varchar(20);
+declare variable co varchar(20);
 begin
   for select distinct C.DORGCD, C.DORGNAME
       from CNV$CITIZENS C
@@ -236,6 +242,31 @@ begin
                     ));
             if (migrid is not null) then
                 delete from cityzenmigration where migrationid = :migrid;
+        end
+    end
+
+    /* Обновление ФИО */
+    for select distinct a.lshet, a.fio, a.name, a.second_name
+        from abonents a
+        inner join cnv$citizens cc on cc.lshet = a.lshet
+            and (coalesce(cc.f, '') <> '' or coalesce(cc.i, '') <> '' or coalesce(cc.o, '') <> '')
+    into :lshet, :af, :ai, :ao
+    do begin
+        cf = null;
+        ci = null;
+        co = null;
+        select f, i, o
+        from getfiobycitizens(:lshet)
+        into :cf, :ci, :co;
+        if (coalesce(lower(af), '') <> coalesce(lower(cf), '')
+            or coalesce(lower(ai), '') <> coalesce(lower(ci), '')
+            or coalesce(lower(ao), '') <> coalesce(lower(co), '')) then
+        begin
+            update abonents a
+            set a.fio = :cf,
+                a.name = :ci,
+                a.second_name = :co
+            where a.lshet = :lshet;
         end
     end
 end";
