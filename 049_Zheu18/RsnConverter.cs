@@ -16,11 +16,13 @@ using aConverterClassLibrary.Class;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using aConverterClassLibrary.Class.ConvertCases;
 using System.IO;
+using aConverterClassLibrary.Class.Utils;
 using FirebirdSql.Data.FirebirdClient;
 using FirebirdSql.Data.Isql;
 using OpenAccessRuntime.common;
 using static _049_Zheu18.Consts;
 using Utils = aConverterClassLibrary.Utils;
+using static aConverterClassLibrary.RecordsDataAccessORM.Utils.OrmRecordUtils;
 
 namespace _049_Zheu18
 {
@@ -32,10 +34,17 @@ namespace _049_Zheu18
         public static bool LsFromFile = false;
 
         /// <summary>
-        /// В порядке убывания
+        /// Конвертация. В порядке убывания
         /// </summary>
-        public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01)/*, new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01)/**/};
-        //public readonly static DateTime[] ConvertingDates = { new DateTime(2015, 08, 01), new DateTime(2015, 07, 01), new DateTime(2015, 06, 01), new DateTime(2015, 05, 01), new DateTime(2015, 04, 01), new DateTime(2015, 03, 01), new DateTime(2015, 02, 01), new DateTime(2015, 01, 01), new DateTime(2014, 12, 01), new DateTime(2014, 11, 01), new DateTime(2014, 10, 01),/**/};
+        //public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01)/*, new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01)/**/};
+        /// <summary>
+        /// Конвертаця старый наем
+        /// </summary>
+        //public readonly static DateTime[] ConvertingDates = { new DateTime(2015, 08, 01), new DateTime(2015, 07, 01), new DateTime(2015, 06, 01), new DateTime(2015, 05, 01), new DateTime(2015, 04, 01), new DateTime(2015, 03, 01), new DateTime(2015, 02, 01), new DateTime(2015, 01, 01), new DateTime(2014, 12, 01), new DateTime(2014, 11, 01), new DateTime(2014, 10, 01),/**/};  
+        /// <summary>
+        /// Поиск граждан, присутствующих при конвертации старого наема, но отсутствующих при последнее конвертации (Задача 30807, лс 99081116)
+        /// </summary>
+        public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01), new DateTime(2015, 08, 01), new DateTime(2015, 07, 01), new DateTime(2015, 06, 01), new DateTime(2015, 05, 01), new DateTime(2015, 04, 01), new DateTime(2015, 03, 01), new DateTime(2015, 02, 01), new DateTime(2015, 01, 01), new DateTime(2014, 12, 01), new DateTime(2014, 11, 01), new DateTime(2014, 10, 01) };  
         public const int InsertRecordCount = 1000;
         public const int CurrentYear = 2017;
         public const int CurrentMonth = 05;
@@ -6647,6 +6656,88 @@ inner join extorgaccounts ea on ea.lshet = a.lshet and ea.extorgcd = 1"))
             }, null, RsnFilePath, false, ConvertingDates, true);
             lsList = lsList.Distinct().ToList();
             Clipboard.SetText(String.Join("\r\n", lsList));
+        }
+    }
+
+    public class FindRemovedCitizensAterNaem : KvcConvertCase
+    {
+        public FindRemovedCitizensAterNaem()
+        {
+            ConvertCaseName = "Поиск граждан, присутствующих при конвертации старого наема, но отсутствующих при последнее конвертации (Задача 30807, лс 99081116)";
+            Position = 100020;
+            IsChecked = false;
+        }
+
+        public override void DoKvcConvert()
+        {
+            SetStepsCount(3);
+            var abonents = new Dictionary<string, CcAbonent[]>();
+            ConvertUniqueCCAbonents(ccAbonent =>
+            {
+                ccAbonent.Жители.ForEach(c => c.ДопИнформация = CitizenComparer.GetCompareString(c.ФИО, c.ДатаРождения));
+                abonents.Add(ccAbonent.LsKvc.Ls, new[] {ccAbonent, null});
+            }, CcFileName, LsNotInLastFile, true, ConvertingDates.Where(d => d < new DateTime(2015, 09, 01)).ToArray(), false);
+
+            ConvertUniqueCCAbonents(ccAbonent =>
+            {
+                if (!abonents.ContainsKey(ccAbonent.LsKvc.Ls)) return;
+                ccAbonent.Жители.ForEach(c => c.ДопИнформация = CitizenComparer.GetCompareString(c.ФИО, c.ДатаРождения));
+                abonents[ccAbonent.LsKvc.Ls][1] = ccAbonent;
+            }, CcFileName, LsNotInLastFile, true, ConvertingDates.Where(d => d >= new DateTime(2015, 09, 01)).ToArray(), true);
+
+            var removedCitizens = new List<CcAbonent.Citizen>();
+            StepStart(abonents.Count + 1);
+            foreach (var abonent in abonents)
+            {
+                Iterate();
+                if (abonent.Value[1] == null) continue;
+                var newCitizens = abonent.Value[1].Жители.Select(c => c.ДопИнформация).ToArray();
+                abonent.Value[0].Жители.ForEach(c =>
+                {
+                    if (!newCitizens.Contains(c.ДопИнформация)) removedCitizens.Add(c);
+                });
+            }
+            StepFinish();
+
+            StepStart(1);
+            var citizenComparer = new CitizenComparer(aConverter_RootSettings.FirebirdStringConnection);
+            citizenComparer.LoadCitizens();
+            StepFinish();
+
+            StepStart(removedCitizens.Count + 1);
+            removedCitizens.ForEach(c =>
+            {
+                Iterate();
+                string lshet;
+                if (!LsDic.TryGetValue(c.LsKvc.Ls, out lshet)) return;
+                c.НомерЕГРП = lshet;
+                var citizenid = citizenComparer.GetCitizenId(new CompareKey(lshet, c.ФИО, c.ДатаРождения));
+                c.НомерПаспорта = citizenid == null ? 0 : (uint)citizenid;
+            });
+            removedCitizens.RemoveAll(c => c.НомерПаспорта == 0);
+            StepFinish();
+
+            StepStart(1);
+            var fbManager = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbManager.ExecuteNonQuery("DELETE FROM CNV$CITIZENS");
+            BufferEntitiesManager.SaveDataToBufferIBScript(removedCitizens.Select(c => new CitizenIdOrm(c)));
+            StepFinish();
+        }
+
+        private class CitizenIdOrm : IOrmRecord
+        {
+            private int _id;
+
+            public CitizenIdOrm(CcAbonent.Citizen citizen)
+            {
+                _id = (int)citizen.НомерПаспорта;
+            }
+
+            public const string InsertSqlTemplate =
+           "INSERT INTO CNV$CITIZENS(ID, ISMAINCITYZEN, HIDDEN, REGISTRATIONTYPE) VALUES({0}, 0, 0, 0);";
+
+            public string InsertSql => string.Format(InsertSqlTemplate,
+                ToSql(_id));
         }
     }
 

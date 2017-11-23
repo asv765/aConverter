@@ -24,7 +24,7 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
 
         private static string GetFioForCompare(string fio)
         {
-            return fio.Replace(" ", "").ToLower();
+            return String.IsNullOrWhiteSpace(fio) ? "" : fio.Replace(" ", "").ToLower();
         }
 
         private static string GetFioForCompare(string f, string i, string o)

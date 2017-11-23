@@ -73,7 +73,7 @@ namespace aConverterClassLibrary.Class.Utils
             DbfLikeRegime
         }
 
-        public Dictionary<Type, object> NullDbfLikeValues = new Dictionary<Type, object>
+        public static readonly Dictionary<Type, object> NullDbfLikeValues = new Dictionary<Type, object>
         {
             {typeof(int), 0},
             {typeof (long), 0},

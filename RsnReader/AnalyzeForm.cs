@@ -1403,8 +1403,8 @@ namespace RsnReader
         private void AbonentByLsKvcbutton_Click(object sender, EventArgs e)
         {
             RsnAbonent rsnAbonent = null;
-            int year = 2016;
-            int month = 07;
+            int year = 2017;
+            int month = 02;
             string fileName = ReadRsnForm.RsnFilePath + @"\rsn0";
             fileName += $"{year.ToString().Substring(2, 2)}{month:D2}";
             var rsnFile = new RsnFile(fileName);

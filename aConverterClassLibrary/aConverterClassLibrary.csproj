@@ -134,6 +134,7 @@
     <Compile Include="Class\Statistic\FdbStatistic.cs" />
     <Compile Include="Class\Statistic\Statistic.cs" />
     <Compile Include="Class\Utils\aConverter_Utils.cs" />
+    <Compile Include="Class\Utils\CitizenComparer.cs" />
     <Compile Include="Class\Utils\DbfConnection.cs" />
     <Compile Include="Class\Utils\ReaderToDataRow.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

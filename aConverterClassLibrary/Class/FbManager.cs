@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using FirebirdSql.Data.FirebirdClient;
 using System.Data;
+using aConverterClassLibrary.Class.Utils;
 using FirebirdSql.Data.Isql;
 
 namespace aConverterClassLibrary.Class
@@ -193,6 +194,31 @@ namespace aConverterClassLibrary.Class
             }
             string query = "EXECUTE PROCEDURE " + procedureName + addstring;
             ExecuteNonQuery(query);
+        }
+
+        /// <summary>
+        /// Выполняет запрос построчно, не занося результат в память
+        /// </summary>
+        /// <param name="query">Запрос</param>
+        /// <param name="drAction">Действие, которое необходимо выполнить с каждым результатом запроса</param>
+        public void ExecuteQueryByRow(string query, Action<DataRow> drAction)
+        {
+            using (var connection = new FbConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+                    using (var reader = command.ExecuteReader())
+                    using (var readerToDataRow = new ReaderToDataRow(reader))
+                    {
+                        while (reader.Read())
+                        {
+                            drAction(readerToDataRow.GetDataRow(reader));
+                        }
+                    }
+                }
+            }
         }
     }
 }
