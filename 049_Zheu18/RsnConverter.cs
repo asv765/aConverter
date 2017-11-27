@@ -36,7 +36,11 @@ namespace _049_Zheu18
         /// <summary>
         /// Конвертация. В порядке убывания
         /// </summary>
-        //public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01)/*, new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01)/**/};
+        //public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01), new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01)/**/};
+        /// <summary>
+        /// Выравнивание сальдо по пене на начало июня
+        /// </summary>
+        public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 05, 01) };
         /// <summary>
         /// Конвертаця старый наем
         /// </summary>
@@ -44,7 +48,7 @@ namespace _049_Zheu18
         /// <summary>
         /// Поиск граждан, присутствующих при конвертации старого наема, но отсутствующих при последнее конвертации (Задача 30807, лс 99081116)
         /// </summary>
-        public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01), new DateTime(2015, 08, 01), new DateTime(2015, 07, 01), new DateTime(2015, 06, 01), new DateTime(2015, 05, 01), new DateTime(2015, 04, 01), new DateTime(2015, 03, 01), new DateTime(2015, 02, 01), new DateTime(2015, 01, 01), new DateTime(2014, 12, 01), new DateTime(2014, 11, 01), new DateTime(2014, 10, 01) };  
+        // public readonly static DateTime[] ConvertingDates = { new DateTime(2017, 04, 01), new DateTime(2017, 03, 01), new DateTime(2017, 02, 01), new DateTime(2017, 01, 01), new DateTime(2016, 12, 01), new DateTime(2016, 11, 01), new DateTime(2016, 10, 01), new DateTime(2016, 09, 01), new DateTime(2016, 08, 01), new DateTime(2016, 07, 01), new DateTime(2016, 06, 01), new DateTime(2016, 05, 01), new DateTime(2016, 04, 01), new DateTime(2016, 03, 01), new DateTime(2016, 02, 01), new DateTime(2016, 01, 01), new DateTime(2015, 12, 01), new DateTime(2015, 11, 01), new DateTime(2015, 10, 01), new DateTime(2015, 09, 01), new DateTime(2015, 08, 01), new DateTime(2015, 07, 01), new DateTime(2015, 06, 01), new DateTime(2015, 05, 01), new DateTime(2015, 04, 01), new DateTime(2015, 03, 01), new DateTime(2015, 02, 01), new DateTime(2015, 01, 01), new DateTime(2014, 12, 01), new DateTime(2014, 11, 01), new DateTime(2014, 10, 01) };  
         public const int InsertRecordCount = 1000;
         public const int CurrentYear = 2017;
         public const int CurrentMonth = 05;
