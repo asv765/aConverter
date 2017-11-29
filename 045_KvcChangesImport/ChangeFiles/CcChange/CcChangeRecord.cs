@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using RsnReader;
 using _045_KvcChangesImport.ChangeFiles.Abstract;
@@ -35,7 +36,14 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
             changeRecord.LsKvc = new LsKvc(rows[0][1].ToString(), true);
             for (int i = 0; i < rows.Count; i++)
             {
-                changeRecord.Жители.Add(Citizen.CreateFromOdatXls(rows[i], changeRecord.LsKvc));
+                try
+                {
+                    changeRecord.Жители.Add(Citizen.CreateFromOdatXls(rows[i], changeRecord.LsKvc));
+                }
+                catch (Exception e)
+                {
+                    throw new Exception($"Ошибка парсинга гражданина на лс {changeRecord.LsKvc.Ls}\r\n{e}");
+                }
             }
             return changeRecord;
         }
