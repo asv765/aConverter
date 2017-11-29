@@ -48,14 +48,14 @@ declare variable REGTYPE integer;
 declare variable MIGRTYPE integer;
 declare variable NUMBEREGRP varchar(100);
 declare variable DATEEGRP date;
-declare variable laststateid integer;
-declare variable migrid integer;
-declare variable af varchar(100);
-declare variable ai varchar(50);
-declare variable ao varchar(50);
-declare variable cf varchar(30);
-declare variable ci varchar(20);
-declare variable co varchar(20);
+declare variable LASTSTATEID integer;
+declare variable MIGRID integer;
+declare variable AF varchar(100);
+declare variable AI varchar(50);
+declare variable AO varchar(50);
+declare variable CF varchar(30);
+declare variable CI varchar(20);
+declare variable CO varchar(20);
 begin
   for select distinct C.DORGCD, C.DORGNAME
       from CNV$CITIZENS C
@@ -94,6 +94,12 @@ begin
   begin
     CITIZENID = (select ci.cityzen_id from cityzens ci where ci.uniquecityzenid = :UNIQUECITYZENID and ci.lshet = :lshet);
     if (:citizenid is null) then CITIZENID = (select gen_id(CITYZENS_GEN, 1) from RDB$DATABASE);
+    if (:startdate = '01.01.1900') then
+        startdate = (select first 1 cm.migrationdate
+                    from cityzenmigration cm
+                    where cm.cityzen_id = :citizenid and cm.migrationtype in (1,2)
+                        and cm.migrationdate <= dateadd(month, 1, :importdate)
+                    order by cm.migrationdate desc,  cm.migrationid desc);
     update or insert into CITYZENS (CITYZEN_ID, LSHET, ISMAINCITYZEN, PASPORTNO, PASPORTSR, PASSPORTDATE, PASSPORTNOTE, CTZFIO,
                           CTZNAME, CTZPARENTNAME, STARTDATE, ENDDATE, NOTE, BIRTHDAY, UNIQUECITYZENID, SEX, HIDDEN,
                           OWNERSHIPNUMERATOR, OWNERSHIPDENOMINATOR, OWNERSHIPTYPE, BIRTHCOUNTRY, BIRTHDISTRICT,
@@ -149,7 +155,16 @@ begin
     do begin
         if (enddate is null or enddate > :importdate) then
         begin
-            if (startdate is null) then enddate = null;
+            if (startdate is null) then
+            begin
+                startdate = (select first 1 cm.migrationdate
+                            from cityzenmigration cm
+                            where cm.cityzen_id = :citizenid and cm.migrationtype <> 0
+                                and cm.migrationdate <= dateadd(month, 1, :importdate)
+                            order by cm.migrationdate desc, cm.migrationid desc);
+                if (startdate is null) then enddate = null;
+                else enddate = :importdate;
+            end
             else enddate = :importdate;
         end
     
@@ -161,15 +176,15 @@ begin
             c.ownershipdenominator = null
         where c.cityzen_id = :citizenid;
 
-        if (startdate is not null) then
-        begin
+       /* if (startdate is not null) then     не нужно проставлять дату регистрации удаляющимся гражданам, даже если у них ее нет
+        begin  */
             /* Если регистрация мпж, то прибытие пмж, в остальных случаях пмп */
-            if (regtype = 1) then migrtype = 1;
+          /*  if (regtype = 1) then migrtype = 1;
             else migrtype = 2;
             UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
             VALUES (:documentcd, :citizenid, :startdate, :migrtype, 1, NULL)
             MATCHING (CITYZEN_ID, MIGRATIONDATE);
-        end
+        end  */
 
         if (enddate is not null) then
         begin
@@ -216,20 +231,28 @@ begin
             /* Если регистрация пмж, то прибытие пмж, в остальных случаях пмп */
             if (regtype = 1) then migrtype = 1;
             else migrtype = 2;
-            UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
-            VALUES (:documentcd, :citizenid, :startdate, :migrtype, 1, NULL)
-            MATCHING (CITYZEN_ID, MIGRATIONDATE);
+            if (migrtype <> coalesce((select first 1 cm.migrationtype
+                                    from cityzenmigration cm
+                                    where cm.cityzen_id = :citizenid and cm.migrationdate < :startdate
+                                    order by cm.migrationdate desc, cm.migrationid desc), 0)) then
+                UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
+                VALUES (:documentcd, :citizenid, :startdate, :migrtype, 1, NULL)
+                MATCHING (CITYZEN_ID, MIGRATIONDATE);
         end
         else
         begin
-            delete from cityzenmigration cm where cm.cityzen_id = :citizenid and cm.migrationdate <= :importdate and cm.direction = 1;
+            delete from cityzenmigration cm where cm.cityzen_id = :citizenid and cm.migrationdate <= :importdate and cm.migrationtype in (1,2);
         end
 
         if (enddate is not null) then
         begin
-            UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
-            VALUES (:documentcd, :citizenid, :enddate, 0, 2, NULL)
-            MATCHING (CITYZEN_ID, MIGRATIONDATE);
+            if (0 <> coalesce((select first 1 cm.migrationtype
+                                from cityzenmigration cm
+                                where cm.cityzen_id = :citizenid and cm.migrationdate < :enddate
+                                order by cm.migrationdate desc, cm.migrationid desc), 0)) then
+                UPDATE OR INSERT INTO CITYZENMIGRATION (DOCUMENTCD, CITYZEN_ID, MIGRATIONDATE, MIGRATIONTYPE, DIRECTION, REGDATE)
+                VALUES (:documentcd, :citizenid, :enddate, 0, 2, NULL)
+                MATCHING (CITYZEN_ID, MIGRATIONDATE);
         end
         else
         begin

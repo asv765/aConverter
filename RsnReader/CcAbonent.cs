@@ -55,9 +55,37 @@ namespace RsnReader
             FileMonth = fileMonth;
             if (rows == null || rows.Count == 0) return;
             LsKvc = new LsKvc(Convert.ToUInt64(rows[0][0]));
+            var fileDate = new DateTime(fileYear, fileMonth, 1);
+            var dontChangeDate = new DateTime(1900, 01, 01);
             for (int i = 0; i < rows.Count; i++)
             {
-                Жители.Add(new Citizen(rows[i], LsKvc));
+                var citizen = new Citizen(rows[i], LsKvc);
+                switch (citizen.СтатусРегистрации)
+                {
+                    case 0:
+                        citizen.ДатаРегистрации = dontChangeDate;
+                        citizen.ДатаСнятияСРегистрации = fileDate;
+                        citizen.ДатаОкончанияВремРегистрации = null;
+                        citizen.ДатаОкончанияВыбытия = null;
+                        break;
+                    case 1:
+                        citizen.ДатаРегистрации = fileDate;
+                        citizen.ДатаСнятияСРегистрации = null;
+                        citizen.ДатаОкончанияВремРегистрации = null;
+                        citizen.ДатаОкончанияВыбытия = null;
+                        break;
+                    case 2:
+                        citizen.ДатаРегистрации = fileDate;
+                        citizen.ДатаСнятияСРегистрации = null;
+                        citizen.ДатаОкончанияВыбытия = null;
+                        break;
+                    case 3:
+                        citizen.ДатаРегистрации = null;
+                        citizen.ДатаСнятияСРегистрации = null;
+                        citizen.ДатаОкончанияВремРегистрации = null;
+                        break;
+                }
+                Жители.Add(citizen);
             }
         }
 
