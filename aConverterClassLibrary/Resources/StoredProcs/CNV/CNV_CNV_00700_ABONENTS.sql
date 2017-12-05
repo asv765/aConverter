@@ -17,6 +17,7 @@ declare variable PRIM_ varchar(250);
 declare variable ISDELETED smallint;
 declare variable CLOSEDATE timestamp;
 declare variable DOCUMENTCD integer;
+declare variable SPLITPHONE varchar(100);
 BEGIN
     FOR SELECT lshet, ducd, housecd, flatno, flatpostfix, roomno, roompostfix, f, i, o, phonenum, prim_, isdeleted, closedate
     FROM cnv$abonent
@@ -28,7 +29,10 @@ BEGIN
         MATCHING (lshet);
         IF (phonenum IS NOT NULL) THEN BEGIN
            DELETE FROM abonentphones WHERE LSHET = :lshet;
-           INSERT INTO ABONENTPHONES (LSHET, PHONETYPEID, PHONENUMBER) VALUES (:lshet, 0, :phonenum);
+		   for select SPLITVALUE from SPLIT(:phonenum, ',') into :SPLITPHONE
+		   do begin
+				INSERT INTO ABONENTPHONES (LSHET, PHONETYPEID, PHONENUMBER) VALUES (:lshet, 0, TRIM(:SPLITPHONE));
+		   end
         END
 		IF (isdeleted = 1) THEN BEGIN
 			DOCUMENTCD = gen_id(DOCUMENTS_GEN, 1);

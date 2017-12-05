@@ -211,6 +211,7 @@ namespace _048_Rgmek
                     RAYONNAME = abonent.Distname.Trim(),
                     PRIM_ = abonent.Address.Trim(),
                     POSTINDEX = abonent.Postindex.Trim(),
+                    PHONENUM = abonent.Phonenum.Trim()
                 };
 
                 if (!String.IsNullOrWhiteSpace(abonent.Fio))
@@ -1010,7 +1011,7 @@ namespace _048_Rgmek
             var cnttyperecode = new Dictionary<string, CNV_COUNTERTYPE>();
 
             var counteridrecode = new Dictionary<string, long>();
-            long counterid = 0;
+            long counterid = Utils.ReadDictionary(CounterIdRecodeFileName).Select(d => d.Value).Max() + 1;
 
             var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
             var houserecode = Utils.ReadDictionary(HouseRecodeFileName);
@@ -1044,6 +1045,7 @@ left join (
                 foreach (DataRow dr in dt.Rows)
                 {
                     cntRecord.ReadDataRow(dr);
+                    if (String.IsNullOrWhiteSpace(cntRecord.Counterid)) continue;
 
                     CNV_COUNTERTYPE cnttype;
                     if (!cnttyperecode.TryGetValue(cntRecord.Cnttype, out cnttype))
@@ -1080,7 +1082,7 @@ left join (
                                 var c = new CNV_COUNTER()
                                 {
                                     LSHET = lshet.ToString(),
-                                    NAME = cntRecord.Name.Trim() + " " + housestreetnamerecode[houseid],
+                                    NAME = housestreetnamerecode[houseid],
                                     SERIALNUM = cntRecord.Serialnum.Trim(),
                                     CNTNAME = cntRecord.Cntname,
                                     SETUPDATE = cntRecord.Setupdate,
@@ -1089,6 +1091,7 @@ left join (
                                     CNTTYPE = cnttype.ID,
                                     SETUPPLACE = (int?)cntRecord.Instplid,
                                     COUNTER_LEVEL = 1,
+                                    DISTRIBUTINGMETHOD = 4,
                                     GROUPCOUNTERMODULEID = 23,
                                     TARGETBALANCE_KOD = 29,
                                     TARGETNEGATIVEBALANCE_KOD = 29
@@ -1186,7 +1189,9 @@ left join (
                         INDDATE = cr.Date,
                         INDICATION = cr.Indication,
                         INDTYPE = 1,
-                        CASETYPE = cr.Indtype.Trim() == "Расчетное" ? 3 : (int?) null
+                        CASETYPE = cr.Indtype.Trim() == "Расчетное" ? 3 : (int?) null,
+                        OLDIND = cr.Indication,
+                        OB_EM = 0
                     };
                     lc.Add(c);
                 }
@@ -1239,16 +1244,21 @@ order by TARIFCD")));
             StepFinish();
 
             StepStart(1);
-            var lc2 = CntrsindRecordUtils.ThinOutList(lc);
+            lc = CntrsindRecordUtils.ThinOutList(lc);
             StepFinish();
 
+            var mainInds = lc.Where(c => c.INDTYPE == 0).ToList();
+            var addInds = lc.Where(c => c.INDTYPE == 1).ToList();
+
             StepStart(1);
-            CntrsindRecordUtils.RestoreHistory(ref lc2, RestoreHistoryType.С_конца_по_конечным_показаниям);
+            CntrsindRecordUtils.RestoreHistory(ref mainInds, RestoreHistoryType.С_конца_по_конечным_показаниям);
             StepFinish();
+
+            mainInds.AddRange(addInds);
 
             StepStart(1);
             string s = lc[0].InsertSql;
-            BufferEntitiesManager.SaveDataToBufferIBScript(lc);
+            BufferEntitiesManager.SaveDataToBufferIBScript(mainInds);
             StepFinish();
         }
 
@@ -1812,13 +1822,121 @@ when not matched then
 
         public override void DoConvert()
         {
-            SetStepsCount(1);
+            SetStepsCount(2);
+            var convertDate = new DateTime(CurrentYear, CurrentMonth, 1).AddDays(-1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            StepStart(3);
+            fbm.ExecuteScript(@"
+SET TERM ^ ;
+
+create procedure RestoreSaldo(saldoyear integer, saldomonth integer) as
+
+declare variable lshet varchar(10);
+declare variable servicecd integer;
+declare variable year_ integer;
+declare variable month_ integer;
+declare variable begsaldo numeric(18,4);
+declare variable nach numeric(18,4);
+declare variable recalc numeric(18,4);
+declare variable paysum numeric(18,4);
+declare variable endsaldo numeric(18,4);
+declare variable nachid integer;
+
+declare variable prevlshet varchar(10);
+declare variable prevservice integer;
+declare variable prevsaldo numeric(18,4);
+declare variable checkdate date;
+begin
+	merge into cnv$nachopl nop
+	using (
+		select cn.lshet, cn.servicecd, cn.year_, cn.month_, sum(cn.fnath) as nachsum, sum(cn.prochl) as recalcsum
+		from cnv$nach cn
+		group by cn.lshet, cn.servicecd, cn.year_, cn.month_
+	) cn on nop.lshet = cn.lshet and nop.servicecd = cn.servicecd and nop.year_ = cn.year_ and nop.month_ = cn.month_
+	when matched then
+		update set nop.fnath = cn.nachsum, nop.prochl = cn.recalcsum
+	when not matched then
+		INSERT (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME)
+			VALUES (cn.lshet, cn.month_, cn.year_, cn.month_, cn.year_, 0, cn.nachsum, cn.recalcsum, 0, 0, cn.servicecd, cn.servicecd);
+
+
+	merge into cnv$nachopl nop
+	using (
+		select co.lshet, co.servicecd, co.year_, co.month_, sum(co.summa) as paysum
+		from cnv$oplata co
+		group by co.lshet, co.servicecd, co.year_, co.month_
+	) co on nop.lshet = co.lshet and nop.servicecd = co.servicecd and nop.year_ = co.year_ and nop.month_ = co.month_
+	when matched then
+		update set nop.oplata = co.paysum
+	when not matched then
+		INSERT (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME)
+			VALUES (co.lshet, co.month_, co.year_, co.month_, co.year_, 0, 0, 0, co.paysum, 0, co.servicecd, co.servicecd);
+
+    prevlshet = '';
+    prevservice = -1;
+    checkdate = cast('01.'||:saldomonth||'.'||:saldoyear as date);
+    for select nop.lshet, nop.servicecd, nop.year_, nop.month_
+        from cnv$nachopl nop
+        where nop.year_ * 12 + nop.month_ <= :saldoyear * 12 + :saldomonth
+        order by nop.lshet, nop.servicecd, nop.year_ desc, nop.month_ desc
+    into :lshet, :servicecd, :year_, :month_
+    do begin
+        if (:lshet <> :prevlshet or :servicecd <> :prevservice) then
+            checkdate = cast('01.'||:saldomonth||'.'||:saldoyear as date);
+        else
+            checkdate = dateadd(month, -1, :checkdate);
+        
+        while (extract(year from :checkdate) <> :year_ or extract(month from :checkdate) <> :month_)
+        do begin
+            INSERT INTO cnv$nachopl (LSHET, MONTH_, YEAR_, MONTH2, YEAR2, BDEBET, FNATH, PROCHL, OPLATA, EDEBET, SERVICECD, SERVICENAME)
+                VALUES (:lshet, extract(month from :checkdate), extract(year from :checkdate), extract(month from :checkdate), extract(year from :checkdate), 0, 0, 0, 0, 0, :servicecd, :servicecd);
+            checkdate = dateadd(month, -1, :checkdate);
+        end
+
+        prevlshet = :lshet;
+        prevservice = :servicecd;
+    end
+
+
+    prevlshet = '';
+    prevservice = -1;
+    for select nop.lshet, nop.servicecd, nop.year_, nop.month_, nop.bdebet, nop.fnath, nop.prochl, nop.oplata, nop.edebet, nop.id
+            from cnv$nachopl nop
+            where nop.year_ * 12 + nop.month_ <= :saldoyear * 12 + :saldomonth
+            order by nop.lshet, nop.servicecd, nop.year_ desc, nop.month_ desc
+    into :lshet, :servicecd, :year_, :month_, :begsaldo, :nach, :recalc, :paysum, :endsaldo, :nachid
+    do begin
+        if (:lshet <> prevlshet or :servicecd <> prevservice) then
+        begin
+            prevlshet = :lshet;
+            prevservice = :servicecd;
+            prevsaldo = :endsaldo + :paysum - :recalc - :nach;
+            update cnv$nachopl nop
+                set nop.bdebet = :prevsaldo
+                where nop.id = :nachid;
+        end
+        else
+        begin
+            endsaldo = :prevsaldo;
+            prevsaldo = :endsaldo + :paysum - :recalc - :nach;
+            update cnv$nachopl nop
+                set nop.edebet = :endsaldo,
+                    nop.bdebet = :prevsaldo
+                where nop.id = :nachid;
+        end
+    end
+end^
+
+SET TERM ; ^");
+            Iterate();
+            fbm.ExecuteProcedure("RestoreSaldo", new[] { convertDate.Year.ToString(), convertDate.Month.ToString() });
+            Iterate();
+            fbm.ExecuteNonQuery("DROP PROCEDURE RestoreSaldo");
+            StepFinish();
             StepStart(1);
             fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
             fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
-            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] { CurrentYear.ToString(CultureInfo.InvariantCulture),
-                CurrentMonth.ToString(CultureInfo.InvariantCulture) });
+            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] {convertDate.Year.ToString(), convertDate.Month.ToString()});
             fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
             fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
             StepFinish();
