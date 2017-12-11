@@ -39,9 +39,12 @@ namespace _048_Rgmek
         public static readonly string PlaceToLshetRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\placetolshetrecode.csv";
         public static readonly string HouseToLshetRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\housetolshetrecode.csv";
         public static readonly string HouseStreetNameRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\housestreetnamerecode.csv";
+        public static readonly string AbonenstNotFromKvcFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\abonentsnotfromkvc.txt";
+        public static readonly string CounterIdToLsRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\counteridtolsrecode.csv";
 
         public static readonly string NachFilesDirectory = aConverter_RootSettings.SourceDbfFilePath;
         public static readonly string AddCharsRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\AddCharsRecode.xlsx";
+        public static readonly string AbonentsNotFromKvcSaldoDbfTableName = "saldo";
 
         public static readonly Dictionary<long, int> CcharRecode = new Dictionary<long, int>
         {
@@ -126,6 +129,14 @@ namespace _048_Rgmek
             }
         }
 
+        public static void SaveDictionary(Dictionary<string, string> recodedic, string filename)
+        {
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
+                foreach (var kvp in recodedic) sw.WriteLine(kvp.Key + ";" + kvp.Value);
+            }
+        }
+
         public static Dictionary<string, long> ReadDictionary(string filename)
         {
             var dic = new Dictionary<string, long>();
@@ -138,6 +149,11 @@ namespace _048_Rgmek
                 }
             }
             return dic;
+        }
+
+        public static HashSet<string> GetLsNotFromKvc()
+        {
+            return new HashSet<string>(File.ReadAllLines(AbonenstNotFromKvcFileName));
         }
     }
 
@@ -180,7 +196,7 @@ namespace _048_Rgmek
 
         public override void DoDbfConvert()
         {
-            SetStepsCount(2);
+            SetStepsCount(3);
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
 
@@ -291,8 +307,20 @@ namespace _048_Rgmek
 
             StepStart(1);
             SaveListInsertSQL(lca, InsertRecordCount);
-            Iterate();
+            StepFinish();
 
+            var lsNotFromKvc = new List<string>();
+            using (DataTable dtSaldo = Tmsource.GetDataTable(AbonentsNotFromKvcSaldoDbfTableName))
+            {
+                StepStart(dtSaldo.Rows.Count);
+                foreach (DataRow dr in dtSaldo.Rows)
+                {
+                    var saldo = new SaldoNotFromKvcSaldoRecord(dr);
+                    lsNotFromKvc.Add(saldo.LsKvc);
+                }
+                lsNotFromKvc = lsNotFromKvc.Distinct().ToList();
+                File.WriteAllLines(AbonenstNotFromKvcFileName, lsNotFromKvc);
+            }
             StepFinish();
         }
     }
@@ -541,7 +569,7 @@ namespace _048_Rgmek
 
         public override void DoDbfConvert()
         {
-            SetStepsCount(3);
+            SetStepsCount(4);
             BufferEntitiesManager.DropTableData("CNV$AADDCHAR");
 
             lsrecode = Utils.ReadDictionary(LsRecodeFileName);
@@ -721,6 +749,21 @@ namespace _048_Rgmek
             lhlc = HcharsRecordUtils.ThinOutList(lhlc);
             Iterate();
             lhac = HcharsRecordUtils.ThinOutList(lhac);
+            StepFinish();
+
+            StepStart(1);
+            var lsNotFromkvc = Utils.GetLsNotFromKvc();
+            foreach (var ls in lsNotFromkvc)
+            {
+                long lshet;
+                if (lsrecode.TryGetValue(ls, out lshet))
+                    laac.Add(new CNV_AADDCHAR
+                    {
+                        LSHET = lshet.ToString(),
+                        ADDCHARCD = 16201105,
+                        VALUE = "1"
+                    });
+            }
             StepFinish();
 
             StepStart(6);
@@ -967,6 +1010,7 @@ namespace _048_Rgmek
             });
             Utils.SaveDictionary(cnttyperecode.ToDictionary(ct => ct.Key, ct => (long)ct.Value.ID), CnttypeRecodeFileName);
             Utils.SaveDictionary(counteridrecode, CounterIdRecodeFileName);
+            Utils.SaveDictionary(lc.ToDictionary(c => c.COUNTERID.ToString(), c => Convert.ToInt64(c.LSHET)), CounterIdToLsRecodeFileName);
             StepFinish();
 
             StepStart(1);
@@ -1158,6 +1202,10 @@ left join (
             IsChecked = false;
         }
 
+        private Dictionary<string, long> _lsToCounters;
+        private Dictionary<long, string> _reverseLsRecode;
+        private HashSet<string> _lsNotFromKvc;
+
         public override void DoDbfConvert()
         {
             SetStepsCount(5);
@@ -1167,9 +1215,12 @@ left join (
 
             BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
             var lc = new List<CNV_CNTRSIND>();
+            _lsNotFromKvc = Utils.GetLsNotFromKvc();
 
+            _lsToCounters = Utils.ReadDictionary(CounterIdToLsRecodeFileName);
             var counteridrecode = Utils.ReadDictionary(CounterIdRecodeFileName);
             var groupcounteridrecode = Utils.ReadDictionary(GroupCounterIdRecodeFileName);
+            _reverseLsRecode = Utils.ReadDictionary(LsRecodeFileName).ToDictionary(l => l.Value, l => l.Key);
             long counterid = 0;
 
 
@@ -1193,6 +1244,9 @@ left join (
                         OLDIND = cr.Indication,
                         OB_EM = 0
                     };
+
+                    if (IsNorFromKvc(c.COUNTERID)) c.INDTYPE = 0;
+
                     lc.Add(c);
                 }
                 Iterate();
@@ -1229,6 +1283,7 @@ order by TARIFCD")));
                     if (counteridrecode.TryGetValue(cr.Counterid, out counterid) ||
                         groupcounteridrecode.TryGetValue(cr.Counterid, out counterid))
                     {
+                        if (IsNorFromKvc(counterid.ToString())) return;
                         var c = new CNV_CNTRSIND()
                         {
                             COUNTERID = counterid.ToString(),
@@ -1277,6 +1332,20 @@ order by TARIFCD")));
             else
                 throw new Exception("Неожиданное наименование документа о снятии показаний:\r\n" +
                     doc);
+        }
+
+        private bool IsNorFromKvc(string counterid)
+        {
+            long lsByCounter;
+            if (_lsToCounters.TryGetValue(counterid, out lsByCounter))
+            {
+                string lsKvcByCounter;
+                if (_reverseLsRecode.TryGetValue(lsByCounter, out lsKvcByCounter))
+                {
+                    return _lsNotFromKvc.Contains(lsKvcByCounter);
+                }
+            }
+            return false;
         }
     }
 
@@ -1507,11 +1576,12 @@ order by TARIFCD")));
 
         public override void DoDbfConvert()
         {
-            SetStepsCount(2);
+            SetStepsCount(3);
 
             BufferEntitiesManager.DropTableData("CNV$NACHOPL");
 
             var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+            var lsNotFromKvc = Utils.GetLsNotFromKvc();
 
             var lnop = new List<CNV_NACHOPL>();
 
@@ -1523,6 +1593,7 @@ order by TARIFCD")));
                 foreach (DataRow dr in dt.Rows)
                 {
                     var charRecord = new CommonAddCharRecord(dr);
+                    if (lsNotFromKvc.Contains(charRecord.Owner)) continue;
                     long lshet;
                     if (lsrecode.TryGetValue(charRecord.Owner, out lshet))
                     {
@@ -1543,6 +1614,35 @@ order by TARIFCD")));
                         });
                     }
                     Iterate();
+                }
+                StepFinish();
+
+                StepStart(lsNotFromKvc.Count);
+                using (DataTable dtSaldo = Tmsource.GetDataTable(AbonentsNotFromKvcSaldoDbfTableName))
+                {
+                    foreach (DataRow dr in dtSaldo.Rows)
+                    {
+                        var saldo = new SaldoNotFromKvcSaldoRecord(dr);
+                        long lshet;
+                        if (lsrecode.TryGetValue(saldo.LsKvc, out lshet))
+                        {
+                            lnop.Add(new CNV_NACHOPL
+                            {
+                                LSHET = lshet.ToString(),
+                                SERVICENAME = "Электроэнергия",
+                                SERVICECD = 9,
+                                PROCHL = 0,
+                                FNATH = 0,
+                                OPLATA = 0,
+                                BDEBET = 0,
+                                EDEBET = saldo.Saldo,
+                                MONTH2 = convertDate.Month,
+                                YEAR2 = convertDate.Year,
+                                MONTH_ = convertDate.Month,
+                                YEAR_ = convertDate.Year
+                            });
+                        }
+                    }
                 }
                 StepFinish();
 

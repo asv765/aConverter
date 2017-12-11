@@ -69,6 +69,7 @@
     <Compile Include="Records\NachExcelRecord.cs" />
     <Compile Include="Records\NachRecord.cs" />
     <Compile Include="Records\PaymentRecord.cs" />
+    <Compile Include="Records\SaldoNotFromKvcSaldoRecord.cs" />
     <Compile Include="Records\SummsRecord.cs" />
     <Compile Include="Records\TarifRecord.cs" />
     <Compile Include="RgmekConverter.cs" />
