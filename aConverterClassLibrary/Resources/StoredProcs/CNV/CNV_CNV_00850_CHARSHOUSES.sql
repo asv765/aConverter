@@ -58,20 +58,22 @@ begin
             update HOUSES H
             set H.BUILDINGYEAR = :value_
             where H.HOUSECD = :HOUSECD;
-      else
-      if (:CHARCD = -2) then
+      else if (:CHARCD = -2) then
         update HOUSES H
         set H.FLOORCOUNT = :VALUE_
         where H.HOUSECD = :HOUSECD;
-      else
-      if (:CHARCD = -3) then
+      else if (:CHARCD = -3) then
         update HOUSES H
         set H.ENTRANCCOUNT = :VALUE_
         where H.HOUSECD = :HOUSECD;
-	  if (:CHARCD = -4) then
+	  else if (:CHARCD = -4) then
         update HOUSES H
         set H.ISMANYKVART = :VALUE_
         where H.HOUSECD = :HOUSECD;
+	  else if (:CHARCD = -5) then
+		update HOUSES H
+		set H.NUMBEROFKVART = :VALUE_
+		where H.HOUSECD = :HOUSECD;
     end
   end
 

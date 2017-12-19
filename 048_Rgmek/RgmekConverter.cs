@@ -96,7 +96,7 @@ namespace _048_Rgmek
             { 8, 6 }, //Электроплиты двуставочный
         };
 
-        public static readonly int CurrentMonth = 10;
+        public static readonly int CurrentMonth = 10; // должен быть следующий месяц после последнего закрытого
         public static readonly int CurrentYear = 2017;
         public static readonly DateTime MinConvertDate = new DateTime(2017, 1, 1);
         public static readonly DateTime NullDate = new DateTime(1899, 12, 30);
@@ -265,13 +265,13 @@ namespace _048_Rgmek
                 a.HOUSENO = abonent.Ndoma.Trim();
 
                 int korpusno;
-                if (!String.IsNullOrEmpty(abonent.Korpustip.Trim()))
-                {
-                    a.HOUSEPOSTFIX = abonent.Korpustip.Substring(0, 3).Trim() + " " + abonent.Korpus.Trim();
-                }
-                else if (Int32.TryParse(abonent.Korpus, out korpusno))
+                if (Int32.TryParse(abonent.Korpus, out korpusno))
                 {
                     a.KORPUSNO = korpusno;
+                }
+                else if (!String.IsNullOrEmpty(abonent.Korpustip.Trim()))
+                {
+                    a.HOUSEPOSTFIX = abonent.Korpustip.Substring(0, 3).Trim() + " " + abonent.Korpus.Trim();
                 }
                 else
                 {
@@ -285,7 +285,7 @@ namespace _048_Rgmek
                     else a.FLATPOSTFIX = abonent.Kvartira;
                 }
 
-                if(a.ROOMNO != 0) a.ROOMNO = (short)abonent.Komnata;
+                if(abonent.Komnata != 0) a.ROOMNO = (short)abonent.Komnata;
 
                 List<string> lshetsForPlace;
                 if (!placerecode.TryGetValue(abonent.Placecd, out lshetsForPlace))
@@ -463,14 +463,16 @@ namespace _048_Rgmek
             var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
             var lcc = new List<CNV_LCHAR>();
 
-            var nachFiles = ConvertNach.GetNachFiles();
+            var nachFiles = ConvertNach.GetNachFiles().Select(nf => new {NachFile = nf, FileDate = ConvertNach.GetNachFileDate(nf)}).OrderBy(nf => nf.FileDate).ToArray();
             StepStart(nachFiles.Length);
             foreach (var file in nachFiles)
             {
-                var fileDate = ConvertNach.GetNachFileDate(file);
-                aConverterClassLibrary.Utils.ReadExcelFileByRow(file, null, dr =>
+                var fileDate = file.FileDate;
+                aConverterClassLibrary.Utils.ReadExcelFileByRow(file.NachFile, null, dr =>
                 {
                     var nachInfo = new NachExcelRecord(dr);
+
+                    if (nachInfo.Sum == 0 && nachInfo.SumCoef == 0 && nachInfo.Volume == 0) return;
 
                     long lshet;
                     if (lsrecode.TryGetValue(nachInfo.LsKvc, out lshet))
@@ -560,6 +562,7 @@ namespace _048_Rgmek
 
         private static Dictionary<string, int> valueListRecode;
         private static Dictionary<string, long> lsrecode;
+        private static Dictionary<string, long> houserecode;
 
         private static string[] IgnoreCharsList =
         {
@@ -571,9 +574,9 @@ namespace _048_Rgmek
         {
             SetStepsCount(4);
             BufferEntitiesManager.DropTableData("CNV$AADDCHAR");
-
+            
             lsrecode = Utils.ReadDictionary(LsRecodeFileName);
-            var houserecode = Utils.ReadDictionary(HouseRecodeFileName);
+            houserecode = Utils.ReadDictionary(HouseRecodeFileName);
             var placeToLshetRecode = File.ReadAllLines(PlaceToLshetRecodeFileName)
                 .Select(s =>
                 {
@@ -893,6 +896,26 @@ namespace _048_Rgmek
                 case "1a083d4e-8798-48dd-98f1-568029c5ce2c":
                     if (!lsrecode.TryGetValue(charRecord.Owner, out lshet)) break;
                     AddLChar(recode, charRecord, lshet);
+                    break;
+                case "fc7c4f38-aee3-48d8-bb79-98bb1ac2462f":
+                    long housecd;
+                    if (!houserecode.TryGetValue(charRecord.Owner, out housecd)) break;
+                    lhcc.Add(new CNV_CHARSHOUSES
+                    {
+                        HOUSECD = (int)housecd,
+                        CHARCD = -5,
+                        CHARNAME = "Количество квартир",
+                        VALUE_ = Convert.ToDecimal(charRecord.Value),
+                        DATE_ = charRecord.Date
+                    });
+                    lhcc.Add(new CNV_CHARSHOUSES
+                    {
+                        HOUSECD = (int)housecd,
+                        CHARCD = -4,
+                        CHARNAME = "Многоквартирный",
+                        VALUE_ = Convert.ToDecimal(charRecord.Value) > 1 ? 1 : 0,
+                        DATE_ = charRecord.Date
+                    });
                     break;
                 default:
                     return false;
@@ -1397,7 +1420,7 @@ order by TARIFCD")));
                     pr.Opertype = reader["OPERTYPE"].ToString().Trim();
 
                     if (pr.Date < MinConvertDate) continue;
-                    if (pr.Activcd != "01" || pr.Resourcd != 4 || String.IsNullOrWhiteSpace(pr.Servicenm)) continue;
+                    if ((pr.Activcd != null && pr.Activcd != "01") || pr.Resourcd != 4 || String.IsNullOrWhiteSpace(pr.Servicenm)) continue;
 
                     long lshet;
                     if (lsrecode.TryGetValue(pr.Lshet, out lshet))
@@ -1492,7 +1515,6 @@ order by TARIFCD")));
                 aConverterClassLibrary.Utils.ReadExcelFileByRow(file, null, dr =>
                 {
                     var nachInfo = new NachExcelRecord(dr);
-                    nachdoc++;
 
                     long lshet;
                     if (!lsrecode.TryGetValue(nachInfo.LsKvc, out lshet)) return;
@@ -1506,8 +1528,6 @@ order by TARIFCD")));
                         YEAR_ = fileDate.Year,
                         YEAR2 = fileDate.Year,
                         DATE_VV = fileDate,
-
-                        DOCUMENTCD = $"N{nachdoc}",
 
                         AUTOUSE = 0,
                         CASETYPE = null,
@@ -1528,6 +1548,7 @@ order by TARIFCD")));
                             nach.PROCHLVOLUME = 0;
                             nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone;
                             nach.REGIMNAME = nachInfo.Nach.ToString();
+                            nach.DOCUMENTCD = $"N{++nachdoc}";
                             ln.Add(nach);
                         }
                     }
@@ -1541,6 +1562,7 @@ order by TARIFCD")));
                             nach.PROCHLVOLUME = 0;
                             nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone;
                             nach.REGIMNAME = nachInfo.Nach.ToString();
+                            nach.DOCUMENTCD = $"N{++nachdoc}";
                             ln.Add(nach);
                         }
                         if (nachInfo.SumCoef != 0)
@@ -1551,6 +1573,7 @@ order by TARIFCD")));
                             nach.PROCHLVOLUME = 0;
                             nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + 100 + (int) nachInfo.Zone;
                             nach.REGIMNAME = nachInfo.Nach.ToString();
+                            nach.DOCUMENTCD = $"N{++nachdoc}";
                             ln.Add(nach);
                         }
                     }
@@ -2036,7 +2059,7 @@ SET TERM ; ^");
             StepStart(1);
             fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert inactive");
             fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate inactive");
-            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] {convertDate.Year.ToString(), convertDate.Month.ToString()});
+            fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] {CurrentYear.ToString(), CurrentMonth.ToString()});
             fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
             fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
             StepFinish();

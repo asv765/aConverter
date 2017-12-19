@@ -45,6 +45,9 @@ namespace _048_Rgmek
                 case "additionalchars":
                     AType = AbonentType.AChar;
                     break;
+                case "houses":
+                    AType = AbonentType.Houses;
+                    break;
                 default:
                     throw new Exception($"Неизвестный тип Абонент {dr[4]}");
             }
@@ -76,7 +79,8 @@ namespace _048_Rgmek
         {
             CChar,
             LChar,
-            AChar
+            AChar,
+            Houses
         }
 
         public enum BelongType
