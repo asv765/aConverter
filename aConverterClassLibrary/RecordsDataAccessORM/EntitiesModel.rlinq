@@ -652,6 +652,9 @@
         <orm:field name="_nOCALCCHILDBALANCES" property="NOCALCCHILDBALANCES" behavior="readwrite" uniqueId="222c794a-878e-4fb9-acae-920f7419a468" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="NOCALCCHILDBALANCES" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
+        <orm:field name="_uNTINGID" property="UNTINGID" behavior="readwrite" uniqueId="26a1b51f-dbbb-49c8-8064-975eda897104" type="System.String">
+          <orm:column name="UNTINGID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
         <orm:index name="CNV$COUNTERS_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -2028,6 +2031,7 @@
         <orm:column name="GROUPCOUNTERMODULEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="KODREGIM" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="NOCALCCHILDBALANCES" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="UNTINGID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
         <orm:index name="CNV$COUNTERS_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -2654,6 +2658,7 @@
       <Property Id="73a4bbd6-d100-4cb8-a528-6ff122ee2e66" name="TARGETNEGATIVEBALANCE_KOD" type="Int32" label="TARGETNEGATIVEBALANCE_KOD : Int32" nullable="true" kind="Persistent" fieldName="_tARGETNEGATIVEBALANCE_KOD" />
       <Property Id="fadadd14-3b6e-4c7b-8601-2e2e1b223ae0" name="GROUPCOUNTERMODULEID" type="Int32" label="GROUPCOUNTERMODULEID : Int32" nullable="true" kind="Persistent" fieldName="_gROUPCOUNTERMODULEID" />
       <Property Id="b94ecf75-af94-4386-9611-5ac568090c5f" name="KODREGIM" type="Int32" label="KODREGIM : Int32" nullable="true" kind="Persistent" fieldName="_kODREGIM" />
+      <Property Id="26a1b51f-dbbb-49c8-8064-975eda897104" name="UNTINGID" label="UNTINGID : String" kind="Persistent" fieldName="_uNTINGID" />
     </DomainClass>
     <DomainClass Id="0122d5da-1d8d-4fd1-9102-5e25ac3c6ae7" name="CNV_CNTRSIND" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="bceb77dd-d70a-442a-9c4b-5c7236beb320" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />

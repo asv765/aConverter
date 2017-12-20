@@ -360,6 +360,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
                 this._nOCALCCHILDBALANCES = value;
             }
         }
+
+        private string _uNTINGID;
+        public virtual string UNTINGID
+        {
+            get
+            {
+                return this._uNTINGID;
+            }
+            set
+            {
+                this._uNTINGID = value;
+            }
+        }
     }
 }
 #pragma warning restore 1591

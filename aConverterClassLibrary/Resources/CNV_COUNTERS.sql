@@ -42,7 +42,8 @@ CREATE TABLE CNV$COUNTERS (
 	TARGETNEGATIVEBALANCE_KOD INTEGER,
 	GROUPCOUNTERMODULEID INTEGER,
 	KODREGIM INTEGER,
-	NOCALCCHILDBALANCES INTEGER
+	NOCALCCHILDBALANCES INTEGER,
+	UNTINGID   VARCHAR(20) /* Используется для многоставочных счетчиков. Основная шкала ссылается на свой COUNTERID, дополнительные шкалы на COUNTERID основной шкалы. При занесении в БД важна очередность, чтобы основная шкала стояла раньше дополнительных*/
 );
 
 

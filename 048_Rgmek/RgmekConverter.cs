@@ -193,6 +193,7 @@ namespace _048_Rgmek
         }
 
         Regex fioRegex = new Regex(@"(?<F>[А-Яа-я\w]+)( +(?<I>[А-Яа-я\w]{1})\.)?( +(?<O>[А-Яа-я\w]{1})\.)?");
+        Regex lsKvcRegex = new Regex(@"\d{3}-\d{3}-\d{2}-\d{3}-\d{1}-\d{2}");
 
         public override void DoDbfConvert()
         {
@@ -217,6 +218,8 @@ namespace _048_Rgmek
             foreach (DataRow dataRow in dt.Rows)
             {
                 abonent.ReadDataRow(dataRow);
+
+                if (!lsKvcRegex.IsMatch(abonent.Lshet)) continue;
 
                 var a = new CNV_ABONENT
                 {
@@ -956,9 +959,51 @@ namespace _048_Rgmek
             StepFinish();
             int lastcnttypeid = 0;
             var lcold = new CountersRecord();
-            StepStart(1);
 
-            DbfManager.ExecuteQueryByRow(@"select c.*, d.enddate 
+            var multiscalesCounters = new HashSet<string>();
+            var abonentTarifs = new Dictionary<string, NachExcelRecord.TarifType>();
+            DbfManager.ExecuteQueryByReader(
+                @"select distinct c.counterid, c.lshet
+                    from (
+	                    select cc.*
+	                    from (
+		                    select c.counterid
+		                    from (
+			                    select distinct c.counterid 
+			                    from counters c
+		                    ) c
+		                    inner join scales s on s.counterid = c.counterid
+		                    where s.name <> 'Основная'
+		                    group by c.counterid
+		                    having count(0) > 1
+	                    ) c
+	                    inner join counters cc on cc.counterid = c.counterid
+                    ) c
+                    inner join scales s on s.counterid = c.counterid",
+                r =>
+                {
+                    multiscalesCounters.Add(r.GetString(0));
+                    abonentTarifs.Add(r.GetString(1), NachExcelRecord.TarifType.Unknown);
+                });
+
+            var nachFile = ConvertNach.GetNachFiles()
+                .Select(nf => new { NachFile = nf, FileDate = ConvertNach.GetNachFileDate(nf) })
+                .OrderByDescending(nf => nf.FileDate)
+                .FirstOrDefault(nf => nf.FileDate <= new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1));
+            if (nachFile == null)
+                nachFile = ConvertNach.GetNachFiles()
+                    .Select(nf => new {NachFile = nf, FileDate = ConvertNach.GetNachFileDate(nf)})
+                    .OrderByDescending(nf => nf.FileDate)
+                    .First();
+            aConverterClassLibrary.Utils.ReadExcelFileByRow(nachFile.NachFile, null, dr =>
+            {
+                var nachInfo = new NachExcelRecord(dr);
+                if (nachInfo.Sum == 0 && nachInfo.SumCoef == 0 && nachInfo.Volume == 0) return;
+                if (!abonentTarifs.ContainsKey(nachInfo.LsKvc)) return;
+                abonentTarifs[nachInfo.LsKvc] = nachInfo.Tarif;
+            });
+
+            string sql = @"select {0} 
                 from counters c
                 left join (
             	    select oldcntid, max(date) as enddate 
@@ -966,74 +1011,125 @@ namespace _048_Rgmek
             	    where opertype in ('Замена', 'Снятие')
             	    group by oldcntid
                 ) d on d.oldcntid = c.counterid
-                where c.counterid is not null", dataRow =>
+                where c.counterid is not null";
+
+            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(String.Format(sql, "count(0)"))) + 1);
+
+            DbfManager.ExecuteQueryByRow(String.Format(sql, "c.*, d.enddate"), dataRow =>
             { 
-                    lcold.ReadDataRow(dataRow);
+                Iterate();
+                lcold.ReadDataRow(dataRow);
 
-                    CNV_COUNTERTYPE cnttype;
-                    if (!cnttyperecode.TryGetValue(lcold.Cnttype, out cnttype))
+                CNV_COUNTERTYPE cnttype;
+                if (!cnttyperecode.TryGetValue(lcold.Cnttype, out cnttype))
+                {
+                    int digitcount;
+                    if (!digitCounterDic.TryGetValue(lcold.Cnttype, out digitcount))
+                        digitcount = DefaultDigitCount;
+                    cnttype = new CNV_COUNTERTYPE
                     {
-                        int digitcount;
-                        if (!digitCounterDic.TryGetValue(lcold.Cnttype, out digitcount))
-                            digitcount = DefaultDigitCount;
-                        cnttype = new CNV_COUNTERTYPE
-                        {
-                            ID = ++lastcnttypeid,
-                            EQUIPMENTGROUPID = 36,
-                            EQUIPMENTTYPEID = 18,
-                            PERIODKOD = (int?) lcold.Periodpov,
-                            NAME = lcold.Cntname.Trim(),
-                            ACCURACY = lcold.Precision,
-                            COEFFICIENT = 1,
-                            DIGITCOUNT = digitcount
-                        };
-                        cnttyperecode.Add(lcold.Cnttype, cnttype);
+                        ID = ++lastcnttypeid,
+                        EQUIPMENTGROUPID = 36,
+                        EQUIPMENTTYPEID = 18,
+                        PERIODKOD = (int?) lcold.Periodpov,
+                        NAME = lcold.Cntname.Trim(),
+                        ACCURACY = lcold.Precision,
+                        COEFFICIENT = 1,
+                        DIGITCOUNT = digitcount
+                    };
+                    cnttyperecode.Add(lcold.Cnttype, cnttype);
+                }
+
+                long lshet;
+                if (lsrecode.TryGetValue(lcold.Lshet, out lshet))
+                {
+                    var enddate = dataRow.IsNull("enddate")
+                        ? (DateTime?) null
+                        : Convert.ToDateTime(dataRow["enddate"]);
+                    if (enddate == DateTime.MinValue) enddate = null;
+                    var c = new CNV_COUNTER()
+                    {
+                        LSHET = lshet.ToString(),
+                        NAME = lcold.Name.Trim(),
+                        SERIALNUM = lcold.Serialnum.Trim(),
+                        CNTNAME = lcold.Cntname,
+                        SETUPDATE = lcold.Setupdate,
+                        DEACTDATE = enddate == null || enddate == NullDate ? null : enddate,
+                        GUID_ = lcold.Counterid.Trim(),
+                        CNTTYPE = cnttype.ID,
+                        SETUPPLACE = (int?) lcold.Instplid
+                    };
+                    c.COUNTERID = Utils.GetValue(lcold.Counterid, counteridrecode, ref counterid).ToString();
+                    if (lcold.Lastpov.Year > 1950)
+                    {
+                        c.LASTPOV = lcold.Lastpov;
+                        if (lcold.Periodpov > 0)
+                            c.NEXTPOV = lcold.Lastpov.AddMonths((int) lcold.Periodpov);
                     }
+                    string prim = "";
+                    if (lcold.Rgresid > 0)
+                        prim += (prim == "" ? "" : ", ") + "RGRESID=" + lcold.Rgresid.ToString();
+                    if (lcold.Precision > 0)
+                        prim += (prim == "" ? "" : ", ") + "PRECISION=" +
+                                lcold.Precision.ToString().Replace(',', '.');
+                    if (!String.IsNullOrEmpty(lcold.Amperage))
+                        prim += (prim == "" ? "" : ", ") + "AMPERAG=" + lcold.Amperage.Trim();
+                    if (!String.IsNullOrEmpty(lcold.Instplace))
+                        prim += (prim == "" ? "" : ", ") + "INSTPLACE=" + lcold.Instplace.Trim();
+                    c.PRIM_ = prim;
 
-                    long lshet;
-                    if (lsrecode.TryGetValue(lcold.Lshet, out lshet))
+                    if (multiscalesCounters.Contains(lcold.Counterid))
                     {
-                        var enddate = dataRow.IsNull("enddate")
-                            ? (DateTime?) null
-                            : Convert.ToDateTime(dataRow["enddate"]);
-                        if (enddate == DateTime.MinValue) enddate = null;
-                        var c = new CNV_COUNTER()
-                        {
-                            LSHET = lshet.ToString(),
-                            NAME = lcold.Name.Trim(),
-                            SERIALNUM = lcold.Serialnum.Trim(),
-                            CNTNAME = lcold.Cntname,
-                            SETUPDATE = lcold.Setupdate,
-                            DEACTDATE = enddate == null || enddate == NullDate ? null : enddate,
-                            GUID_ = lcold.Counterid.Trim(),
-                            CNTTYPE = cnttype.ID,
-                            SETUPPLACE = (int?) lcold.Instplid
-                        };
-                        c.COUNTERID = Utils.GetValue(lcold.Counterid, counteridrecode, ref counterid).ToString();
-                        if (lcold.Lastpov.Year > 1950)
-                        {
-                            c.LASTPOV = lcold.Lastpov;
-                            if (lcold.Periodpov > 0)
-                                c.NEXTPOV = lcold.Lastpov.AddMonths((int) lcold.Periodpov);
-                        }
-                        string prim = "";
-                        if (lcold.Rgresid > 0)
-                            prim += (prim == "" ? "" : ", ") + "RGRESID=" + lcold.Rgresid.ToString();
-                        if (lcold.Precision > 0)
-                            prim += (prim == "" ? "" : ", ") + "PRECISION=" +
-                                    lcold.Precision.ToString().Replace(',', '.');
-                        if (!String.IsNullOrEmpty(lcold.Amperage))
-                            prim += (prim == "" ? "" : ", ") + "AMPERAG=" + lcold.Amperage.Trim();
-                        if (!String.IsNullOrEmpty(lcold.Instplace))
-                            prim += (prim == "" ? "" : ", ") + "INSTPLACE=" + lcold.Instplace.Trim();
-                        c.PRIM_ = prim;
+                        var abnonentTarif = abonentTarifs[lcold.Lshet];
 
-                    lc.Add(c);
+                        int dayRegim, nightRegim;
+                        switch (abnonentTarif)
+                        {
+                            case NachExcelRecord.TarifType.Ep2:
+                                dayRegim = (int) NachExcelRecord.TarifType.Ep2 + (int) NachExcelRecord.ZoneType.Day;
+                                nightRegim = (int) NachExcelRecord.TarifType.Ep2 + (int) NachExcelRecord.ZoneType.Night;
+                                break;
+                            default:
+                                dayRegim = (int) NachExcelRecord.TarifType.Gp2 + (int) NachExcelRecord.ZoneType.Day;
+                                nightRegim = (int) NachExcelRecord.TarifType.Gp2 + (int) NachExcelRecord.ZoneType.Night;
+                                break;
+                        }
+
+                        c.KODREGIM = dayRegim;
+                        c.UNTINGID = c.COUNTERID;
+                        lc.Add(c);
+
+                        lc.Add(new CNV_COUNTER
+                        {
+                            LSHET = c.LSHET,
+                            NAME = c.NAME,
+                            SERIALNUM = c.SERIALNUM,
+                            CNTNAME = c.CNTNAME,
+                            SETUPDATE = c.SETUPDATE,
+                            DEACTDATE = c.DEACTDATE,
+                            GUID_ = c.GUID_,
+                            CNTTYPE = c.CNTTYPE,
+                            SETUPPLACE = c.SETUPPLACE,
+                            COUNTERID = (++counterid).ToString(),
+                            LASTPOV = c.LASTPOV,
+                            NEXTPOV = c.NEXTPOV,
+                            PRIM_ = c.PRIM_,
+                            KODREGIM = nightRegim,
+                            UNTINGID = c.COUNTERID
+                        });
+                    }
+                    else
+                        lc.Add(c);
                 }
             });
             Utils.SaveDictionary(cnttyperecode.ToDictionary(ct => ct.Key, ct => (long)ct.Value.ID), CnttypeRecodeFileName);
             Utils.SaveDictionary(counteridrecode, CounterIdRecodeFileName);
-            Utils.SaveDictionary(lc.ToDictionary(c => c.COUNTERID.ToString(), c => Convert.ToInt64(c.LSHET)), CounterIdToLsRecodeFileName);
+            Utils.SaveDictionary(lc
+                .Select(c => new {c.COUNTERID, c.LSHET})
+                .GroupBy(c => c.COUNTERID, c => c.LSHET)
+                .Select(gc => new {COUNTERID = gc.Key, Lshet = gc.First()})
+                .ToDictionary(c => c.COUNTERID.ToString(), c => Convert.ToInt64(c.Lshet)),
+                CounterIdToLsRecodeFileName);
             StepFinish();
 
             StepStart(1);
