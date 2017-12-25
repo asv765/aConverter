@@ -513,16 +513,30 @@ namespace _048_Rgmek
                         });
 
                         if (nachInfo.Nach != NachExcelRecord.NachType.AddNach)
-                            lcc.Add(new CNV_LCHAR
-                            {
-                                LSHET = lshet.ToString(),
-                                SortLshet = lshet,
-                                LCHARCD = 21,
-                                LCHARNAME = "Сч. электроэнергии",
-                                DATE_ = fileDate,
-                                VALUE_ = nachInfo.Nach == NachExcelRecord.NachType.WithDevice ? 1 : 0,
-                                VALUEDESC = nachInfo.Nach.ToString()
-                            });
+                        {
+                            if (nachInfo.Service == NachExcelRecord.ServiceType.Living)
+                                lcc.Add(new CNV_LCHAR
+                                {
+                                    LSHET = lshet.ToString(),
+                                    SortLshet = lshet,
+                                    LCHARCD = 21,
+                                    LCHARNAME = "Сч. электроэнергии",
+                                    DATE_ = fileDate,
+                                    VALUE_ = nachInfo.Nach == NachExcelRecord.NachType.WithDevice ? 1 : 0,
+                                    VALUEDESC = nachInfo.Nach.ToString()
+                                });
+                            else if (nachInfo.Service == NachExcelRecord.ServiceType.Odn)
+                                lcc.Add(new CNV_LCHAR
+                                {
+                                    LSHET = lshet.ToString(),
+                                    SortLshet = lshet,
+                                    LCHARCD = 22,
+                                    LCHARNAME = "Сч. электроэнергии ОДН",
+                                    DATE_ = fileDate,
+                                    VALUE_ = nachInfo.Nach == NachExcelRecord.NachType.WithDevice ? 1 : 0,
+                                    VALUEDESC = nachInfo.Nach.ToString()
+                                });
+                        }
                     }
                 });
                 lcc = LcharsRecordUtils.CreateUniqueLchars(lcc);
@@ -1615,6 +1629,11 @@ order by TARIFCD")));
                     long lshet;
                     if (!lsrecode.TryGetValue(nachInfo.LsKvc, out lshet)) return;
 
+                    if (nachInfo.LsKvc == "001-032-00-001-0-94")
+                    {
+                        int a = 10;
+                    }
+
                     var nach = new CNV_NACH
                     {
                         LSHET = lshet.ToString(),
@@ -1638,39 +1657,81 @@ order by TARIFCD")));
                     {
                         if (nachInfo.Sum != 0)
                         {
-                            nach.FNATH = 0;
-                            nach.VOLUME = 0;
-                            nach.PROCHL = nachInfo.Sum;
-                            nach.PROCHLVOLUME = 0;
-                            nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone;
-                            nach.REGIMNAME = nachInfo.Nach.ToString();
-                            nach.DOCUMENTCD = $"N{++nachdoc}";
-                            ln.Add(nach);
+                            ln.Add(new CNV_NACH
+                            {
+                                LSHET = nach.LSHET,
+                                MONTH_ = nach.MONTH_,
+                                MONTH2 = nach.MONTH2,
+                                YEAR_ = nach.YEAR_,
+                                YEAR2 = nach.YEAR2,
+                                DATE_VV = nach.DATE_VV,
+                                AUTOUSE = nach.AUTOUSE,
+                                CASETYPE = nach.CASETYPE,
+                                TYPE_ = nach.TYPE_,
+                                VTYPE_ = nach.VTYPE_,
+                                SERVICECD = nach.SERVICECD,
+                                SERVICENAME = nach.SERVICENAME,
+                                FNATH = 0,
+                                VOLUME = 0,
+                                PROCHL = nachInfo.Sum,
+                                PROCHLVOLUME = 0,
+                                REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone,
+                                REGIMNAME = nachInfo.Nach.ToString(),
+                                DOCUMENTCD = $"N{++nachdoc}"
+                            });
                         }
                     }
                     else
                     {
                         if (nachInfo.Sum != 0 || nachInfo.Volume != 0)
                         {
-                            nach.FNATH = nachInfo.Sum;
-                            nach.VOLUME = nachInfo.Volume;
-                            nach.PROCHL = 0;
-                            nach.PROCHLVOLUME = 0;
-                            nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone;
-                            nach.REGIMNAME = nachInfo.Nach.ToString();
-                            nach.DOCUMENTCD = $"N{++nachdoc}";
-                            ln.Add(nach);
+                            ln.Add(new CNV_NACH
+                            {
+                                LSHET = nach.LSHET,
+                                MONTH_ = nach.MONTH_,
+                                MONTH2 = nach.MONTH2,
+                                YEAR_ = nach.YEAR_,
+                                YEAR2 = nach.YEAR2,
+                                DATE_VV = nach.DATE_VV,
+                                AUTOUSE = nach.AUTOUSE,
+                                CASETYPE = nach.CASETYPE,
+                                TYPE_ = nach.TYPE_,
+                                VTYPE_ = nach.VTYPE_,
+                                SERVICECD = nach.SERVICECD,
+                                SERVICENAME = nach.SERVICENAME,
+                                FNATH = nachInfo.Sum - nachInfo.SumCoef,
+                                VOLUME = nachInfo.Volume,
+                                PROCHL = 0,
+                                PROCHLVOLUME = 0,
+                                REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone,
+                                REGIMNAME = nachInfo.Nach.ToString(),
+                                DOCUMENTCD = $"N{++nachdoc}"
+                            });
                         }
                         if (nachInfo.SumCoef != 0)
                         {
-                            nach.FNATH = nachInfo.SumCoef;
-                            nach.VOLUME = 0;
-                            nach.PROCHL = 0;
-                            nach.PROCHLVOLUME = 0;
-                            nach.REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + 100 + (int) nachInfo.Zone;
-                            nach.REGIMNAME = nachInfo.Nach.ToString();
-                            nach.DOCUMENTCD = $"N{++nachdoc}";
-                            ln.Add(nach);
+                            ln.Add(new CNV_NACH
+                            {
+                                LSHET = nach.LSHET,
+                                MONTH_ = nach.MONTH_,
+                                MONTH2 = nach.MONTH2,
+                                YEAR_ = nach.YEAR_,
+                                YEAR2 = nach.YEAR2,
+                                DATE_VV = nach.DATE_VV,
+                                AUTOUSE = nach.AUTOUSE,
+                                CASETYPE = nach.CASETYPE,
+                                TYPE_ = nach.TYPE_,
+                                VTYPE_ = nach.VTYPE_,
+                                SERVICECD = nach.SERVICECD,
+                                SERVICENAME = nach.SERVICENAME,
+                                FNATH = nachInfo.SumCoef,
+                                VOLUME = 0,
+                                PROCHL = 0,
+                                PROCHLVOLUME = 0,
+                                REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + 100 + (int) nachInfo.Zone,
+                                REGIMNAME = nachInfo.Nach.ToString(),
+                                DOCUMENTCD = $"N{++nachdoc}"
+                            });
                         }
                     }
                 });
