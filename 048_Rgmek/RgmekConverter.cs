@@ -96,7 +96,7 @@ namespace _048_Rgmek
             { 8, 6 }, //Электроплиты двуставочный
         };
 
-        public static readonly int CurrentMonth = 10; // должен быть следующий месяц после последнего закрытого
+        public static readonly int CurrentMonth = 11; // должен быть следующий месяц после последнего закрытого
         public static readonly int CurrentYear = 2017;
         public static readonly DateTime MinConvertDate = new DateTime(2017, 1, 1);
         public static readonly DateTime NullDate = new DateTime(1899, 12, 30);
@@ -170,6 +170,43 @@ namespace _048_Rgmek
 
         public override void DoConvert()
         {
+            //var nachFile = ConvertNach.GetNachFiles().First(nf => ConvertNach.GetNachFileDate(nf) == new DateTime(2017, 10, 01));
+            //var lsRecode = Utils.ReadDictionary(LsRecodeFileName);
+            //var missingNach = new List<NachExcelRecord>();
+            //var existedNach = new List<NachExcelRecord>();
+            //aConverterClassLibrary.Utils.ReadExcelFileByRow(nachFile, null, dr =>
+            //{
+            //    var nachInfo = new NachExcelRecord(dr);
+            //    if (!lsRecode.ContainsKey(nachInfo.LsKvc))
+            //        missingNach.Add(nachInfo);
+            //    else
+            //    {
+            //        nachInfo.LsKvc = lsRecode[nachInfo.LsKvc].ToString();
+            //        existedNach.Add(nachInfo);
+            //    }
+            //});
+
+            //var missingSum = missingNach.Sum(n => n.Sum);
+            //var missingVol = missingNach.Sum(n => n.Volume);
+
+            //existedNach = existedNach.OrderBy(n => n.LsKvc).ToList();
+
+            //var reculcVol = existedNach.Where(n => n.Nach == NachExcelRecord.NachType.AddNach).Sum(n => n.Volume);
+
+            //existedNach = existedNach.Where(n => n.Nach != NachExcelRecord.NachType.AddNach).OrderBy(n => n.LsKvc).ToList();
+
+            //var anyNull = existedNach.Where(n => (n.Sum == 0 && n.Volume != 0)
+            //                                     || (n.Sum != 0 && n.Volume == 0))
+            //    .ToList();
+
+            //var anyNullMissingSum = anyNull.Sum(n => n.Sum);
+            //var anyNullMissingVol = anyNull.Sum(n => n.Volume);
+
+            //existedNach = existedNach.Where(n => !((n.Sum == 0 && n.Volume != 0)
+            //                                     || (n.Sum != 0 && n.Volume == 0)))
+            //    .ToList();
+
+
             SetStepsCount(1);
             StepStart(1);
 
@@ -212,6 +249,8 @@ namespace _048_Rgmek
             var houserecode = new Dictionary<string, long>();
             long lasthousecd = 0;
             var placerecode = new Dictionary<string, List<string>>();
+            var distrRecode = new Dictionary<string, long>();
+            long lastDistId = 0;
 
             StepStart(dt.Rows.Count);
             var abonent = new AbonentRecord();
@@ -228,6 +267,8 @@ namespace _048_Rgmek
                     ISDELETED = Convert.ToInt32(abonent.Isdeleted),
                     RAYONKOD = (int)abonent.Distkod,
                     RAYONNAME = abonent.Distname.Trim(),
+                    DISTKOD = (int)Utils.GetValue(abonent.Diviscd.Trim(), distrRecode, ref lastDistId),
+                    DISTNAME = abonent.Divisnm.Trim(),
                     PRIM_ = abonent.Address.Trim(),
                     POSTINDEX = abonent.Postindex.Trim(),
                     PHONENUM = abonent.Phonenum.Trim()
@@ -474,8 +515,6 @@ namespace _048_Rgmek
                 aConverterClassLibrary.Utils.ReadExcelFileByRow(file.NachFile, null, dr =>
                 {
                     var nachInfo = new NachExcelRecord(dr);
-
-                    if (nachInfo.Sum == 0 && nachInfo.SumCoef == 0 && nachInfo.Volume == 0) return;
 
                     long lshet;
                     if (lsrecode.TryGetValue(nachInfo.LsKvc, out lshet))
@@ -997,7 +1036,8 @@ namespace _048_Rgmek
                 r =>
                 {
                     multiscalesCounters.Add(r.GetString(0));
-                    abonentTarifs.Add(r.GetString(1), NachExcelRecord.TarifType.Unknown);
+                    if (!abonentTarifs.ContainsKey(r.GetString(1)))
+                        abonentTarifs.Add(r.GetString(1), NachExcelRecord.TarifType.Unknown);
                 });
 
             var nachFile = ConvertNach.GetNachFiles()
@@ -1529,8 +1569,13 @@ order by TARIFCD")));
                     pr.Servicenm = reader["SERVICENM"].ToString().Trim();
                     pr.Opertype = reader["OPERTYPE"].ToString().Trim();
 
+                    if (pr.Lshet == "062-164-00-001-0-15" && pr.Date > new DateTime(2017,09,01))
+                    {
+                        int a = 10;
+                    }
+
                     if (pr.Date < MinConvertDate) continue;
-                    if ((pr.Activcd != null && pr.Activcd != "01") || pr.Resourcd != 4 || String.IsNullOrWhiteSpace(pr.Servicenm)) continue;
+                    if (pr.Activcd == "11") continue;
 
                     long lshet;
                     if (lsrecode.TryGetValue(pr.Lshet, out lshet))
@@ -1564,7 +1609,8 @@ order by TARIFCD")));
             string servicename = pr.Servicenm.ToLower();
             if (servicename.Contains("электроэнергия")) return 9;
             if (servicename.Contains("общедовые нужды") || servicename.Contains("общедомовые нужды")) return 29;
-            throw new Exception($"Необработанная услуга {pr.Servicenm}");
+            return 9;
+            //throw new Exception($"Необработанная услуга {pr.Servicenm}");
         }
     }
 
@@ -1629,11 +1675,6 @@ order by TARIFCD")));
                     long lshet;
                     if (!lsrecode.TryGetValue(nachInfo.LsKvc, out lshet)) return;
 
-                    if (nachInfo.LsKvc == "001-032-00-001-0-94")
-                    {
-                        int a = 10;
-                    }
-
                     var nach = new CNV_NACH
                     {
                         LSHET = lshet.ToString(),
@@ -1672,7 +1713,7 @@ order by TARIFCD")));
                                 SERVICECD = nach.SERVICECD,
                                 SERVICENAME = nach.SERVICENAME,
                                 FNATH = 0,
-                                VOLUME = 0,
+                                VOLUME = nachInfo.Volume,
                                 PROCHL = nachInfo.Sum,
                                 PROCHLVOLUME = 0,
                                 REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone,
@@ -1683,7 +1724,7 @@ order by TARIFCD")));
                     }
                     else
                     {
-                        if (nachInfo.Sum != 0 || nachInfo.Volume != 0)
+                        if (nachInfo.Sum != 0 && nachInfo.Volume != 0)
                         {
                             ln.Add(new CNV_NACH
                             {

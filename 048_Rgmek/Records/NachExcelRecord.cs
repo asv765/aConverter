@@ -6,7 +6,7 @@ namespace _048_Rgmek.Records
     public class NachExcelRecord
     {
         public string LsKvc;
-        public SourceType Source;
+        //public SourceType Source;
         public ServiceType Service;
         public NachType Nach;
         public TarifType Tarif;
@@ -20,7 +20,7 @@ namespace _048_Rgmek.Records
         public NachExcelRecord(DataRow dr)
         {
             LsKvc = dr[0].ToString().Trim();
-            string value = dr[1].ToString().Trim().ToLower();
+            /*string value = dr[1].ToString().Trim().ToLower();
             switch (value)
             {
                 case "квц":
@@ -31,8 +31,8 @@ namespace _048_Rgmek.Records
                     break;
                 default:
                     throw new Exception($"Неизвестный источник {dr[1]}");
-            }
-            value = dr[2].ToString().Trim().ToLower();
+            }*/
+            string value = dr[2].ToString().Trim().ToLower();
             switch (value)
             {
                 case "жилые":

@@ -23,6 +23,28 @@ namespace _048_Rgmek
             set { CheckStringData("Lshet", value, 19); lshet = value; }
         }
 
+        private string diviscd;
+        // <summary>
+        // DIVISCD C(36)
+        // </summary>
+        [FieldName("DIVISCD"), FieldType('C'), FieldWidth(36)]
+        public string Diviscd
+        {
+            get { return diviscd; }
+            set { CheckStringData("Diviscd", value, 36); diviscd = value; }
+        }
+
+        private string divisnm;
+        // <summary>
+        // DIVISNM C(100)
+        // </summary>
+        [FieldName("DIVISNM"), FieldType('C'), FieldWidth(100)]
+        public string Divisnm
+        {
+            get { return divisnm; }
+            set { CheckStringData("Divisnm", value, 100); divisnm = value; }
+        }
+
         private string housecd;
         // <summary>
         // HOUSECD C(36)
@@ -258,11 +280,11 @@ namespace _048_Rgmek
         // <summary>
         // PHONENUM C(15)
         // </summary>
-        [FieldName("PHONENUM"), FieldType('C'), FieldWidth(15)]
+        [FieldName("PHONENUM"), FieldType('C'), FieldWidth(100)]
         public string Phonenum
         {
             get { return phonenum; }
-            set { CheckStringData("Phonenum", value, 15); phonenum = value; }
+            set { CheckStringData("Phonenum", value, 100); phonenum = value; }
         }
 
         private string postindex;
@@ -323,6 +345,8 @@ namespace _048_Rgmek
         public override void ReadDataRow(System.Data.DataRow ADataRow)
         {
             if (ADataRow.Table.Columns.Contains("LSHET")) Lshet = ADataRow["LSHET"].ToString(); else Lshet = "";
+            if (ADataRow.Table.Columns.Contains("DIVISCD")) Diviscd = ADataRow["DIVISCD"].ToString(); else Diviscd = "";
+            if (ADataRow.Table.Columns.Contains("DIVISNM")) Divisnm = ADataRow["DIVISNM"].ToString(); else Divisnm = "";
             if (ADataRow.Table.Columns.Contains("HOUSECD")) Housecd = ADataRow["HOUSECD"].ToString(); else Housecd = "";
             if (ADataRow.Table.Columns.Contains("PLACECD")) Placecd = ADataRow["PLACECD"].ToString(); else Placecd = "";
             if (ADataRow.Table.Columns.Contains("ADDRESS")) Address = ADataRow["ADDRESS"].ToString(); else Address = "";
@@ -356,6 +380,8 @@ namespace _048_Rgmek
         {
             AbonentRecord retValue = new AbonentRecord();
             retValue.Lshet = this.Lshet;
+            retValue.Diviscd = this.Diviscd;
+            retValue.Divisnm = this.Divisnm;
             retValue.Housecd = this.Housecd;
             retValue.Placecd = this.Placecd;
             retValue.Address = this.Address;
@@ -388,7 +414,7 @@ namespace _048_Rgmek
 
         public override string GetInsertScript()
         {
-            string rs = String.Format("INSERT INTO ABONENT (LSHET, HOUSECD, PLACECD, ADDRESS, DISTKOD, DISTNAME, RAYONKOD, RAYONNAME, TOWNSKOD, TOWNSNAME, ULICAKOD, ULICANAME, NDOMA, KORPUS, KORPUSTIP, KVARTIRA, KOMNATA, FIO, F, I, O, PRIM, PHONENUM, POSTINDEX, DUCD, DUNAME, ISDELETED, ISARCHIVE) VALUES ('{0}', '{1}', '{2}', '{3}', {4}, '{5}', {6}, '{7}', {8}, '{9}', {10}, '{11}', '{12}', '{13}', '{14}', '{15}', {16}, '{17}', '{18}', '{19}', '{20}', '{21}', '{22}', '{23}', '{24}', '{25}', {26}, {27})", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), String.IsNullOrEmpty(Housecd) ? "" : Housecd.Trim(), String.IsNullOrEmpty(Placecd) ? "" : Placecd.Trim(), String.IsNullOrEmpty(Address) ? "" : Address.Trim(), Distkod.ToString(), String.IsNullOrEmpty(Distname) ? "" : Distname.Trim(), Rayonkod.ToString(), String.IsNullOrEmpty(Rayonname) ? "" : Rayonname.Trim(), Townskod.ToString(), String.IsNullOrEmpty(Townsname) ? "" : Townsname.Trim(), Ulicakod.ToString(), String.IsNullOrEmpty(Ulicaname) ? "" : Ulicaname.Trim(), String.IsNullOrEmpty(Ndoma) ? "" : Ndoma.Trim(), String.IsNullOrEmpty(Korpus) ? "" : Korpus.Trim(), String.IsNullOrEmpty(Korpustip) ? "" : Korpustip.Trim(), String.IsNullOrEmpty(Kvartira) ? "" : Kvartira.Trim(), Komnata.ToString(), String.IsNullOrEmpty(Fio) ? "" : Fio.Trim(), String.IsNullOrEmpty(F) ? "" : F.Trim(), String.IsNullOrEmpty(I) ? "" : I.Trim(), String.IsNullOrEmpty(O) ? "" : O.Trim(), String.IsNullOrEmpty(Prim) ? "" : Prim.Trim(), String.IsNullOrEmpty(Phonenum) ? "" : Phonenum.Trim(), String.IsNullOrEmpty(Postindex) ? "" : Postindex.Trim(), String.IsNullOrEmpty(Ducd) ? "" : Ducd.Trim(), String.IsNullOrEmpty(Duname) ? "" : Duname.Trim(), Isdeleted.ToString(), Isarchive.ToString());
+            string rs = String.Format("INSERT INTO ABONENT (LSHET, DIVISCD, DIVISNM, HOUSECD, PLACECD, ADDRESS, DISTKOD, DISTNAME, RAYONKOD, RAYONNAME, TOWNSKOD, TOWNSNAME, ULICAKOD, ULICANAME, NDOMA, KORPUS, KORPUSTIP, KVARTIRA, KOMNATA, FIO, F, I, O, PRIM, PHONENUM, POSTINDEX, DUCD, DUNAME, ISDELETED, ISARCHIVE) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', {6}, '{7}', {8}, '{9}', {10}, '{11}', {12}, '{13}', '{14}', '{15}', '{16}', '{17}', {18}, '{19}', '{20}', '{21}', '{22}', '{23}', '{24}', '{25}', '{26}', '{27}', {28}, {29})", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), String.IsNullOrEmpty(Diviscd) ? "" : Diviscd.Trim(), String.IsNullOrEmpty(Divisnm) ? "" : Divisnm.Trim(), String.IsNullOrEmpty(Housecd) ? "" : Housecd.Trim(), String.IsNullOrEmpty(Placecd) ? "" : Placecd.Trim(), String.IsNullOrEmpty(Address) ? "" : Address.Trim(), Distkod.ToString(), String.IsNullOrEmpty(Distname) ? "" : Distname.Trim(), Rayonkod.ToString(), String.IsNullOrEmpty(Rayonname) ? "" : Rayonname.Trim(), Townskod.ToString(), String.IsNullOrEmpty(Townsname) ? "" : Townsname.Trim(), Ulicakod.ToString(), String.IsNullOrEmpty(Ulicaname) ? "" : Ulicaname.Trim(), String.IsNullOrEmpty(Ndoma) ? "" : Ndoma.Trim(), String.IsNullOrEmpty(Korpus) ? "" : Korpus.Trim(), String.IsNullOrEmpty(Korpustip) ? "" : Korpustip.Trim(), String.IsNullOrEmpty(Kvartira) ? "" : Kvartira.Trim(), Komnata.ToString(), String.IsNullOrEmpty(Fio) ? "" : Fio.Trim(), String.IsNullOrEmpty(F) ? "" : F.Trim(), String.IsNullOrEmpty(I) ? "" : I.Trim(), String.IsNullOrEmpty(O) ? "" : O.Trim(), String.IsNullOrEmpty(Prim) ? "" : Prim.Trim(), String.IsNullOrEmpty(Phonenum) ? "" : Phonenum.Trim(), String.IsNullOrEmpty(Postindex) ? "" : Postindex.Trim(), String.IsNullOrEmpty(Ducd) ? "" : Ducd.Trim(), String.IsNullOrEmpty(Duname) ? "" : Duname.Trim(), Isdeleted.ToString(), Isarchive.ToString());
             return rs;
         }
     }

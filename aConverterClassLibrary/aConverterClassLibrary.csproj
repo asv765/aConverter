@@ -326,6 +326,8 @@
     <None Include="Resources\CNV_CITYZENLGOTA_d.sql" />
     <Content Include="Resources\CNV_CNTRSIND.sql" />
     <Content Include="Resources\CNV_CNTRSIND_d.sql" />
+    <Content Include="Resources\CNV_COUNTERADDCHAR.sql" />
+    <Content Include="Resources\CNV_COUNTERADDCHAR_d.sql" />
     <Content Include="Resources\CNV_COUNTERS.sql" />
     <Content Include="Resources\CNV_COUNTERS_d.sql" />
     <Content Include="Resources\CNV_CITIZENMIGRATION.sql" />
@@ -333,6 +335,8 @@
     <None Include="Resources\CNV_DOCUMENTNUMERATORTABLE_d.sql" />
     <None Include="Resources\CNV_COUNTERTYPES.SQL" />
     <None Include="Resources\CNV_COUNTERTYPES_d.sql" />
+    <Content Include="Resources\CNV_COUNTERTYPEADDCHAR.sql" />
+    <Content Include="Resources\CNV_COUNTERTYPEADDCHAR_d.sql" />
     <Content Include="Resources\CNV_DOGOVOR.sql" />
     <Content Include="Resources\CNV_DOGOVOR_d.sql" />
     <Content Include="Resources\CNV_EQUIPMENT.sql" />

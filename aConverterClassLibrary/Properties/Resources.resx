@@ -322,11 +322,23 @@
   <data name="CNV_CNV_DOCUMENTNUMERATOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_documentnumerator.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_COUNTERADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_COUNTERADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_COUNTERADDCHAR_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_COUNTERADDCHAR_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_COUNTERS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_counters.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_COUNTERS_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_counters_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_COUNTERTYPEADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_COUNTERTYPEADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_COUNTERTYPEADDCHAR_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_COUNTERTYPEADDCHAR_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_COUNTERTYPES" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_COUNTERTYPES.SQL;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
