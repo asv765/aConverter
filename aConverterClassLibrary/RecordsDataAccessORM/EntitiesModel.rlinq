@@ -705,7 +705,7 @@
         <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="1a8fb06a-7273-4bf8-ba72-d017ab89b40e" type="System.Int32">
           <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
         </orm:field>
-        <orm:field name="_сOUNTERTYPEID" property="COUNTERTYPEID" behavior="readwrite" uniqueId="e4679e23-69f7-48bd-8f15-7038c71f0063" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+        <orm:field name="_cOUNTERTYPEID" property="COUNTERTYPEID" behavior="readwrite" uniqueId="e4679e23-69f7-48bd-8f15-7038c71f0063" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="COUNTERTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_aDDCHARCD" property="ADDCHARCD" behavior="readwrite" uniqueId="154c3349-7ed3-41e2-af97-f7e83d7802fa" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
@@ -2748,7 +2748,7 @@
     </DomainClass>
     <DomainClass Id="3e00f67e-c747-4a26-b6aa-5faad33521a2" name="CNV_COUNTERTYPEADDCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="1a8fb06a-7273-4bf8-ba72-d017ab89b40e" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
-      <Property Id="e4679e23-69f7-48bd-8f15-7038c71f0063" name="COUNTERTYPEID" type="Int32" label="COUNTERTYPEID : Int32" nullable="true" kind="Persistent" fieldName="_сOUNTERTYPEID" />
+      <Property Id="e4679e23-69f7-48bd-8f15-7038c71f0063" name="COUNTERTYPEID" type="Int32" label="COUNTERTYPEID : Int32" nullable="true" kind="Persistent" fieldName="_cOUNTERTYPEID" />
       <Property Id="154c3349-7ed3-41e2-af97-f7e83d7802fa" name="ADDCHARCD" type="Int32" label="ADDCHARCD : Int32" nullable="true" kind="Persistent" fieldName="_aDDCHARCD" />
       <Property Id="471624e4-7a17-4e63-9ff6-fc6d7095fc9e" name="VALUE_" label="VALUE_ : String" kind="Persistent" fieldName="_vALUE_" />
     </DomainClass>

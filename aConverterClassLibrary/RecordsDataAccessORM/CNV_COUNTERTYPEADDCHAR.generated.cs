@@ -20,8 +20,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
             }
         }
 
-        private string _cOUNTERTYPEID;
-        public virtual string COUNTERTYPEID
+        private int? _cOUNTERTYPEID;
+        public virtual int? COUNTERTYPEID
         {
             get
             {
