@@ -259,6 +259,9 @@
   <data name="CNV_CNV_00900_LCHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_00900_LCHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_CNV_00910_ADDCHARS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_00910_ADDCHARS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_CNV_00950_COUNTERSTYPES" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_00950_COUNTERSTYPES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -270,6 +273,12 @@
   </data>
   <data name="CNV_CNV_01100_COUNTERTYPES" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_01100_COUNTERTYPES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_01110_COUNTERADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_01110_COUNTERADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_01120_COUNTERTYPEADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_01120_COUNTERTYPEADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_CNV_01300_SOURCEDOC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_01300_SOURCEDOC.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

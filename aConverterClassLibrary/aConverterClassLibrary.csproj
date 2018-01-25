@@ -136,6 +136,7 @@
     <Compile Include="Class\Utils\aConverter_Utils.cs" />
     <Compile Include="Class\Utils\CitizenComparer.cs" />
     <Compile Include="Class\Utils\DbfConnection.cs" />
+    <Compile Include="Class\Utils\KVC\LsKvc.cs" />
     <Compile Include="Class\Utils\ReaderToDataRow.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -182,6 +183,7 @@
     <Compile Include="RecordsDataAccessORM\CNV_COUNTER.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_COUNTERTYPEADDCHAR.generated.cs" />
     <Compile Include="RecordsDataAccessORM\CNV_COUNTERTYPE.generated.cs" />
     <Compile Include="RecordsDataAccessORM\CNV_DOGOVOR.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
@@ -239,7 +241,9 @@
     <Compile Include="RecordsDataAccessORM\PartialCITIZENRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCITIZENRELATIONSRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCNTRSINDRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialCOUNTERADDCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialCOUNTERTYPEADDCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERTYPERecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialHADDCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialLCHARHOUSESRecord.cs" />
@@ -254,6 +258,7 @@
     </Compile>
     <Compile Include="RecordsDataAccessORM\Utils\AddCharsRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\CitizenRecordUtils.cs" />
+    <Compile Include="RecordsDataAccessORM\CNV_COUNTERADDCHAR.generated.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\HcharsRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\OrmRecordUtils.cs" />
     <Compile Include="RecordsDataAccessORM\Utils\SupplnetRecordUtils.cs" />
@@ -390,6 +395,9 @@
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01050_GROUPCOUNTERS.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_00150_SETTLEMENT.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01100_COUNTERTYPES.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_00910_ADDCHARS.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_01110_COUNTERADDCHAR.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_01120_COUNTERTYPEADDCHAR.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01400_OPLATA.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01500_SALDO.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01600_NACHISLIMPORT.sql" />

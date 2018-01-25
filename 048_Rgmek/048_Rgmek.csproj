@@ -42,6 +42,7 @@
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=3.0.2.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,6 +58,12 @@
   <ItemGroup>
     <Compile Include="AddCharRecodeRecord.cs" />
     <Compile Include="CommonAddCharRecord.cs" />
+    <Compile Include="Forms\Form_ConnectionString.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_ConnectionString.Designer.cs">
+      <DependentUpon>Form_ConnectionString.cs</DependentUpon>
+    </Compile>
     <Compile Include="Records\AbonentRecord.cs" />
     <Compile Include="Records\CharsRecord.cs" />
     <Compile Include="Records\CntrsindRecord.cs" />
@@ -83,6 +90,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="RestoreSaldo.txt" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\Form_ConnectionString.resx">
+      <DependentUpon>Form_ConnectionString.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -100,7 +100,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <summary>
         /// Делает уникальный набор характеристик с ключом "лс,код характерстки, дата"
         /// </summary>        
-        public static List<CNV_CHAR> CreateUniqueLchars(List<CNV_CHAR> lcc)
+        public static List<CNV_CHAR> CreateUniqueCchars(List<CNV_CHAR> lcc)
         {
             return lcc
                 .GroupBy(lc => new { lc.LSHET, lc.CHARCD, lc.DATE_ })

@@ -14,19 +14,20 @@ using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
 using aConverterClassLibrary.Class.ConvertCases;
 using aConverterClassLibrary.Class.Utils;
+using aConverterClassLibrary.Class.Utils.KVC;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
 using DbfClassLibrary;
+using _048_Rgmek.Forms;
 using _048_Rgmek.Records;
 using static _048_Rgmek.Consts;
+using static aConverterClassLibrary.RecordsDataAccessORM.Utils.OrmRecordUtils;
+
 
 namespace _048_Rgmek
 {
     public static class Consts
     {
-        /// <summary>
-        /// Количество записей на каждый инсерт
-        /// </summary>
         public const int InsertRecordCount = 1000;
 
         public static readonly string LsRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\lsrecode.csv";
@@ -106,6 +107,133 @@ namespace _048_Rgmek
         public const int UnknownStreetId = 1;
         public const string UnknownStreetName = "Неизвестна";
         public const int DefaultDigitCount = 5;
+
+        public static readonly Dictionary<int, string[]> CoutnerPlaceRecode = new Dictionary<int, string[]>
+        {
+            {0, new[] {"неизвестно"}},
+            {1, new[] {"баня"}},
+            {2, new[] {"ввыноснойшитовой"}},
+            {3, new[] {"вдоме"}},
+            {4, new[] {"вком.учетатп-799"}},
+            {5, new[] {"вкоридоредома"}},
+            {6, new[] {"впанелесверху"}},
+            {7, new[] {"вн.ст.бани", "внешняястенабани"}},
+            {8, new[] {"вн.ст.гаража", "вн.стенагаража"}},
+            {9, new[] {"вн.стенаж/д", "внешняястенажилогодома"}},
+            {10, new[] {"вн.стенахоз/п"}},
+            {11, new[] {"вовруж/длифты", "воврулифтов"}},
+            {12, new[] {"вовруобъекта"}},
+            {13, new[] {"вру"}},
+            {14, new[] {"вруавр", "врусавр"}},
+            {15, new[] {"врувкоридоре2эт."}},
+            {16, new[] {"врувп.№4"}},
+            {17, new[] {"врувподвале3под."}},
+            {18, new[] {"врувэлектрощитовой"}},
+            {19, new[] {"вруж/д", "вружилогодома"}},
+            {20, new[] {"вруна1этаже"}},
+            {21, new[] {"вруобщежития"}},
+            {22, new[] {"вруобщежитиянам.о.п."}},
+            {23, new[] {"вруподвал"}},
+            {24, new[] {"вруподвалж/д"}},
+            {25, new[] {"вруподъезд№1", "вру1подъезда"}},
+            {26, new[] {"вруподъезд№2", "вру2подъезда"}},
+            {27, new[] {"вруподъезд№3", "вру3подъезд"}},
+            {28, new[] {"вруподъезд№4", "вру4подъезд"}},
+            {29, new[] {"вруподъезд№5", "вру5подъезда"}},
+            {30, new[] {"вруподъезд№6", "вру6подъезд"}},
+            {31, new[] {"вруподъезд№7", "вру7подъезд"}},
+            {32, new[] {"вруподъезд№8", "вру8подъезда"}},
+            {33, new[] {"вруподъезд№9", "вруподъезд9"}},
+            {34, new[] {"врупомещения"}},
+            {35, new[] {"врутоварищества", "врутсж"}},
+            {36, new[] {"гараж"}},
+            {37, new[] {"дача"}},
+            {38, new[] {"доп.двери", "доп.дверь", "доп.дверь"}},
+            {39, new[] {"доп.трубостойка"}},
+            {40, new[] {"кам.забор"}},
+            {41, new[] {"кварт.", "квартира"}},
+            {42, new[] {"кладовка"}},
+            {43, new[] {"комната"}},
+            {44, new[] {"комнатаучетатп276"}},
+            {45, new[] {"коридор"}},
+            {46, new[] {"коридорна1этаже"}},
+            {47, new[] {"крышнаякотельная"}},
+            {48, new[] {"лест.кл.", "лест.клетка", "лест.клетка", "лестничнаяклетка"}},
+            {49, new[] {"местаобщегопользования"}},
+            {50, new[] {"мет.стойканаул"}},
+            {51, new[] {"навнешнейстенетп-22"}},
+            {52, new[] {"нанаружнойстенетп-502"}},
+            {53, new[] {"настенегаража"}},
+            {54, new[] {"настенедачи"}},
+            {55, new[] {"настенедома"}},
+            {56, new[] {"настенежилогодома"}},
+            {57, new[] {"настенетп"}},
+            {58, new[] {"настенехоз.постройки"}},
+            {59, new[] {"натерриториистройки"}},
+            {60, new[] {"натер.участка"}},
+            {61, new[] {"навводе"}},
+            {62, new[] {"общеквартирныйучет"}},
+            {63, new[] {"наопоре", "опора"}},
+            {64, new[] {"вподвале", "подвал"}},
+            {65, new[] {"подъезд"}},
+            {66, new[] {"подъезд№1(этаж2)"}},
+            {67, new[] {"привходеналево"}},
+            {68, new[] {"пристройка"}},
+            {69, new[] {"рп-1п.11р.2"}},
+            {70, new[] {"ру-0.4квтп-758,п.3,р.3"}},
+            {71, new[] {"ру-0.4квтп-758,п.8,р.4"}},
+            {72, new[] {"сарай"}},
+            {73, new[] {"стойказабора"}},
+            {74, new[] {"строит.вагончик", "строительныйвагончик"}},
+            {75, new[] {"втп-1052"}},
+            {76, new[] {"тп110"}},
+            {77, new[] {"тп118,тп-118"}},
+            {78, new[] {"тп-172"}},
+            {79, new[] {"тп-176"}},
+            {80, new[] {"тп-229"}},
+            {81, new[] {"тп-240"}},
+            {82, new[] {"тп-276"}},
+            {83, new[] {"тп-307"}},
+            {84, new[] {"тп311"}},
+            {85, new[] {"тп-35"}},
+            {86, new[] {"тп-385"}},
+            {87, new[] {"тп-401"}},
+            {88, new[] {"тп-454"}},
+            {89, new[] {"тп-53"}},
+            {90, new[] {"тп-539"}},
+            {91, new[] {"втп-543"}},
+            {92, new[] {"тп-543"}},
+            {93, new[] {"тп-745"}},
+            {94, new[] {"тп-746"}},
+            {95, new[] {"тп-758"}},
+            {96, new[] {"тп-758ру-0.4кв"}},
+            {97, new[] {"тп-759,тп-759"}},
+            {98, new[] {"тп-898"}},
+            {99, new[] {"тп-903"}},
+            {100, new[] {"тп-92"}},
+            {101, new[] {"тп-940настене"}},
+            {102, new[] {"фасадздания"}},
+            {103, new[] {"цокольныйэтаж"}},
+            {104, new[] {"шу1-этажа"}},
+            {105, new[] {"шунавнешнейстенетп-128"}},
+            {106, new[] {"шунастенетп865"}},
+            {107, new[] {"шунастенетп866"}},
+            {108, new[] {"щитучета"}},
+            {109, new[] {"щунанарстенетп488"}},
+            {110, new[] {"щунастенерп-1"}},
+            {111, new[] {"щунастенетп-423"}},
+            {112, new[] {"щунатп-456"}},
+            {113, new[] {"вэл.щитовой", "эл.щитовая"}},
+            {114, new[] {"эл.щитовая1этаж"}},
+            {115, new[] {"эл.щитоваяв1подъезде"}},
+            {116, new[] {"эл.щитоваяв2подъезде"}},
+            {117, new[] {"эл.щитоваявподвале"}},
+            {118, new[] {"эл.щитоваятп-344"}},
+            {119, new[] {"эл.щитоваятп-345"}},
+            {120, new[] {"эл.щитоваятп-463"}},
+            {121, new[] {"эл.щитоваятп-763"}},
+            {122, new[] {"эл.щитоваяувхода"}},
+        };
     }
 
     public static class Utils
@@ -170,43 +298,6 @@ namespace _048_Rgmek
 
         public override void DoConvert()
         {
-            //var nachFile = ConvertNach.GetNachFiles().First(nf => ConvertNach.GetNachFileDate(nf) == new DateTime(2017, 10, 01));
-            //var lsRecode = Utils.ReadDictionary(LsRecodeFileName);
-            //var missingNach = new List<NachExcelRecord>();
-            //var existedNach = new List<NachExcelRecord>();
-            //aConverterClassLibrary.Utils.ReadExcelFileByRow(nachFile, null, dr =>
-            //{
-            //    var nachInfo = new NachExcelRecord(dr);
-            //    if (!lsRecode.ContainsKey(nachInfo.LsKvc))
-            //        missingNach.Add(nachInfo);
-            //    else
-            //    {
-            //        nachInfo.LsKvc = lsRecode[nachInfo.LsKvc].ToString();
-            //        existedNach.Add(nachInfo);
-            //    }
-            //});
-
-            //var missingSum = missingNach.Sum(n => n.Sum);
-            //var missingVol = missingNach.Sum(n => n.Volume);
-
-            //existedNach = existedNach.OrderBy(n => n.LsKvc).ToList();
-
-            //var reculcVol = existedNach.Where(n => n.Nach == NachExcelRecord.NachType.AddNach).Sum(n => n.Volume);
-
-            //existedNach = existedNach.Where(n => n.Nach != NachExcelRecord.NachType.AddNach).OrderBy(n => n.LsKvc).ToList();
-
-            //var anyNull = existedNach.Where(n => (n.Sum == 0 && n.Volume != 0)
-            //                                     || (n.Sum != 0 && n.Volume == 0))
-            //    .ToList();
-
-            //var anyNullMissingSum = anyNull.Sum(n => n.Sum);
-            //var anyNullMissingVol = anyNull.Sum(n => n.Volume);
-
-            //existedNach = existedNach.Where(n => !((n.Sum == 0 && n.Volume != 0)
-            //                                     || (n.Sum != 0 && n.Volume == 0)))
-            //    .ToList();
-
-
             SetStepsCount(1);
             StepStart(1);
 
@@ -217,6 +308,43 @@ namespace _048_Rgmek
 
             Result = ConvertCaseStatus.Шаг_выполнен_успешно;
             Iterate();
+        }
+    }
+
+    public class FindNotExistedAbonentInNach : ConvertCase
+    {
+        public FindNotExistedAbonentInNach()
+        {
+            ConvertCaseName = "Поиск абонентов в файле с начислениями, которые отсутствуют в БД";
+            Position = 11;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+            var nachFile = ConvertNach.GetNachFiles().First(n => ConvertNach.GetNachFileDate(n) == new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1));
+            var notExistedNach = new List<NachExcelRecord>();
+            var addNach = new List<NachExcelRecord>();
+            aConverterClassLibrary.Utils.ReadExcelFileByRow(nachFile, null, dr =>
+            {
+                var nachInfo = new NachExcelRecord(dr);
+                if (lsrecode.ContainsKey(nachInfo.LsKvc))
+                {
+                    if (nachInfo.Nach == NachExcelRecord.NachType.AddNach)
+                        addNach.Add(nachInfo);
+                }
+                else
+                {
+                    notExistedNach.Add(nachInfo);
+                }
+            });
+            var notExitedLs = notExistedNach.Select(n => n.LsKvc).Distinct().ToList();
+            var notExistedSum = notExistedNach.Sum(n => n.Sum);
+            var notExistedVol = notExistedNach.Sum(n => n.Volume);
+            var notExistedLsList = String.Join("\r\n", notExitedLs);
+            var addNachSum = addNach.Sum(n => n.Sum);
+            var addNachVol = addNach.Sum(n => n.Volume);
         }
     }
 
@@ -243,7 +371,7 @@ namespace _048_Rgmek
             var lca = new List<CNV_ABONENT>();
 
             var lsrecode = new Dictionary<string, long>();
-            long lastls = 1010000000;
+            long lastls = 101000000;
             var durecode = new Dictionary<string, long>();
             long lastducd = 0;
             var houserecode = new Dictionary<string, long>();
@@ -251,6 +379,15 @@ namespace _048_Rgmek
             var placerecode = new Dictionary<string, List<string>>();
             var distrRecode = new Dictionary<string, long>();
             long lastDistId = 0;
+            var emails = new Dictionary<string, string>();
+            DbfManager.ExecuteQueryByReader(
+                "select lshet, value_s from lschars where charcd = '62278e46-4e08-11e4-903c-001e8c71f1cc'",
+                r =>
+                {
+                    string ls = r.GetString(0);
+                    if (emails.ContainsKey(ls)) emails[ls] = r.GetString(1);
+                    else emails.Add(ls, r.GetString(1));
+                });
 
             StepStart(dt.Rows.Count);
             var abonent = new AbonentRecord();
@@ -274,6 +411,10 @@ namespace _048_Rgmek
                     PHONENUM = abonent.Phonenum.Trim()
                 };
 
+                string email;
+                if (emails.TryGetValue(abonent.Lshet, out email))
+                    a.EMAIL = email;
+
                 if (!String.IsNullOrWhiteSpace(abonent.Fio))
                 {
                     string fio = abonent.Fio.Trim();
@@ -294,7 +435,8 @@ namespace _048_Rgmek
                     a.TOWNSNAME = UnknownTownName;
                 }
 
-                a.ULICAKOD = (int)abonent.Ulicakod;
+                
+                a.ULICAKOD = new LsKvc(abonent.Lshet, true).StreetId;
                 a.ULICANAME = abonent.Ulicaname.Trim();
                 if (a.ULICAKOD == 0)
                 {
@@ -415,7 +557,9 @@ namespace _048_Rgmek
             }
             StepFinish();
 
-            StepStart(1);
+            StepStart(2);
+            lcc = CharsRecordUtils.CreateUniqueCchars(lcc);
+            Iterate();
             lcc = CharsRecordUtils.ThinOutList(lcc, true);
             StepFinish();
 
@@ -423,6 +567,76 @@ namespace _048_Rgmek
             BufferEntitiesManager.SaveDataToBufferIBScript(lcc);
             StepFinish();
         }
+    }
+
+    public class ConvertOwnersChars : ConvertCase
+    {
+        public ConvertOwnersChars()
+        {
+            ConvertCaseName = "OWNERS CHARS - количество собственников из базы КВЦ";
+            Position = 31;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(3);
+            var form = new Form_ConnectionString("Строка подключения к БД КВЦ");
+            if (form.ShowDialog() != DialogResult.OK) return;
+            string kvcConnectionString = form.ConnectionString;
+            var lsRecode = Utils.ReadDictionary(LsRecodeFileName);
+            int extorgcd = 1;
+            int ccharid = 11;
+            DateTime maxDate = new DateTime(CurrentYear, CurrentMonth, 1);
+            var kvcFb = new FbManager(kvcConnectionString);
+            var ownersChars = new List<CNV_CHAR>();
+            StepStart(1);
+            kvcFb.ExecuteQueryByRow(
+                String.Format(SelectOwnersSqlTemplate, ToSql(extorgcd), ToSql(11), ToSql(maxDate), ToSql(MinConvertDate)),
+                dr =>
+                {
+                    var lsKvc = new LsKvc(dr["extlshet"].ToString(), false);
+                    long lshet;
+                    if (!lsRecode.TryGetValue(lsKvc.Ls, out lshet)) return;
+                    ownersChars.Add(new CNV_CHAR
+                    {
+                        LSHET = lshet.ToString(),
+                        SortLshet = lshet,
+                        CHARCD = 11,
+                        DATE_ = Convert.ToDateTime(dr["abonentcchardate"]),
+                        VALUE_ = Convert.ToDecimal(dr["significance"]),
+                    });
+                });
+            StepFinish();
+            StepStart(1);
+            ownersChars = CharsRecordUtils.ThinOutList(ownersChars, true);
+            StepFinish();
+            StepStart(1);
+            BufferEntitiesManager.SaveDataToBufferIBScript(ownersChars);
+            StepFinish();
+        }
+
+        private string SelectOwnersSqlTemplate =
+            "select ea.extlshet, ca.kodccharslist, ca.abonentcchardate, ca.significance " +
+            "from ccharsabonentlist ca " +
+            "inner join extorgaccounts ea on ea.extorgcd = {0} and ea.lshet = ca.lshet " +
+            "where ca.kodccharslist = {1} " +
+            "   and (ca.abonentcchardate < {2} and ca.abonentcchardate > {3}) " +
+            " " +
+            "union all " +
+            " " +
+            "select ea.extlshet, {1}, {3}, " +
+            "   (select first 1 ca.significance " +
+            "   from ccharsabonentlist ca " +
+            "   where ca.kodccharslist = {1} and ca.lshet = l.lshet and ca.abonentcchardate <= {3} " +
+            "   order by ca.abonentcchardate desc) " +
+            "from( " +
+            "   select distinct ca.lshet " +
+            "   from ccharsabonentlist ca " +
+            "   where ca.kodccharslist = {1} " +
+            "   and ca.abonentcchardate <= {3} " +
+            ") as l " +
+            "inner join extorgaccounts ea on ea.extorgcd = {0} and ea.lshet = l.lshet";
     }
 
     public class ConvertLChars : DbfConvertCase
@@ -824,6 +1038,20 @@ namespace _048_Rgmek
                     });
             }
             StepFinish();
+            StepStart(2);
+            // инвертирование характеристик
+            foreach (var lchar in lalc)
+            {
+                if (lchar.LCHARCD != 30) continue;
+                lchar.VALUE_ = lchar.VALUE_ == 0 ? 1 : 0;
+            }
+            Iterate();
+            foreach (var addchar in laac)
+            {
+                if (addchar.ADDCHARCD != 1620127 && addchar.ADDCHARCD != 1620142) continue;
+                addchar.VALUE = addchar.VALUE == "0" ? "1" : "0";
+            }
+            StepFinish();
 
             StepStart(6);
             BufferEntitiesManager.SaveDataToBufferIBScript(lacc);
@@ -838,6 +1066,18 @@ namespace _048_Rgmek
             Iterate();
             BufferEntitiesManager.SaveDataToBufferIBScript(lhac);
             StepFinish();
+
+
+            lacc.Clear();
+            lalc.Clear();
+            laac.Clear();
+            lhcc.Clear();
+            lhlc.Clear();
+            lhac.Clear();
+
+            valueListRecode.Clear();
+            lsrecode.Clear();
+            houserecode.Clear();
         }
 
         private void AddLChar(AddCharRecodeRecord recode, CommonAddCharRecord charRecord, long lshet)
@@ -997,9 +1237,13 @@ namespace _048_Rgmek
             tms.Init();
 
             BufferEntitiesManager.DropTableData("CNV$COUNTERTYPES");
+            BufferEntitiesManager.DropTableData("CNV$COUNTERTYPEADDCHAR");
+            BufferEntitiesManager.DropTableData("CNV$COUNTERADDCHAR");
             BufferEntitiesManager.DropTableData("CNV$COUNTERS");
             
             var lc = new List<CNV_COUNTER>();
+            var lca = new List<CNV_COUNTERADDCHAR>();
+            var lta = new List<CNV_COUNTERTYPEADDCHAR>();
 
             var cnttyperecode = new Dictionary<string, CNV_COUNTERTYPE>();
 
@@ -1122,14 +1366,33 @@ namespace _048_Rgmek
                     }
                     string prim = "";
                     if (lcold.Rgresid > 0)
-                        prim += (prim == "" ? "" : ", ") + "RGRESID=" + lcold.Rgresid.ToString();
+                        lca.Add(new CNV_COUNTERADDCHAR
+                        {
+                            COUNTERID = c.COUNTERID,
+                            ADDCHARCD = 906,
+                            VALUE_ = lcold.Rgresid.ToString()
+                        });
+                    if (!String.IsNullOrEmpty(lcold.Instplace))
+                    {
+                        string instPlace = lcold.Instplace.Trim().Replace(" ", "").ToLower();
+                        int placeId = 0;
+                        if (!CoutnerPlaceRecode.Any(r => r.Value.Any(v => v == instPlace)))
+                            Task.Factory.StartNew(() => MessageBox.Show($"Не найдена перекодировка места установки {lcold.Instplace}"));
+                        else
+                            placeId = CoutnerPlaceRecode.First(r => r.Value.Any(v => v == instPlace)).Key;
+                        lca.Add(new CNV_COUNTERADDCHAR
+                        {
+                            COUNTERID = c.COUNTERID,
+                            ADDCHARCD = 900,
+                            VALUE_ = placeId.ToString()
+                        });
+                    }
+
                     if (lcold.Precision > 0)
                         prim += (prim == "" ? "" : ", ") + "PRECISION=" +
                                 lcold.Precision.ToString().Replace(',', '.');
                     if (!String.IsNullOrEmpty(lcold.Amperage))
                         prim += (prim == "" ? "" : ", ") + "AMPERAG=" + lcold.Amperage.Trim();
-                    if (!String.IsNullOrEmpty(lcold.Instplace))
-                        prim += (prim == "" ? "" : ", ") + "INSTPLACE=" + lcold.Instplace.Trim();
                     c.PRIM_ = prim;
 
                     if (multiscalesCounters.Contains(lcold.Counterid))
@@ -1190,9 +1453,12 @@ namespace _048_Rgmek
             BufferEntitiesManager.SaveDataToBufferIBScript(cnttyperecode.Values);
             StepFinish();
 
-            StepStart(1);
-            string s = lc[0].InsertSql;
+            StepStart(3);
             BufferEntitiesManager.SaveDataToBufferIBScript(lc);
+            Iterate();
+            BufferEntitiesManager.SaveDataToBufferIBScript(lca);
+            Iterate();
+            BufferEntitiesManager.SaveDataToBufferIBScript(lta);
             StepFinish();
         }
 
@@ -1672,6 +1938,8 @@ order by TARIFCD")));
                 {
                     var nachInfo = new NachExcelRecord(dr);
 
+                    if (!(fileDate.Month == 10 && nachInfo.LsKvc == "695-006-00-041-0-23")) return;
+
                     long lshet;
                     if (!lsrecode.TryGetValue(nachInfo.LsKvc, out lshet)) return;
 
@@ -1713,9 +1981,9 @@ order by TARIFCD")));
                                 SERVICECD = nach.SERVICECD,
                                 SERVICENAME = nach.SERVICENAME,
                                 FNATH = 0,
-                                VOLUME = nachInfo.Volume,
+                                VOLUME = 0,
                                 PROCHL = nachInfo.Sum,
-                                PROCHLVOLUME = 0,
+                                PROCHLVOLUME = nachInfo.Volume,
                                 REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone,
                                 REGIMNAME = nachInfo.Nach.ToString(),
                                 DOCUMENTCD = $"N{++nachdoc}"
@@ -2019,15 +2287,25 @@ order by TARIFCD")));
         public override void DoConvert()
         {
             SetStepsCount(1);
-            StepStart(1);
+            StepStart(2);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            fbm.ExecuteQuery(@"merge into abonentadditionalchars ad
-using cnv$aaddchar ca on ca.lshet = ad.lshet and ca.addcharcd = ad.additionalcharcd
-when matched then
-    update set ad.significance = ca.""VALUE""
-when not matched then
-    insert(additionalcharcd, lshet, significance)
-    values(ca.addcharcd, ca.lshet, ca.""VALUE"")");
+            fbm.ExecuteProcedure("CNV$CNV_00910_ADDCHARS");
+            Iterate();
+            fbm.ExecuteQuery(
+                @"INSERT INTO ABONENTADDITIONALCHARS (ADDITIONALCHARCD, LSHET, SIGNIFICANCE, CHANGEDOCUMENTCD)
+with charlist as (
+    select ac.additionalcharcd
+    from additionalchars ac
+    where ac.additionalchartype = 7 and ac.additionalcharmode = 1 and ac.additionalcharsgroupcd = 10
+)
+select cl.additionalcharcd, a.lshet, '0', null
+from charlist cl
+inner join abonents a on 1 = 1
+where not exists (
+    select 0
+    from abonentadditionalchars ad
+    where ad.additionalcharcd = cl.additionalcharcd and ad.lshet = a.lshet)
+select * from district");
             StepFinish();
         }
     }
@@ -2066,6 +2344,27 @@ when not matched then
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0", "1", "0", "1" });
+            StepFinish();
+        }
+    }
+
+    public class TransferCounterChars : ConvertCase
+    {
+        public TransferCounterChars()
+        {
+            ConvertCaseName = "Перенос данных о характеристиках счетчиков";
+            Position = 1041;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01110_COUNTERADDCHAR");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01120_COUNTERTYPEADDCHAR");
             StepFinish();
         }
     }

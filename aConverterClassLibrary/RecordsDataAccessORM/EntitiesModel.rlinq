@@ -666,6 +666,60 @@
           </orm:columnMapping>
         </orm:index>
       </orm:class>
+      <orm:class name="CNV_COUNTERADDCHAR" uniqueId="f31acad7-d626-43c0-a64f-c4e0d970824e">
+        <orm:table name="CNV$COUNTERADDCHAR" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="ID" />
+          </orm:key-generator>
+          <orm:single-field field-name="_iD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="10525b62-7d13-4fc9-bd7a-468268e5b183" type="System.Int32">
+          <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_cOUNTERID" property="COUNTERID" behavior="readwrite" uniqueId="107ca445-0efc-4f3c-9241-fc42f4faabbf" type="System.String">
+          <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_aDDCHARCD" property="ADDCHARCD" behavior="readwrite" uniqueId="f00f65ec-081e-492a-929a-3253b778af5f" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ADDCHARCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_vALUE_" property="VALUE_" behavior="readwrite" uniqueId="4b383e68-5ed6-49e8-b9d4-cb2e9493db0a" type="System.String">
+          <orm:column name="VALUE_" sql-type="VARCHAR" nullable="true" length="2000" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:index name="CNV$COUNTERADDCHAR_IDX1">
+          <orm:columnMapping>
+            <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
+      <orm:class name="CNV_COUNTERTYPEADDCHAR" uniqueId="3e00f67e-c747-4a26-b6aa-5faad33521a2">
+        <orm:table name="CNV$COUNTERTYPEADDCHAR" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="ID" />
+          </orm:key-generator>
+          <orm:single-field field-name="_iD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="1a8fb06a-7273-4bf8-ba72-d017ab89b40e" type="System.Int32">
+          <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_сOUNTERTYPEID" property="COUNTERTYPEID" behavior="readwrite" uniqueId="e4679e23-69f7-48bd-8f15-7038c71f0063" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="COUNTERTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_aDDCHARCD" property="ADDCHARCD" behavior="readwrite" uniqueId="154c3349-7ed3-41e2-af97-f7e83d7802fa" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ADDCHARCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_vALUE_" property="VALUE_" behavior="readwrite" uniqueId="471624e4-7a17-4e63-9ff6-fc6d7095fc9e" type="System.String">
+          <orm:column name="VALUE_" sql-type="VARCHAR" nullable="true" length="2000" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:index name="CNV$COUNTERTYPEADDCHAR_IDX1">
+          <orm:columnMapping>
+            <orm:column name="COUNTERTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
       <orm:class name="CNV_CNTRSIND" uniqueId="0122d5da-1d8d-4fd1-9102-5e25ac3c6ae7">
         <orm:table name="CNV$CNTRSIND" />
         <orm:identity>
@@ -1029,6 +1083,9 @@
         <orm:field name="_rOOMPOSTFIX" property="ROOMPOSTFIX" uniqueId="cacd0a19-20d8-4bf8-84a1-8e441c107cc7" type="System.String" />
         <orm:field name="_cLOSEDATE" property="CLOSEDATE" uniqueId="6fa0766f-b188-49f7-a521-316f75bc4d70" type="DateTime?" />
         <orm:field name="_hOUSENOTE" property="HOUSENOTE" uniqueId="a28a54a1-1a3b-4888-aa9c-da629f78a828" type="System.String" />
+        <orm:field name="_eMAIL" property="EMAIL" behavior="readwrite" uniqueId="3dadb166-3ab3-4a0e-bb28-d6c301faeb40" type="System.String">
+          <orm:column name="EMAIL" sql-type="varchar" nullable="true" length="500" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
         <orm:index name="CNV$ABONENT_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -2043,6 +2100,28 @@
           </orm:columnMapping>
         </orm:index>
       </orm:table>
+      <orm:table name="CNV$COUNTERADDCHAR">
+        <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="ADDCHARCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="VALUE_" sql-type="VARCHAR" nullable="true" length="2000" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="CNV$COUNTERADDCHAR_IDX1">
+          <orm:columnMapping>
+            <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
+      <orm:table name="CNV$COUNTERTYPEADDCHAR">
+        <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="COUNTERTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="ADDCHARCD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="VALUE_" sql-type="VARCHAR" nullable="true" length="2000" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="CNV$COUNTERTYPEADDCHAR_IDX1">
+          <orm:columnMapping>
+            <orm:column name="COUNTERTYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
       <orm:table name="CNV$CNTRSIND">
         <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
         <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
@@ -2185,6 +2264,7 @@
         <orm:column name="FLATPOSTFIX" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         <orm:column name="FLATNO" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="CLOSEDATE" sql-type="date" nullable="true" length="0" scale="0" ado-type="" />
+        <orm:column name="EMAIL" sql-type="varchar" nullable="true" length="500" scale="0" ado-type="StringVariableLength" />
         <orm:index name="CNV$ABONENT_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -2660,6 +2740,18 @@
       <Property Id="b94ecf75-af94-4386-9611-5ac568090c5f" name="KODREGIM" type="Int32" label="KODREGIM : Int32" nullable="true" kind="Persistent" fieldName="_kODREGIM" />
       <Property Id="26a1b51f-dbbb-49c8-8064-975eda897104" name="UNTINGID" label="UNTINGID : String" kind="Persistent" fieldName="_uNTINGID" />
     </DomainClass>
+    <DomainClass Id="f31acad7-d626-43c0-a64f-c4e0d970824e" name="CNV_COUNTERADDCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
+      <Property Id="10525b62-7d13-4fc9-bd7a-468268e5b183" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
+      <Property Id="107ca445-0efc-4f3c-9241-fc42f4faabbf" name="COUNTERID" label="COUNTERID : String" kind="Persistent" fieldName="_cOUNTERID" />
+      <Property Id="f00f65ec-081e-492a-929a-3253b778af5f" name="ADDCHARCD" type="Int32" label="ADDCHARCD : Int32" nullable="true" kind="Persistent" fieldName="_aDDCHARCD" />
+      <Property Id="4b383e68-5ed6-49e8-b9d4-cb2e9493db0a" name="VALUE_" label="VALUE_ : String" kind="Persistent" fieldName="_vALUE_" />
+    </DomainClass>
+    <DomainClass Id="3e00f67e-c747-4a26-b6aa-5faad33521a2" name="CNV_COUNTERTYPEADDCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
+      <Property Id="1a8fb06a-7273-4bf8-ba72-d017ab89b40e" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
+      <Property Id="e4679e23-69f7-48bd-8f15-7038c71f0063" name="COUNTERTYPEID" type="Int32" label="COUNTERTYPEID : Int32" nullable="true" kind="Persistent" fieldName="_сOUNTERTYPEID" />
+      <Property Id="154c3349-7ed3-41e2-af97-f7e83d7802fa" name="ADDCHARCD" type="Int32" label="ADDCHARCD : Int32" nullable="true" kind="Persistent" fieldName="_aDDCHARCD" />
+      <Property Id="471624e4-7a17-4e63-9ff6-fc6d7095fc9e" name="VALUE_" label="VALUE_ : String" kind="Persistent" fieldName="_vALUE_" />
+    </DomainClass>
     <DomainClass Id="0122d5da-1d8d-4fd1-9102-5e25ac3c6ae7" name="CNV_CNTRSIND" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="bceb77dd-d70a-442a-9c4b-5c7236beb320" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
       <Property Id="d6a37514-e2f7-40b9-8380-717aede57c2a" name="COUNTERID" label="COUNTERID : String" kind="Persistent" fieldName="_cOUNTERID" />
@@ -2746,6 +2838,7 @@
       <Property Id="cacd0a19-20d8-4bf8-84a1-8e441c107cc7" name="ROOMPOSTFIX" label="ROOMPOSTFIX : String" fieldName="_rOOMPOSTFIX" />
       <Property Id="6fa0766f-b188-49f7-a521-316f75bc4d70" name="CLOSEDATE" type="DateTime?" label="CLOSEDATE : DateTime?" fieldName="_cLOSEDATE" />
       <Property Id="a28a54a1-1a3b-4888-aa9c-da629f78a828" name="HOUSENOTE" label="HOUSENOTE : String" nullable="true" fieldName="_hOUSENOTE" />
+      <Property Id="3dadb166-3ab3-4a0e-bb28-d6c301faeb40" name="EMAIL" label="EMAIL : String" kind="Persistent" fieldName="_eMAIL" />
     </DomainClass>
     <DomainClass Id="fa550a6a-fed8-48c9-9bdc-96746380bf5e" name="EXTORGSTREET" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
       <Property Id="0090bd92-43f0-47ef-93d6-5b8aa0181f61" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" kind="Persistent" identity="true" fieldName="_eXTORGCD" />
@@ -3139,6 +3232,8 @@
         <entitySetProperty name="CNV_DOGOVORs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_DOGOVOR" label="CNV_DOGOVORs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_DOGOVOR&gt;" />
         <entitySetProperty name="CNV_COUNTERTYPEs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_COUNTERTYPE" label="CNV_COUNTERTYPEs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_COUNTERTYPE&gt;" />
         <entitySetProperty name="CNV_COUNTERs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_COUNTER" label="CNV_COUNTERs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_COUNTER&gt;" />
+        <entitySetProperty name="CNV_COUNTERADDCHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_COUNTERADDCHAR" label="CNV_COUNTERADDCHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_COUNTERADDCHAR&gt;" />
+        <entitySetProperty name="CNV_COUNTERTYPEADDCHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_COUNTERTYPEADDCHAR" label="CNV_COUNTERTYPEADDCHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_COUNTERTYPEADDCHAR&gt;" />
         <entitySetProperty name="CNV_CNTRSINDs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CNTRSIND" label="CNV_CNTRSINDs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CNTRSIND&gt;" />
         <entitySetProperty name="CNV_CITIZENs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CITIZEN" label="CNV_CITIZENs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CITIZEN&gt;" />
         <entitySetProperty name="CNV_CHARVALs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CHARVAL" label="CNV_CHARVALs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CHARVAL&gt;" />

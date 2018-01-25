@@ -94,10 +94,17 @@ begin
     else
       EQUIPMENTID = :COUNTERID;
 	if (:UNTINGID is null) then UNTINGID = :EQUIPMENTID;
-	else if (:UNTINGID = :COUNTERID) then 
-		UPDATE CNV$COUNTERS 
-			SET UNTINGID = :EQUIPMENTID
-			WHERE UNTINGID = :COUNTERID;
+	else
+    begin
+        UNTINGID = (select first 1 untingid from cnv$counters where counterid = :counterid);
+        if (:UNTINGID = :COUNTERID) then
+        begin
+            UPDATE CNV$COUNTERS 
+                SET UNTINGID = :EQUIPMENTID
+                WHERE UNTINGID = :COUNTERID;
+            UNTINGID = :EQUIPMENTID;
+        end
+    end
     insert into PARENTEQUIPMENT (EQUIPMENTID, SERIALNUMBER, IMPORTTAG, NOTE, UNITINGID)
     values (:EQUIPMENTID, :SERIALNUM, :COUNTERID, :PRIM_, :UNTINGID);
     insert into RESOURCECOUNTERS (KOD, KODCOUNTERSTYPES, SETUPDATE, COUNTER_LEVEL, COUNTERPLACE, DATEPPR, LASTPPRDATE,

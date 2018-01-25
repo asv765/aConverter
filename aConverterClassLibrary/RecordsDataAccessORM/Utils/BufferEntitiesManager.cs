@@ -150,6 +150,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_00850_CHARSHOUSES");
                 l.Add("CNV_00855_LCHARSHOUSES");
                 l.Add("CNV_00900_LCHARS");
+                l.Add("CNV_00910_ADDCHARS");
                 l.Add("CNV_00950_COUNTERSTYPES");
                 l.Add("CNV_01000_COUNTERS");
                 l.Add("CNV_01050_GROUPCOUNTERS");

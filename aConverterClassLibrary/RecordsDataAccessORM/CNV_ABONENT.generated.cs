@@ -464,7 +464,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
 				this._hOUSENOTE = value;
 			}
 		}
-		
-	}
+
+        private string _eMAIL;
+        public virtual string EMAIL
+        {
+            get
+            {
+                return this._eMAIL;
+            }
+            set
+            {
+                this._eMAIL = value;
+            }
+        }
+    }
 }
 #pragma warning restore 1591

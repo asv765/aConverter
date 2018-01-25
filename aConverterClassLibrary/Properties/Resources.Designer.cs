@@ -1170,6 +1170,30 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
+        ///create or alter procedure CNV$CNV_00910_ADDCHARS (
+        ///    NEEDDELETE smallint = 0)
+        ///as
+        ///BEGIN
+        ///    IF (needdelete = 1) THEN 
+        ///		DELETE FROM abonentadditionalchars AD where AD.lshet IN (SELECT LSHET FROM cnv$aaddchar);
+        ///
+        ///	merge into abonentadditionalchars ad
+        ///	using cnv$aaddchar ca on ca.lshet = ad.lshet and ca.addcharcd = ad.additionalcharcd
+        ///	when matched then
+        ///		update set ad.significance = ca.&quot;VALUE&quot;
+        ///	when not matched then
+        ///		insert(additionalcharcd, lshet, significance)
+        ///			values(ca.addcharcd, c [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_00910_ADDCHARS {
+            get {
+                return ResourceManager.GetString("CNV_CNV_00910_ADDCHARS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
         ///create or alter procedure CNV$CNV_00950_COUNTERSTYPES
         ///as
         ///declare variable CNTTYPE integer;
@@ -1250,6 +1274,36 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_CNV_01100_COUNTERTYPES {
             get {
                 return ResourceManager.GetString("CNV_CNV_01100_COUNTERTYPES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
+        ///create or alter procedure CNV$CNV_01100_COUNTERTYPES
+        ///as
+        ///begin
+        ///    INSERT INTO COUNTERSTYPES (KOD, EQUIPMENTTYPEID, PERIODKOD, NAME, COEFFICIENT, DIGITCOUNT, EQUIPMENTGROUPID, EXTORGCD, DIMENSIONTYPE, MINCONSUMPTION, MAXCONSUMPTION, MINTEMPERATURE, MAXTEMPERATURE, COUNTERMARKMODULEID, SERVICELIFEID, ACCURACY)
+        ///    select ID, EQUIPMENTTYPEID, PERIODKOD, NAME, COEFFICIENT, DIGITCOUNT, EQUIPMENTGROUPID, EXTORGCD, DIMENSIONTYPE, MINCONSUMPTION, MAXCONSUMPTION, MINTEMPERATURE, MAXTEMPERATURE, COUNTER [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_01110_COUNTERADDCHAR {
+            get {
+                return ResourceManager.GetString("CNV_CNV_01110_COUNTERADDCHAR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
+        ///create or alter procedure CNV$CNV_01100_COUNTERTYPES
+        ///as
+        ///begin
+        ///    INSERT INTO COUNTERSTYPES (KOD, EQUIPMENTTYPEID, PERIODKOD, NAME, COEFFICIENT, DIGITCOUNT, EQUIPMENTGROUPID, EXTORGCD, DIMENSIONTYPE, MINCONSUMPTION, MAXCONSUMPTION, MINTEMPERATURE, MAXTEMPERATURE, COUNTERMARKMODULEID, SERVICELIFEID, ACCURACY)
+        ///    select ID, EQUIPMENTTYPEID, PERIODKOD, NAME, COEFFICIENT, DIGITCOUNT, EQUIPMENTGROUPID, EXTORGCD, DIMENSIONTYPE, MINCONSUMPTION, MAXCONSUMPTION, MINTEMPERATURE, MAXTEMPERATURE, COUNTER [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_01120_COUNTERTYPEADDCHAR {
+            get {
+                return ResourceManager.GetString("CNV_CNV_01120_COUNTERTYPEADDCHAR", resourceCulture);
             }
         }
         
@@ -1665,12 +1719,13 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to CREATE TABLE CNV$COUNTERADDCHAR (
         ///  ID INTEGER NOT NULL,
-        ///  COUNTERID INTEGER,
+        ///  COUNTERID varchar(20),
         ///  ADDCHARCD INTEGER,
         ///  VALUE_ varchar(2000),
         ///  PRIMARY KEY (ID)
         ///);
         ///CREATE SEQUENCE GEN_CNV$COUNTERADDCHAR_ID;
+        ///CREATE INDEX CNV$COUNTERADDCHAR_IDX1 ON CNV$COUNTERADDCHAR (COUNTERID);
         ///
         ///SET TERM ^ ;
         ///CREATE TRIGGER CNV$COUNTERADDCHAR_BI FOR CNV$COUNTERADDCHAR
@@ -1693,6 +1748,7 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to DROP TRIGGER CNV$COUNTERADDCHAR_BI;
         ///DROP SEQUENCE GEN_CNV$COUNTERADDCHAR_ID;
+        ///DROP INDEX CNV$COUNTERADDCHAR_IDX1;
         ///DROP TABLE CNV$COUNTERADDCHAR;
         ///
         ///
@@ -1746,6 +1802,7 @@ namespace aConverterClassLibrary.Properties {
         ///  PRIMARY KEY (ID)
         ///);
         ///CREATE SEQUENCE GEN_CNV$COUNTERTYPEADDCHAR_ID;
+        ///CREATE INDEX CNV$COUNTERTYPEADDCHAR_IDX1 ON CNV$COUNTERTYPEADDCHAR (COUNTERTYPEID);
         ///
         ///SET TERM ^ ;
         ///CREATE TRIGGER CNV$COUNTERTYPEADDCHAR_BI FOR CNV$COUNTERTYPEADDCHAR
@@ -1755,9 +1812,7 @@ namespace aConverterClassLibrary.Properties {
         ///  IF (NEW.ID IS NULL) THEN
         ///    NEW.ID = GEN_ID(GEN_CNV$COUNTERTYPEADDCHAR_ID,1);
         ///END
-        ///^
-        ///SET TERM ; ^
-        ///.
+        ///^        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CNV_COUNTERTYPEADDCHAR {
             get {
@@ -1768,6 +1823,7 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to DROP TRIGGER CNV$COUNTERTYPEADDCHAR_BI;
         ///DROP SEQUENCE GEN_CNV$COUNTERTYPEADDCHAR_ID;
+        ///DROP INDEX CNV$COUNTERTYPEADDCHAR_IDX1;
         ///DROP TABLE CNV$COUNTERTYPEADDCHAR;
         ///
         ///
