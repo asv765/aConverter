@@ -23,6 +23,7 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
             StepCounter.StepStart(dt.Rows.Count);
             string lastLs = null;
             var rows = new List<DataRow>();
+            int lastIter = dt.Rows.Count - 1;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 var row = dt.Rows[i];
@@ -34,7 +35,7 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
                 else
                 {
                     lastLs = currentLs;
-                    if (rows.Count > 0)
+                    if (rows.Count > 0 && i != lastIter)
                     { 
                         var abonent = new CcChangeRecord(rows, (ushort)ChangesConsts.ImportYear, (ushort)ChangesConsts.ImportMonth);
                         convertAction(abonent);
@@ -43,6 +44,8 @@ namespace _045_KvcChangesImport.ChangeFiles.CcChange
                 }
                 StepCounter.Iterate();
             }
+            var lastAbonent = new CcChangeRecord(rows, (ushort)ChangesConsts.ImportYear, (ushort)ChangesConsts.ImportMonth);
+            convertAction(lastAbonent);
             StepCounter.StepFinish();
         }
     }
