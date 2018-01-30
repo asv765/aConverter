@@ -234,6 +234,19 @@ namespace _048_Rgmek
             {121, new[] {"эл.щитоваятп-763"}},
             {122, new[] {"эл.щитоваяувхода"}},
         };
+
+        public static string LsKvcWithoutKr(string lsKvc)
+        {
+            if (lsKvc.Length != 19) return lsKvc;
+            return lsKvc.Substring(0, 16);
+        }
+
+        public static long FindLsRecode(string lsKvc, Dictionary<string, long> lsRecode)
+        {
+            long recodedLs;
+            lsRecode.TryGetValue(LsKvcWithoutKr(lsKvc), out recodedLs);
+            return recodedLs;
+        }
     }
 
     public static class Utils
@@ -329,7 +342,7 @@ namespace _048_Rgmek
             aConverterClassLibrary.Utils.ReadExcelFileByRow(nachFile, null, dr =>
             {
                 var nachInfo = new NachExcelRecord(dr);
-                if (lsrecode.ContainsKey(nachInfo.LsKvc))
+                if (lsrecode.ContainsKey(LsKvcWithoutKr(nachInfo.LsKvc)))
                 {
                     if (nachInfo.Nach == NachExcelRecord.NachType.AddNach)
                         addNach.Add(nachInfo);
@@ -399,7 +412,7 @@ namespace _048_Rgmek
 
                 var a = new CNV_ABONENT
                 {
-                    LSHET = Utils.GetValue(abonent.Lshet, lsrecode, ref lastls).ToString(),
+                    LSHET = Utils.GetValue(LsKvcWithoutKr(abonent.Lshet), lsrecode, ref lastls).ToString(),
                     EXTLSHET = abonent.Lshet.Trim().Replace("-",""),
                     ISDELETED = Convert.ToInt32(abonent.Isdeleted),
                     RAYONKOD = (int)abonent.Distkod,
@@ -539,8 +552,8 @@ namespace _048_Rgmek
             {
                 cold.ReadDataRow(dataRow);
 
-                long lshet;
-                if (lsrecode.TryGetValue(cold.Lshet, out lshet))
+                long lshet = FindLsRecode(cold.Lshet, lsrecode);
+                if (lshet != 0)
                 {
                     var c = new CNV_CHAR
                     {
@@ -596,8 +609,8 @@ namespace _048_Rgmek
                 dr =>
                 {
                     var lsKvc = new LsKvc(dr["extlshet"].ToString(), false);
-                    long lshet;
-                    if (!lsRecode.TryGetValue(lsKvc.Ls, out lshet)) return;
+                    long lshet = FindLsRecode(lsKvc.Ls, lsRecode);
+                    if (lshet == 0) return;
                     ownersChars.Add(new CNV_CHAR
                     {
                         LSHET = lshet.ToString(),
@@ -667,8 +680,8 @@ namespace _048_Rgmek
                 {
                     lcold.ReadDataRow(dataRow);
 
-                    long lshet;
-                    if (lsrecode.TryGetValue(lcold.Lshet, out lshet))
+                    long lshet = FindLsRecode(lcold.Lshet, lsrecode);
+                    if (lshet != 0)
                     {
                         var recodeValue = LcharRecode[new KeyValuePair<long, long>(lcold.Lcharcd, lcold.Value_)];
                         var c = new CNV_LCHAR
@@ -730,8 +743,8 @@ namespace _048_Rgmek
                 {
                     var nachInfo = new NachExcelRecord(dr);
 
-                    long lshet;
-                    if (lsrecode.TryGetValue(nachInfo.LsKvc, out lshet))
+                    long lshet = FindLsRecode(nachInfo.LsKvc, lsrecode);
+                    if (lshet != 0)
                     {
                         int tarifValue;
                         switch (nachInfo.Tarif)
@@ -765,31 +778,32 @@ namespace _048_Rgmek
                             VALUEDESC = nachInfo.Nach.ToString()
                         });
 
-                        if (nachInfo.Nach != NachExcelRecord.NachType.AddNach)
-                        {
-                            if (nachInfo.Service == NachExcelRecord.ServiceType.Living)
-                                lcc.Add(new CNV_LCHAR
-                                {
-                                    LSHET = lshet.ToString(),
-                                    SortLshet = lshet,
-                                    LCHARCD = 21,
-                                    LCHARNAME = "Сч. электроэнергии",
-                                    DATE_ = fileDate,
-                                    VALUE_ = nachInfo.Nach == NachExcelRecord.NachType.WithDevice ? 1 : 0,
-                                    VALUEDESC = nachInfo.Nach.ToString()
-                                });
-                            else if (nachInfo.Service == NachExcelRecord.ServiceType.Odn)
-                                lcc.Add(new CNV_LCHAR
-                                {
-                                    LSHET = lshet.ToString(),
-                                    SortLshet = lshet,
-                                    LCHARCD = 22,
-                                    LCHARNAME = "Сч. электроэнергии ОДН",
-                                    DATE_ = fileDate,
-                                    VALUE_ = nachInfo.Nach == NachExcelRecord.NachType.WithDevice ? 1 : 0,
-                                    VALUEDESC = nachInfo.Nach.ToString()
-                                });
-                        }
+                        // Признак наличия счетчика берется из статуса оборудования
+                        //if (nachInfo.Nach != NachExcelRecord.NachType.AddNach)
+                        //{
+                        //    if (nachInfo.Service == NachExcelRecord.ServiceType.Living)
+                        //        lcc.Add(new CNV_LCHAR
+                        //        {
+                        //            LSHET = lshet.ToString(),
+                        //            SortLshet = lshet,
+                        //            LCHARCD = 21,
+                        //            LCHARNAME = "Сч. электроэнергии",
+                        //            DATE_ = fileDate,
+                        //            VALUE_ = nachInfo.Nach == NachExcelRecord.NachType.WithDevice ? 1 : 0,
+                        //            VALUEDESC = nachInfo.Nach.ToString()
+                        //        });
+                        //    else if (nachInfo.Service == NachExcelRecord.ServiceType.Odn)
+                        //        lcc.Add(new CNV_LCHAR
+                        //        {
+                        //            LSHET = lshet.ToString(),
+                        //            SortLshet = lshet,
+                        //            LCHARCD = 22,
+                        //            LCHARNAME = "Сч. электроэнергии ОДН",
+                        //            DATE_ = fileDate,
+                        //            VALUE_ = nachInfo.Nach == NachExcelRecord.NachType.WithDevice ? 1 : 0,
+                        //            VALUEDESC = nachInfo.Nach.ToString()
+                        //        });
+                        //}
                     }
                 });
                 lcc = LcharsRecordUtils.CreateUniqueLchars(lcc);
@@ -926,8 +940,8 @@ namespace _048_Rgmek
                                     switch (recode.BelongTo)
                                     {
                                         case AddCharRecodeRecord.BelongType.Abonent:
-                                            long lshet;
-                                            if (!lsrecode.TryGetValue(charRecord.Owner, out lshet)) continue;
+                                            long lshet = FindLsRecode(charRecord.Owner, lsrecode);
+                                            if (lshet == 0) continue;
                                             switch (recode.AType)
                                             {
                                                 case AddCharRecodeRecord.AbonentType.LChar:
@@ -1028,8 +1042,8 @@ namespace _048_Rgmek
             var lsNotFromkvc = Utils.GetLsNotFromKvc();
             foreach (var ls in lsNotFromkvc)
             {
-                long lshet;
-                if (lsrecode.TryGetValue(ls, out lshet))
+                long lshet = FindLsRecode(ls, lsrecode);
+                if (lshet != 0)
                     laac.Add(new CNV_AADDCHAR
                     {
                         LSHET = lshet.ToString(),
@@ -1190,7 +1204,8 @@ namespace _048_Rgmek
             switch (recode.RgmekCode)
             {
                 case "1a083d4e-8798-48dd-98f1-568029c5ce2c":
-                    if (!lsrecode.TryGetValue(charRecord.Owner, out lshet)) break;
+                    lshet = FindLsRecode(charRecord.Owner, lsrecode);
+                    if (lshet == 0) break;
                     AddLChar(recode, charRecord, lshet);
                     break;
                 case "fc7c4f38-aee3-48d8-bb79-98bb1ac2462f":
@@ -1231,7 +1246,7 @@ namespace _048_Rgmek
 
         public override void DoDbfConvert()
         {
-            SetStepsCount(4);
+            SetStepsCount(5);
 
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
@@ -1338,8 +1353,8 @@ namespace _048_Rgmek
                     cnttyperecode.Add(lcold.Cnttype, cnttype);
                 }
 
-                long lshet;
-                if (lsrecode.TryGetValue(lcold.Lshet, out lshet))
+                long lshet = FindLsRecode(lcold.Lshet, lsrecode);
+                if (lshet != 0)
                 {
                     var enddate = dataRow.IsNull("enddate")
                         ? (DateTime?) null
@@ -1558,8 +1573,8 @@ left join (
                         {
                             foreach (var lsKvc in abnList)
                             {
-                                long lshet;
-                                if (!lsrecode.TryGetValue(lsKvc, out lshet)) continue;
+                                long lshet = FindLsRecode(lsKvc, lsrecode);
+                                if (lshet == 0) continue;
                                 var enddate = dr.IsNull("enddate") ? (DateTime?)null : Convert.ToDateTime(dr["enddate"]);
                                 if (enddate == DateTime.MinValue) enddate = null;
                                 var c = new CNV_COUNTER()
@@ -1669,10 +1684,17 @@ left join (
                 var cr = new CntrsindRecord();
                 cr.ReadDataRow(dataRow);
 
-                if (counteridrecode.TryGetValue(cr.Counterid, out counterid) ||
-                    groupcounteridrecode.TryGetValue(cr.Counterid, out counterid))
+                counterid = 0;
+
+                bool isGroupCounter = false;
+                if (!counteridrecode.TryGetValue(cr.Counterid, out counterid))
                 {
-                    var c = new CNV_CNTRSIND()
+                    isGroupCounter = groupcounteridrecode.TryGetValue(cr.Counterid, out counterid);
+                }
+                
+                if (counterid != 0)
+                {
+                    var c = new CNV_CNTRSIND
                     {
                         COUNTERID = counterid.ToString(),
                         DOCUMENTCD = GetDocumentCd(cr.Doc),
@@ -1684,7 +1706,8 @@ left join (
                         OB_EM = 0
                     };
 
-                    if (IsNorFromKvc(c.COUNTERID)) c.INDTYPE = 0;
+                    if (IsNorFromKvc(c.COUNTERID) || isGroupCounter)
+                        c.INDTYPE = 0;
 
                     lc.Add(c);
                 }
@@ -1843,8 +1866,8 @@ order by TARIFCD")));
                     if (pr.Date < MinConvertDate) continue;
                     if (pr.Activcd == "11") continue;
 
-                    long lshet;
-                    if (lsrecode.TryGetValue(pr.Lshet, out lshet))
+                    long lshet = FindLsRecode(pr.Lshet, lsrecode);
+                    if (lshet != 0)
                     {
                         lp.Add(new CNV_OPLATA
                         {
@@ -1938,10 +1961,8 @@ order by TARIFCD")));
                 {
                     var nachInfo = new NachExcelRecord(dr);
 
-                    if (!(fileDate.Month == 10 && nachInfo.LsKvc == "695-006-00-041-0-23")) return;
-
-                    long lshet;
-                    if (!lsrecode.TryGetValue(nachInfo.LsKvc, out lshet)) return;
+                    long lshet = FindLsRecode(nachInfo.LsKvc, lsrecode);
+                    if (lshet == 0) return;
 
                     var nach = new CNV_NACH
                     {
@@ -2083,8 +2104,8 @@ order by TARIFCD")));
                 {
                     var charRecord = new CommonAddCharRecord(dr);
                     if (lsNotFromKvc.Contains(charRecord.Owner)) continue;
-                    long lshet;
-                    if (lsrecode.TryGetValue(charRecord.Owner, out lshet))
+                    long lshet = FindLsRecode(charRecord.Owner, lsrecode);
+                    if (lshet != 0)
                     {
                         lnop.Add(new CNV_NACHOPL
                         {
@@ -2112,8 +2133,8 @@ order by TARIFCD")));
                     foreach (DataRow dr in dtSaldo.Rows)
                     {
                         var saldo = new SaldoNotFromKvcSaldoRecord(dr);
-                        long lshet;
-                        if (lsrecode.TryGetValue(saldo.LsKvc, out lshet))
+                        long lshet = FindLsRecode(saldo.LsKvc, lsrecode);
+                        if (lshet != 0)
                         {
                             lnop.Add(new CNV_NACHOPL
                             {
@@ -2369,7 +2390,7 @@ select * from district");
         }
     }
 
-    public class TransferGroupCounters : KvcConvertCase
+    public class TransferGroupCounters : ConvertCase
     {
         public TransferGroupCounters()
         {
@@ -2379,13 +2400,55 @@ select * from district");
 
         }
 
-        public override void DoKvcConvert()
+        public override void DoConvert()
         {
             SetStepsCount(1);
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_01050_GROUPCOUNTERS", new[] { "0", "1", "0" });
             Iterate();
+        }
+    }
+
+    public class TransferCounterAttributeFromStatuses : ConvertCase
+    {
+        public TransferCounterAttributeFromStatuses()
+        {
+            ConvertCaseName = "Перенос данных о наличии счетчика из статусов счетчиков";
+            Position = 1046;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(3);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteNonQuery("delete from cnv$lchars");
+            Iterate();
+            fbm.ExecuteNonQuery(@"INSERT INTO CNV$LCHARS (LSHET, DATE_, LCHARCD, VALUE_)
+with lslist as (
+    select ae.lshet, es.statusdate, coalesce(rc.counter_level, 0) counter_level
+    from eqstatuses es
+    inner join abonentsequipment ae on ae.equipmentid = es.equipmentid
+    inner join resourcecounters rc on rc.kod = es.equipmentid
+    group by ae.lshet, es.statusdate, rc.counter_level
+)
+select ls.lshet, ls.statusdate, iif (ls.counter_level = 1, 22, 21) as lcharcd,
+    iif (exists(
+            select 0
+            from abonentsequipment ae
+            inner join resourcecounters rc on rc.kod = ae.equipmentid
+                                        and coalesce(rc.counter_level, 0) = ls.counter_level
+            inner join eqstatuses es on es.equipmentid = rc.kod
+                                    and es.statusdate = ls.statusdate
+                                    and es.statuscd > 0
+            where ae.lshet = ls.lshet
+        ), 1, 0) as lcharvalue
+from lslist ls");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_00900_LCHARS", new[] { "0", "0" });
+            StepFinish();
         }
     }
 

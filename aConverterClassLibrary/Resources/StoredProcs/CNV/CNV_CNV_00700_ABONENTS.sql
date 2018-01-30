@@ -18,14 +18,15 @@ declare variable ISDELETED smallint;
 declare variable CLOSEDATE timestamp;
 declare variable DOCUMENTCD integer;
 declare variable SPLITPHONE varchar(100);
+declare variable email varchar(500);
 BEGIN
-    FOR SELECT lshet, ducd, housecd, flatno, flatpostfix, roomno, roompostfix, f, i, o, phonenum, prim_, isdeleted, closedate
+    FOR SELECT lshet, ducd, housecd, flatno, flatpostfix, roomno, roompostfix, f, i, o, phonenum, prim_, isdeleted, closedate, email
     FROM cnv$abonent
     ORDER BY lshet
-    INTO :lshet, :ducd, :housecd, :flatno, :flatpostfix, :roomno, :roompostfix, :f, :i, :o, :phonenum, :prim_, :isdeleted, :closedate
+    INTO :lshet, :ducd, :housecd, :flatno, :flatpostfix, :roomno, :roompostfix, :f, :i, :o, :phonenum, :prim_, :isdeleted, :closedate, email
     DO BEGIN
-        UPDATE OR INSERT INTO abonents (lshet, ownerid, housecd, flatno, flatpostfix, roomno, roompostfix, fio, name, second_name, note, deleted,DELETE_DATE)
-        VALUES (:lshet, :ducd, :housecd, :flatno, :flatpostfix, :roomno, :roompostfix, :f, :i, :o, :prim_, :isdeleted, :closedate)
+        UPDATE OR INSERT INTO abonents (lshet, ownerid, housecd, flatno, flatpostfix, roomno, roompostfix, fio, name, second_name, note, deleted,DELETE_DATE, email)
+        VALUES (:lshet, :ducd, :housecd, :flatno, :flatpostfix, :roomno, :roompostfix, :f, :i, :o, :prim_, :isdeleted, :closedate, :email)
         MATCHING (lshet);
         IF (phonenum IS NOT NULL) THEN BEGIN
            DELETE FROM abonentphones WHERE LSHET = :lshet;
