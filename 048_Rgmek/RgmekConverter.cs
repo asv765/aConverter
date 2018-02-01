@@ -6,6 +6,7 @@ using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -57,34 +58,37 @@ namespace _048_Rgmek
             {6, 3}, // Число проживающих
         };
 
-        public static readonly Dictionary<KeyValuePair<long, long>, KeyValuePair<int, int>> LcharRecode =
-            new Dictionary<KeyValuePair<long, long>, KeyValuePair<int, int>>
+        public static readonly Dictionary<KeyValuePair<long, long>, KeyValuePair<int, int>[]> LcharRecode =
+            new Dictionary<KeyValuePair<long, long>, KeyValuePair<int, int>[]>
             {
-                {new KeyValuePair<long, long>(1, 0), new KeyValuePair<int, int>(2, 0)},
-                {new KeyValuePair<long, long>(1, 1), new KeyValuePair<int, int>(2, 1)},
-                {new KeyValuePair<long, long>(1, 2), new KeyValuePair<int, int>(2, 0)},
-                {new KeyValuePair<long, long>(2, 0), new KeyValuePair<int, int>(2, 0)},
-                {new KeyValuePair<long, long>(2, 1), new KeyValuePair<int, int>(2, 2)},
-                {new KeyValuePair<long, long>(2, 2), new KeyValuePair<int, int>(2, 0)},
-                {new KeyValuePair<long, long>(3, 0), new KeyValuePair<int, int>(2, 0)},
-                {new KeyValuePair<long, long>(3, 1), new KeyValuePair<int, int>(2, 3)},
-                {new KeyValuePair<long, long>(3, 2), new KeyValuePair<int, int>(2, 0)},
-                {new KeyValuePair<long, long>(4, 0), new KeyValuePair<int, int>(13, 0)},
-                {new KeyValuePair<long, long>(4, 1), new KeyValuePair<int, int>(13, 1)},
-                {new KeyValuePair<long, long>(4, 2), new KeyValuePair<int, int>(13, 0)},
-                {new KeyValuePair<long, long>(5, 1), new KeyValuePair<int, int>(5, 1)},
-                {new KeyValuePair<long, long>(5, 2), new KeyValuePair<int, int>(5, 2)},
-                {new KeyValuePair<long, long>(5, 3), new KeyValuePair<int, int>(5, 3)},
-                {new KeyValuePair<long, long>(5, 4), new KeyValuePair<int, int>(5, 4)},
-                {new KeyValuePair<long, long>(5, 5), new KeyValuePair<int, int>(5, 5)},
-                {new KeyValuePair<long, long>(5, 6), new KeyValuePair<int, int>(5, 6)},
-                {new KeyValuePair<long, long>(6, 1), new KeyValuePair<int, int>(6, 1)},
-                {new KeyValuePair<long, long>(6, 4), new KeyValuePair<int, int>(6, 2)},
-                {new KeyValuePair<long, long>(6, 7), new KeyValuePair<int, int>(6, 3)},
-                {new KeyValuePair<long, long>(6, 8), new KeyValuePair<int, int>(6, 4)},
-                {new KeyValuePair<long, long>(6, 9), new KeyValuePair<int, int>(6, 5)},
-                {new KeyValuePair<long, long>(6, 10), new KeyValuePair<int, int>(6, 6)},
-                {new KeyValuePair<long, long>(6, 11), new KeyValuePair<int, int>(6, 7)},
+                {new KeyValuePair<long, long>(1, 0), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)}},
+                {new KeyValuePair<long, long>(1, 1), new[] {new KeyValuePair<int, int>(2, 1), new KeyValuePair<int, int>(11, 1)}},
+                {new KeyValuePair<long, long>(1, 2), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)}},
+                {new KeyValuePair<long, long>(2, 0), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)}},
+                {new KeyValuePair<long, long>(2, 1), new[] {new KeyValuePair<int, int>(2, 2), new KeyValuePair<int, int>(11, 1)}},
+                {new KeyValuePair<long, long>(2, 2), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)}},
+                {new KeyValuePair<long, long>(3, 0), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)}},
+                {new KeyValuePair<long, long>(3, 1), new[] {new KeyValuePair<int, int>(2, 3), new KeyValuePair<int, int>(11, 1)}},
+                {new KeyValuePair<long, long>(3, 2), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)}},
+                {new KeyValuePair<long, long>(4, 0), new[] {new KeyValuePair<int, int>(13, 0)}},
+                {new KeyValuePair<long, long>(4, 1), new[] {new KeyValuePair<int, int>(13, 1)}},
+                {new KeyValuePair<long, long>(4, 2), new[] {new KeyValuePair<int, int>(13, 0)}},
+                {new KeyValuePair<long, long>(5, 1), new[] {new KeyValuePair<int, int>(5, 1)}},
+                {new KeyValuePair<long, long>(5, 2), new[] {new KeyValuePair<int, int>(5, 2)}},
+                {new KeyValuePair<long, long>(5, 3), new[] {new KeyValuePair<int, int>(5, 3)}},
+                {new KeyValuePair<long, long>(5, 4), new[] {new KeyValuePair<int, int>(5, 4)}},
+                {new KeyValuePair<long, long>(5, 5), new[] {new KeyValuePair<int, int>(5, 5)}},
+                {new KeyValuePair<long, long>(5, 6), new[] {new KeyValuePair<int, int>(5, 6)}},
+                {new KeyValuePair<long, long>(55, 0), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)}},
+                {new KeyValuePair<long, long>(55, 1), new[] {new KeyValuePair<int, int>(2, 1), new KeyValuePair<int, int>(11, 1)}},
+                {new KeyValuePair<long, long>(55, 2), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)}},
+                {new KeyValuePair<long, long>(6, 1), new[] {new KeyValuePair<int, int>(6, 1)}},
+                {new KeyValuePair<long, long>(6, 4), new[] {new KeyValuePair<int, int>(6, 2)}},
+                {new KeyValuePair<long, long>(6, 7), new[] {new KeyValuePair<int, int>(6, 3)}},
+                {new KeyValuePair<long, long>(6, 8), new[] {new KeyValuePair<int, int>(6, 4)}},
+                {new KeyValuePair<long, long>(6, 9), new[] {new KeyValuePair<int, int>(6, 5)}},
+                {new KeyValuePair<long, long>(6, 10), new[] {new KeyValuePair<int, int>(6, 6)}},
+                {new KeyValuePair<long, long>(6, 11), new[] {new KeyValuePair<int, int>(6, 7)}},
             };
 
         public static readonly Dictionary<int, int> TarifRecode = new Dictionary<int, int>
@@ -97,8 +101,8 @@ namespace _048_Rgmek
             { 8, 6 }, //Электроплиты двуставочный
         };
 
-        public static readonly int CurrentMonth = 11; // должен быть следующий месяц после последнего закрытого
-        public static readonly int CurrentYear = 2017;
+        public static readonly int CurrentMonth = 01; // должен быть следующий месяц после последнего закрытого
+        public static readonly int CurrentYear = 2018;
         public static readonly DateTime MinConvertDate = new DateTime(2017, 1, 1);
         public static readonly DateTime NullDate = new DateTime(1899, 12, 30);
 
@@ -524,6 +528,61 @@ namespace _048_Rgmek
         }
     }
 
+    public class ConvertExtLshets : DbfConvertCase
+    {
+        public ConvertExtLshets()
+        {
+            ConvertCaseName = "EXTLSHET - внешние лицевые счета";
+            Position = 21;
+            IsChecked = false;
+        }
+
+        public override void DoDbfConvert()
+        {
+            SetStepsCount(3);
+            BufferEntitiesManager.DropTableData("CNV$EXTLSHET");
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+            long orgCd = 3;
+            var orgRecode = new Dictionary<string, long>();
+            var extLshets = new List<CNV_EXTLSHET>();
+            StepStart(1);
+            DbfManager.ExecuteQueryByRow("select * from abnlshet", dr =>
+            {
+                var extLshetRecord = new AbnlshetRecord();
+                extLshetRecord.ReadDataRow(dr);
+                long intExtLs;
+                string extLshet = extLshetRecord.Lsh.Replace(" ", "");
+                if (!long.TryParse(extLshet, out intExtLs))
+                    return;
+
+                var lshet = FindLsRecode(extLshetRecord.Lshet, lsrecode);
+
+                if (lshet != 0)
+                {
+                    extLshets.Add(new CNV_EXTLSHET
+                    {
+                        EXTORGCD = (int) Utils.GetValue(extLshetRecord.Orgcd, orgRecode, ref orgCd),
+                        LSHET = lshet.ToString(),
+                        EXTLSHET = extLshet,
+                        EXTORGNAME = extLshetRecord.Orgnm
+                    });
+                }
+            });
+            StepFinish();
+
+            StepStart(1);
+            extLshets = extLshets
+                .GroupBy(l => l.LSHET)
+                .Select(gr => gr.First(l => Convert.ToInt64(l.EXTLSHET) == gr.Max(ll => Convert.ToInt64(ll.EXTLSHET))))
+                .ToList();
+            StepFinish();
+            
+            StepStart(1);
+            BufferEntitiesManager.SaveDataToBufferIBScript(extLshets);
+            StepFinish();
+        }
+    }
+
     public class ConvertChars : DbfConvertCase
     {
         public ConvertChars()
@@ -679,22 +738,27 @@ namespace _048_Rgmek
                 foreach (DataRow dataRow in dt.Rows)
                 {
                     lcold.ReadDataRow(dataRow);
+                    if (lcold.Lcharcd == 5 && lcold.Lcharname.Trim() == "Электроэнергия: Гараж")
+                        lcold.Lcharcd = 55;
 
                     long lshet = FindLsRecode(lcold.Lshet, lsrecode);
                     if (lshet != 0)
                     {
                         var recodeValue = LcharRecode[new KeyValuePair<long, long>(lcold.Lcharcd, lcold.Value_)];
-                        var c = new CNV_LCHAR
+                        foreach (var recode in recodeValue)
                         {
-                            LSHET = lshet.ToString(),
-                            SortLshet = lshet,
-                            LCHARCD = recodeValue.Key,
-                            LCHARNAME = lcold.Lcharname.Trim(),
-                            DATE_ = lcold.Date,
-                            VALUE_ = recodeValue.Value,
-                            VALUEDESC = lcold.Valuedesc
-                        };
-                        lcc.Add(c);
+                            var c = new CNV_LCHAR
+                            {
+                                LSHET = lshet.ToString(),
+                                SortLshet = lshet,
+                                LCHARCD = recode.Key,
+                                LCHARNAME = lcold.Lcharname.Trim(),
+                                DATE_ = lcold.Date,
+                                VALUE_ = recode.Value,
+                                VALUEDESC = lcold.Valuedesc
+                            };
+                            lcc.Add(c);
+                        }
                     }
                     Iterate();
                 }
@@ -1006,6 +1070,9 @@ namespace _048_Rgmek
                                                 case AddCharRecodeRecord.AbonentType.LChar:
                                                     lshets.ForEach(ls => AddLChar(recode, charRecord, ls));
                                                     break;
+                                                case AddCharRecodeRecord.AbonentType.AChar:
+                                                    lshets.ForEach(ls => AddAChar(recode, charRecord, ls, isEnumChar));
+                                                    break;
                                                 default:
                                                     throw new Exception($"Необработанный тип абонента {recode.AType} для типа ргмэк {recode.RType} и принадлежности {recode.BelongTo}");
                                             }
@@ -1274,30 +1341,12 @@ namespace _048_Rgmek
 
             var multiscalesCounters = new HashSet<string>();
             var abonentTarifs = new Dictionary<string, NachExcelRecord.TarifType>();
-            DbfManager.ExecuteQueryByReader(
-                @"select distinct c.counterid, c.lshet
-                    from (
-	                    select cc.*
-	                    from (
-		                    select c.counterid
-		                    from (
-			                    select distinct c.counterid 
-			                    from counters c
-		                    ) c
-		                    inner join scales s on s.counterid = c.counterid
-		                    where s.name <> 'Основная'
-		                    group by c.counterid
-		                    having count(0) > 1
-	                    ) c
-	                    inner join counters cc on cc.counterid = c.counterid
-                    ) c
-                    inner join scales s on s.counterid = c.counterid",
-                r =>
-                {
-                    multiscalesCounters.Add(r.GetString(0));
-                    if (!abonentTarifs.ContainsKey(r.GetString(1)))
-                        abonentTarifs.Add(r.GetString(1), NachExcelRecord.TarifType.Unknown);
-                });
+            DbfManager.ExecuteQueryByReader(MultiscalesCountersSql, r =>
+            {
+                multiscalesCounters.Add(r.GetString(0));
+                if (!abonentTarifs.ContainsKey(r.GetString(1)))
+                    abonentTarifs.Add(r.GetString(1), NachExcelRecord.TarifType.Unknown);
+            });
 
             var nachFile = ConvertNach.GetNachFiles()
                 .Select(nf => new { NachFile = nf, FileDate = ConvertNach.GetNachFileDate(nf) })
@@ -1490,6 +1539,25 @@ namespace _048_Rgmek
             }
             return digitCounterDic;
         }
+
+        public const string MultiscalesCountersSql =
+            @"select distinct c.counterid, c.lshet
+            from (
+	            select cc.*
+	            from (
+		            select c.counterid
+		            from (
+			            select distinct c.counterid 
+			            from counters c
+		            ) c
+		            inner join scales s on s.counterid = c.counterid
+		            where s.name <> 'Основная'
+		            group by c.counterid
+		            having count(0) > 1
+	            ) c
+	            inner join counters cc on cc.counterid = c.counterid
+            ) c
+            inner join scales s on s.counterid = c.counterid";
     }
 
     public class ConvertGroupCounters : DbfConvertCase
@@ -1677,9 +1745,24 @@ left join (
             _reverseLsRecode = Utils.ReadDictionary(LsRecodeFileName).ToDictionary(l => l.Value, l => l.Key);
             long counterid = 0;
 
+            var multiscalesCounters = new HashSet<string>();
+            DbfManager.ExecuteQueryByReader(ConvertCounters.MultiscalesCountersSql, r =>
+            {
+                multiscalesCounters.Add(r.GetString(0));
+            });
 
-            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar("SELECT COUNT(*) FROM CNTRSIND")));
-            DbfManager.ExecuteQueryByRow("SELECT * FROM CNTRSIND", dataRow =>
+            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(
+                @"select top 1
+            	(select count(0) from CNTRSIND_2017) +
+            	(select count(0) from CNTRSIND_2018) 
+            from TARIFS
+            order by TARIFCD")));
+            DbfManager.ExecuteQueryByRow(@"select * from CNTRSIND_2018
+                                        where indtype = 'От абонента (по квитанции)'
+                                        union all
+                                        select * from CNTRSIND_2017
+                                        where indtype = 'От абонента (по квитанции)'", 
+                                        dataRow =>
             {
                 var cr = new CntrsindRecord();
                 cr.ReadDataRow(dataRow);
@@ -1691,9 +1774,13 @@ left join (
                 {
                     isGroupCounter = groupcounteridrecode.TryGetValue(cr.Counterid, out counterid);
                 }
-                
+            
                 if (counterid != 0)
                 {
+                    if (multiscalesCounters.Contains(cr.Counterid))
+                    {
+                        if (cr.Scalecd > 1) counterid++;
+                    }
                     var c = new CNV_CNTRSIND
                     {
                         COUNTERID = counterid.ToString(),
@@ -1715,25 +1802,21 @@ left join (
             });
             StepFinish();
 
-//            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
-//	(select count(0) from IND_2017 where indtype = 'От абонента (по квитанции)') +
-//	(select count(0) from IND_2016 where indtype = 'От абонента (по квитанции)') +
-//	(select count(0) from IND_2015 where indtype = 'От абонента (по квитанции)') 
+            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
+            	(select count(0) from CNTRSKVC_2017 where indtype = 'От абонента (по квитанции)') +
+            	(select count(0) from CNTRSKVC_2018 where indtype = 'От абонента (по квитанции)') 
+            from TARIFS
+            order by TARIFCD")));
+            DbfManager.ExecuteQueryByRow(@"select * from CNTRSKVC_2018
+                                        where indtype = 'От абонента (по квитанции)'
+                                        union all
+                                        select * from CNTRSKVC_2017
+                                        where indtype = 'От абонента (по квитанции)'",
+//StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
+//	(select count(0) from CNTRSKVC where indtype = 'От абонента (по квитанции)')
 //from TARIFS
 //order by TARIFCD")));
-//            DbfManager.ExecuteQueryByRow(@"select * from IND_2017
-//                                        where indtype = 'От абонента (по квитанции)'
-//                                        union all
-//                                        select * from IND_2016
-//                                        where indtype = 'От абонента (по квитанции)'
-//                                        union all
-//                                        select * from IND_2015
-//                                        where indtype = 'От абонента (по квитанции)'",
-            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
-	(select count(0) from CNTRSKVC where indtype = 'От абонента (по квитанции)')
-from TARIFS
-order by TARIFCD")));
-            DbfManager.ExecuteQueryByRow(@"select * from CNTRSKVC where indtype = 'От абонента (по квитанции)'",
+            //DbfManager.ExecuteQueryByRow(@"select * from CNTRSKVC where indtype = 'От абонента (по квитанции)'",
                 dataRow =>
                 {
                     var cr = new CntrsindRecord();
@@ -1746,6 +1829,10 @@ order by TARIFCD")));
                         groupcounteridrecode.TryGetValue(cr.Counterid, out counterid))
                     {
                         if (IsNorFromKvc(counterid.ToString())) return;
+                        if (multiscalesCounters.Contains(cr.Counterid))
+                        {
+                            if (cr.Scalecd > 1) counterid++;
+                        }
                         var c = new CNV_CNTRSIND()
                         {
                             COUNTERID = counterid.ToString(),
@@ -1957,6 +2044,7 @@ order by TARIFCD")));
             foreach (var file in files)
             {
                 var fileDate = GetNachFileDate(file);
+
                 aConverterClassLibrary.Utils.ReadExcelFileByRow(file, null, dr =>
                 {
                     var nachInfo = new NachExcelRecord(dr);
@@ -2249,9 +2337,13 @@ order by TARIFCD")));
         public override void DoConvert()
         {
             SetStepsCount(1);
-            StepStart(1);
+            StepStart(2);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_02100_EXTLSHETS", new[] { "2", "0" });
+            Iterate();
+            fbm.ExecuteNonQuery("ALTER trigger LSHETS_CHANGE inactive");
+            fbm.ExecuteProcedure("CNV$CNV_02150_MASSEXTLSHETS");
+            fbm.ExecuteNonQuery("ALTER trigger LSHETS_CHANGE active");
             Iterate();
         }
     }
@@ -2325,8 +2417,7 @@ inner join abonents a on 1 = 1
 where not exists (
     select 0
     from abonentadditionalchars ad
-    where ad.additionalcharcd = cl.additionalcharcd and ad.lshet = a.lshet)
-select * from district");
+    where ad.additionalcharcd = cl.additionalcharcd and ad.lshet = a.lshet)");
             StepFinish();
         }
     }
@@ -2364,6 +2455,10 @@ select * from district");
             SetStepsCount(1);
             StepStart(1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteNonQuery(
+                @"update cnv$cntrsind ci
+                set ci.ob_em = 0
+                where abs(ci.ob_em) > 100000");
             fbm.ExecuteProcedure("CNV$CNV_01000_COUNTERS", new[] { "0", "1", "0", "1" });
             StepFinish();
         }
@@ -2385,7 +2480,7 @@ select * from district");
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_01110_COUNTERADDCHAR");
             Iterate();
-            fbm.ExecuteProcedure("CNV$CNV_01120_COUNTERTYPEADDCHAR");
+            fbm.ExecuteProcedure("CNV$CNV_01120_CNTRTYPEADDCHAR");
             StepFinish();
         }
     }

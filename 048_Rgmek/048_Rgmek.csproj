@@ -64,6 +64,7 @@
     <Compile Include="Forms\Form_ConnectionString.Designer.cs">
       <DependentUpon>Form_ConnectionString.cs</DependentUpon>
     </Compile>
+    <Compile Include="Records\AbnlshetRecord.cs" />
     <Compile Include="Records\AbonentRecord.cs" />
     <Compile Include="Records\CharsRecord.cs" />
     <Compile Include="Records\CntrsindRecord.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Records\LsCharsRecord.cs" />
     <Compile Include="Records\NachExcelRecord.cs" />
     <Compile Include="Records\NachRecord.cs" />
+    <Compile Include="Records\PartialAbnlshetRecord.cs" />
     <Compile Include="Records\PaymentRecord.cs" />
     <Compile Include="Records\SaldoNotFromKvcSaldoRecord.cs" />
     <Compile Include="Records\SummsRecord.cs" />

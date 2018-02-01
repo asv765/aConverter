@@ -1,6 +1,6 @@
 SET TERM ^ ;
 
-create or alter procedure CNV$CNV_01120_COUNTERTYPEADDCHAR
+create or alter procedure CNV$CNV_01120_CNTRTYPEADDCHAR
 as
 begin
 	merge into countermarkchars ad

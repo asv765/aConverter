@@ -43,6 +43,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "CITIZENRELATIONS",
                 "CITIZENS",
                 "CITYZENLGOTA",
+                "EXTLSHET",
                 "LGOTSUMMA",
                 "CNTRSIND",
                 "COUNTERS",
@@ -155,6 +156,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_01000_COUNTERS");
                 l.Add("CNV_01050_GROUPCOUNTERS");
                 l.Add("CNV_01100_COUNTERTYPES");
+                l.Add("CNV_01110_COUNTERADDCHAR");
+                l.Add("CNV_01120_CNTRTYPEADDCHAR");
                 l.Add("CNV_01300_SOURCEDOC");
                 l.Add("CNV_01400_OPLATA");
                 l.Add("CNV_01500_SALDO");
@@ -165,6 +168,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_01820_CITIZENMIGRATION");
                 l.Add("CNV_01900_PENISUMMA");
                 l.Add("CNV_02100_EXTLSHETS");
+                l.Add("CNV_02150_MASSEXTLSHETS");
                 l.Add("CNV_03000_CITIZENS_TVER");
                 l.Add("CNV_03000_CITIZENS_KVC");
                 l.Add("CNV_03050_CITIZENSMIGR_TVER");

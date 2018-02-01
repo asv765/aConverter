@@ -131,6 +131,7 @@ namespace aConverterClassLibrary
             {
                 cmd?.Dispose();
                 odconn?.Dispose();
+                throw;
             }
         }
 

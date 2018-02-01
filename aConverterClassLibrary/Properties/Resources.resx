@@ -277,8 +277,8 @@
   <data name="CNV_CNV_01110_COUNTERADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_01110_COUNTERADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
-  <data name="CNV_CNV_01120_COUNTERTYPEADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\StoredProcs\CNV\CNV_CNV_01120_COUNTERTYPEADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  <data name="CNV_CNV_01120_CNTRTYPEADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_01120_CNTRTYPEADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_CNV_01300_SOURCEDOC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_01300_SOURCEDOC.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
@@ -309,6 +309,9 @@
   </data>
   <data name="CNV_CNV_02100_EXTLSHETS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_02100_extlshets.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CNV_02150_MASSEXTLSHETS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_02150_MASSEXTLSHETS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_CNV_03000_CITIZENS_KVC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_03000_CITIZENS_KVC.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -378,6 +381,12 @@
   </data>
   <data name="CNV_EQUIPMENT_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_equipment_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_EXTLSHET" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_EXTLSHET.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_EXTLSHET_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_EXTLSHET_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_GCOUNTER" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cnv_gcounter.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

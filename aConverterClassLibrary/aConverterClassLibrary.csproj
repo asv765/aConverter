@@ -245,6 +245,7 @@
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERTYPEADDCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERTYPERecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialEXTLSHETRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialHADDCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialLCHARHOUSESRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialLCHARRecord.cs" />
@@ -296,6 +297,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RecordsDataAccessORM\CNV_EXTLSHET.generated.cs" />
     <None Include="Resources\CNV_ABONENT_d.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +348,8 @@
     <Content Include="Resources\CNV_DOGOVOR_d.sql" />
     <Content Include="Resources\CNV_EQUIPMENT.sql" />
     <Content Include="Resources\CNV_EQUIPMENT_d.sql" />
+    <None Include="Resources\CNV_EXTLSHET.sql" />
+    <None Include="Resources\CNV_EXTLSHET_d.sql" />
     <Content Include="Resources\CNV_GCOUNTER.sql" />
     <Content Include="Resources\CNV_GCOUNTER_d.sql" />
     <Content Include="Resources\CNV_HADDCHAR.sql" />
@@ -397,7 +401,7 @@
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01100_COUNTERTYPES.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_00910_ADDCHARS.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01110_COUNTERADDCHAR.sql" />
-    <None Include="Resources\StoredProcs\CNV\CNV_CNV_01120_COUNTERTYPEADDCHAR.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_01120_CNTRTYPEADDCHAR.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01400_OPLATA.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01500_SALDO.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_01600_NACHISLIMPORT.sql" />
@@ -408,6 +412,7 @@
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_01820_CITIZENMIGRATION.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_02100_EXTLSHETS.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03000_CITIZENS_KVC.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_02150_MASSEXTLSHETS.sql" />
     <Content Include="Resources\StoredProcs\CNV\CNV_CNV_03000_CITIZENS_TVER.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03100_TVER_ABONENTDOLYA.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03200_CITYZENLGOTA_TVER.sql" />

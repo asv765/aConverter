@@ -1280,11 +1280,19 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
-        ///create or alter procedure CNV$CNV_01100_COUNTERTYPES
+        ///create or alter procedure CNV$CNV_01110_COUNTERADDCHAR
         ///as
         ///begin
-        ///    INSERT INTO COUNTERSTYPES (KOD, EQUIPMENTTYPEID, PERIODKOD, NAME, COEFFICIENT, DIGITCOUNT, EQUIPMENTGROUPID, EXTORGCD, DIMENSIONTYPE, MINCONSUMPTION, MAXCONSUMPTION, MINTEMPERATURE, MAXTEMPERATURE, COUNTERMARKMODULEID, SERVICELIFEID, ACCURACY)
-        ///    select ID, EQUIPMENTTYPEID, PERIODKOD, NAME, COEFFICIENT, DIGITCOUNT, EQUIPMENTGROUPID, EXTORGCD, DIMENSIONTYPE, MINCONSUMPTION, MAXCONSUMPTION, MINTEMPERATURE, MAXTEMPERATURE, COUNTER [rest of string was truncated]&quot;;.
+        ///	merge into equipmentadditionalchars ad
+        ///	using cnv$counteraddchar ca on ca.counterid = ad.equipmentid and ca.addcharcd = ad.additionalcharcd
+        ///	when matched then
+        ///		update set ad.significance = ca.value_
+        ///	when not matched then
+        ///		insert(additionalcharcd, equipmentid, significance)
+        ///			values(ca.addcharcd, ca.counterid, ca.value_);
+        ///end^
+        ///
+        ///SET TERM ; ^.
         /// </summary>
         internal static string CNV_CNV_01110_COUNTERADDCHAR {
             get {
@@ -1295,15 +1303,23 @@ namespace aConverterClassLibrary.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
-        ///create or alter procedure CNV$CNV_01100_COUNTERTYPES
+        ///create or alter procedure CNV$CNV_01120_CNTRTYPEADDCHAR
         ///as
         ///begin
-        ///    INSERT INTO COUNTERSTYPES (KOD, EQUIPMENTTYPEID, PERIODKOD, NAME, COEFFICIENT, DIGITCOUNT, EQUIPMENTGROUPID, EXTORGCD, DIMENSIONTYPE, MINCONSUMPTION, MAXCONSUMPTION, MINTEMPERATURE, MAXTEMPERATURE, COUNTERMARKMODULEID, SERVICELIFEID, ACCURACY)
-        ///    select ID, EQUIPMENTTYPEID, PERIODKOD, NAME, COEFFICIENT, DIGITCOUNT, EQUIPMENTGROUPID, EXTORGCD, DIMENSIONTYPE, MINCONSUMPTION, MAXCONSUMPTION, MINTEMPERATURE, MAXTEMPERATURE, COUNTER [rest of string was truncated]&quot;;.
+        ///	merge into countermarkchars ad
+        ///	using cnv$countertypeaddchar ca on ca.countertypeid = ad.markaid and ca.addcharcd = ad.additionalcharcd
+        ///	when matched then
+        ///		update set ad.significance = ca.value_
+        ///	when not matched then
+        ///		insert(additionalcharcd, markaid, significance)
+        ///			values(ca.addcharcd, ca.countertypeid, ca.value_);
+        ///end^
+        ///
+        ///SET TERM ; ^.
         /// </summary>
-        internal static string CNV_CNV_01120_COUNTERTYPEADDCHAR {
+        internal static string CNV_CNV_01120_CNTRTYPEADDCHAR {
             get {
-                return ResourceManager.GetString("CNV_CNV_01120_COUNTERTYPEADDCHAR", resourceCulture);
+                return ResourceManager.GetString("CNV_CNV_01120_CNTRTYPEADDCHAR", resourceCulture);
             }
         }
         
@@ -1548,6 +1564,20 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_CNV_02100_EXTLSHETS {
             get {
                 return ResourceManager.GetString("CNV_CNV_02100_EXTLSHETS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;
+        ///
+        ///create or alter procedure CNV$CNV_02150_MASSEXTLSHETS
+        ///as
+        ///BEGIN
+        ///	INSERT INTO EXTORGSPR (EXTORGCD, EXTORGNM, CANGIVELGOT, PAYIMPORT, CHARSIMPORT, ISACCOUNT, LSHETFORMAT, HASOWNADRESSCD, EQUIPMENTSALE, EQUIPMENTMAKE, ISPROVIDER, JURIDICALADDRESS, POSTADDRESS, PHONE, INN, KPP, RS, DIRECTOR, MAINACCOUNTANT, NOTE, OKPO, BANK, KORACCOUNT, BIK, ISEXTERNALCALC, CANISSUEPASSP, ISBASEORGANIZATION, SECTORADDRESS, SECTORPHONE, SECTORWORKMODE, ISDEFAULTORG, ISMILITARYCOMISSION, ISTAX, ISREGISTRATIONAUTHORIT [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_02150_MASSEXTLSHETS {
+            get {
+                return ResourceManager.GetString("CNV_CNV_02150_MASSEXTLSHETS", resourceCulture);
             }
         }
         
@@ -2006,6 +2036,51 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_EQUIPMENT_d {
             get {
                 return ResourceManager.GetString("CNV_EQUIPMENT_d", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CREATE GENERATOR GEN_CNV$EXTLSHET_ID;
+        ///
+        ///CREATE TABLE CNV$EXTLSHET (
+        ///    ID             INTEGER NOT NULL,
+        ///    LSHET          VARCHAR(10),
+        ///	EXTLSHET	   VARCHAR(20),
+        ///	EXTORGCD	   INTEGER,
+        ///	EXTORGNAME	   VARCHAR(100)
+        ///);
+        ///
+        ///ALTER TABLE CNV$EXTLSHET ADD PRIMARY KEY (ID);
+        ///
+        ///CREATE INDEX CNV$EXTLSHET_IDX1 ON CNV$EXTLSHET (LSHET);
+        ///CREATE INDEX CNV$EXTLSHET_IDX2 ON CNV$EXTLSHET (EXTORGCD);
+        ///
+        ///SET TERM ^ ;
+        ///CREATE OR ALTER TRIGGER CNV$EXTLSHET_BI FOR CNV$EXTLSHET
+        ///ACTIVE BEFORE INSERT POSITION 0
+        ///AS
+        ///BEGIN
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_EXTLSHET {
+            get {
+                return ResourceManager.GetString("CNV_EXTLSHET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DROP TRIGGER CNV$EXTLSHET_BI;
+        ///DROP SEQUENCE GEN_CNV$EXTLSHET_ID;
+        ///DROP INDEX CNV$EXTLSHET_IDX1;
+        ///DROP INDEX CNV$EXTLSHET_IDX2;
+        ///DROP TABLE CNV$EXTLSHET;
+        ///
+        ///
+        ///.
+        /// </summary>
+        internal static string CNV_EXTLSHET_d {
+            get {
+                return ResourceManager.GetString("CNV_EXTLSHET_d", resourceCulture);
             }
         }
         

@@ -1092,6 +1092,36 @@
           </orm:columnMapping>
         </orm:index>
       </orm:class>
+      <orm:class name="CNV_EXTLSHET" uniqueId="d9283155-e25b-4fbd-bece-d4052be5fc83">
+        <orm:table name="CNV$EXTLSHET" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="ID" />
+          </orm:key-generator>
+          <orm:single-field field-name="_iD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="741daea2-31d1-4283-bf64-404e3f2e0cf9" type="System.Int32">
+          <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="60a407a4-d4e0-428a-b67b-11adbee9ef01" type="System.String">
+          <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_eXTLSHET" property="EXTLSHET" behavior="readwrite" uniqueId="7b85728a-9e74-4e29-be04-86b44be66377" type="System.String">
+          <orm:column name="EXTLSHET" sql-type="varchar" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_eXTORGCD" property="EXTORGCD" behavior="readwrite" uniqueId="2d473785-1d01-4b9e-89ca-41f45e6f6ec0" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="EXTORGCD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_eXTORGNAME" property="EXTORGNAME" behavior="readwrite" uniqueId="d1a1eded-9c3a-471e-91ff-5e4144f5107f" type="System.String">
+          <orm:column name="EXTORGNAME" sql-type="varchar" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:index name="CNV$EXTLSHET_IDX1">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
       <orm:class name="EXTORGSTREET" uniqueId="fa550a6a-fed8-48c9-9bdc-96746380bf5e">
         <orm:table name="EXTORGSTREET" />
         <orm:identity>
@@ -2271,6 +2301,18 @@
           </orm:columnMapping>
         </orm:index>
       </orm:table>
+      <orm:table name="CNV$EXTLSHET">
+        <orm:column name="ID" sql-type="integer" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="EXTLSHET" sql-type="varchar" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="EXTORGCD" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="EXTORGNAME" sql-type="varchar" nullable="true" length="100" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="CNV$EXTLSHET_IDX1">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
       <orm:table name="EXTORGSTREET">
         <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
         <orm:column name="STREETCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
@@ -2840,6 +2882,13 @@
       <Property Id="a28a54a1-1a3b-4888-aa9c-da629f78a828" name="HOUSENOTE" label="HOUSENOTE : String" nullable="true" fieldName="_hOUSENOTE" />
       <Property Id="3dadb166-3ab3-4a0e-bb28-d6c301faeb40" name="EMAIL" label="EMAIL : String" kind="Persistent" fieldName="_eMAIL" />
     </DomainClass>
+    <DomainClass Id="49163223-8709-4285-904e-11dce3130f91" name="CNV_EXTLSHET" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
+      <Property Id="4d5514e1-5202-4062-ac7b-dbdeabc2f796" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
+      <Property Id="bca80eb9-d6f4-4580-ab62-9de7a407c5b5" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
+      <Property Id="bca80eb9-d6f4-4580-ab62-9de7a407c5b5" name="EXTLSHET" label="EXTLSHET : String" kind="Persistent" fieldName="_eXTLSHET" />
+      <Property Id="354f9ba2-3ff1-408b-af0e-acbb57f7a283" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" nullable="true" kind="Persistent" fieldName="_eXTORGCD" />
+      <Property Id="bca80eb9-d6f4-4580-ab62-9de7a407c5b5" name="EXTORGNAME" label="EXTORGNAME : String" kind="Persistent" fieldName="_eXTORGNAME" />
+    </DomainClass>
     <DomainClass Id="fa550a6a-fed8-48c9-9bdc-96746380bf5e" name="EXTORGSTREET" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
       <Property Id="0090bd92-43f0-47ef-93d6-5b8aa0181f61" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" kind="Persistent" identity="true" fieldName="_eXTORGCD" />
       <Property Id="4e47c1f7-7b1c-4ffe-872a-365ce6641003" name="PUNKTCD" type="Int32" label="PUNKTCD : Int32" kind="Persistent" identity="true" fieldName="_pUNKTCD" />
@@ -3239,6 +3288,7 @@
         <entitySetProperty name="CNV_CHARVALs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CHARVAL" label="CNV_CHARVALs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CHARVAL&gt;" />
         <entitySetProperty name="CNV_CHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CHAR" label="CNV_CHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CHAR&gt;" />
         <entitySetProperty name="CNV_ABONENTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_ABONENT" label="CNV_ABONENTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_ABONENT&gt;" />
+        <entitySetProperty name="CNV_EXTLSHETs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_EXTLSHET" label="CNV_EXTLSHETs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_EXTLSHET&gt;" />
         <entitySetProperty name="EXTORGSTREETs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="EXTORGSTREET" label="EXTORGSTREETs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.EXTORGSTREET&gt;" />
         <entitySetProperty name="LCHARSLISTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="LCHARSLIST" label="LCHARSLISTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.LCHARSLIST&gt;" />
         <entitySetProperty name="HOUSEs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="HOUSE" label="HOUSEs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.HOUSE&gt;" />
