@@ -100,6 +100,17 @@ namespace _048_Rgmek
             set { lastpov = value; }
         }
 
+        private Int64 id_meter;
+        // <summary>
+        // ID_METER N(11)
+        // </summary>
+        [FieldName("ID_METER"), FieldType('N'), FieldWidth(11)]
+        public Int64 Id_meter
+        {
+            get { return id_meter; }
+            set { CheckIntegerData("Id_meter", value, 11); id_meter = value; }
+        }
+
         private string cnttype;
         // <summary>
         // CNTTYPE C(36)
@@ -155,15 +166,26 @@ namespace _048_Rgmek
             set { CheckIntegerData("Periodpov", value, 11); periodpov = value; }
         }
 
-        private Int64 rgresid;
+        private string phasecount;
         // <summary>
-        // RGRESID N(11)
+        // PHASECOUNT C(10)
         // </summary>
-        [FieldName("RGRESID"), FieldType('N'), FieldWidth(11)]
-        public Int64 Rgresid
+        [FieldName("PHASECOUNT"), FieldType('C'), FieldWidth(10)]
+        public string Phasecount
         {
-            get { return rgresid; }
-            set { CheckIntegerData("Rgresid", value, 11); rgresid = value; }
+            get { return phasecount; }
+            set { CheckStringData("Phasecount", value, 10); phasecount = value; }
+        }
+
+        private Int64 id_tpmeter;
+        // <summary>
+        // ID_TPMETER N(11)
+        // </summary>
+        [FieldName("ID_TPMETER"), FieldType('N'), FieldWidth(11)]
+        public Int64 Id_tpmeter
+        {
+            get { return id_tpmeter; }
+            set { CheckIntegerData("Id_tpmeter", value, 11); id_tpmeter = value; }
         }
 
         private DateTime setupdate;
@@ -209,12 +231,14 @@ namespace _048_Rgmek
             if (ADataRow.Table.Columns.Contains("NAME")) Name = ADataRow["NAME"].ToString(); else Name = "";
             if (ADataRow.Table.Columns.Contains("SERIALNUM")) Serialnum = ADataRow["SERIALNUM"].ToString(); else Serialnum = "";
             if (ADataRow.Table.Columns.Contains("LASTPOV")) Lastpov = Convert.ToDateTime(ADataRow["LASTPOV"]); else Lastpov = DateTime.MinValue;
+            if (ADataRow.Table.Columns.Contains("ID_METER")) Id_meter = Convert.ToInt64(ADataRow["ID_METER"]); else Id_meter = 0;
             if (ADataRow.Table.Columns.Contains("CNTTYPE")) Cnttype = ADataRow["CNTTYPE"].ToString(); else Cnttype = "";
             if (ADataRow.Table.Columns.Contains("CNTNAME")) Cntname = ADataRow["CNTNAME"].ToString(); else Cntname = "";
             if (ADataRow.Table.Columns.Contains("PRECISION")) Precision = Convert.ToDecimal(ADataRow["PRECISION"]); else Precision = 0;
             if (ADataRow.Table.Columns.Contains("AMPERAGE")) Amperage = ADataRow["AMPERAGE"].ToString(); else Amperage = "";
             if (ADataRow.Table.Columns.Contains("PERIODPOV")) Periodpov = Convert.ToInt64(ADataRow["PERIODPOV"]); else Periodpov = 0;
-            if (ADataRow.Table.Columns.Contains("RGRESID")) Rgresid = Convert.ToInt64(ADataRow["RGRESID"]); else Rgresid = 0;
+            if (ADataRow.Table.Columns.Contains("PHASECOUNT")) Phasecount = ADataRow["PHASECOUNT"].ToString(); else Phasecount = "";
+            if (ADataRow.Table.Columns.Contains("ID_TPMETER")) Id_tpmeter = Convert.ToInt64(ADataRow["ID_TPMETER"]); else Id_tpmeter = 0;
             if (ADataRow.Table.Columns.Contains("SETUPDATE")) Setupdate = Convert.ToDateTime(ADataRow["SETUPDATE"]); else Setupdate = DateTime.MinValue;
             if (ADataRow.Table.Columns.Contains("DEACTDATE")) Deactdate = Convert.ToDateTime(ADataRow["DEACTDATE"]); else Deactdate = DateTime.MinValue;
             if (ADataRow.Table.Columns.Contains("ISREMOVE")) Isremove = Convert.ToInt64(ADataRow["ISREMOVE"]); else Isremove = 0;
@@ -231,12 +255,14 @@ namespace _048_Rgmek
             retValue.Name = this.Name;
             retValue.Serialnum = this.Serialnum;
             retValue.Lastpov = this.Lastpov;
+            retValue.Id_meter = this.Id_meter;
             retValue.Cnttype = this.Cnttype;
             retValue.Cntname = this.Cntname;
             retValue.Precision = this.Precision;
             retValue.Amperage = this.Amperage;
             retValue.Periodpov = this.Periodpov;
-            retValue.Rgresid = this.Rgresid;
+            retValue.Phasecount = this.Phasecount;
+            retValue.Id_tpmeter = this.Id_tpmeter;
             retValue.Setupdate = this.Setupdate;
             retValue.Deactdate = this.Deactdate;
             retValue.Isremove = this.Isremove;
@@ -245,7 +271,7 @@ namespace _048_Rgmek
 
         public override string GetInsertScript()
         {
-            string rs = String.Format("INSERT INTO COUNTERS (LSHET, PLACECD, INSTPLID, INSTPLACE, COUNTERID, NAME, SERIALNUM, LASTPOV, CNTTYPE, CNTNAME, PRECISION, AMPERAGE, PERIODPOV, RGRESID, SETUPDATE, DEACTDATE, ISREMOVE) VALUES ('{0}', '{1}', {2}, '{3}', '{4}', '{5}', '{6}', CTOD('{7}'), '{8}', '{9}', {10}, '{11}', {12}, {13}, CTOD('{14}'), CTOD('{15}'), {16})", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), String.IsNullOrEmpty(Placecd) ? "" : Placecd.Trim(), Instplid.ToString(), String.IsNullOrEmpty(Instplace) ? "" : Instplace.Trim(), String.IsNullOrEmpty(Counterid) ? "" : Counterid.Trim(), String.IsNullOrEmpty(Name) ? "" : Name.Trim(), String.IsNullOrEmpty(Serialnum) ? "" : Serialnum.Trim(), Lastpov == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Lastpov.Month, Lastpov.Day, Lastpov.Year), String.IsNullOrEmpty(Cnttype) ? "" : Cnttype.Trim(), String.IsNullOrEmpty(Cntname) ? "" : Cntname.Trim(), Precision.ToString().Replace(',', '.'), String.IsNullOrEmpty(Amperage) ? "" : Amperage.Trim(), Periodpov.ToString(), Rgresid.ToString(), Setupdate == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Setupdate.Month, Setupdate.Day, Setupdate.Year), Deactdate == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Deactdate.Month, Deactdate.Day, Deactdate.Year), Isremove.ToString());
+            string rs = String.Format("INSERT INTO COUNTERS (LSHET, PLACECD, INSTPLID, INSTPLACE, COUNTERID, NAME, SERIALNUM, LASTPOV, ID_METER, CNTTYPE, CNTNAME, PRECISION, AMPERAGE, PERIODPOV, PHASECOUNT, ID_TPMETER, SETUPDATE, DEACTDATE, ISREMOVE) VALUES ('{0}', '{1}', {2}, '{3}', '{4}', '{5}', '{6}', CTOD('{7}'), {8}, '{9}', '{10}', {11}, '{12}', {13}, '{14}', {15}, CTOD('{16}'), CTOD('{17}'), {18})", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), String.IsNullOrEmpty(Placecd) ? "" : Placecd.Trim(), Instplid.ToString(), String.IsNullOrEmpty(Instplace) ? "" : Instplace.Trim(), String.IsNullOrEmpty(Counterid) ? "" : Counterid.Trim(), String.IsNullOrEmpty(Name) ? "" : Name.Trim(), String.IsNullOrEmpty(Serialnum) ? "" : Serialnum.Trim(), Lastpov == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Lastpov.Month, Lastpov.Day, Lastpov.Year), Id_meter.ToString(), String.IsNullOrEmpty(Cnttype) ? "" : Cnttype.Trim(), String.IsNullOrEmpty(Cntname) ? "" : Cntname.Trim(), Precision.ToString().Replace(',', '.'), String.IsNullOrEmpty(Amperage) ? "" : Amperage.Trim(), Periodpov.ToString(), String.IsNullOrEmpty(Phasecount) ? "" : Phasecount.Trim(), Id_tpmeter.ToString(), Setupdate == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Setupdate.Month, Setupdate.Day, Setupdate.Year), Deactdate == DateTime.MinValue ? "" : String.Format("{0}/{1}/{2}", Deactdate.Month, Deactdate.Day, Deactdate.Year), Isremove.ToString());
             return rs;
         }
     }

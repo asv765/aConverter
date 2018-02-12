@@ -1086,6 +1086,7 @@
         <orm:field name="_eMAIL" property="EMAIL" behavior="readwrite" uniqueId="3dadb166-3ab3-4a0e-bb28-d6c301faeb40" type="System.String">
           <orm:column name="EMAIL" sql-type="varchar" nullable="true" length="500" scale="0" ado-type="StringVariableLength" />
         </orm:field>
+        <orm:field name="_sTARTDATE" property="STARTDATE" uniqueId="7081c356-9124-433e-a375-19255ffdad10" type="DateTime?" />
         <orm:index name="CNV$ABONENT_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -2295,6 +2296,7 @@
         <orm:column name="FLATNO" sql-type="integer" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="CLOSEDATE" sql-type="date" nullable="true" length="0" scale="0" ado-type="" />
         <orm:column name="EMAIL" sql-type="varchar" nullable="true" length="500" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="STARTDATE" sql-type="date" nullable="true" length="0" scale="0" ado-type="" />
         <orm:index name="CNV$ABONENT_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="varchar" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -2879,6 +2881,7 @@
       <Property Id="c23db484-61d7-45be-a097-ea9c244f98b5" name="FLATNO" type="Int32" label="FLATNO : Int32" nullable="true" fieldName="_fLATNO" />
       <Property Id="cacd0a19-20d8-4bf8-84a1-8e441c107cc7" name="ROOMPOSTFIX" label="ROOMPOSTFIX : String" fieldName="_rOOMPOSTFIX" />
       <Property Id="6fa0766f-b188-49f7-a521-316f75bc4d70" name="CLOSEDATE" type="DateTime?" label="CLOSEDATE : DateTime?" fieldName="_cLOSEDATE" />
+      <Property Id="6fa0766f-b188-49f7-a521-316f75bc4d70" name="STARTDATE" type="DateTime?" label="STARTDATE : DateTime?" fieldName="_sTARTDATE" />
       <Property Id="a28a54a1-1a3b-4888-aa9c-da629f78a828" name="HOUSENOTE" label="HOUSENOTE : String" nullable="true" fieldName="_hOUSENOTE" />
       <Property Id="3dadb166-3ab3-4a0e-bb28-d6c301faeb40" name="EMAIL" label="EMAIL : String" kind="Persistent" fieldName="_eMAIL" />
     </DomainClass>

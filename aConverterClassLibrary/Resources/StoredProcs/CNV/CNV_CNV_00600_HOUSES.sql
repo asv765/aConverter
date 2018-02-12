@@ -30,6 +30,8 @@ BEGIN
     FROM rdb$generators
     WHERE rdb$generators.rdb$generator_name = 'HOUSES_G'
     INTO :cnt;
+	UPDATE HOUSES SET KORPUSNO = null where KORPUSNO = 0;
+	UPDATE HOUSES SET KORPUSPOSTFIX = null where KORPUSPOSTFIX = '';
 END^
 
 SET TERM ; ^

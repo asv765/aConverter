@@ -56,6 +56,28 @@ namespace _048_Rgmek
             set { CheckStringData("Housecd", value, 36); housecd = value; }
         }
 
+        private string htypecd;
+        // <summary>
+        // HTYPECD C(36)
+        // </summary>
+        [FieldName("HTYPECD"), FieldType('C'), FieldWidth(36)]
+        public string Htypecd
+        {
+            get { return htypecd; }
+            set { CheckStringData("Htypecd", value, 36); htypecd = value; }
+        }
+
+        private string htypenm;
+        // <summary>
+        // HTYPENM C(50)
+        // </summary>
+        [FieldName("HTYPENM"), FieldType('C'), FieldWidth(50)]
+        public string Htypenm
+        {
+            get { return htypenm; }
+            set { CheckStringData("Htypenm", value, 50); htypenm = value; }
+        }
+
         private string placecd;
         // <summary>
         // PLACECD C(36)
@@ -65,6 +87,28 @@ namespace _048_Rgmek
         {
             get { return placecd; }
             set { CheckStringData("Placecd", value, 36); placecd = value; }
+        }
+
+        private string ptypecd;
+        // <summary>
+        // PTYPECD C(36)
+        // </summary>
+        [FieldName("PTYPECD"), FieldType('C'), FieldWidth(36)]
+        public string Ptypecd
+        {
+            get { return ptypecd; }
+            set { CheckStringData("Ptypecd", value, 36); ptypecd = value; }
+        }
+
+        private string ptypenm;
+        // <summary>
+        // PTYPENM C(30)
+        // </summary>
+        [FieldName("PTYPENM"), FieldType('C'), FieldWidth(30)]
+        public string Ptypenm
+        {
+            get { return ptypenm; }
+            set { CheckStringData("Ptypenm", value, 30); ptypenm = value; }
         }
 
         private string address;
@@ -164,6 +208,17 @@ namespace _048_Rgmek
         {
             get { return ulicaname; }
             set { CheckStringData("Ulicaname", value, 50); ulicaname = value; }
+        }
+
+        private string ulicacut;
+        // <summary>
+        // ULICACUT C(30)
+        // </summary>
+        [FieldName("ULICACUT"), FieldType('C'), FieldWidth(30)]
+        public string Ulicacut
+        {
+            get { return ulicacut; }
+            set { CheckStringData("Ulicacut", value, 30); ulicacut = value; }
         }
 
         private string ndoma;
@@ -278,7 +333,7 @@ namespace _048_Rgmek
 
         private string phonenum;
         // <summary>
-        // PHONENUM C(15)
+        // PHONENUM C(100)
         // </summary>
         [FieldName("PHONENUM"), FieldType('C'), FieldWidth(100)]
         public string Phonenum
@@ -348,7 +403,11 @@ namespace _048_Rgmek
             if (ADataRow.Table.Columns.Contains("DIVISCD")) Diviscd = ADataRow["DIVISCD"].ToString(); else Diviscd = "";
             if (ADataRow.Table.Columns.Contains("DIVISNM")) Divisnm = ADataRow["DIVISNM"].ToString(); else Divisnm = "";
             if (ADataRow.Table.Columns.Contains("HOUSECD")) Housecd = ADataRow["HOUSECD"].ToString(); else Housecd = "";
+            if (ADataRow.Table.Columns.Contains("HTYPECD")) Htypecd = ADataRow["HTYPECD"].ToString(); else Htypecd = "";
+            if (ADataRow.Table.Columns.Contains("HTYPENM")) Htypenm = ADataRow["HTYPENM"].ToString(); else Htypenm = "";
             if (ADataRow.Table.Columns.Contains("PLACECD")) Placecd = ADataRow["PLACECD"].ToString(); else Placecd = "";
+            if (ADataRow.Table.Columns.Contains("PTYPECD")) Ptypecd = ADataRow["PTYPECD"].ToString(); else Ptypecd = "";
+            if (ADataRow.Table.Columns.Contains("PTYPENM")) Ptypenm = ADataRow["PTYPENM"].ToString(); else Ptypenm = "";
             if (ADataRow.Table.Columns.Contains("ADDRESS")) Address = ADataRow["ADDRESS"].ToString(); else Address = "";
             if (ADataRow.Table.Columns.Contains("DISTKOD")) Distkod = Convert.ToInt64(ADataRow["DISTKOD"]); else Distkod = 0;
             if (ADataRow.Table.Columns.Contains("DISTNAME")) Distname = ADataRow["DISTNAME"].ToString(); else Distname = "";
@@ -358,6 +417,7 @@ namespace _048_Rgmek
             if (ADataRow.Table.Columns.Contains("TOWNSNAME")) Townsname = ADataRow["TOWNSNAME"].ToString(); else Townsname = "";
             if (ADataRow.Table.Columns.Contains("ULICAKOD")) Ulicakod = Convert.ToInt64(ADataRow["ULICAKOD"]); else Ulicakod = 0;
             if (ADataRow.Table.Columns.Contains("ULICANAME")) Ulicaname = ADataRow["ULICANAME"].ToString(); else Ulicaname = "";
+            if (ADataRow.Table.Columns.Contains("ULICACUT")) Ulicacut = ADataRow["ULICACUT"].ToString(); else Ulicacut = "";
             if (ADataRow.Table.Columns.Contains("NDOMA")) Ndoma = ADataRow["NDOMA"].ToString(); else Ndoma = "";
             if (ADataRow.Table.Columns.Contains("KORPUS")) Korpus = ADataRow["KORPUS"].ToString(); else Korpus = "";
             if (ADataRow.Table.Columns.Contains("KORPUSTIP")) Korpustip = ADataRow["KORPUSTIP"].ToString(); else Korpustip = "";
@@ -383,7 +443,11 @@ namespace _048_Rgmek
             retValue.Diviscd = this.Diviscd;
             retValue.Divisnm = this.Divisnm;
             retValue.Housecd = this.Housecd;
+            retValue.Htypecd = this.Htypecd;
+            retValue.Htypenm = this.Htypenm;
             retValue.Placecd = this.Placecd;
+            retValue.Ptypecd = this.Ptypecd;
+            retValue.Ptypenm = this.Ptypenm;
             retValue.Address = this.Address;
             retValue.Distkod = this.Distkod;
             retValue.Distname = this.Distname;
@@ -393,6 +457,7 @@ namespace _048_Rgmek
             retValue.Townsname = this.Townsname;
             retValue.Ulicakod = this.Ulicakod;
             retValue.Ulicaname = this.Ulicaname;
+            retValue.Ulicacut = this.Ulicacut;
             retValue.Ndoma = this.Ndoma;
             retValue.Korpus = this.Korpus;
             retValue.Korpustip = this.Korpustip;
@@ -414,7 +479,7 @@ namespace _048_Rgmek
 
         public override string GetInsertScript()
         {
-            string rs = String.Format("INSERT INTO ABONENT (LSHET, DIVISCD, DIVISNM, HOUSECD, PLACECD, ADDRESS, DISTKOD, DISTNAME, RAYONKOD, RAYONNAME, TOWNSKOD, TOWNSNAME, ULICAKOD, ULICANAME, NDOMA, KORPUS, KORPUSTIP, KVARTIRA, KOMNATA, FIO, F, I, O, PRIM, PHONENUM, POSTINDEX, DUCD, DUNAME, ISDELETED, ISARCHIVE) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', {6}, '{7}', {8}, '{9}', {10}, '{11}', {12}, '{13}', '{14}', '{15}', '{16}', '{17}', {18}, '{19}', '{20}', '{21}', '{22}', '{23}', '{24}', '{25}', '{26}', '{27}', {28}, {29})", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), String.IsNullOrEmpty(Diviscd) ? "" : Diviscd.Trim(), String.IsNullOrEmpty(Divisnm) ? "" : Divisnm.Trim(), String.IsNullOrEmpty(Housecd) ? "" : Housecd.Trim(), String.IsNullOrEmpty(Placecd) ? "" : Placecd.Trim(), String.IsNullOrEmpty(Address) ? "" : Address.Trim(), Distkod.ToString(), String.IsNullOrEmpty(Distname) ? "" : Distname.Trim(), Rayonkod.ToString(), String.IsNullOrEmpty(Rayonname) ? "" : Rayonname.Trim(), Townskod.ToString(), String.IsNullOrEmpty(Townsname) ? "" : Townsname.Trim(), Ulicakod.ToString(), String.IsNullOrEmpty(Ulicaname) ? "" : Ulicaname.Trim(), String.IsNullOrEmpty(Ndoma) ? "" : Ndoma.Trim(), String.IsNullOrEmpty(Korpus) ? "" : Korpus.Trim(), String.IsNullOrEmpty(Korpustip) ? "" : Korpustip.Trim(), String.IsNullOrEmpty(Kvartira) ? "" : Kvartira.Trim(), Komnata.ToString(), String.IsNullOrEmpty(Fio) ? "" : Fio.Trim(), String.IsNullOrEmpty(F) ? "" : F.Trim(), String.IsNullOrEmpty(I) ? "" : I.Trim(), String.IsNullOrEmpty(O) ? "" : O.Trim(), String.IsNullOrEmpty(Prim) ? "" : Prim.Trim(), String.IsNullOrEmpty(Phonenum) ? "" : Phonenum.Trim(), String.IsNullOrEmpty(Postindex) ? "" : Postindex.Trim(), String.IsNullOrEmpty(Ducd) ? "" : Ducd.Trim(), String.IsNullOrEmpty(Duname) ? "" : Duname.Trim(), Isdeleted.ToString(), Isarchive.ToString());
+            string rs = String.Format("INSERT INTO ABONENT (LSHET, DIVISCD, DIVISNM, HOUSECD, HTYPECD, HTYPENM, PLACECD, PTYPECD, PTYPENM, ADDRESS, DISTKOD, DISTNAME, RAYONKOD, RAYONNAME, TOWNSKOD, TOWNSNAME, ULICAKOD, ULICANAME, ULICACUT, NDOMA, KORPUS, KORPUSTIP, KVARTIRA, KOMNATA, FIO, F, I, O, PRIM, PHONENUM, POSTINDEX, DUCD, DUNAME, ISDELETED, ISARCHIVE) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', {10}, '{11}', {12}, '{13}', {14}, '{15}', {16}, '{17}', '{18}', '{19}', '{20}', '{21}', '{22}', {23}, '{24}', '{25}', '{26}', '{27}', '{28}', '{29}', '{30}', '{31}', '{32}', {33}, {34})", String.IsNullOrEmpty(Lshet) ? "" : Lshet.Trim(), String.IsNullOrEmpty(Diviscd) ? "" : Diviscd.Trim(), String.IsNullOrEmpty(Divisnm) ? "" : Divisnm.Trim(), String.IsNullOrEmpty(Housecd) ? "" : Housecd.Trim(), String.IsNullOrEmpty(Htypecd) ? "" : Htypecd.Trim(), String.IsNullOrEmpty(Htypenm) ? "" : Htypenm.Trim(), String.IsNullOrEmpty(Placecd) ? "" : Placecd.Trim(), String.IsNullOrEmpty(Ptypecd) ? "" : Ptypecd.Trim(), String.IsNullOrEmpty(Ptypenm) ? "" : Ptypenm.Trim(), String.IsNullOrEmpty(Address) ? "" : Address.Trim(), Distkod.ToString(), String.IsNullOrEmpty(Distname) ? "" : Distname.Trim(), Rayonkod.ToString(), String.IsNullOrEmpty(Rayonname) ? "" : Rayonname.Trim(), Townskod.ToString(), String.IsNullOrEmpty(Townsname) ? "" : Townsname.Trim(), Ulicakod.ToString(), String.IsNullOrEmpty(Ulicaname) ? "" : Ulicaname.Trim(), String.IsNullOrEmpty(Ulicacut) ? "" : Ulicacut.Trim(), String.IsNullOrEmpty(Ndoma) ? "" : Ndoma.Trim(), String.IsNullOrEmpty(Korpus) ? "" : Korpus.Trim(), String.IsNullOrEmpty(Korpustip) ? "" : Korpustip.Trim(), String.IsNullOrEmpty(Kvartira) ? "" : Kvartira.Trim(), Komnata.ToString(), String.IsNullOrEmpty(Fio) ? "" : Fio.Trim(), String.IsNullOrEmpty(F) ? "" : F.Trim(), String.IsNullOrEmpty(I) ? "" : I.Trim(), String.IsNullOrEmpty(O) ? "" : O.Trim(), String.IsNullOrEmpty(Prim) ? "" : Prim.Trim(), String.IsNullOrEmpty(Phonenum) ? "" : Phonenum.Trim(), String.IsNullOrEmpty(Postindex) ? "" : Postindex.Trim(), String.IsNullOrEmpty(Ducd) ? "" : Ducd.Trim(), String.IsNullOrEmpty(Duname) ? "" : Duname.Trim(), Isdeleted.ToString(), Isarchive.ToString());
             return rs;
         }
     }

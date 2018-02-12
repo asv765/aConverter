@@ -17,6 +17,8 @@ namespace _048_Rgmek.Records
         public decimal Sum;
         public decimal SumCoef;
 
+        public NachExcelRecord() { }
+
         public NachExcelRecord(DataRow dr)
         {
             LsKvc = dr[0].ToString().Trim();

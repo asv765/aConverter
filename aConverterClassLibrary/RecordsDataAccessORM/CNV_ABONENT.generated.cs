@@ -477,6 +477,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
                 this._eMAIL = value;
             }
         }
+
+        private DateTime? _sTARTDATE;
+        public virtual DateTime? STARTDATE
+        {
+            get
+            {
+                return this._sTARTDATE;
+            }
+            set
+            {
+                this._sTARTDATE = value;
+            }
+        }
     }
 }
 #pragma warning restore 1591

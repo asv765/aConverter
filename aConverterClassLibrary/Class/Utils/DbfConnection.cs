@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
+using System.Text;
 
 namespace aConverterClassLibrary.Class.Utils
 {
@@ -20,7 +21,7 @@ namespace aConverterClassLibrary.Class.Utils
         /// <param name="filesDirectory">Путь к папке с DBF файлами</param>
         public DbfManager(string filesDirectory)
         {
-            _connectionString = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={filesDirectory};Extended Properties = dBASE IV";
+            _connectionString = $"Provider=vfpoledb.1;Data Source={filesDirectory};Extended Properties = dBASE IV;Collating Sequence=Russian";
         }
 
         /// <summary>
