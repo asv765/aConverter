@@ -103,7 +103,7 @@ namespace _048_Rgmek
             {8, 6}, //Электроплиты двуставочный
         };
 
-        public static readonly int CurrentMonth = 01; // должен быть следующий месяц после последнего закрытого
+        public static readonly int CurrentMonth = 02; // должен быть следующий месяц после последнего закрытого
         public static readonly int CurrentYear = 2018;
         public static readonly DateTime MinConvertDate = new DateTime(2015, 1, 1);
         public static readonly DateTime NullDate = new DateTime(1899, 12, 30);
@@ -506,7 +506,7 @@ namespace _048_Rgmek
                     RAYONNAME = abonent.Distname.Trim(),
                     DISTKOD = (int)Utils.GetValue(abonent.Diviscd.Trim(), distrRecode, ref lastDistId),
                     DISTNAME = abonent.Divisnm.Trim(),
-                    PRIM_ = abonent.Address.Trim(),
+                    PRIM_ = abonent.Prim.Trim(),
                     POSTINDEX = abonent.Postindex.Trim(),
                     PHONENUM = abonent.Phonenum.Trim()
                 };
@@ -647,7 +647,7 @@ namespace _048_Rgmek
             Utils.SaveDictionary(houserecode, HouseRecodeFileName);
             File.WriteAllLines(PlaceToLshetRecodeFileName, placerecode.SelectMany(p => p.Value.Select(v => $"{p.Key};{v}")));
             File.WriteAllLines(HouseToLshetRecodeFileName, la.Select(a => $"{a.HOUSECD};{a.LSHET}"));
-            File.WriteAllLines(HouseStreetNameRecodeFileName, la.Select(a => $"{a.HOUSECD};ул. {a.ULICANAME} д.{a.HOUSENO}{a.HOUSEPOSTFIX}").Distinct());
+            File.WriteAllLines(HouseStreetNameRecodeFileName, la.Select(a => $"{a.HOUSECD};{a.ULICANAME} д.{a.HOUSENO}{a.HOUSEPOSTFIX}").Distinct());
 
             StepStart(3);
             BufferEntitiesManager.SaveDataToBufferIBScript(la);
@@ -1060,6 +1060,7 @@ namespace _048_Rgmek
         private static Dictionary<string, int> valueListRecode;
         private static Dictionary<string, long> lsrecode;
         private static Dictionary<string, long> houserecode;
+        private static Dictionary<long, List<long>> houseToLshetRecode;
 
         private static string[] IgnoreCharsList =
         {
@@ -1082,7 +1083,7 @@ namespace _048_Rgmek
                 })
                 .GroupBy(p => p.Place, p => p.Lshet)
                 .ToDictionary(gp => gp.Key, gp => gp.ToList());
-            var houseToLshetRecode = File.ReadAllLines(HouseToLshetRecodeFileName)
+            houseToLshetRecode = File.ReadAllLines(HouseToLshetRecodeFileName)
                 .Select(s =>
                 {
                     string[] info = s.Split(';');
@@ -1417,15 +1418,26 @@ namespace _048_Rgmek
         private bool CustomCharHandler(AddCharRecodeRecord recode, CommonAddCharRecord charRecord)
         {
             long lshet;
+            long housecd;
             switch (recode.RgmekCode)
             {
                 case "1a083d4e-8798-48dd-98f1-568029c5ce2c":
-                    lshet = FindLsRecode(charRecord.Owner, lsrecode);
-                    if (lshet == 0) break;
-                    AddLChar(recode, charRecord, lshet);
+                    if (!houserecode.TryGetValue(charRecord.Owner, out housecd)) break;
+                    List<long> lshets;
+                    if (!houseToLshetRecode.TryGetValue(housecd, out lshets)) break;
+                    lshets.ForEach(ls =>
+                        lalc.Add(new CNV_LCHAR
+                        {
+                            LSHET = ls.ToString(),
+                            SortLshet = ls,
+                            LCHARCD = 13,
+                            LCHARNAME = "Электроэнергия ОДН",
+                            VALUE_ = charRecord.Value.Trim().ToLower() == "орн" ? 1 : 0,
+                            VALUEDESC = charRecord.Value,
+                            DATE_ = charRecord.Date
+                        }));
                     break;
                 case "fc7c4f38-aee3-48d8-bb79-98bb1ac2462f":
-                    long housecd;
                     if (!houserecode.TryGetValue(charRecord.Owner, out housecd)) break;
                     lhcc.Add(new CNV_CHARSHOUSES
                     {
@@ -1744,6 +1756,8 @@ namespace _048_Rgmek
             SetStepsCount(4);
 
             var lc = new List<CNV_COUNTER>();
+            var lca = new List<CNV_COUNTERADDCHAR>();
+            var lta = new List<CNV_COUNTERTYPEADDCHAR>();
             var cnttyperecode = new Dictionary<string, CNV_COUNTERTYPE>();
 
             var counteridrecode = new Dictionary<string, long>();
@@ -1801,6 +1815,14 @@ left join (
                             DIGITCOUNT = digitcount,
                         };
                         cnttyperecode.Add(cntRecord.Cnttype, cnttype);
+
+                        if (!String.IsNullOrWhiteSpace(cntRecord.Amperage))
+                            lta.Add(new CNV_COUNTERTYPEADDCHAR
+                            {
+                                COUNTERTYPEID = cnttype.ID,
+                                ADDCHARCD = 905,
+                                VALUE_ = cntRecord.Amperage.Trim()
+                            });
                     }
 
                     long houseid;
@@ -1839,17 +1861,25 @@ left join (
                                     if (cntRecord.Periodpov > 0)
                                         c.NEXTPOV = cntRecord.Lastpov.AddMonths((int)cntRecord.Periodpov);
                                 }
-                                string prim = "";
-                                if (cntRecord.Rgresid > 0)
-                                    prim += (prim == "" ? "" : ", ") + "RGRESID=" + cntRecord.Rgresid.ToString();
-                                if (cntRecord.Precision > 0)
-                                    prim += (prim == "" ? "" : ", ") + "PRECISION=" +
-                                            cntRecord.Precision.ToString().Replace(',', '.');
-                                if (!String.IsNullOrEmpty(cntRecord.Amperage))
-                                    prim += (prim == "" ? "" : ", ") + "AMPERAG=" + cntRecord.Amperage.Trim();
+
                                 if (!String.IsNullOrEmpty(cntRecord.Instplace))
-                                    prim += (prim == "" ? "" : ", ") + "INSTPLACE=" + cntRecord.Instplace.Trim();
-                                c.PRIM_ = prim;
+                                {
+                                    string instPlace = StringRecode(cntRecord.Instplace);
+                                    if (!String.IsNullOrWhiteSpace(instPlace))
+                                    {
+                                        int placeId = 0;
+                                        if (!CoutnerPlaceRecode.Any(r => r.Value.Any(v => v == instPlace)))
+                                            Task.Factory.StartNew(() => MessageBox.Show($"Не найдена перекодировка места установки {cntRecord.Instplace}"));
+                                        else
+                                            placeId = CoutnerPlaceRecode.First(r => r.Value.Any(v => v == instPlace)).Key;
+                                        lca.Add(new CNV_COUNTERADDCHAR
+                                        {
+                                            COUNTERID = c.COUNTERID,
+                                            ADDCHARCD = 900,
+                                            VALUE_ = placeId.ToString()
+                                        });
+                                    }
+                                }
 
                                 lc.Add(c);
                             }
@@ -2458,6 +2488,7 @@ left join (
                 StepFinish();
 
                 StepStart(1);
+                //SaveListInsertSQL(lnop, InsertRecordCount);
                 BufferEntitiesManager.SaveDataToBufferIBScript(lnop);
                 StepFinish();
             }
@@ -2754,16 +2785,18 @@ with lslist as (
     inner join resourcecounters rc on rc.kod = es.equipmentid
     group by ae.lshet, es.statusdate, rc.counter_level
 )
-select ls.lshet, ls.statusdate, iif (ls.counter_level = 1, 22, 21) as lcharcd,
+select distinct ls.lshet, ls.statusdate, iif (ls.counter_level = 1, 22, 21) as lcharcd,
     iif (exists(
             select 0
             from abonentsequipment ae
             inner join resourcecounters rc on rc.kod = ae.equipmentid
                                         and coalesce(rc.counter_level, 0) = ls.counter_level
-            inner join eqstatuses es on es.equipmentid = rc.kod
-                                    and es.statusdate = ls.statusdate
-                                    and es.statuscd > 0
             where ae.lshet = ls.lshet
+                and 0 < (select first 1 es.STATUSCD
+                        from EQSTATUSES es
+                        where es.equipmentid = rc.kod
+                                        and es.statusdate <= ls.statusdate
+                                        order by es.STATUSDATE desc)
         ), 1, 0) as lcharvalue
 from lslist ls");
             Iterate();
