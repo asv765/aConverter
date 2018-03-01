@@ -63,6 +63,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "PENI",
                 "PENISUMMA",
                 "SUPPLNET",
+                "ABONENTCONTRACT",
                 "DOCUMENTNUMERATORTABLE",
             };
             return l;
@@ -175,6 +176,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_03100_TVER_ABONENTDOLYA");
                 l.Add("CNV_03200_CITYZENLGOTA_TVER");
                 l.Add("CNV_03300_LGOTSUMMA");
+                l.Add("CNV_03400_ABONENTCONTRACTS");
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {

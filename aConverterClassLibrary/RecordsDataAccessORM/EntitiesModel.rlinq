@@ -1677,6 +1677,60 @@
           </orm:columnMapping>
         </orm:index>
       </orm:class>
+      <orm:class name="CNV_ABONENTCONTRACT" uniqueId="c59e9a4a-2910-4dae-8dc4-fc6ef94990b7">
+        <orm:table name="CNV$ABONENTCONTRACT" />
+        <orm:identity>
+          <orm:key-generator name="autoinc">
+            <orm:key-generator-member property-name="ID" />
+          </orm:key-generator>
+          <orm:single-field field-name="_iD" />
+        </orm:identity>
+        <orm:concurrency strategy="changed" />
+        <orm:field name="_iD" property="ID" behavior="readwrite" uniqueId="1f5e6fe8-a681-42ab-b38d-0b33366c36de" type="System.Int32">
+          <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_lSHET" property="LSHET" behavior="readwrite" uniqueId="2808f2e1-53e3-4d7e-bfc1-e5aae98d55ea" type="System.String">
+          <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_nAME" property="NAME" behavior="readwrite" uniqueId="58ca6f7e-9e02-4139-acf0-ea9675a4e649" type="System.String">
+          <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_tYPEID" property="TYPEID" behavior="readwrite" uniqueId="0a7d4891-3755-4d6c-8857-d160335054cb" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="TYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_dOC_SER" property="DOC_SER" behavior="readwrite" uniqueId="08d85f9e-3361-4479-b0a8-035ef5287f82" type="System.String">
+          <orm:column name="DOC_SER" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_dOC_NUMBER" property="DOC_NUMBER" behavior="readwrite" uniqueId="49456f11-095b-47f5-960d-8ea10005e288" type="System.String">
+          <orm:column name="DOC_NUMBER" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_dOC_DATE" property="DOC_DATE" behavior="readwrite" uniqueId="a259e8d3-581b-43ee-8d5f-26ffbe1541be" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="DOC_DATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_oRGID" property="ORGID" behavior="readwrite" uniqueId="d90c1f66-471b-4bbf-b772-3b392b3e2164" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ORGID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sTARTDATE" property="STARTDATE" behavior="readwrite" uniqueId="1ed1abe4-aab7-469e-be95-ab75f5157e68" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="STARTDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_eNDDATE" property="ENDDATE" behavior="readwrite" uniqueId="1fdaed17-691f-4649-b048-95d946e63015" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="ENDDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        </orm:field>
+        <orm:field name="_pRIM" property="PRIM" behavior="readwrite" uniqueId="2ceb2b35-514f-44fc-a0c5-1d6056bc23ac" type="System.String">
+          <orm:column name="PRIM" sql-type="VARCHAR" nullable="true" length="1000" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_cITIZENID" property="CITIZENID" behavior="readwrite" uniqueId="d41c77f3-5094-48dd-a22c-90d33ec335fd" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="CITIZENID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
+        <orm:field name="_sERVICES" property="SERVICES" behavior="readwrite" uniqueId="ce22b762-b790-4be9-92ab-35a7473f83cd" type="System.String">
+          <orm:column name="SERVICES" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:index name="CNV$ABONENTCONTRACT_IDX1">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:class>
       <orm:class name="EXTORGACCOUNT" uniqueId="f42eb915-cf7d-4add-90fc-62867862d986">
         <orm:table name="EXTORGACCOUNTS" />
         <orm:identity>
@@ -2511,6 +2565,26 @@
           </orm:columnMapping>
         </orm:index>
       </orm:table>
+      <orm:table name="CNV$ABONENTCONTRACT">
+        <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
+        <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="TYPEID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="DOC_SER" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOC_NUMBER" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="DOC_DATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="ORGID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="STARTDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="ENDDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
+        <orm:column name="PRIM" sql-type="VARCHAR" nullable="true" length="1000" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="CITIZENID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="SERVICES" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
+        <orm:index name="CNV$ABONENTCONTRACT_IDX1">
+          <orm:columnMapping>
+            <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
+          </orm:columnMapping>
+        </orm:index>
+      </orm:table>
       <orm:table name="EXTORGACCOUNTS">
         <orm:column name="EXTORGCD" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" ado-type="Int32" />
         <orm:column name="LSHET" sql-type="VARCHAR" nullable="false" length="10" scale="0" primary-key="true" ado-type="StringVariableLength" />
@@ -3186,6 +3260,21 @@
       <Property Id="0491f64d-393d-42fc-a8d8-47a13f81e41f" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
       <Property Id="aac2f9c8-718c-4d0d-8927-84ff8f5194a3" name="VALUE" label="VALUE : String" kind="Persistent" fieldName="_vALUE" />
     </DomainClass>
+    <DomainClass Id="c59e9a4a-2910-4dae-8dc4-fc6ef94990b7" name="CNV_ABONENTCONTRACT" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
+      <Property Id="1f5e6fe8-a681-42ab-b38d-0b33366c36de" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />
+      <Property Id="2808f2e1-53e3-4d7e-bfc1-e5aae98d55ea" name="LSHET" label="LSHET : String" kind="Persistent" fieldName="_lSHET" />
+      <Property Id="58ca6f7e-9e02-4139-acf0-ea9675a4e649" name="NAME" label="NAME : String" kind="Persistent" fieldName="_nAME" />
+      <Property Id="0a7d4891-3755-4d6c-8857-d160335054cb" name="TYPEID" type="Int32" label="TYPEID : Int32" nullable="true" kind="Persistent" fieldName="_tYPEID" />
+      <Property Id="08d85f9e-3361-4479-b0a8-035ef5287f82" name="DOC_SER" label="DOC_SER : String" kind="Persistent" fieldName="_dOC_SER" />
+      <Property Id="49456f11-095b-47f5-960d-8ea10005e288" name="DOC_NUMBER" label="DOC_NUMBER : String" kind="Persistent" fieldName="_dOC_NUMBER" />
+      <Property Id="a259e8d3-581b-43ee-8d5f-26ffbe1541be" name="DOC_DATE" type="DateTime" label="DOC_DATE : DateTime" nullable="true" kind="Persistent" fieldName="_dOC_DATE" />
+      <Property Id="d90c1f66-471b-4bbf-b772-3b392b3e2164" name="ORGID" type="Int32" label="ORGID : Int32" nullable="true" kind="Persistent" fieldName="_oRGID" />
+      <Property Id="1ed1abe4-aab7-469e-be95-ab75f5157e68" name="STARTDATE" type="DateTime" label="STARTDATE : DateTime" nullable="true" kind="Persistent" fieldName="_sTARTDATE" />
+      <Property Id="1fdaed17-691f-4649-b048-95d946e63015" name="ENDDATE" type="DateTime" label="ENDDATE : DateTime" nullable="true" kind="Persistent" fieldName="_eNDDATE" />
+      <Property Id="2ceb2b35-514f-44fc-a0c5-1d6056bc23ac" name="PRIM" label="PRIM : String" kind="Persistent" fieldName="_pRIM" />
+      <Property Id="d41c77f3-5094-48dd-a22c-90d33ec335fd" name="CITIZENID" type="Int32" label="CITIZENID : Int32" nullable="true" kind="Persistent" fieldName="_cITIZENID" />
+      <Property Id="ce22b762-b790-4be9-92ab-35a7473f83cd" name="SERVICES" label="SERVICES : String" kind="Persistent" fieldName="_sERVICES" />
+    </DomainClass>
     <DomainClass Id="f42eb915-cf7d-4add-90fc-62867862d986" name="EXTORGACCOUNT" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true">
       <Property Id="32276667-c672-40f0-8df8-57c0c44764bb" name="EXTORGCD" type="Int32" label="EXTORGCD : Int32" kind="Persistent" identity="true" fieldName="_eXTORGCD" />
       <Property Id="bfe9d8a4-9f7b-4b64-ad41-10659717a81d" name="LSHET" label="LSHET : String" kind="Persistent" identity="true" fieldName="_lSHET" />
@@ -3300,6 +3389,7 @@
         <entitySetProperty name="ABONENTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="ABONENT" label="ABONENTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.ABONENT&gt;" />
         <entitySetProperty name="STREETs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="STREET" label="STREETs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.STREET&gt;" />
         <entitySetProperty name="CNV_AADDCHARs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_AADDCHAR" label="CNV_AADDCHARs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_AADDCHAR&gt;" />
+        <entitySetProperty name="CNV_ABONENTCONTRACTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_ABONENTCONTRACT" label="CNV_ABONENTCONTRACTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_ABONENTCONTRACT&gt;" />
         <entitySetProperty name="EXTORGACCOUNTs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="EXTORGACCOUNT" label="EXTORGACCOUNTs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.EXTORGACCOUNT&gt;" />
         <entitySetProperty name="CNV_CITIZENMIGRATIONs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CITIZENMIGRATION" label="CNV_CITIZENMIGRATIONs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CITIZENMIGRATION&gt;" />
         <entitySetProperty name="CNV_CITIZENRELATIONSs" namespace="aConverterClassLibrary.RecordsDataAccessORM" type="CNV_CITIZENRELATIONS" label="CNV_CITIZENRELATIONSs : IQueryable&lt;aConverterClassLibrary.RecordsDataAccessORM.CNV_CITIZENRELATIONS&gt;" />

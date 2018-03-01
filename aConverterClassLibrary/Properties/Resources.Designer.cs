@@ -137,6 +137,46 @@ namespace aConverterClassLibrary.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CREATE TABLE CNV$ABONENTCONTRACT (
+        ///	ID INTEGER NOT NULL,
+        ///	LSHET VARCHAR(10),
+        ///	NAME VARCHAR(150),
+        ///	TYPEID INTEGER,
+        ///	DOC_SER VARCHAR(20),
+        ///	DOC_NUMBER VARCHAR(150),
+        ///	DOC_DATE TIMESTAMP,
+        ///	ORGID INTEGER,
+        ///	STARTDATE TIMESTAMP,
+        ///	ENDDATE TIMESTAMP,
+        ///	PRIM VARCHAR(1000),
+        ///	CITIZENID INTEGER,
+        ///	SERVICES VARCHAR(150), /* СЃРїРёСЃРѕРє СѓСЃР»СѓРі С‡РµСЂРµР· ; */
+        ///	PRIMARY KEY (ID));
+        ///	
+        ///CREATE INDEX CNV$ABONENTCONTRACT_IDX1 ON CNV$ABONENTCONTRACT (LSHET);
+        ///CREATE SEQUENCE GEN_CNV$ABONENTCONTRACT_ID;
+        ///
+        ///SET TER [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_ABONENTCONTRACT {
+            get {
+                return ResourceManager.GetString("CNV_ABONENTCONTRACT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DROP TRIGGER CNV$ABONENTCONTRACT_BI;
+        ///DROP SEQUENCE GEN_CNV$ABONENTCONTRACT_ID;
+        ///DROP INDEX CNV$ABONENTCONTRACT_IDX1;
+        ///DROP TABLE CNV$ABONENTCONTRACT;.
+        /// </summary>
+        internal static string CNV_ABONENTCONTRACT_d {
+            get {
+                return ResourceManager.GetString("CNV_ABONENTCONTRACT_d", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CREATE OR ALTER EXCEPTION CNV$WRONG_PARAMATER_VALUE &apos;Значение параметра не соответствует ожидаемому&apos;;
         ///.
         /// </summary>
@@ -1718,6 +1758,29 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_CNV_03300_LGOTSUMMA {
             get {
                 return ResourceManager.GetString("CNV_CNV_03300_LGOTSUMMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;	
+        ///create or alter procedure CNV$CNV_03400_ABONENTCONTRACTS
+        ///as
+        ///declare variable LSHET varchar(10);
+        ///declare variable NAME varchar(150);
+        ///declare variable TYPEID integer;
+        ///declare variable DOC_SER varchar(20);
+        ///declare variable DOC_NUMBER varchar(150);
+        ///declare variable DOC_DATE timestamp;
+        ///declare variable ORGID integer;
+        ///declare variable STARTDATE timestamp;
+        ///declare variable ENDDATE timestamp;
+        ///declare variable PRIM varchar(1000);
+        ///declare variable CITIZENID integer;
+        ///declare variable SERVIC [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CNV_CNV_03400_ABONENTCONTRACTS {
+            get {
+                return ResourceManager.GetString("CNV_CNV_03400_ABONENTCONTRACTS", resourceCulture);
             }
         }
         

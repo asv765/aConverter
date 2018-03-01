@@ -234,6 +234,7 @@
     </Compile>
     <Compile Include="RecordsDataAccessORM\IOrmRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialAADDCHARRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialABONENTCONTRACTRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialABONENTRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCHARSHOUSESRecord.cs" />
@@ -298,6 +299,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RecordsDataAccessORM\CNV_EXTLSHET.generated.cs" />
+    <Compile Include="RecordsDataAccessORM\CNV_ABONENTCONTRACT.generated.cs" />
     <None Include="Resources\CNV_ABONENT_d.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +320,8 @@
   <ItemGroup>
     <Content Include="Resources\CNV_AADDCHAR.sql" />
     <Content Include="Resources\CNV_AADDCHAR_d.sql" />
+    <None Include="Resources\CNV_ABONENTCONTRACT.sql" />
+    <None Include="Resources\CNV_ABONENTCONTRACT_d.sql" />
     <Content Include="Resources\CNV_CHARLST.sql" />
     <Content Include="Resources\CNV_CHARLST_d.sql" />
     <None Include="Resources\CNV_CHARSHOUSES.sql" />
@@ -418,6 +422,7 @@
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03200_CITYZENLGOTA_TVER.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03050_CITIZENSMIGR_TVER.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03300_LGOTSUMMA.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03400_ABONENTCONTRACTS.sql" />
     <Content Include="Resources\StoredProcs\CNV\cnv_cnv_documentnumerator.sql" />
     <Content Include="Resources\StoredProcs\CNV_ADD_WRONG_PARAMETER_EXCEPTION.sql" />
   </ItemGroup>
