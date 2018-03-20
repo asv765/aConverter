@@ -71,6 +71,7 @@
     <Compile Include="NachImport\OldFileNachFactory.cs" />
     <Compile Include="NachImport\OldFileNachImport.cs" />
     <Compile Include="Records\AbnlshetRecord.cs" />
+    <Compile Include="Records\AbnphoneRecord.cs" />
     <Compile Include="Records\AbnstateRecord.cs" />
     <Compile Include="Records\AbonentRecord.cs" />
     <Compile Include="Records\CharsRecord.cs" />
@@ -86,9 +87,12 @@
     <Compile Include="Records\NachRecord.cs" />
     <Compile Include="Records\PartialAbnlshetRecord.cs" />
     <Compile Include="Records\PaymentRecord.cs" />
-    <Compile Include="Records\SaldoNotFromKvcSaldoRecord.cs" />
+    <Compile Include="Records\ExtSaldo.cs" />
+    <Compile Include="Records\SaldoRecord.cs" />
+    <Compile Include="Records\Saldo_pnRecord.cs" />
     <Compile Include="Records\SummsRecord.cs" />
     <Compile Include="Records\TarifRecord.cs" />
+    <Compile Include="Records\Tp_actRecord.cs" />
     <Compile Include="RgmekConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

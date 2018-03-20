@@ -42,7 +42,7 @@ BEGIN
         MATCHING (lshet);
         IF (phonenum IS NOT NULL) THEN BEGIN
            DELETE FROM abonentphones WHERE LSHET = :lshet;
-		   for select SPLITVALUE from SPLIT(:phonenum, ',') into :SPLITPHONE
+		   for select SPLITVALUE from SPLIT(:phonenum, ';') into :SPLITPHONE
 		   do begin
 				INSERT INTO ABONENTPHONES (LSHET, PHONETYPEID, PHONENUMBER) VALUES (:lshet, 0, TRIM(:SPLITPHONE));
 		   end

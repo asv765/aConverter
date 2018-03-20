@@ -133,6 +133,12 @@
   <data name="CNV_ABONENTCONTRACT_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_ABONENTCONTRACT_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="CNV_ABONENTPHONES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_ABONENTPHONES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_ABONENTPHONES_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_ABONENTPHONES_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="CNV_ABONENT_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_ABONENT_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -340,8 +346,17 @@
   <data name="CNV_CNV_03400_ABONENTCONTRACTS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StoredProcs\CNV\CNV_CNV_03400_ABONENTCONTRACTS.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="CNV_CNV_03500_ABONENTPHONES" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StoredProcs\CNV\CNV_CNV_03500_ABONENTPHONES.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="CNV_CNV_DOCUMENTNUMERATOR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\storedprocs\cnv\cnv_cnv_documentnumerator.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CONTRACTADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_CONTRACTADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="CNV_CONTRACTADDCHAR_d" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CNV_CONTRACTADDCHAR_d.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="CNV_COUNTERADDCHAR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CNV_COUNTERADDCHAR.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

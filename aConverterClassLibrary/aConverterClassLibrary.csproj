@@ -158,6 +158,7 @@
     <Compile Include="RecordsDataAccessORM\CNV_ABONENT.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_ABONENTPHONES.generated.cs" />
     <Compile Include="RecordsDataAccessORM\CNV_CHAR.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
@@ -183,6 +184,7 @@
     <Compile Include="RecordsDataAccessORM\CNV_COUNTER.generated.cs">
       <DependentUpon>EntitiesModel.rlinq</DependentUpon>
     </Compile>
+    <Compile Include="RecordsDataAccessORM\CNV_CONTRACTADDCHAR.generated.cs" />
     <Compile Include="RecordsDataAccessORM\CNV_COUNTERTYPEADDCHAR.generated.cs" />
     <Compile Include="RecordsDataAccessORM\CNV_COUNTERTYPE.generated.cs" />
     <Compile Include="RecordsDataAccessORM\CNV_DOGOVOR.generated.cs">
@@ -234,6 +236,7 @@
     </Compile>
     <Compile Include="RecordsDataAccessORM\IOrmRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialAADDCHARRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialABONENTPHONESRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialABONENTCONTRACTRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialABONENTRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCHARRecord.cs" />
@@ -242,6 +245,7 @@
     <Compile Include="RecordsDataAccessORM\PartialCITIZENRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCITIZENRELATIONSRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCNTRSINDRecord.cs" />
+    <Compile Include="RecordsDataAccessORM\PartialCONTRACTADDCHARecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERADDCHARRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERRecord.cs" />
     <Compile Include="RecordsDataAccessORM\PartialCOUNTERTYPEADDCHARRecord.cs" />
@@ -322,6 +326,8 @@
     <Content Include="Resources\CNV_AADDCHAR_d.sql" />
     <None Include="Resources\CNV_ABONENTCONTRACT.sql" />
     <None Include="Resources\CNV_ABONENTCONTRACT_d.sql" />
+    <None Include="Resources\CNV_ABONENTPHONES.sql" />
+    <None Include="Resources\CNV_ABONENTPHONES_d.sql" />
     <Content Include="Resources\CNV_CHARLST.sql" />
     <Content Include="Resources\CNV_CHARLST_d.sql" />
     <None Include="Resources\CNV_CHARSHOUSES.sql" />
@@ -337,6 +343,8 @@
     <None Include="Resources\CNV_CITYZENLGOTA_d.sql" />
     <Content Include="Resources\CNV_CNTRSIND.sql" />
     <Content Include="Resources\CNV_CNTRSIND_d.sql" />
+    <None Include="Resources\CNV_CONTRACTADDCHAR.sql" />
+    <None Include="Resources\CNV_CONTRACTADDCHAR_d.sql" />
     <Content Include="Resources\CNV_COUNTERADDCHAR.sql" />
     <Content Include="Resources\CNV_COUNTERADDCHAR_d.sql" />
     <Content Include="Resources\CNV_COUNTERS.sql" />
@@ -423,6 +431,7 @@
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03050_CITIZENSMIGR_TVER.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03300_LGOTSUMMA.sql" />
     <None Include="Resources\StoredProcs\CNV\CNV_CNV_03400_ABONENTCONTRACTS.sql" />
+    <None Include="Resources\StoredProcs\CNV\CNV_CNV_03500_ABONENTPHONES.sql" />
     <Content Include="Resources\StoredProcs\CNV\cnv_cnv_documentnumerator.sql" />
     <Content Include="Resources\StoredProcs\CNV_ADD_WRONG_PARAMETER_EXCEPTION.sql" />
   </ItemGroup>

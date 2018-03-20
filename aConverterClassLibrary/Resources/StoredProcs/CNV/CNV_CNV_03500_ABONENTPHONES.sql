@@ -1,0 +1,16 @@
+﻿SET TERM ^ ;	
+create or alter procedure CNV$CNV_03500_ABONENTPHONES
+as
+declare variable LSHET varchar(10);
+declare variable TYPEID integer;
+declare variable PHONENUMBER varchar(100);
+begin
+    FOR SELECT LSHET, TYPEID, PHONENUMBER
+		FROM CNV$ABONENTPHONES 
+    INTO :LSHET, :TYPEID, :PHONENUMBER
+    DO BEGIN
+		INSERT INTO ABONENTPHONES (LSHET, PHONETYPEID, PHONENUMBER) VALUES (:lshet, :TYPEID, :PHONENUMBER);
+    END
+end^
+
+SET TERM ; ^

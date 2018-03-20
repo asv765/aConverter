@@ -177,6 +177,47 @@ namespace aConverterClassLibrary.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CREATE TABLE CNV$ABONENTPHONES (
+        ///	ID INTEGER NOT NULL,
+        ///	LSHET VARCHAR(10),
+        ///	TYPEID INTEGER,
+        ///	PHONENUMBER VARCHAR(100),
+        ///	PRIMARY KEY (ID));
+        ///	
+        ///CREATE INDEX CNV$ABONENTPHONES_IDX1 ON CNV$ABONENTPHONES (LSHET);
+        ///CREATE SEQUENCE GEN_CNV$ABONENTPHONES_ID;
+        ///
+        ///SET TERM ^ ;
+        ///CREATE TRIGGER CNV$ABONENTPHONES_BI FOR CNV$ABONENTPHONES
+        ///ACTIVE BEFORE INSERT POSITION 0
+        ///AS
+        ///BEGIN
+        ///  IF (NEW.ID IS NULL) THEN
+        ///    NEW.ID = GEN_ID(GEN_CNV$ABONENTPHONES_ID,1);
+        ///END
+        ///^
+        ///SET TERM ; ^
+        ///.
+        /// </summary>
+        internal static string CNV_ABONENTPHONES {
+            get {
+                return ResourceManager.GetString("CNV_ABONENTPHONES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DROP TRIGGER CNV$ABONENTPHONES_BI;
+        ///DROP SEQUENCE GEN_CNV$ABONENTPHONES_ID;
+        ///DROP INDEX CNV$ABONENTPHONES_IDX1;
+        ///DROP TABLE CNV$ABONENTPHONES;.
+        /// </summary>
+        internal static string CNV_ABONENTPHONES_d {
+            get {
+                return ResourceManager.GetString("CNV_ABONENTPHONES_d", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CREATE OR ALTER EXCEPTION CNV$WRONG_PARAMATER_VALUE &apos;Значение параметра не соответствует ожидаемому&apos;;
         ///.
         /// </summary>
@@ -1785,6 +1826,30 @@ namespace aConverterClassLibrary.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SET TERM ^ ;	
+        ///create or alter procedure CNV$CNV_03500_ABONENTPHONES
+        ///as
+        ///declare variable LSHET varchar(10);
+        ///declare variable TYPEID integer;
+        ///declare variable PHONENUMBER varchar(100);
+        ///begin
+        ///    FOR SELECT LSHET, TYPEID, PHONENUMBER
+        ///		FROM CNV$ABONENTPHONES 
+        ///    INTO :LSHET, :TYPEID, :PHONENUMBER
+        ///    DO BEGIN
+        ///		INSERT INTO ABONENTPHONES (LSHET, PHONETYPEID, PHONENUMBER) VALUES (:lshet, :TYPEID, :PHONENUMBER);
+        ///    END
+        ///end^
+        ///
+        ///SET TERM ; ^.
+        /// </summary>
+        internal static string CNV_CNV_03500_ABONENTPHONES {
+            get {
+                return ResourceManager.GetString("CNV_CNV_03500_ABONENTPHONES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SET TERM ^ ;
         ///
         ///create or alter procedure CNV$CNV_DOCUMENTNUMERATOR (
@@ -1806,6 +1871,50 @@ namespace aConverterClassLibrary.Properties {
         internal static string CNV_CNV_DOCUMENTNUMERATOR {
             get {
                 return ResourceManager.GetString("CNV_CNV_DOCUMENTNUMERATOR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CREATE TABLE CNV$CONTRACTADDCHAR (
+        ///  ID INTEGER NOT NULL,
+        ///  CONTRACTID INTEGER,
+        ///  ADDCHARCD INTEGER,
+        ///  VALUE_ varchar(2000),
+        ///  PRIMARY KEY (ID)
+        ///);
+        ///CREATE SEQUENCE GEN_CNV$CONTRACTADDCHAR_ID;
+        ///CREATE INDEX CNV$CONTRACTADDCHAR_IDX1 ON CNV$CONTRACTADDCHAR (CONTRACTID);
+        ///
+        ///SET TERM ^ ;
+        ///CREATE TRIGGER CNV$CONTRACTADDCHAR_BI FOR CNV$CONTRACTADDCHAR
+        ///ACTIVE BEFORE INSERT POSITION 0
+        ///AS
+        ///BEGIN
+        ///  IF (NEW.ID IS NULL) THEN
+        ///    NEW.ID = GEN_ID(GEN_CNV$CONTRACTADDCHAR_ID,1);
+        ///END
+        ///^
+        ///SET TERM ; ^
+        ///.
+        /// </summary>
+        internal static string CNV_CONTRACTADDCHAR {
+            get {
+                return ResourceManager.GetString("CNV_CONTRACTADDCHAR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DROP TRIGGER CNV$CONTRACTADDCHAR_BI;
+        ///DROP SEQUENCE GEN_CNV$CONTRACTADDCHAR_ID;
+        ///DROP INDEX CNV$CONTRACTADDCHAR_IDX1;
+        ///DROP TABLE CNV$CONTRACTADDCHAR;
+        ///
+        ///
+        ///.
+        /// </summary>
+        internal static string CNV_CONTRACTADDCHAR_d {
+            get {
+                return ResourceManager.GetString("CNV_CONTRACTADDCHAR_d", resourceCulture);
             }
         }
         

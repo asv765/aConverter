@@ -64,6 +64,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 "PENISUMMA",
                 "SUPPLNET",
                 "ABONENTCONTRACT",
+                "ABONENTPHONES",
+                "CONTRACTADDCHAR",
                 "DOCUMENTNUMERATORTABLE",
             };
             return l;
@@ -92,10 +94,17 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
         /// <param name="entityName"></param>
         public static void CreateDatabaseObject(string entityName)
         {
-            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            string createScript =
-                Properties.Resources.ResourceManager.GetString("CNV_" + entityName);
-            fbm.ExecuteScript(createScript);
+            try
+            {
+                var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+                string createScript =
+                    Properties.Resources.ResourceManager.GetString("CNV_" + entityName);
+                fbm.ExecuteScript(createScript);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при создании объекта БД {entityName}:\r\n{ex.Message}", ex.InnerException);
+            }
         }
 
         /// <summary>
@@ -177,6 +186,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM.Utils
                 l.Add("CNV_03200_CITYZENLGOTA_TVER");
                 l.Add("CNV_03300_LGOTSUMMA");
                 l.Add("CNV_03400_ABONENTCONTRACTS");
+                l.Add("CNV_03500_ABONENTPHONES");
             }
             if (procedureType == ProcedureType.ПроверкаЦелостности)
             {
