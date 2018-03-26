@@ -5,7 +5,8 @@ create or alter procedure CNV$CNV_DOCUMENTNUMERATOR (
     DOCNAME varchar(150),
     DOCDATE date,
     INPUTDATE date,
-    BASEORG integer)
+    BASEORG integer,
+	DOCREASON integer = null)
 returns (
     DOCUMENTCD integer)
 as
@@ -13,8 +14,8 @@ BEGIN
   if (importkey = '') then
   begin
         select gen_id(documents_gen, 1) from RDB$DATABASE into :documentcd;
-        INSERT INTO DOCUMENTS (DOCUMENTCD, ORGANIZATIONCD, REGISTERUSERCD, OTVETSTVUSERCD, DOCTYPEID, DOCNAME, DOCDATE, INPUTDATE)
-        VALUES (:documentcd, :baseorg, 1, 1, 9, :docname, :docdate, :inputdate);
+        INSERT INTO DOCUMENTS (DOCUMENTCD, ORGANIZATIONCD, REGISTERUSERCD, OTVETSTVUSERCD, DOCTYPEID, DOCNAME, DOCDATE, INPUTDATE, REASONID)
+        VALUES (:documentcd, :baseorg, 1, 1, 9, :docname, :docdate, :inputdate, :docreason);
   end
   else
   begin
@@ -22,8 +23,8 @@ BEGIN
       if (documentcd IS NULL) then
       begin
         select gen_id(documents_gen, 1) from RDB$DATABASE into :documentcd;
-        INSERT INTO DOCUMENTS (DOCUMENTCD, ORGANIZATIONCD, REGISTERUSERCD, OTVETSTVUSERCD, DOCTYPEID, DOCNAME, DOCDATE, INPUTDATE)
-        VALUES (:documentcd, :baseorg, 1, 1, 9, :docname, :docdate, :inputdate);
+        INSERT INTO DOCUMENTS (DOCUMENTCD, ORGANIZATIONCD, REGISTERUSERCD, OTVETSTVUSERCD, DOCTYPEID, DOCNAME, DOCDATE, INPUTDATE, REASONID)
+        VALUES (:documentcd, :baseorg, 1, 1, 9, :docname, :docdate, :inputdate, :docreason);
         insert into CNV$DOCUMENTNUMERATORTABLE(DOCUMENTCD, IMPORTKEY) values (:documentcd, :importkey);
       end
   end

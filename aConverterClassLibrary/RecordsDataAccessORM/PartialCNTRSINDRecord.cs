@@ -5,8 +5,8 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
     public partial class CNV_CNTRSIND : IOrmRecord
     {
         public const string InsertSqlTemplate =
-            "INSERT INTO CNV$CNTRSIND (COUNTERID, DOCUMENTCD, OLDIND, OB_EM, INDICATION, INDDATE, INDTYPE, CASETYPE) " +
-            "VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7});";
+            "INSERT INTO CNV$CNTRSIND (COUNTERID, DOCUMENTCD, OLDIND, OB_EM, INDICATION, INDDATE, INDTYPE, CASETYPE, REASONID) " +
+            "VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8});";
 
         public string InsertSql => string.Format(InsertSqlTemplate,
             ToSql(_cOUNTERID),
@@ -16,6 +16,7 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
             ToSql(_iNDICATION),
             ToSql(_iNDDATE),
             ToSql(_iNDTYPE),
-            ToSql(_cASETYPE));
+            ToSql(_cASETYPE),
+            ToSql(_rEASONID));
     }
 }

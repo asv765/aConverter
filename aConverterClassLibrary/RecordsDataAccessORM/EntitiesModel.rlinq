@@ -756,6 +756,9 @@
         <orm:field name="_cASETYPE" property="CASETYPE" behavior="readwrite" uniqueId="098190cf-d4a4-43b2-a81d-df073d431a0f" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="CASETYPE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
+        <orm:field name="_rEASONID" property="REASONID" behavior="readwrite" uniqueId="c63eabf0-86e3-4df6-843b-0ca2f594b3c8" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="REASONID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        </orm:field>
         <orm:index name="CNV$CNTRSIND_IDX1">
           <orm:columnMapping>
             <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
@@ -2271,6 +2274,7 @@
         <orm:column name="INDDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="INDTYPE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="CASETYPE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
+        <orm:column name="REASONID" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:index name="CNV$CNTRSIND_IDX1">
           <orm:columnMapping>
             <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
@@ -2956,6 +2960,7 @@
       <Property Id="5b4a3f75-5d24-4b53-bc88-91fd0b85841b" name="OB_EM" type="Decimal" label="OB_EM : Decimal" nullable="true" kind="Persistent" fieldName="_oB_EM" />
       <Property Id="fce0de3e-211a-44ed-b102-35150a0377fe" name="OLDIND" type="Decimal" label="OLDIND : Decimal" nullable="true" kind="Persistent" fieldName="_oLDIND" />
       <Property Id="098190cf-d4a4-43b2-a81d-df073d431a0f" name="CASETYPE" type="Int32" label="CASETYPE : Int32" nullable="true" kind="Persistent" fieldName="_cASETYPE" />
+      <Property Id="c63eabf0-86e3-4df6-843b-0ca2f594b3c8" name="REASONID" type="Int32" label="REASONID : Int32" nullable="true" kind="Persistent" fieldName="_rEASONID" />
     </DomainClass>
     <DomainClass Id="1957ec23-41bd-4067-89c5-9ef471c52b7c" name="CNV_CITIZEN" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="8e654f6e-3a9f-4931-954f-a92f479a2874" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />

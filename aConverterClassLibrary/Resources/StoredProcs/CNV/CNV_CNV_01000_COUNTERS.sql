@@ -44,6 +44,7 @@ declare variable month_ integer;
 declare variable day_ integer;
 declare variable casetype integer;
 declare variable untingid varchar(20);
+declare variable docreason integer;
 begin
 
   if (NEEDDELETE = 1) then
@@ -156,19 +157,19 @@ begin
   from EXTORGSPR EOS
   where EOS.ISBASEORGANIZATION = 1
   into :BASEORG;
-  for select PE.EQUIPMENTID, CI.OLDIND, CI.OB_EM, CI.INDICATION, CI.INDDATE, CI.DOCUMENTCD, CI.INDTYPE, CI.CASETYPE, CO.LSHET
+  for select PE.EQUIPMENTID, CI.OLDIND, CI.OB_EM, CI.INDICATION, CI.INDDATE, CI.DOCUMENTCD, CI.INDTYPE, CI.CASETYPE, CO.LSHET, CI.REASONID
       from CNV$CNTRSIND CI
       inner join PARENTEQUIPMENT PE on CI.COUNTERID = PE.IMPORTTAG
 	  inner join RESOURCECOUNTERS RC on RC.KOD = PE.EQUIPMENTID
 	  inner join CNV$COUNTERS CO on CO.COUNTERID = CI.COUNTERID
 	  where RC.COUNTER_LEVEL <> 1
-      into :EQUIPMENTID, :OLDIND, :OB_EM, :INDICATION, :INDDATE, :DOCUMENTCD, :INDTYPE, :CASETYPE, :LSHET
+      into :EQUIPMENTID, :OLDIND, :OB_EM, :INDICATION, :INDDATE, :DOCUMENTCD, :INDTYPE, :CASETYPE, :LSHET, :DOCREASON
   do
   begin
   if (DOCUMENTCD is not null) then
   begin
 	select DOCUMENTCD
-    from CNV$CNV_DOCUMENTNUMERATOR(:DOCUMENTCD, 'Импорт показаний', :INDDATE, :INDDATE, :BASEORG)
+    from CNV$CNV_DOCUMENTNUMERATOR(:DOCUMENTCD, 'Импорт показаний', :INDDATE, :INDDATE, :BASEORG, :DOCREASON)
     into :NEWDOCUMENTCD;
   end
   else NEWDOCUMENTCD = null;

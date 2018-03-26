@@ -139,6 +139,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
                 this._cASETYPE = value;
             }
         }
+
+        private int? _rEASONID;
+        public virtual int? REASONID
+        {
+            get
+            {
+                return this._rEASONID;
+            }
+            set
+            {
+                this._rEASONID = value;
+            }
+        }
     }
 }
 #pragma warning restore 1591

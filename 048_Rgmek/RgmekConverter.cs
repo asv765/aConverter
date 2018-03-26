@@ -386,40 +386,86 @@ namespace _048_Rgmek
         }
     }
 
-    public class FindNotExistedAbonentInNach : ConvertCase
+    public class FindNotExistedAbonentInNach : DbfConvertCase
     {
         public FindNotExistedAbonentInNach()
         {
-            ConvertCaseName = "Поиск абонентов в файле с начислениями, которые отсутствуют в БД";
+            ConvertCaseName = "Поиск несоответствий";
             Position = 11;
             IsChecked = false;
         }
 
-        public override void DoConvert()
+        public override void DoDbfConvert()
         {
-            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
-            var nachFile = ConvertNach.GetNachFiles().First(n => ConvertNach.GetNachFileDate(n) == new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1));
-            var notExistedNach = new List<NachExcelRecord>();
-            var addNach = new List<NachExcelRecord>();
-            aConverterClassLibrary.Utils.ReadExcelFileByRow(nachFile, null, dr =>
-            {
-                var nachInfo = new NachExcelRecord(dr);
-                if (lsrecode.ContainsKey(LsKvcWithoutKr(nachInfo.LsKvc)))
+            // Абоненты не с ЛС КВЦ
+            /*{
+                var notLsKvc = new List<string>();
+                DbfManager.ExecuteQueryByReader("select * from abonent where lshet like '___-___-__-___-_-__'", r =>
                 {
-                    if (nachInfo.Nach == NachExcelRecord.NachType.AddNach)
-                        addNach.Add(nachInfo);
-                }
-                else
+                    if (!lsKvcRegex.IsMatch(r.GetString(0))) notLsKvc.Add(r.GetString(0));
+                });
+                var result = String.Join(Environment.NewLine, notLsKvc);
+            }*/
+
+            // Абоненты с одинаковым ЛС КВЦ, но с разным КР
+            /*{
+                var ls = new List<string>();
+                DbfManager.ExecuteQueryByReader("select lshet from abonent where lshet like '___-___-__-___-_-__'", r =>
                 {
-                    notExistedNach.Add(nachInfo);
+                    ls.Add(r.GetString(0));
+                });
+                var doubledKr = ls.Select(s => s.Substring(0, 16)).GroupBy(s => s).Where(gs => gs.Count() > 1).ToArray();
+                var result = String.Join(Environment.NewLine, doubledKr.Select(ds => ds.Key));
+            }*/
+
+            // Поиск абонентов в файле с начислениями, которые отсутствуют в БД.
+            { 
+                var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+                var nachFile = ConvertNach.GetNachFiles().First(n => ConvertNach.GetNachFileDate(n) == new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1));
+                var existedNach = new List<NachExcelRecord>();
+                var notExistedNach = new List<NachExcelRecord>();
+                var addNach = new List<NachExcelRecord>();
+                aConverterClassLibrary.Utils.ReadExcelFileByRow(nachFile, null, dr =>
+                {
+                    var nachInfo = new NachExcelRecord(dr);
+                    if (lsrecode.ContainsKey(LsKvcWithoutKr(nachInfo.LsKvc)))
+                    {
+                        if (nachInfo.Nach == NachExcelRecord.NachType.AddNach)
+                            addNach.Add(nachInfo);
+                        existedNach.Add(nachInfo);
+                    }
+                    else
+                    {
+                        notExistedNach.Add(nachInfo);
+                    }
+                });
+                var notExitedLs = notExistedNach.Select(n => n.LsKvc).Distinct().ToList();
+                var notExistedSum = notExistedNach.Sum(n => n.Sum);
+                var notExistedVol = notExistedNach.Sum(n => n.Volume);
+                var notExistedLsList = String.Join("\r\n", notExitedLs);
+                var addNachSum = addNach.Sum(n => n.Sum);
+                var addNachVol = addNach.Sum(n => n.Volume);
+                var existedSum = existedNach.Sum(n => n.Sum);
+                var eistedVol = existedNach.Sum(n => n.Volume);
+                var nachSumWithoutVol = existedNach.Where(n => n.Volume == 0).Sum(n => n.Sum);
+                var nachVolWithoutSum = existedNach.Where(n => n.Sum == 0).Sum(n => n.Volume);
+
+
+                var fileLsList = existedNach.Where(n => Math.Abs(n.Sum) < 0).Select(n => n.LsKvc).Distinct().Select(l => new LsKvc(l, true).CombinedLs).ToArray();
+                var dbLsList = new HashSet<string>();;
+                FbManager fb = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+                using (var dt = fb.ExecuteQuery("select distinct ea.EXTLSHET " +
+                                                "from NACHISLVOLUMS nv " +
+                                                "inner join EXTORGACCOUNTS ea on ea.EXTORGCD = 2 and ea.LSHET = nv.LSHET " +
+                                                "where nv.NYEAR = 2018 and nv.NMONTH = 02"))
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        dbLsList.Add(dt.Rows[i][0].ToString());
+                    }
                 }
-            });
-            var notExitedLs = notExistedNach.Select(n => n.LsKvc).Distinct().ToList();
-            var notExistedSum = notExistedNach.Sum(n => n.Sum);
-            var notExistedVol = notExistedNach.Sum(n => n.Volume);
-            var notExistedLsList = String.Join("\r\n", notExitedLs);
-            var addNachSum = addNach.Sum(n => n.Sum);
-            var addNachVol = addNach.Sum(n => n.Volume);
+                var notExistedLs = fileLsList.Where(fl => !dbLsList.Contains(fl)).ToArray();
+            }
         }
     }
 
@@ -558,10 +604,13 @@ namespace _048_Rgmek
                                 break;
                         }
                         if (phone.Isdeleted == 1) phoneType = -1;
+                        string phonenumber = phone.Nomer.Trim();
+                        if (phonenumber.Length == 10 && phonenumber[0] == '9')
+                            phonenumber = "8" + phonenumber;
                         lap.Add(new CNV_ABONENTPHONES
                         {
                             LSHET = a.LSHET,
-                            PHONENUMBER = phone.Nomer.Trim(),
+                            PHONENUMBER = phonenumber,
                             TYPEID = phoneType
                         });
                     }
@@ -1001,6 +1050,7 @@ namespace _048_Rgmek
             SetStepsCount(2);
             var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
             var lc = new List<CNV_CHAR>();
+            var ll = new List<CNV_LCHAR>();
 
             using (var dt = aConverterClassLibrary.Utils.ReadExcelFile(OwnerPartCharsFileName, null))
             {
@@ -1012,21 +1062,41 @@ namespace _048_Rgmek
                     if (!int.TryParse(dr[0].ToString(), out rowNumber)) continue;
                     long lshet = FindLsRecode(dr[1].ToString(), lsrecode);
                     if (lshet == 0) continue;
-                    decimal ownerPart = Convert.ToDecimal(dr[4]);
-                    lc.Add(new CNV_CHAR
-                    {
-                        LSHET = lshet.ToString(),
-                        CHARCD = 25,
-                        CHARNAME = "Доля собственности (для абонента)",
-                        DATE_ = InitialDate,
-                        VALUE_ = ownerPart
-                    });
+                    if (!String.IsNullOrWhiteSpace(dr[4].ToString()))
+                        lc.Add(new CNV_CHAR
+                        {
+                            LSHET = lshet.ToString(),
+                            CHARCD = 27,
+                            CHARNAME = "Индивидуальный норматив",
+                            DATE_ = InitialDate,
+                            VALUE_ = Convert.ToDecimal(dr[4])
+                        });
+                    if (!String.IsNullOrWhiteSpace(dr[5].ToString()))
+                        ll.Add(new CNV_LCHAR
+                        {
+                            LSHET = lshet.ToString(),
+                            LCHARCD = 30,
+                            LCHARNAME = "Повышающий коэффициент",
+                            DATE_ = InitialDate,
+                            VALUE_ = dr[5].ToString().Trim().ToLower() == "применять" ? 0 : 1
+                        });
+                    if (!String.IsNullOrWhiteSpace(dr[6].ToString()))
+                        lc.Add(new CNV_CHAR
+                        {
+                            LSHET = lshet.ToString(),
+                            CHARCD = 25,
+                            CHARNAME = "Доля собственности (для абонента)",
+                            DATE_ = InitialDate,
+                            VALUE_ = Convert.ToDecimal(dr[6])
+                        });
                 }
                 StepFinish();
             }
 
-            StepStart(1);
+            StepStart(2);
             BufferEntitiesManager.SaveDataToBufferIBScript(lc);
+            Iterate();
+            BufferEntitiesManager.SaveDataToBufferIBScript(ll);
             StepFinish();
         }
     }
@@ -1244,6 +1314,8 @@ namespace _048_Rgmek
             SetStepsCount(2);
             var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
             var lc = new Dictionary<string, CNV_ABONENTCONTRACT>();
+            var fb = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            int countractId = (int)fb.ExecuteScalar("select count(0) from CNV$CONTRACTADDCHAR");
 
             StepStart(1);
             DbfManager.ExecuteQueryByRow(GetContractsWithServicesSql, dr =>
@@ -1266,6 +1338,7 @@ namespace _048_Rgmek
                 {
                     lc.Add(record.Contractcd, new CNV_ABONENTCONTRACT
                     {
+                        ID = ++countractId,
                         LSHET = lshet.ToString(),
                         TYPEID = 13, // Договор с абонентом.
                         DOC_NUMBER = record.Nomer.Trim(),
@@ -1303,7 +1376,8 @@ namespace _048_Rgmek
             var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
             var lc = new List<CNV_ABONENTCONTRACT>();
             var lcc = new List<CNV_CONTRACTADDCHAR>();
-            int countractId = 0;
+            var fb = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            int countractId = (int)fb.ExecuteScalar("select count(0) from CNV$CONTRACTADDCHAR");
             var format = new NumberFormatInfo
             {
                 NumberDecimalSeparator = "."
@@ -2578,7 +2652,7 @@ left join (
                             YEAR_ = pr.Date.Year,
                             SERVICECD = GetServicecd(pr),
                             SERVICENAME = $"{pr.Servicenm}",
-                            SUMMA = pr.Summa,
+                            SUMMA = Math.Round(pr.Summa, 2),
                             DOCUMENTCD = $"P{++paydoc}",
                             SOURCENAME = pr.Paypostnm,
                             SOURCECD = (int) Utils.GetValue(pr.Paypostcd, sourcedocrecode, ref lastsourcedoc)
@@ -2718,8 +2792,8 @@ left join (
                                     SERVICENAME = nach.SERVICENAME,
                                     FNATH = 0,
                                     VOLUME = 0,
-                                    PROCHL = nachInfo.Sum,
-                                    PROCHLVOLUME = nachInfo.Volume,
+                                    PROCHL = Math.Round(nachInfo.Sum, 2),
+                                    PROCHLVOLUME = Math.Round(nachInfo.Volume, 2),
                                     REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone,
                                     REGIMNAME = nachInfo.Nach.ToString(),
                                     DOCUMENTCD = $"N{++nachdoc}"
@@ -2728,7 +2802,7 @@ left join (
                         }
                         else
                         {
-                            if (nachInfo.Sum != 0 && nachInfo.Volume != 0)
+                            if (nachInfo.Sum != 0 || nachInfo.Volume != 0)
                             {
                                 ln.Add(new CNV_NACH
                                 {
@@ -2744,8 +2818,8 @@ left join (
                                     VTYPE_ = nach.VTYPE_,
                                     SERVICECD = nach.SERVICECD,
                                     SERVICENAME = nach.SERVICENAME,
-                                    FNATH = nachInfo.Sum - nachInfo.SumCoef,
-                                    VOLUME = nachInfo.Volume,
+                                    FNATH = nachInfo.Sum == 0 ? 0 : Math.Round(nachInfo.Sum - nachInfo.SumCoef, 2),
+                                    VOLUME = Math.Round(nachInfo.Volume, 2),
                                     PROCHL = 0,
                                     PROCHLVOLUME = 0,
                                     REGIMCD = nachInfo.Tarif == NachExcelRecord.TarifType.Unknown ? 10 : (int) nachInfo.Tarif + (int) nachInfo.Zone,
@@ -2769,7 +2843,7 @@ left join (
                                     VTYPE_ = nach.VTYPE_,
                                     SERVICECD = nach.SERVICECD,
                                     SERVICENAME = nach.SERVICENAME,
-                                    FNATH = nachInfo.SumCoef,
+                                    FNATH = Math.Round(nachInfo.SumCoef, 2),
                                     VOLUME = 0,
                                     PROCHL = 0,
                                     PROCHLVOLUME = 0,
@@ -2812,9 +2886,41 @@ left join (
             var lsNotFromKvc = Utils.GetLsNotFromKvc();
 
             var lnop = new List<CNV_NACHOPL>();
+            var actSaldoDic = new Dictionary<string, decimal>();
 
             var convertDate = new DateTime(CurrentYear, CurrentMonth, 1).AddDays(-1);
-            
+
+            using (var dt = aConverterClassLibrary.Utils.ReadExcelFile(ActSaldoFileName, null))
+            {
+                StepStart(dt.Rows.Count);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    var actSaldoRec = new ExtSaldo(dr, ExtSaldo.ExternalType.Acts);
+                    long lshet = FindLsRecode(actSaldoRec.LsKvc, lsrecode);
+                    if (lshet != 0)
+                    {
+                        var nachopl = new CNV_NACHOPL
+                        {
+                            LSHET = lshet.ToString(),
+                            SERVICENAME = "Акты",
+                            SERVICECD = 39,
+                            PROCHL = 0,
+                            FNATH = 0,
+                            OPLATA = 0,
+                            BDEBET = 0,
+                            EDEBET = Math.Round(actSaldoRec.Saldo, 2),
+                            MONTH2 = convertDate.Month,
+                            YEAR2 = convertDate.Year,
+                            MONTH_ = convertDate.Month,
+                            YEAR_ = convertDate.Year
+                        };
+                        actSaldoDic.Add(nachopl.LSHET, nachopl.EDEBET);
+                        lnop.Add(nachopl);
+                    }
+                }
+                StepFinish();
+            }
+
             using (var dt = Tmsource.ExecuteQuery("select * from lschars where charcd = 'd673ef5d-90b1-11df-ae5f-001e8c71f1cc'"))
             {
                 StepStart(dt.Rows.Count);
@@ -2825,7 +2931,7 @@ left join (
                     long lshet = FindLsRecode(charRecord.Owner, lsrecode);
                     if (lshet != 0)
                     {
-                        lnop.Add(new CNV_NACHOPL
+                        var nachopl = new CNV_NACHOPL
                         {
                             LSHET = lshet.ToString(),
                             SERVICENAME = "Электроэнергия",
@@ -2834,12 +2940,15 @@ left join (
                             FNATH = 0,
                             OPLATA = 0,
                             BDEBET = 0,
-                            EDEBET = Convert.ToDecimal(charRecord.Value),
+                            EDEBET = Math.Round(Convert.ToDecimal(charRecord.Value), 2),
                             MONTH2 = convertDate.Month,
                             YEAR2 = convertDate.Year,
                             MONTH_ = convertDate.Month,
                             YEAR_ = convertDate.Year
-                        });
+                        };
+                        if (actSaldoDic.ContainsKey(nachopl.LSHET))
+                            nachopl.EDEBET -= actSaldoDic[nachopl.LSHET];
+                        lnop.Add(nachopl);
                     }
                     Iterate();
                 }
@@ -2864,7 +2973,7 @@ left join (
                             FNATH = 0,
                             OPLATA = 0,
                             BDEBET = 0,
-                            EDEBET = saldo.Saldo,
+                            EDEBET = Math.Round(saldo.Saldo, 2),
                             MONTH2 = convertDate.Month,
                             YEAR2 = convertDate.Year,
                             MONTH_ = convertDate.Month,
@@ -2895,7 +3004,7 @@ left join (
                             FNATH = 0,
                             OPLATA = 0,
                             BDEBET = 0,
-                            EDEBET = Convert.ToDecimal(saldoRecord.Summa),
+                            EDEBET = Math.Round(Convert.ToDecimal(saldoRecord.Summa), 2),
                             MONTH2 = convertDate.Month,
                             YEAR2 = convertDate.Year,
                             MONTH_ = convertDate.Month,
@@ -2906,36 +3015,7 @@ left join (
                 }
                 StepFinish();
             }
-            
-            using (var dt = aConverterClassLibrary.Utils.ReadExcelFile(ActSaldoFileName, null))
-            {
-                StepStart(dt.Rows.Count);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    var actSaldoRec = new ExtSaldo(dr, ExtSaldo.ExternalType.Acts);
-                    long lshet = FindLsRecode(actSaldoRec.LsKvc, lsrecode);
-                    if (lshet != 0)
-                    {
-                        lnop.Add(new CNV_NACHOPL
-                        {
-                            LSHET = lshet.ToString(),
-                            SERVICENAME = "Акты",
-                            SERVICECD = 39,
-                            PROCHL = 0,
-                            FNATH = 0,
-                            OPLATA = 0,
-                            BDEBET = 0,
-                            EDEBET = actSaldoRec.Saldo,
-                            MONTH2 = convertDate.Month,
-                            YEAR2 = convertDate.Year,
-                            MONTH_ = convertDate.Month,
-                            YEAR_ = convertDate.Year
-                        });
-                    }
-                }
-                StepFinish();
-            }
-
+           
             StepStart(1);
             //SaveListInsertSQL(lnop, InsertRecordCount);
             BufferEntitiesManager.SaveDataToBufferIBScript(lnop);
@@ -3311,9 +3391,35 @@ where not exists (
         public override void DoConvert()
         {
             SetStepsCount(1);
-            StepStart(1);
+            StepStart(2);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_01050_GROUPCOUNTERS", new[] { "0", "1", "0" });
+            Iterate();
+            fbm.ExecuteNonQuery(@"execute block as
+declare variable countername varchar(150);
+declare variable counterid integer;
+declare variable number integer;
+begin
+    for select rc.name
+        from RESOURCECOUNTERS rc
+        where rc.COUNTER_LEVEL = 1
+        group by rc.NAME
+        having count(0) > 1
+    into :countername
+    do begin
+        number = 0;
+        for select rc.KOD
+            from RESOURCECOUNTERS rc
+            where rc.NAME = :countername
+        into :counterid
+        do begin
+            number = :number + 1;
+            update RESOURCECOUNTERS rc
+                set rc.NAME = rc.NAME || ' (' || cast(:number as varchar(2)) || ')'
+                where rc.KOD = :counterid;
+        end
+    end
+end");
             Iterate();
         }
     }
