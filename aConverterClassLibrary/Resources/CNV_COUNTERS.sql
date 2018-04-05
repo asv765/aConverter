@@ -21,7 +21,7 @@ CREATE TABLE CNV$COUNTERS (
     COUNTERID   VARCHAR(20),
     LSHET       VARCHAR(10),
     CNTTYPE     INTEGER,
-    CNTNAME     VARCHAR(50),
+    CNTNAME     VARCHAR(150),
     SETUPDATE   TIMESTAMP,
     SERIALNUM   VARCHAR(30),
     SETUPPLACE  INTEGER,
@@ -43,7 +43,8 @@ CREATE TABLE CNV$COUNTERS (
 	GROUPCOUNTERMODULEID INTEGER,
 	KODREGIM INTEGER,
 	NOCALCCHILDBALANCES INTEGER,
-	UNTINGID   VARCHAR(20) /* Используется для многоставочных счетчиков. Основная шкала ссылается на свой COUNTERID, дополнительные шкалы на COUNTERID основной шкалы. При занесении в БД важна очередность, чтобы основная шкала стояла раньше дополнительных*/
+	UNTINGID   VARCHAR(20), /* Используется для многоставочных счетчиков. Основная шкала ссылается на свой COUNTERID, дополнительные шкалы на COUNTERID основной шкалы. При занесении в БД важна очередность, чтобы основная шкала стояла раньше дополнительных*/
+	RECOUNTKOEFFICIENT NUMERIC(18,5)
 );
 
 

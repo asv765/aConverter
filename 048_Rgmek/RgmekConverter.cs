@@ -34,12 +34,14 @@ namespace _048_Rgmek
         public static readonly string CnttypeRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\cnttyperecode.csv";
         public static readonly string CounterIdRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\counteridrecode.csv";
         public static readonly string GroupCounterIdRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\groupcounteridrecode.csv";
+        public static readonly string CommunalCounterIdRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\communalcounteridrecode.csv";
         public static readonly string IndtypeRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\indtyperecode.csv";
         public static readonly string PlaceToLshetRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\placetolshetrecode.csv";
         public static readonly string HouseToLshetRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\housetolshetrecode.csv";
         public static readonly string HouseStreetNameRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\housestreetnamerecode.csv";
         public static readonly string AbonenstNotFromKvcFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\abonentsnotfromkvc.txt";
         public static readonly string CounterIdToLsRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\counteridtolsrecode.csv";
+        public static readonly string LshetAddressNameFileName = aConverter_RootSettings.SourceDbfFilePath + @"\Docs\lshetaddressnamerecode.csv";
         public static readonly string NachFilesDirectory = aConverter_RootSettings.SourceDbfFilePath + @"\Nach";
         public static readonly string AddCharsRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\AddCharsRecode.xlsx";
         public static readonly string PaymentSourcesRecodeFileName = aConverter_RootSettings.SourceDbfFilePath + @"\PaymentSources.xlsx";
@@ -75,11 +77,12 @@ namespace _048_Rgmek
             { new KeyValuePair<long, long>(4, 1), new KeyValuePair<int, int>[0] /* new[] {new KeyValuePair<int, int>(13, 1)}*/ },
             { new KeyValuePair<long, long>(4, 2), new KeyValuePair<int, int>[0] /* new[] {new KeyValuePair<int, int>(13, 0)}*/ },
             { new KeyValuePair<long, long>(5, 1), new[] {new KeyValuePair<int, int>(5, 1)} },
-            { new KeyValuePair<long, long>(5, 2), new[] {new KeyValuePair<int, int>(5, 2)} },
-            { new KeyValuePair<long, long>(5, 3), new[] {new KeyValuePair<int, int>(5, 3)} },
-            { new KeyValuePair<long, long>(5, 4), new[] {new KeyValuePair<int, int>(5, 4)} },
-            { new KeyValuePair<long, long>(5, 5), new[] {new KeyValuePair<int, int>(5, 5)} },
+            { new KeyValuePair<long, long>(5, 2), new[] {new KeyValuePair<int, int>(5, 7)} },
+            { new KeyValuePair<long, long>(5, 3), new[] {new KeyValuePair<int, int>(5, 2)} },
+            { new KeyValuePair<long, long>(5, 4), new[] {new KeyValuePair<int, int>(5, 3)} },
+            { new KeyValuePair<long, long>(5, 5), new[] {new KeyValuePair<int, int>(5, 8)} },
             { new KeyValuePair<long, long>(5, 6), new[] {new KeyValuePair<int, int>(5, 6)} },
+            { new KeyValuePair<long, long>(5, 7), new[] {new KeyValuePair<int, int>(5, 9)} },
             { new KeyValuePair<long, long>(55, 0), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)} },
             { new KeyValuePair<long, long>(55, 1), new[] {new KeyValuePair<int, int>(2, 1), new KeyValuePair<int, int>(11, 1)} },
             { new KeyValuePair<long, long>(55, 2), new[] {new KeyValuePair<int, int>(2, 0), new KeyValuePair<int, int>(11, 0)} },
@@ -348,7 +351,15 @@ namespace _048_Rgmek
                 while (!sr.EndOfStream)
                 {
                     string line = sr.ReadLine();
-                    dic.Add(line.Split(';')[0], Convert.ToInt64(line.Split(';')[1]));
+                    try
+                    {
+                        dic.Add(line.Split(';')[0], Convert.ToInt64(line.Split(';')[1]));
+
+                    }
+                    catch (Exception e)
+                    {
+                        throw;
+                    }
                 }
             }
             return dic;
@@ -497,10 +508,10 @@ namespace _048_Rgmek
             var lap = new List<CNV_ABONENTPHONES>();
             var lha = new List<CNV_HADDCHAR>();
             var laa = new List<CNV_AADDCHAR>();
-            var lhcc = new List<CNV_CHARSHOUSES>();
+            //var lhcc = new List<CNV_CHARSHOUSES>();
 
-            var lsrecode = new Dictionary<string, long>();
-            long lastls = 101000000;
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+            long lastls = lsrecode.Max(l => l.Value);
             var durecode = new Dictionary<string, long>();
             long lastducd = 0;
             var houserecode = new Dictionary<string, long>();
@@ -605,8 +616,8 @@ namespace _048_Rgmek
                         }
                         if (phone.Isdeleted == 1) phoneType = -1;
                         string phonenumber = phone.Nomer.Trim();
-                        if (phonenumber.Length == 10 && phonenumber[0] == '9')
-                            phonenumber = "8" + phonenumber;
+                        //if (phonenumber.Length == 10 && phonenumber[0] == '9')
+                        //    phonenumber = "8" + phonenumber;
                         lap.Add(new CNV_ABONENTPHONES
                         {
                             LSHET = a.LSHET,
@@ -819,6 +830,7 @@ namespace _048_Rgmek
             File.WriteAllLines(PlaceToLshetRecodeFileName, placerecode.SelectMany(p => p.Value.Select(v => $"{p.Key};{v}")));
             File.WriteAllLines(HouseToLshetRecodeFileName, la.Select(a => $"{a.HOUSECD};{a.LSHET}"));
             File.WriteAllLines(HouseStreetNameRecodeFileName, la.Select(a => $"{a.HOUSECD};{a.ULICANAME} д.{a.HOUSENO}{a.HOUSEPOSTFIX}").Distinct());
+            File.WriteAllLines(LshetAddressNameFileName, la.Select(l => $"{l.LSHET};{l.ULICANAME} д.{l.HOUSENO}{l.HOUSEPOSTFIX} кв.{l.FLATNO}{l.FLATPOSTFIX}"));
 
             StepStart(4);
             BufferEntitiesManager.SaveDataToBufferIBScript(la);
@@ -827,7 +839,7 @@ namespace _048_Rgmek
             Iterate();
             BufferEntitiesManager.SaveDataToBufferIBScript(lha);
             Iterate();
-            BufferEntitiesManager.SaveDataToBufferIBScript(lhcc);
+            //BufferEntitiesManager.SaveDataToBufferIBScript(lhcc);
             Iterate();
             BufferEntitiesManager.SaveDataToBufferIBScript(lap);
             StepFinish();
@@ -1097,6 +1109,70 @@ namespace _048_Rgmek
             BufferEntitiesManager.SaveDataToBufferIBScript(lc);
             Iterate();
             BufferEntitiesManager.SaveDataToBufferIBScript(ll);
+            StepFinish();
+        }
+    }
+
+    public class ConvertCoeffCounter : DbfConvertCase
+    {
+        public ConvertCoeffCounter()
+        {
+            ConvertCaseName = "COEFF COUNTER CHARS - коэффециент распределения объема по счетчикам";
+            Position = 33;
+            IsChecked = false;
+        }
+
+        public override void DoDbfConvert()
+        {
+            SetStepsCount(3);
+
+            var lcc = new List<CNV_CHAR>();
+
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+
+            string sql =
+@"select {0}
+from (
+	select lshet, max(date) as dat
+	from cntrs_kf
+	where servicenm like '%Электроэнергия%'
+		and lshet like '___-___-__-___-_-__'
+	group by lshet	
+) l
+inner join cntrs_kf k on k.lshet = l.lshet
+					and k.date = l.dat
+where k.lshet like '___-___-__-___-_-__'";
+
+            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(String.Format(sql, "count(*)"))));
+            var cold = new Cntrs_kfRecord();
+            DbfManager.ExecuteQueryByRow(String.Format(sql, "k.*"), dr =>
+            {
+                cold.ReadDataRow(dr);
+
+                long lshet = FindLsRecode(cold.Lshet, lsrecode);
+                if (lshet != 0)
+                {
+                    var c = new CNV_CHAR
+                    {
+                        LSHET = lshet.ToString(),
+                        SortLshet = lshet,
+                        CHARCD = 26,
+                        CHARNAME = "Коэф. распр. V по ГПУ",
+                        DATE_ = cold.Date,
+                        VALUE_ = cold.Koeff
+                    };
+                    lcc.Add(c);
+                }
+                Iterate();
+            });
+            StepFinish();
+
+            StepStart(1);
+            lcc = CharsRecordUtils.CreateUniqueCchars(lcc);
+            StepFinish();
+
+            StepStart(1);
+            BufferEntitiesManager.SaveDataToBufferIBScript(lcc);
             StepFinish();
         }
     }
@@ -1943,11 +2019,6 @@ namespace _048_Rgmek
 
             var tms = new TableManager(aConverter_RootSettings.SourceDbfFilePath);
             tms.Init();
-
-            BufferEntitiesManager.DropTableData("CNV$COUNTERTYPES");
-            BufferEntitiesManager.DropTableData("CNV$COUNTERTYPEADDCHAR");
-            BufferEntitiesManager.DropTableData("CNV$COUNTERADDCHAR");
-            BufferEntitiesManager.DropTableData("CNV$COUNTERS");
             
             var lc = new List<CNV_COUNTER>();
             var lca = new List<CNV_COUNTERADDCHAR>();
@@ -1991,19 +2062,53 @@ namespace _048_Rgmek
                 abonentTarifs[nachInfo.LsKvc] = nachInfo.Tarif;
             });
 
-            string sql = @"select {0} 
-                from counters c
-                left join (
-            	    select oldcntid, max(date) as enddate 
-            	    from cntrs_ac
-            	    where opertype in ('Замена', 'Снятие')
-            	    group by oldcntid
-                ) d on d.oldcntid = c.counterid
-                where c.counterid is not null and c.counterid <> ''";
+            string sql = 
+@"select {0}
+from (
+	select c.*, t.koeff
+	from (
+		select c.*
+		from counters c
+		left join (
+			select c.counterid
+			from (
+				select c.lshet, c.counterid
+				from counters c
+				where c.counterid is not null
+					and c.lshet like '___-___-__-___-_-__'
+				group by c.lshet, c.counterid
+			) c
+			group by c.counterid
+			having count(0) > 1
+		) gc on c.counterid = gc.counterid
+		where gc.counterid is null
+	) c
+	left join (
+		select t.*
+		from (
+			select t.placecd, t.instplid, max(date) as dat
+			from cntrs_tr t
+			where t.placecd is not null
+			group by t.placecd, t.instplid
+		) mt
+		inner join cntrs_tr t on t.placecd = mt.placecd
+							and t.instplid = mt.instplid
+							and t.date = mt.dat
+	) t on t.placecd = c.placecd and t.instplid = c.instplid
+) c
+left join (
+	select oldcntid, max(date) as enddate 
+	from cntrs_ac
+	where opertype in ('Замена', 'Снятие')
+	group by oldcntid
+) d on d.oldcntid = c.counterid
+where c.counterid is not null and c.counterid <> ''
+	and c.lshet like '___-___-__-___-_-__'
+{1}";
 
-            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(String.Format(sql, "count(0)"))) + 1);
+            StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(String.Format(sql, "count(*)", ""))) + 1);
 
-            DbfManager.ExecuteQueryByRow(String.Format(sql, "c.*, d.enddate"), dataRow =>
+            DbfManager.ExecuteQueryByRow(String.Format(sql, "c.*, d.enddate", "order by c.setupdate desc"), dataRow =>
             { 
                 Iterate();
                 lcold.ReadDataRow(dataRow);
@@ -2189,14 +2294,23 @@ namespace _048_Rgmek
 
         public static string GetCounterName(string name, int digitCount, decimal precision, string amperage)
         {
-            const int maxNameLength = 50;
-            string result = $"{name.Trim()} {digitCount}р";
+            const int maxNameLength = 150;
+            string result = name.Trim();
+            if (digitCount > 0)
+            {
+                string digitStr = $"разр. {digitCount}";
+                result += ", " + digitStr;
+            }
             if (precision > 0)
             {
-                string precisionStr = $"{precision:F1}".Replace(',', '.') + "кл";
-                result += " " + precisionStr;
+                string precisionStr = $"кл.точ. {precision:F1}".Replace(',', '.');
+                result += ", " + precisionStr;
             }
-            if (!String.IsNullOrWhiteSpace(amperage)) result += " " + amperage.Trim();
+            if (!String.IsNullOrWhiteSpace(amperage))
+            {
+                string amprStr = $"{amperage.Trim()} А";
+                result += ", " + amprStr;
+            }
             if (result.Length > maxNameLength) result = result.Substring(0, maxNameLength);
             return result;
         }
@@ -2259,14 +2373,32 @@ namespace _048_Rgmek
             var abnsInHouses = GetDicAbnsInHouses(Tmsource);
             StepFinish();
 
-            using (var dt = Tmsource.ExecuteQuery(@"select c.*, d.enddate 
-from cntrs_gr c
+            using (var dt = Tmsource.ExecuteQuery(
+@"select c.*, d.enddate
+from (
+	select c.*, t.koeff
+	from cntrs_gr c
+	left join (
+		select t.*
+		from (
+			select t.housecd, t.instplid, max(date) as dat
+			from cntrs_tr t
+			where t.housecd is not null
+			group by t.housecd, t.instplid
+		) mt
+		inner join cntrs_tr t on t.housecd = mt.housecd
+							and t.instplid = mt.instplid
+							and t.date = mt.dat
+	) t on t.housecd = c.housecd and t.instplid = c.instplid
+) c
 left join (
 	select oldcntid, max(date) as enddate 
 	from cntrs_ac
 	where opertype in ('Замена', 'Снятие')
 	group by oldcntid
-) d on d.oldcntid = c.counterid"))
+) d on d.oldcntid = c.counterid
+where c.counterid is not null and c.counterid <> ''
+order by c.setupdate desc"))
             {
                 int lastcnttypeid = (int)Utils.ReadDictionary((CnttypeRecodeFileName)).Select(cr => cr.Value).Max();
                 StepStart(dt.Rows.Count);
@@ -2331,7 +2463,8 @@ left join (
                                     DISTRIBUTINGMETHOD = 4,
                                     GROUPCOUNTERMODULEID = 23,
                                     TARGETBALANCE_KOD = 29,
-                                    TARGETNEGATIVEBALANCE_KOD = 29
+                                    TARGETNEGATIVEBALANCE_KOD = 29,
+                                    RECOUNTKOEFFICIENT = String.IsNullOrWhiteSpace(dr["koeff"].ToString()) ? 1 : Convert.ToInt32(dr["koeff"])
                                 };
                                 c.COUNTERID = Utils.GetValue(cntRecord.Counterid, counteridrecode, ref counterid).ToString();
                                 if (cntRecord.Lastpov.Year > 1950)
@@ -2374,7 +2507,8 @@ left join (
             BufferEntitiesManager.SaveDataToBufferIBScript(cnttyperecode.Where(t => !alreadyLoadedTypes.Contains(t.Value.ID)).Select(t => t.Value));
 
             Utils.SaveDictionary(cnttyperecode.ToDictionary(ct => ct.Key, ct => (long)ct.Value.ID), CnttypeRecodeFileName);
-            Utils.SaveDictionary(counteridrecode, GroupCounterIdRecodeFileName);
+            Utils.SaveDictionary(counteridrecode, CounterIdRecodeFileName);
+            File.WriteAllLines(GroupCounterIdRecodeFileName, lc.Select(c => c.GUID_).Distinct());
             StepFinish();
 
             StepStart(2);
@@ -2399,6 +2533,216 @@ left join (
         }
     }
 
+    public class ConvertCommunalCounters : DbfConvertCase
+    {
+        public ConvertCommunalCounters()
+        {
+            ConvertCaseName = "COMMUNAL COUNTERS - конвертация информации о коммунальных счетчиках";
+            Position = 56;
+            IsChecked = false;
+        }
+        
+        public override void DoDbfConvert()
+        {
+            var lc = new List<CNV_COUNTER>();
+            var lca = new List<CNV_COUNTERADDCHAR>();
+            var lta = new List<CNV_COUNTERTYPEADDCHAR>();
+            var cnttyperecode = Utils.ReadDictionary(CnttypeRecodeFileName).ToDictionary(c => c.Key, c => new CNV_COUNTERTYPE { ID = (int)c.Value });
+
+            var counteridrecode = Utils.ReadDictionary(CounterIdRecodeFileName);
+            long counterid = counteridrecode.Select(d => d.Value).Max() + 1;
+
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+            var lshetAddressNameRecode = File.ReadAllLines(LshetAddressNameFileName)
+                .Select(s =>
+                {
+                    string[] info = s.Split(';');
+                    return new {Lshet = info[0], AddressName = info[1]};
+                })
+                .GroupBy(l => l.Lshet, l => l.AddressName)
+                .ToDictionary(p => p.Key, p => p.First());
+
+            StepStart(1);
+            var digitCounterDic = ConvertCounters.GetCounterDigits(Tmsource);
+            StepFinish();
+
+            using (var dt = Tmsource.ExecuteQuery(
+@"select c.*, d.enddate
+from (
+	select c.*, t.koeff
+	from (
+		select c.*
+		from counters c
+		inner join (
+			select c.counterid
+			from (
+				select c.lshet, c.counterid
+				from counters c
+				where c.counterid is not null
+					and c.lshet like '___-___-__-___-_-__'
+				group by c.lshet, c.counterid
+			) c
+			group by c.counterid
+			having count(0) > 1
+		) gc on c.counterid = gc.counterid
+	) c
+	left join (
+		select t.*
+		from (
+			select t.placecd, t.instplid, max(date) as dat
+			from cntrs_tr t
+			where t.placecd is not null
+			group by t.placecd, t.instplid
+		) mt
+		inner join cntrs_tr t on t.placecd = mt.placecd
+							and t.instplid = mt.instplid
+							and t.date = mt.dat
+	) t on t.placecd = c.placecd and t.instplid = c.instplid
+) c
+left join (
+	select oldcntid, max(date) as enddate 
+	from cntrs_ac
+	where opertype in ('Замена', 'Снятие')
+	group by oldcntid
+) d on d.oldcntid = c.counterid
+where c.counterid is not null and c.counterid <> ''
+	 and c.lshet like '___-___-__-___-_-__' 
+order by c.setupdate desc"))
+            {
+                int lastcnttypeid = (int)Utils.ReadDictionary((CnttypeRecodeFileName)).Select(cr => cr.Value).Max();
+                StepStart(dt.Rows.Count);
+                var cntRecord = new CountersRecord();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    cntRecord.ReadDataRow(dr);
+                    if (String.IsNullOrWhiteSpace(cntRecord.Counterid)) continue;
+
+                    CNV_COUNTERTYPE cnttype;
+                    if (!cnttyperecode.TryGetValue(cntRecord.Cnttype, out cnttype))
+                    {
+                        int digitcount;
+                        if (!digitCounterDic.TryGetValue(cntRecord.Cnttype, out digitcount))
+                            digitcount = DefaultDigitCount;
+                        cnttype = new CNV_COUNTERTYPE
+                        {
+                            ID = ++lastcnttypeid,
+                            EQUIPMENTGROUPID = 36,
+                            EQUIPMENTTYPEID = 18,
+                            PERIODKOD = (int?)cntRecord.Periodpov,
+                            NAME = ConvertCounters.GetCounterName(cntRecord.Cntname, digitcount, cntRecord.Precision, cntRecord.Amperage),
+                            ACCURACY = cntRecord.Precision,
+                            COEFFICIENT = 1,
+                            DIGITCOUNT = digitcount,
+                        };
+                        cnttyperecode.Add(cntRecord.Cnttype, cnttype);
+
+                        if (cntRecord.Id_tpmeter > 0)
+                        {
+                            lta.Add(new CNV_COUNTERTYPEADDCHAR
+                            {
+                                COUNTERTYPEID = cnttype.ID,
+                                ADDCHARCD = 907,
+                                VALUE_ = cntRecord.Id_tpmeter.ToString()
+                            });
+                        }
+                        if (!String.IsNullOrWhiteSpace(cntRecord.Phasecount))
+                            lta.Add(new CNV_COUNTERTYPEADDCHAR
+                            {
+                                COUNTERTYPEID = cnttype.ID,
+                                ADDCHARCD = 904,
+                                VALUE_ = cntRecord.Phasecount.Trim()
+                            });
+                        if (!String.IsNullOrWhiteSpace(cntRecord.Amperage))
+                            lta.Add(new CNV_COUNTERTYPEADDCHAR
+                            {
+                                COUNTERTYPEID = cnttype.ID,
+                                ADDCHARCD = 905,
+                                VALUE_ = cntRecord.Amperage.Trim()
+                            });
+                    }
+
+                    long ls;
+                    if (lsrecode.TryGetValue(LsKvcWithoutKr(cntRecord.Lshet), out ls) && lshetAddressNameRecode.ContainsKey(ls.ToString()))
+                    {
+                        var enddate = dr.IsNull("enddate") ? (DateTime?)null : Convert.ToDateTime(dr["enddate"]);
+                        if (enddate == DateTime.MinValue) enddate = null;
+                        var c = new CNV_COUNTER()
+                        {
+                            LSHET = ls.ToString(),
+                            NAME = "к.с. " + lshetAddressNameRecode[ls.ToString()],
+                            SERIALNUM = cntRecord.Serialnum.Trim(),
+                            CNTNAME = cntRecord.Cntname,
+                            SETUPDATE = cntRecord.Setupdate,
+                            DEACTDATE = enddate == null || enddate == NullDate ? null : enddate,
+                            GUID_ = cntRecord.Counterid.Trim(),
+                            CNTTYPE = cnttype.ID,
+                            SETUPPLACE = (int?)cntRecord.Instplid,
+                            COUNTER_LEVEL = 1,
+                            DISTRIBUTINGMETHOD = 4,
+                            GROUPCOUNTERMODULEID = 162010002,
+                            TARGETBALANCE_KOD = 9,
+                            TARGETNEGATIVEBALANCE_KOD = 9,
+                            RECOUNTKOEFFICIENT = String.IsNullOrWhiteSpace(dr["koeff"].ToString()) ? 1 : Convert.ToInt32(dr["koeff"])
+                        };
+                        c.COUNTERID = Utils.GetValue(cntRecord.Counterid, counteridrecode, ref counterid).ToString();
+                        if (cntRecord.Lastpov.Year > 1950)
+                        {
+                            c.LASTPOV = cntRecord.Lastpov;
+                            if (cntRecord.Periodpov > 0)
+                                c.NEXTPOV = cntRecord.Lastpov.AddMonths((int)cntRecord.Periodpov);
+                        }
+
+                        if (cntRecord.Id_meter > 0)
+                            lca.Add(new CNV_COUNTERADDCHAR
+                            {
+                                COUNTERID = c.COUNTERID,
+                                ADDCHARCD = 906,
+                                VALUE_ = cntRecord.Id_meter.ToString()
+                            });
+
+                        if (!String.IsNullOrEmpty(cntRecord.Instplace))
+                        {
+                            string instPlace = StringRecode(cntRecord.Instplace);
+                            if (!String.IsNullOrWhiteSpace(instPlace))
+                            {
+                                int placeId = 0;
+                                if (!CoutnerPlaceRecode.Any(r => r.Value.Any(v => v == instPlace)))
+                                    Task.Factory.StartNew(() => MessageBox.Show($"Не найдена перекодировка места установки {cntRecord.Instplace}"));
+                                else
+                                    placeId = CoutnerPlaceRecode.First(r => r.Value.Any(v => v == instPlace)).Key;
+                                lca.Add(new CNV_COUNTERADDCHAR
+                                {
+                                    COUNTERID = c.COUNTERID,
+                                    ADDCHARCD = 900,
+                                    VALUE_ = placeId.ToString()
+                                });
+                            }
+                        }
+
+                        lc.Add(c);
+                    }
+                }
+            }
+
+            StepFinish();
+
+            StepStart(1);
+            var alreadyLoadedTypes = Utils.ReadDictionary(CnttypeRecodeFileName).Select(t => t.Value);
+            BufferEntitiesManager.SaveDataToBufferIBScript(cnttyperecode.Where(t => !alreadyLoadedTypes.Contains(t.Value.ID)).Select(t => t.Value));
+
+            Utils.SaveDictionary(cnttyperecode.ToDictionary(ct => ct.Key, ct => (long)ct.Value.ID), CnttypeRecodeFileName);
+            Utils.SaveDictionary(counteridrecode, CounterIdRecodeFileName);
+            File.WriteAllLines(CommunalCounterIdRecodeFileName, lc.Select(c => c.GUID_).Distinct());
+            StepFinish();
+
+            StepStart(2);
+            BufferEntitiesManager.SaveDataToBufferIBScript(lc);
+            Iterate();
+            BufferEntitiesManager.SaveDataToBufferIBScript(lta);
+            StepFinish();
+        }
+    }
+
     public class ConvertCntrsind : DbfConvertCase
     {
         public ConvertCntrsind()
@@ -2420,12 +2764,16 @@ left join (
             tms.Init();
 
             BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
-            var lc = new List<CNV_CNTRSIND>();
+            var lcRgmek = new List<CNV_CNTRSIND>();
+            var lcKvc = new List<CNV_CNTRSIND>();
             _lsNotFromKvc = Utils.GetLsNotFromKvc();
 
             _lsToCounters = Utils.ReadDictionary(CounterIdToLsRecodeFileName);
             var counteridrecode = Utils.ReadDictionary(CounterIdRecodeFileName);
-            var groupcounteridrecode = Utils.ReadDictionary(GroupCounterIdRecodeFileName);
+            var groupcounteridrecode = new HashSet<string>();
+            File.ReadAllLines(GroupCounterIdRecodeFileName).ToList().ForEach(s => groupcounteridrecode.Add(s));
+            var communalcounteridrecode = new HashSet<string>();
+            File.ReadAllLines(CommunalCounterIdRecodeFileName).ToList().ForEach(s => communalcounteridrecode.Add(s)); ;
             _reverseLsRecode = Utils.ReadDictionary(LsRecodeFileName).ToDictionary(l => l.Value, l => l.Key);
             long counterid = 0;
 
@@ -2456,16 +2804,11 @@ left join (
                 cr.ReadDataRow(dataRow);
                 if (cr.Date < MinConvertDate) return;
 
-                counterid = 0;
-
-                bool isGroupCounter = false;
-                if (!counteridrecode.TryGetValue(cr.Counterid, out counterid))
-                {
-                    isGroupCounter = groupcounteridrecode.TryGetValue(cr.Counterid, out counterid);
-                }
-            
+                counteridrecode.TryGetValue(cr.Counterid, out counterid);
                 if (counterid != 0)
                 {
+                    bool isGroupCounter = groupcounteridrecode.Contains(cr.Counterid);
+                    bool isCommunalCounter = communalcounteridrecode.Contains(cr.Counterid);
                     if (multiscalesCounters.Contains(cr.Counterid))
                     {
                         if (cr.Scalecd > 1) counterid++;
@@ -2478,19 +2821,19 @@ left join (
                         INDICATION = cr.Indication,
                         INDTYPE = 1,
                         CASETYPE = cr.Indtype.Trim() == "Расчетное" ? 3 : (int?) null,
-                        OLDIND = cr.Indication,
-                        OB_EM = 0
+                        OLDIND = cr.Predind,
+                        OB_EM = cr.Rashod
                     };
 
-                    if (IsNorFromKvc(c.COUNTERID) || isGroupCounter)
+                    if (IsNorFromKvc(c.COUNTERID) || isGroupCounter || isCommunalCounter)
                         c.INDTYPE = 0;
 
-                    lc.Add(c);
+                    lcRgmek.Add(c);
                 }
                 Iterate();
             });
             StepFinish();
-
+            goto skip;
             StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
                 (select count(0) from CNTRSKVC_2015 where indtype = 'От абонента (по квитанции)') +
             	(select count(0) from CNTRSKVC_2016 where indtype = 'От абонента (по квитанции)') +
@@ -2519,8 +2862,7 @@ left join (
 
                     if (cr.Date < MinConvertDate) return;
 
-                    if (counteridrecode.TryGetValue(cr.Counterid, out counterid) ||
-                        groupcounteridrecode.TryGetValue(cr.Counterid, out counterid))
+                    if (counteridrecode.TryGetValue(cr.Counterid, out counterid))
                     {
                         if (IsNorFromKvc(counterid.ToString())) return;
                         if (multiscalesCounters.Contains(cr.Counterid))
@@ -2535,27 +2877,20 @@ left join (
                             INDICATION = cr.Indication,
                             INDTYPE = 0,
                         };
-                        lc.Add(c);
+                        lcKvc.Add(c);
                     }
                     Iterate();
                 });
             StepFinish();
-
-            //StepStart(1);
-            //lc = CntrsindRecordUtils.ThinOutList(lc);
-            //StepFinish();
-
-            var mainInds = lc.Where(c => c.INDTYPE == 0).ToList();
-            var addInds = lc.Where(c => c.INDTYPE == 1).ToList();
-
+            skip:
             StepStart(1);
-            CntrsindRecordUtils.RestoreHistory(ref mainInds, RestoreHistoryType.С_конца_по_конечным_показаниям);
+            CntrsindRecordUtils.RestoreHistory(ref lcKvc, RestoreHistoryType.С_конца_по_конечным_показаниям);
             StepFinish();
 
-            mainInds.AddRange(addInds);
+            lcRgmek.AddRange(lcKvc);
 
             StepStart(1);
-            BufferEntitiesManager.SaveDataToBufferIBScript(mainInds);
+            BufferEntitiesManager.SaveDataToBufferIBScript(lcRgmek);
             StepFinish();
         }
 
@@ -3015,6 +3350,13 @@ left join (
                 }
                 StepFinish();
             }
+
+            Task.Factory.StartNew(() =>
+            {
+                var doubledSaldo = lnop.GroupBy(n => new {n.LSHET, n.SERVICECD}).Where(gn => gn.Count() > 1).ToArray();
+                if (!doubledSaldo.Any()) return;
+                MessageBox.Show($"Имеется задублированно сальдо{Environment.NewLine}{string.Join(Environment.NewLine, doubledSaldo.Select(s => $"Lshet: {s.Key.LSHET}, Service: {s.Key.SERVICECD}"))}");
+            });
            
             StepStart(1);
             //SaveListInsertSQL(lnop, InsertRecordCount);
@@ -3357,33 +3699,12 @@ where not exists (
         }
     }
 
-    public class TransferCounterChars : ConvertCase
-    {
-        public TransferCounterChars()
-        {
-            ConvertCaseName = "Перенос данных о характеристиках счетчиков";
-            Position = 1041;
-            IsChecked = false;
-        }
-
-        public override void DoConvert()
-        {
-            SetStepsCount(1);
-            StepStart(2);
-            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            fbm.ExecuteProcedure("CNV$CNV_01110_COUNTERADDCHAR");
-            Iterate();
-            fbm.ExecuteProcedure("CNV$CNV_01120_CNTRTYPEADDCHAR");
-            StepFinish();
-        }
-    }
-
     public class TransferGroupCounters : ConvertCase
     {
         public TransferGroupCounters()
         {
             ConvertCaseName = "Перенос данных о групповых счетчиках и показаниях";
-            Position = 1045;
+            Position = 1041;
             IsChecked = false;
 
         }
@@ -3399,28 +3720,90 @@ where not exists (
 declare variable countername varchar(150);
 declare variable counterid integer;
 declare variable number integer;
+declare variable newcounterid integer;
+declare variable etaloncounter integer;
+declare variable moduleid integer = 162010010;
+declare variable parentcounter integer;
 begin
     for select rc.name
         from RESOURCECOUNTERS rc
-        where rc.COUNTER_LEVEL = 1
+        where coalesce(rc.TARGETBALANCE_KOD, 9) = 29
         group by rc.NAME
         having count(0) > 1
     into :countername
     do begin
-        number = 0;
-        for select rc.KOD
+        NEWCOUNTERID = 0;
+        if (1 < (select count(0)
             from RESOURCECOUNTERS rc
             where rc.NAME = :countername
-        into :counterid
+                and 0 < coalesce((select first 1 es.STATUSCD
+                                from EQSTATUSES es
+                                where es.EQUIPMENTID = rc.KOD
+                                order by es.STATUSDATE desc), 0))) then
+        begin
+            NEWCOUNTERID = gen_id(PARENTEQUI_GEN, 1);
+            etaloncounter = (select first 1 rc.KOD
+                            from RESOURCECOUNTERS rc
+                            where rc.NAME = :COUNTERNAME
+                                and 0 < coalesce((select first 1 es.STATUSCD
+                                                from EQSTATUSES es
+                                                where es.EQUIPMENTID = rc.KOD
+                                                order by es.STATUSDATE desc), 0));
+
+            insert into PARENTEQUIPMENT (EQUIPMENTID, SERIALNUMBER, IMPORTTAG, NOTE, UNITINGID)
+                values (:NEWCOUNTERID, null, null, 'Общий счетчик для расчета', :NEWCOUNTERID);
+            insert into RESOURCECOUNTERS (KOD, KODCOUNTERSTYPES, SETUPDATE, COUNTER_LEVEL, COUNTERPLACE, DATEPPR, LASTPPRDATE, NAME, TARGETBALANCE_KOD, DISTRIBUTINGMETHOD, TARGETNEGATIVEBALANCE_KOD, GROUPCOUNTERMODULEID)
+                select first 1 :NEWCOUNTERID,  rc.KODCOUNTERSTYPES, rc.SETUPDATE, 1, rc.COUNTERPLACE, rc.DATEPPR, rc.LASTPPRDATE, :COUNTERNAME, rc.TARGETBALANCE_KOD, 5, rc.TARGETNEGATIVEBALANCE_KOD, :MODULEID
+                from RESOURCECOUNTERS rc
+                where rc.KOD = :ETALONCOUNTER;
+            insert into EQSTATUSES (EQUIPMENTID, STATUSDATE, STATUSCD, DOCUMENTCD)
+                select first 1 :NEWCOUNTERID, es.STATUSDATE, es.STATUSCD, null
+                from EQSTATUSES es
+                where es.EQUIPMENTID = :ETALONCOUNTER
+                order by es.STATUSDATE desc;
+            insert into ABONENTSEQUIPMENT (LSHET, EQUIPMENTID, INSTALLDATE, REMOVEDATE)
+                select ae.LSHET, :NEWCOUNTERID, ae.INSTALLDATE, ae.REMOVEDATE
+                from ABONENTSEQUIPMENT ae
+                where ae.EQUIPMENTID = :ETALONCOUNTER;
+        end
+
+        number = 0;
+        for select rc.KOD, iif(:NEWCOUNTERID = 0, null, :NEWCOUNTERID)
+            from RESOURCECOUNTERS rc
+            where rc.NAME = :countername
+                and rc.KOD <> :NEWCOUNTERID
+        into :COUNTERID, :PARENTCOUNTER
         do begin
             number = :number + 1;
             update RESOURCECOUNTERS rc
-                set rc.NAME = rc.NAME || ' (' || cast(:number as varchar(2)) || ')'
+                set rc.NAME = rc.NAME || ' (' || cast(:number as varchar(2)) || ')',
+                    rc.PARENTCOUNTERID = :PARENTCOUNTER
                 where rc.KOD = :counterid;
         end
     end
 end");
             Iterate();
+        }
+    }
+
+    public class TransferCounterChars : ConvertCase
+    {
+        public TransferCounterChars()
+        {
+            ConvertCaseName = "Перенос данных о характеристиках счетчиков";
+            Position = 1045;
+            IsChecked = false;
+        }
+
+        public override void DoConvert()
+        {
+            SetStepsCount(1);
+            StepStart(2);
+            var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            fbm.ExecuteProcedure("CNV$CNV_01110_COUNTERADDCHAR");
+            Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_01120_CNTRTYPEADDCHAR");
+            StepFinish();
         }
     }
 
@@ -3442,18 +3825,18 @@ end");
             Iterate();
             fbm.ExecuteNonQuery(@"INSERT INTO CNV$LCHARS (LSHET, DATE_, LCHARCD, VALUE_)
 with lslist as (
-    select ae.lshet, es.statusdate, coalesce(rc.counter_level, 0) counter_level
+    select ae.lshet, es.statusdate, coalesce(rc.TARGETBALANCE_KOD, 9) targetBalance
     from eqstatuses es
     inner join abonentsequipment ae on ae.equipmentid = es.equipmentid
     inner join resourcecounters rc on rc.kod = es.equipmentid
-    group by ae.lshet, es.statusdate, rc.counter_level
+    group by ae.lshet, es.statusdate, rc.TARGETBALANCE_KOD
 )
-select distinct ls.lshet, ls.statusdate, iif (ls.counter_level = 1, 22, 21) as lcharcd,
+select distinct ls.lshet, ls.statusdate, iif (ls.targetBalance = 29, 22, 21) as lcharcd,
     iif (exists(
             select 0
             from abonentsequipment ae
             inner join resourcecounters rc on rc.kod = ae.equipmentid
-                                        and coalesce(rc.counter_level, 0) = ls.counter_level
+                                        and coalesce(rc.TARGETBALANCE_KOD, 9) = ls.targetBalance
             where ae.lshet = ls.lshet
                 and 0 < (select first 1 es.STATUSCD
                         from EQSTATUSES es
@@ -3528,7 +3911,7 @@ from lslist ls");
             fbm.ExecuteScript(@"
 SET TERM ^ ;
 
-create procedure RestoreSaldo(saldoyear integer, saldomonth integer) as
+create or alter procedure RestoreSaldo(saldoyear integer, saldomonth integer) as
 
 declare variable lshet varchar(10);
 declare variable servicecd integer;
@@ -3555,6 +3938,7 @@ begin
 	using (
 		select cn.lshet, cn.servicecd, cn.year_, cn.month_, sum(cn.fnath) as nachsum, sum(cn.prochl) as recalcsum
 		from cnv$nach cn
+        where cn.year_ * 12 + cn.month_ <= :saldoyear * 12 + :saldomonth
 		group by cn.lshet, cn.servicecd, cn.year_, cn.month_
 	) cn on nop.lshet = cn.lshet and nop.servicecd = cn.servicecd and nop.year_ = cn.year_ and nop.month_ = cn.month_
 	when matched then
@@ -3568,6 +3952,7 @@ begin
 	using (
 		select co.lshet, co.servicecd, co.year_, co.month_, sum(co.summa) as paysum
 		from cnv$oplata co
+        where co.year_ * 12 + co.month_ <= :saldoyear * 12 + :saldomonth
 		group by co.lshet, co.servicecd, co.year_, co.month_
 	) co on nop.lshet = co.lshet and nop.servicecd = co.servicecd and nop.year_ = co.year_ and nop.month_ = co.month_
 	when matched then

@@ -526,7 +526,7 @@
           <orm:column name="PERIODKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_nAME" property="NAME" behavior="readwrite" uniqueId="06ace800-8a53-479a-8387-b9e5d904d0ae" type="System.String">
-          <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_cOEFFICIENT" property="COEFFICIENT" behavior="readwrite" uniqueId="e474780e-1617-4e41-ba57-e8db17d4b568" type="System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="COEFFICIENT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
@@ -587,7 +587,7 @@
           <orm:column name="CNTTYPE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         </orm:field>
         <orm:field name="_cNTNAME" property="CNTNAME" behavior="readwrite" uniqueId="3efb5267-f7fc-4c95-96e6-f4ebdf5de2f7" type="System.String">
-          <orm:column name="CNTNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+          <orm:column name="CNTNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
         </orm:field>
         <orm:field name="_sETUPDATE" property="SETUPDATE" behavior="readwrite" uniqueId="4df3b6b1-f642-4d6c-a7b6-f2906e54f88a" type="System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
           <orm:column name="SETUPDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
@@ -654,6 +654,9 @@
         </orm:field>
         <orm:field name="_uNTINGID" property="UNTINGID" behavior="readwrite" uniqueId="26a1b51f-dbbb-49c8-8064-975eda897104" type="System.String">
           <orm:column name="UNTINGID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        </orm:field>
+        <orm:field name="_rECOUNTKOEFFICIENT" property="RECOUNTKOEFFICIENT" behavior="readwrite" uniqueId="8020da0a-410a-4bb3-88f0-7ab34a5201a6" type="System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]">
+          <orm:column name="RECOUNTKOEFFICIENT" sql-type="NUMERIC" nullable="true" length="18" scale="5" ado-type="Numeric" />
         </orm:field>
         <orm:index name="CNV$COUNTERS_IDX1">
           <orm:columnMapping>
@@ -2190,7 +2193,7 @@
         <orm:column name="ID" sql-type="INTEGER" nullable="false" length="0" scale="0" primary-key="true" backend-calculated="true" ado-type="Int32" />
         <orm:column name="EQUIPMENTTYPEID" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         <orm:column name="PERIODKOD" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="NAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
         <orm:column name="COEFFICIENT" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="DIGITCOUNT" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
         <orm:column name="EQUIPMENTGROUPID" sql-type="INTEGER" nullable="false" length="0" scale="0" ado-type="Int32" />
@@ -2209,7 +2212,7 @@
         <orm:column name="COUNTERID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
         <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
         <orm:column name="CNTTYPE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
-        <orm:column name="CNTNAME" sql-type="VARCHAR" nullable="true" length="50" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="CNTNAME" sql-type="VARCHAR" nullable="true" length="150" scale="0" ado-type="StringVariableLength" />
         <orm:column name="SETUPDATE" sql-type="TIMESTAMP" nullable="true" length="0" scale="0" ado-type="DateTime" />
         <orm:column name="SERIALNUM" sql-type="VARCHAR" nullable="true" length="30" scale="0" ado-type="StringVariableLength" />
         <orm:column name="SETUPPLACE" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
@@ -2231,6 +2234,7 @@
         <orm:column name="KODREGIM" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="NOCALCCHILDBALANCES" sql-type="INTEGER" nullable="true" length="0" scale="0" ado-type="Int32" />
         <orm:column name="UNTINGID" sql-type="VARCHAR" nullable="true" length="20" scale="0" ado-type="StringVariableLength" />
+        <orm:column name="RECOUNTKOEFFICIENT" sql-type="NUMERIC" nullable="true" length="18" scale="5" ado-type="Numeric" />
         <orm:index name="CNV$COUNTERS_IDX1">
           <orm:columnMapping>
             <orm:column name="LSHET" sql-type="VARCHAR" nullable="true" length="10" scale="0" ado-type="StringVariableLength" />
@@ -2937,6 +2941,7 @@
       <Property Id="fadadd14-3b6e-4c7b-8601-2e2e1b223ae0" name="GROUPCOUNTERMODULEID" type="Int32" label="GROUPCOUNTERMODULEID : Int32" nullable="true" kind="Persistent" fieldName="_gROUPCOUNTERMODULEID" />
       <Property Id="b94ecf75-af94-4386-9611-5ac568090c5f" name="KODREGIM" type="Int32" label="KODREGIM : Int32" nullable="true" kind="Persistent" fieldName="_kODREGIM" />
       <Property Id="26a1b51f-dbbb-49c8-8064-975eda897104" name="UNTINGID" label="UNTINGID : String" kind="Persistent" fieldName="_uNTINGID" />
+      <Property Id="8020da0a-410a-4bb3-88f0-7ab34a5201a6" name="RECOUNTKOEFFICIENT" type="Decimal" label="RECOUNTKOEFFICIENT : Decimal" nullable="true" kind="Persistent" fieldName="_rECOUNTKOEFFICIENT" />
     </DomainClass>
     <DomainClass Id="f31acad7-d626-43c0-a64f-c4e0d970824e" name="CNV_COUNTERADDCHAR" namespace="aConverterClassLibrary.RecordsDataAccessORM" showPropertiesCompartment="true" identityMechanism="DatabaseServerCalculated" concurrencyMode="Changed" showNavigationCompartment="true" showImplementationCompartment="true" identityMechanismMember="ID">
       <Property Id="10525b62-7d13-4fc9-bd7a-468268e5b183" name="ID" type="Int32" label="ID : Int32" kind="Persistent" identity="true" fieldName="_iD" />

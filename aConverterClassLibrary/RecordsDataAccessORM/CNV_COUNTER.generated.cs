@@ -373,6 +373,19 @@ namespace aConverterClassLibrary.RecordsDataAccessORM
                 this._uNTINGID = value;
             }
         }
+
+        private decimal _rECOUNTKOEFFICIENT;
+        public virtual decimal RECOUNTKOEFFICIENT
+        {
+            get
+            {
+                return this._rECOUNTKOEFFICIENT;
+            }
+            set
+            {
+                this._rECOUNTKOEFFICIENT = value;
+            }
+        }
     }
 }
 #pragma warning restore 1591

@@ -79,6 +79,7 @@
     <Compile Include="Records\Cntrs_grRecord.cs" />
     <Compile Include="Records\ContractRecord.cs" />
     <Compile Include="Records\CountersRecord.cs" />
+    <Compile Include="Records\Cntrs_kfRecord.cs" />
     <Compile Include="Records\FlCharsRecord.cs" />
     <Compile Include="Records\HsCharsRecord.cs" />
     <Compile Include="Records\LCharsRecord.cs" />
