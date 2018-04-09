@@ -105,7 +105,7 @@ namespace _048_Rgmek
             {8, 6}, //Электроплиты двуставочный
         };
 
-        public static readonly int CurrentMonth = 03; // должен быть следующий месяц после последнего закрытого
+        public static readonly int CurrentMonth = 04; // должен быть следующий месяц после последнего закрытого
         public static readonly int CurrentYear = 2018;
         public static readonly DateTime MinConvertDate = new DateTime(2015, 1, 1);
         public static readonly DateTime NullDate = new DateTime(1899, 12, 30);
@@ -211,7 +211,7 @@ namespace _048_Rgmek
             {38, new[] {"доп.двери", "доп.дверь", "доп.дверь"}},
             {39, new[] {"доп.трубостойка"}},
             {40, new[] {"кам.забор"}},
-            {41, new[] {"кварт.", "квартира"}},
+            {41, new[] {"кварт.", "квартира", "эл.эн./квартира"}},
             {42, new[] {"кладовка"}},
             {43, new[] {"комната"}},
             {44, new[] {"комнатаучетатп276"}},
@@ -293,6 +293,9 @@ namespace _048_Rgmek
             {120, new[] {"эл.щитоваятп-463"}},
             {121, new[] {"эл.щитоваятп-763"}},
             {122, new[] {"эл.щитоваяувхода"}},
+            {123, new[] {"подъезд№1(подвал)"}},
+            {124, new[] {"тп-191"}},
+            {125, new[] {"вруавтостоянка"}},
         };
 
         public static string LsKvcWithoutKr(string lsKvc)
@@ -419,7 +422,7 @@ namespace _048_Rgmek
             }*/
 
             // Абоненты с одинаковым ЛС КВЦ, но с разным КР
-            /*{
+            {
                 var ls = new List<string>();
                 DbfManager.ExecuteQueryByReader("select lshet from abonent where lshet like '___-___-__-___-_-__'", r =>
                 {
@@ -427,6 +430,30 @@ namespace _048_Rgmek
                 });
                 var doubledKr = ls.Select(s => s.Substring(0, 16)).GroupBy(s => s).Where(gs => gs.Count() > 1).ToArray();
                 var result = String.Join(Environment.NewLine, doubledKr.Select(ds => ds.Key));
+            }
+
+            // Округление.
+            /*{
+                var volumes = new List<decimal>();
+                var sums = new List<decimal>();
+                var nachFile = ConvertNach.GetNachFiles().First(n => ConvertNach.GetNachFileDate(n) == new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1));
+                aConverterClassLibrary.Utils.ReadExcelFileByRow(nachFile, null, dr =>
+                {
+                    var nachInfo = new NachExcelRecord(dr);
+                    string[] split = nachInfo.Volume.ToString().Split(',');
+                    if (split.Length > 1 && split[1].Length > 2) volumes.Add(nachInfo.Volume);
+                    split = nachInfo.Sum.ToString().Split(',');
+                    if (split.Length > 1 && split[1].Length > 2) sums.Add(nachInfo.Sum);
+                });
+
+                var fullVolume = volumes.Sum();
+                var fullSum = sums.Sum();
+
+                var roundedVolume = volumes.Select(v => Math.Round(v, 2)).Sum();
+                var roundedSum = sums.Select(s => Math.Round(s, 2)).Sum();
+
+                var diffVolume = fullVolume - roundedVolume;
+                var diffSum = fullSum - roundedSum;
             }*/
 
             // Поиск абонентов в файле с начислениями, которые отсутствуют в БД.
@@ -528,6 +555,7 @@ namespace _048_Rgmek
                     if (emails.ContainsKey(ls)) emails[ls] = r.GetString(1);
                     else emails.Add(ls, r.GetString(1));
                 });
+            var existedLs = new HashSet<string>();
             //var housesWithFlatNumbers = new HashSet<string>();
             //DbfManager.ExecuteQueryByReader(
             //    @"select distinct hs.housecd
@@ -771,6 +799,7 @@ namespace _048_Rgmek
                     lshetsForPlace.Add(a.LSHET);
 
                 la.Add(a);
+                existedLs.Add(a.LSHET);
 
                 if (!String.IsNullOrWhiteSpace(abonent.Ptypenm))
                 {
@@ -824,7 +853,7 @@ namespace _048_Rgmek
             }
             StepFinish();
 
-            Utils.SaveDictionary(lsrecode, LsRecodeFileName);
+            File.WriteAllLines(LsRecodeFileName, lsrecode.Where(lr => existedLs.Contains(lr.Value.ToString())).Select(lr => $"{lr.Key};{lr.Value}"));
             Utils.SaveDictionary(durecode, DuRecodeFileName);
             Utils.SaveDictionary(houserecode, HouseRecodeFileName);
             File.WriteAllLines(PlaceToLshetRecodeFileName, placerecode.SelectMany(p => p.Value.Select(v => $"{p.Key};{v}")));
@@ -1703,6 +1732,9 @@ where k.lshet like '___-___-__-___-_-__'";
                                                     break;
                                                 case AddCharRecodeRecord.AbonentType.AChar:
                                                     AddAChar(recode, charRecord, lshet, isEnumChar);
+                                                    break;
+                                                case AddCharRecodeRecord.AbonentType.CChar:
+                                                    AddCChar(recode, charRecord, lshet);
                                                     break;
                                                 default:
                                                     throw new Exception($"Необработанный тип абонента {recode.AType} для типа ргмэк {recode.RType} и принадлежности {recode.BelongTo}");
@@ -2833,7 +2865,6 @@ order by c.setupdate desc"))
                 Iterate();
             });
             StepFinish();
-            goto skip;
             StepStart(Convert.ToInt32(Tmsource.ExecuteScalar(@"select top 1
                 (select count(0) from CNTRSKVC_2015 where indtype = 'От абонента (по квитанции)') +
             	(select count(0) from CNTRSKVC_2016 where indtype = 'От абонента (по квитанции)') +
@@ -2882,7 +2913,6 @@ order by c.setupdate desc"))
                     Iterate();
                 });
             StepFinish();
-            skip:
             StepStart(1);
             CntrsindRecordUtils.RestoreHistory(ref lcKvc, RestoreHistoryType.С_конца_по_конечным_показаниям);
             StepFinish();
@@ -3538,10 +3568,11 @@ order by c.setupdate desc"))
         public override void DoConvert()
         {
             SetStepsCount(1);
-            StepStart(1);
+            StepStart(2);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
             fbm.ExecuteProcedure("CNV$CNV_00700_ABONENTS");
             Iterate();
+            fbm.ExecuteProcedure("CNV$CNV_03500_ABONENTPHONES");
             StepFinish();
         }
     }

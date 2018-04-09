@@ -35,7 +35,7 @@ begin
   FOR SELECT YEAR_, MONTH_, YEAR2, MONTH2, LSHET, FNATH, REGIMCD, SERVICECD, DATE_VV AS DATE_,
     EXTRACT(YEAR FROM DATE_VV) AS FYEAR, EXTRACT(MONTH FROM DATE_VV) AS FMONTH, EXTRACT(DAY FROM DATE_VV) AS FDAY, DOCUMENTCD, TYPE_, volume, VTYPE_, AUTOUSE, CASETYPE
     FROM CNV$NACH
-    WHERE FNATH <> 0
+    WHERE FNATH <> 0 or VOLUME <> 0
     order by year_,  month_, lshet, documentcd
     INTO :YEAR_, :MONTH_, :YEAR2, :MONTH2, :lshet,  :fnath,  :regimcd,  :servicecd, :date_,
       :fyear,  :fmonth, :fday, :documentcd, :type_, :volume, :VTYPE_, :AUTOUSE, :CASETYPE

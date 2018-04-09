@@ -45,7 +45,7 @@ BEGIN
 	   prochlvolume,
 	   AUTOUSE
     FROM cnv$nach
-    WHERE prochl <> 0
+    WHERE prochl <> 0 or prochlvolume <> 0
     ORDER BY year_,  month_, lshet, documentcd
     INTO :year_, :month_, :year2, :month2, :lshet, :prochl, :regimcd, :servicecd,
          :fyear, :fmonth, :fday, :date_vv, :documentcd, :type_, :docname, :docdate, :prochlvolume, :AUTOUSE
