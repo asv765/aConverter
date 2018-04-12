@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
 using aConverterClassLibrary.Class.ConvertCases;
+using aConverterClassLibrary.Class.Utils;
 using aConverterClassLibrary.Class.Utils.KVC;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
@@ -422,7 +423,7 @@ namespace _048_Rgmek
             }*/
 
             // Абоненты с одинаковым ЛС КВЦ, но с разным КР
-            {
+            /*{
                 var ls = new List<string>();
                 DbfManager.ExecuteQueryByReader("select lshet from abonent where lshet like '___-___-__-___-_-__'", r =>
                 {
@@ -430,7 +431,7 @@ namespace _048_Rgmek
                 });
                 var doubledKr = ls.Select(s => s.Substring(0, 16)).GroupBy(s => s).Where(gs => gs.Count() > 1).ToArray();
                 var result = String.Join(Environment.NewLine, doubledKr.Select(ds => ds.Key));
-            }
+            }*/
 
             // Округление.
             /*{
@@ -454,6 +455,53 @@ namespace _048_Rgmek
 
                 var diffVolume = fullVolume - roundedVolume;
                 var diffSum = fullSum - roundedSum;
+            }*/
+
+            // Вычет сальдо по актам
+            /*{
+                var actSaldoDic = new Dictionary<string, decimal>();
+
+                decimal sum = 0;
+
+                using (var dt = aConverterClassLibrary.Utils.ReadExcelFile(ActSaldoFileName, null))
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var actSaldoRec = new ExtSaldo(dr, ExtSaldo.ExternalType.Acts);
+                        actSaldoDic.Add(LsKvcWithoutKr(actSaldoRec.LsKvc), Math.Round(actSaldoRec.Saldo, 2));
+                    }
+                }
+
+                using (var dt = Tmsource.ExecuteQuery("select * from lschars where charcd = 'd673ef5d-90b1-11df-ae5f-001e8c71f1cc' and lshet like '___-___-__-___-_-__'"))
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var charRecord = new CommonAddCharRecord(dr);
+                        string lsKvc = LsKvcWithoutKr(charRecord.Owner);
+                        decimal saldo = Math.Round(Convert.ToDecimal(charRecord.Value), 2);
+                        if (actSaldoDic.ContainsKey(lsKvc))
+                            sum += saldo - actSaldoDic[lsKvc];
+                        else
+                            sum += saldo;
+                    }
+                }
+            }*/
+
+            // Разница улицы и КВЦ
+            /*{
+                var abonents = new List<AbonentRecord>();
+                DbfManager.ExecuteQueryByRow("select * from abonent", dr =>
+                {
+                    var ar = new AbonentRecord();
+                    ar.ReadDataRow(dr);
+                    if (!lsKvcRegex.Match(ar.Lshet).Success) return;
+                    var lsKvc = new LsKvc(ar.Lshet, true);
+                    int ulicakod;
+                    if (!int.TryParse(ar.Ulicakod, out ulicakod)) return;
+                    if (lsKvc.StreetId != ulicakod)
+                        abonents.Add(ar);
+                });
+                var diff = abonents.Select(a => new {new LsKvc(a.Lshet, true).StreetId, a.Ulicakod, a.Ulicaname}).Distinct().ToArray();
             }*/
 
             // Поиск абонентов в файле с начислениями, которые отсутствуют в БД.
@@ -505,6 +553,123 @@ namespace _048_Rgmek
                 var notExistedLs = fileLsList.Where(fl => !dbLsList.Contains(fl)).ToArray();
             }
         }
+    }
+
+    public class ConvertBadInd : DbfConvertCase
+    {
+        public ConvertBadInd()
+        {
+            ConvertCaseName = "Доконвертация непересенных показаний";
+            Position = 12;
+            IsChecked = false;
+        }
+
+        public override void DoDbfConvert()
+        {
+            BufferEntitiesManager.DropTableData("CNV$CNTRSIND");
+            DateTime convertDate = new DateTime(2018, 03, 31);
+            var lsrecode = Utils.ReadDictionary(LsRecodeFileName);
+            var dbCounters = new Dictionary<string, List<CNV_CNTRSIND>>();
+            var fb = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            using (var dt = fb.ExecuteQuery(String.Format(SelectCountersSql, DateToSql(convertDate))))
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    var dbCounter= new CNV_CNTRSIND
+                    {
+                        DOCUMENTCD = dr["LSHET"].ToString(),
+                        COUNTERID = dr["KOD"].ToString(),
+                        OLDIND = Convert.ToDecimal(dr["lastind"]),
+                        INDDATE = string.IsNullOrWhiteSpace(dr["INDICATIONDATE"].ToString()) ? (DateTime?)null : Convert.ToDateTime(dr["INDICATIONDATE"])
+                    };
+                    if (dbCounters.ContainsKey(dbCounter.DOCUMENTCD))
+                        dbCounters[dbCounter.DOCUMENTCD].Add(dbCounter);
+                    else
+                        dbCounters.Add(dbCounter.DOCUMENTCD, new List<CNV_CNTRSIND> { dbCounter });
+                }
+            }
+            var diffCounters = new List<CNV_CNTRSIND>();
+            DbfManager.ExecuteQueryByRow(String.Format(SelectCharsSql, convertDate.Year, convertDate.Month, convertDate.Day), dr =>
+            {
+                var dbfInd = new CommonAddCharRecord(dr);
+                var lshetLong = FindLsRecode(dbfInd.Owner, lsrecode);
+                if (lshetLong == 0) return;
+                string lshet = lshetLong.ToString();
+                List<CNV_CNTRSIND> lsCounters;
+                if (!dbCounters.TryGetValue(lshet, out lsCounters)) return;
+                var kvcInd = decimal.Parse(dbfInd.Value) % 10000000;
+                decimal diff = Decimal.MaxValue;
+                CNV_CNTRSIND dbCounter = null;
+                foreach (var counter in lsCounters)
+                {
+                    //if (counter.INDDATE > dbfInd.Date) continue;
+                    var curDiff = Math.Abs(kvcInd - counter.OLDIND.Value);
+                    if (curDiff < diff)
+                    {
+                        dbCounter = counter;
+                        diff = curDiff;
+                    }
+                }
+                if (dbCounter == null /*|| dbCounter.OLDIND == kvcInd*/) return;
+                dbCounter.INDICATION = kvcInd;
+                dbCounter.OB_EM = dbCounter.INDICATION - dbCounter.OLDIND;
+                //dbCounter.INDDATE = dbfInd.Date;
+                dbCounter.INDDATE = convertDate;
+                diffCounters.Add(dbCounter);
+            });
+
+            BufferEntitiesManager.SaveDataToBufferIBScript(diffCounters);
+        }
+
+        private class DbCounter
+        {
+            public string Lshet;
+            public int CounterId;
+            public decimal LastInd;
+            public DateTime? IndDate;
+            public decimal NewInd;
+
+            public DbCounter(DataRow dr)
+            {
+                Lshet = dr["LSHET"].ToString();
+                CounterId = Convert.ToInt32(dr["KOD"]);
+                LastInd = Convert.ToDecimal(dr["lastind"]);
+                IndDate = string.IsNullOrWhiteSpace(dr["INDICATIONDATE"].ToString()) ? (DateTime?)null : Convert.ToDateTime(dr["INDICATIONDATE"]);
+            }
+        }
+
+        private string DateToSql(DateTime date)
+        {
+            return date.ToString("dd.MM.yyyy");
+        }
+
+        private const string SelectCountersSql =
+@"select i.*, coalesce(ci.INDICATIONVALUE, 0) as lastind, ci.INDICATIONDATE
+from (
+    select ae.LSHET, rc.KOD, (
+            select first 1 ci.COUNTERINDICATIONFACTID
+            from COUNTERINDICATION ci
+            where ci.KOD = rc.KOD and ci.INDICATIONDATE <= '{0}'
+            order by ci.INDICATIONDATE DESC, ci.COUNTERINDICATIONFACTID desc
+        ) as lastindid
+    from RESOURCECOUNTERS rc
+    inner join ABONENTSEQUIPMENT ae on ae.EQUIPMENTID = rc.KOD
+    inner join ABONENTADDITIONALCHARS ad on ad.LSHET = ae.LSHET and ad.ADDITIONALCHARCD = 1620134
+    where rc.COUNTER_LEVEL = 0
+        and 0 < (
+            select first 1 es.STATUSCD
+            from EQSTATUSES es
+            where es.EQUIPMENTID = rc.KOD and es.STATUSDATE <= '{0}'
+            order by es.STATUSDATE desc
+        )
+) i
+left join COUNTERINDICATION ci on ci.COUNTERINDICATIONFACTID = i.lastindid";
+
+        private const string SelectCharsSql =
+            @"select * from lschars where charcd = 'd673ef5c-90b1-11df-ae5f-001e8c71f1cc'";
+	/*and (year(date) <> {0}
+	or month(date) <> {1}
+	or day(date) <> {2})";*/
     }
 
     public class ConvertAbonent : DbfConvertCase
@@ -917,7 +1082,7 @@ namespace _048_Rgmek
                 extLshetRecord.ReadDataRow(dr);
 
                 long intExtLs;
-                string extLshet = extLshetRecord.Lsh.Replace(" ", "");
+                string extLshet = extLshetRecord.Lsh.Replace(" ", "").Replace(new string((char)160, 1), "");
                 if (!long.TryParse(extLshet, out intExtLs))
                     return;
 
@@ -925,13 +1090,15 @@ namespace _048_Rgmek
 
                 if (lshet != 0)
                 {
-                    extLshets.Add(new CNV_EXTLSHET
+                    var ls = new CNV_EXTLSHET
                     {
                         EXTORGCD = (int) Utils.GetValue(extLshetRecord.Orgcd, orgRecode, ref orgCd),
                         LSHET = lshet.ToString(),
-                        EXTLSHET = extLshet,
+                        EXTLSHET = intExtLs.ToString(),
                         EXTORGNAME = extLshetRecord.Orgnm
-                    });
+                    };
+                    if (ls.EXTORGCD == 4) ls.EXTLSHET = ls.EXTLSHET.PadLeft(8, '0');
+                    extLshets.Add(ls);
                 }
             });
             StepFinish();
@@ -2854,7 +3021,7 @@ order by c.setupdate desc"))
                         INDTYPE = 1,
                         CASETYPE = cr.Indtype.Trim() == "Расчетное" ? 3 : (int?) null,
                         OLDIND = cr.Predind,
-                        OB_EM = cr.Rashod
+                        OB_EM = cr.Rashod,
                     };
 
                     if (IsNorFromKvc(c.COUNTERID) || isGroupCounter || isCommunalCounter)
@@ -3292,7 +3459,7 @@ order by c.setupdate desc"))
                 foreach (DataRow dr in dt.Rows)
                 {
                     var charRecord = new CommonAddCharRecord(dr);
-                    if (lsNotFromKvc.Contains(charRecord.Owner)) continue;
+                    //if (lsNotFromKvc.Contains(charRecord.Owner)) continue;
                     long lshet = FindLsRecode(charRecord.Owner, lsrecode);
                     if (lshet != 0)
                     {
@@ -3320,6 +3487,7 @@ order by c.setupdate desc"))
                 StepFinish();
             }
 
+            /*
             StepStart(lsNotFromKvc.Count);
             using (DataTable dtSaldo = Tmsource.GetDataTable(AbonentsNotFromKvcSaldoDbfTableName))
             {
@@ -3348,9 +3516,10 @@ order by c.setupdate desc"))
                 }
             }
             StepFinish();
+            */
 
-            var odnDate = new DateTime(CurrentYear, CurrentMonth, 1);
-            using (var dt = Tmsource.ExecuteQuery(String.Format(SelectSaldoOdnSql, odnDate.Year, odnDate.Month, odnDate.Day)))
+            var odnDate = new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1);
+            using (var dt = Tmsource.ExecuteQuery(SelectSaldoOdnSql))
             {
                 StepStart(dt.Rows.Count);
                 foreach (DataRow dr in dt.Rows)
@@ -3395,11 +3564,16 @@ order by c.setupdate desc"))
         }
 
         private const string SelectSaldoOdnSql =
-            "select * from saldo " +
-            "where(servicenm = 'Общедовые нужды' or servicenm = 'Общедомовые нужды') " +
-            "   and year(date_deist) = {0} " +
-            "   and month(date_deist) = {1} " +
-            "   and day(date_deist) = {2}";
+@"select s.*
+from (
+	select lshet, servicenm, max(date_deist) as date_deist from saldo
+	where (servicenm = 'Общедовые нужды' or servicenm = 'Общедомовые нужды')
+	group by lshet, servicenm
+) d
+inner join saldo s on s.lshet = d.lshet
+					and s.servicenm = d.servicenm
+					and s.date_deist = d.date_deist
+where (s.servicenm = 'Общедовые нужды' or s.servicenm = 'Общедомовые нужды')";
 
 
         //private const string SelectSaldoOdnSql =
@@ -3433,7 +3607,7 @@ order by c.setupdate desc"))
             var convertDate = new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1);
             var peniDate = convertDate.AddDays(-1);
 
-            using (var dt = Tmsource.ExecuteQuery(String.Format(SelectPeniSaldoSql, convertDate.Year, convertDate.Month, convertDate.Day)))
+            using (var dt = Tmsource.ExecuteQuery(SelectPeniSaldoSql))
             {
                 StepStart(dt.Rows.Count);
                 foreach (DataRow dr in dt.Rows)
@@ -3481,10 +3655,14 @@ order by c.setupdate desc"))
         }
 
         private const string SelectPeniSaldoSql =
-            "select * from saldo_pn " +
-            "where year(period) = {0} " +
-            "   and month(period) = {1} " +
-            "   and day(period) = {2}";
+@"select s.*
+from (
+	select lshet, servicenm, max(period) as period from saldo_pn
+	group by lshet, servicenm
+) d
+inner join saldo_pn s on s.lshet = d.lshet
+					and s.servicenm = d.servicenm
+					and s.period = d.period";
 
         //private const string SelectPeniSaldoSql =
         //    "select s.* " +
@@ -3938,7 +4116,7 @@ from lslist ls");
             SetStepsCount(2);
             var convertDate = new DateTime(CurrentYear, CurrentMonth, 1).AddDays(-1);
             var fbm = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
-            StepStart(3);
+            StepStart(4);
             fbm.ExecuteScript(@"
 SET TERM ^ ;
 
@@ -4059,6 +4237,42 @@ SET TERM ; ^");
             fbm.ExecuteProcedure("CNV$CNV_01500_SALDO", new[] {CurrentYear.ToString(), CurrentMonth.ToString()});
             fbm.ExecuteNonQuery("ALTER trigger saldocheckupdate active");
             fbm.ExecuteNonQuery("ALTER trigger saldocheckinsert active");
+            Iterate();
+            fbm.ExecuteScript(@"--- корректировка первой строчки сальдо
+execute block as
+declare variable lshet varchar(10);
+declare variable year_ integer;
+declare variable month_ integer;
+declare variable service integer;
+declare variable saldosum numeric(18,4);
+declare variable documentcd integer;
+declare variable tempdate date;
+begin
+    for select s.LSHET, s.NYEAR, s.NMONTH, s.BALANCE_KOD, s.BEGINSUMMA
+        from (
+            select s.LSHET, s.BALANCE_KOD, min(s.NYEAR * 12 + s.NMONTH) as sdate
+            from saldo s
+            where s.BALANCE_KOD = 9
+            group by s.LSHET, s.BALANCE_KOD
+        ) d
+        inner join saldo s on s.LSHET = d.lshet
+                            and s.BALANCE_KOD = d.balance_kod
+                            and s.NYEAR * 12 + s.NMONTH = d.sdate
+        where s.BEGINSUMMA <> 0
+    into :lshet, :year_, :month_, :service, :saldosum
+    do begin
+        tempdate = DATEADD(DAY, -1, cast('01.'||:month_||'.'||:year_ as date));
+        year_ = extract(year from :tempdate);
+        month_ = extract(month from :tempdate);
+        INSERT INTO SALDO (NYEAR, NMONTH, BALANCE_KOD, LSHET, DATA, BEGINSUMMA, ENDSUMMA)
+            VALUES (:year_, :month_, :service, :lshet, :tempdate, 0, :saldosum);
+        select documentcd from CREATEDOCUMENT('Импорт сальдо') into :documentcd;
+        INSERT INTO PERERASHETCASE (CASEID, LSHET, NACHISLCASEID, BEGINDATE, AUTOUSE, IZMEN, FYEAR, FMONTH, FDAY, ISMONTH, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, CASETYPE, NOTEID, DATE4PENI)
+            VALUES (:documentcd , :lshet, :documentcd, NULL, 0, 1, :year_, :month_, 1, 0, :year_, :month_, 1, :year_, :month_, 1, NULL, NULL, NULL);
+        INSERT INTO NACHISLSUMMA (LSHET, CASEID, KODREGIM, BALANCE_KOD, SUMMATYPE, NYEAR, NMONTH, NDAY, AYEAR, AMONTH, ADAY, SUMMA, NORMTYPE, SUPPLIERID, KNOTLEVELONEID, KNOTLEVELTWOID, COUNTERCD)
+            VALUES (:lshet, :documentcd, 10, :service, 0, :year_, :month_, 1, :year_, :month_, 1, :saldosum, 0, NULL, NULL, NULL, NULL);
+    end
+end;");
             StepFinish();
         }
     }
