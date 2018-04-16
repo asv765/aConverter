@@ -4,13 +4,13 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using aConverterClassLibrary;
 using aConverterClassLibrary.Class;
 using aConverterClassLibrary.Class.ConvertCases;
-using aConverterClassLibrary.Class.Utils;
 using aConverterClassLibrary.Class.Utils.KVC;
 using aConverterClassLibrary.RecordsDataAccessORM;
 using aConverterClassLibrary.RecordsDataAccessORM.Utils;
@@ -670,6 +670,306 @@ left join COUNTERINDICATION ci on ci.COUNTERINDICATIONFACTID = i.lastindid";
 	/*and (year(date) <> {0}
 	or month(date) <> {1}
 	or day(date) <> {2})";*/
+    }
+
+    public class ConvertDoubledCounterStatus : DbfConvertCase
+    {
+        public ConvertDoubledCounterStatus()
+        {
+            ConvertCaseName = "Конвертация задвоенных статусов счетчиков";
+            Position = 13;
+            IsChecked = false;
+        }
+
+        public override void DoDbfConvert()
+        {
+            var counterRecode = Utils.ReadDictionary(CounterIdRecodeFileName);
+            FbManager fb = new FbManager(aConverter_RootSettings.FirebirdStringConnection);
+            var dbCounters = new Dictionary<long, List<DbCounter>>();
+            fb.ExecuteQueryByRow(
+@"select pe.IMPORTTAG, pe.EQUIPMENTID, ae.LSHET, coalesce(rc.TARGETBALANCE_KOD, 9) as service
+from PARENTEQUIPMENT pe
+inner join RESOURCECOUNTERS rc on rc.KOD = pe.EQUIPMENTID
+inner join ABONENTSEQUIPMENT ae on ae.EQUIPMENTID = pe.EQUIPMENTID
+where IMPORTTAG is not null", dr =>
+            {
+                var dbCounter = new DbCounter(dr);
+                if (dbCounters.ContainsKey(dbCounter.ImportTag))
+                    dbCounters[dbCounter.ImportTag].Add(dbCounter);
+                else
+                    dbCounters.Add(dbCounter.ImportTag, new List<DbCounter> {dbCounter});
+            });
+            var lshetsChars = new List<DbCounter>();
+            var counterStatuses = new List<DbCounter>();
+            foreach (var dobuledCounter in DobuledCounters)
+            {
+                long importTag;
+                if (!counterRecode.TryGetValue(dobuledCounter.CounterId, out importTag))
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        //MessageBox.Show($"Не найдена перекодировка счетчика {dobuledCounter.CounterId}");
+                    });
+                    continue;
+                }
+                List<DbCounter> counters;
+                if (!dbCounters.TryGetValue(importTag, out counters))
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        //MessageBox.Show($"Не найдена перекодировка импорт тега {importTag}");
+                    });
+                    continue;
+                }
+                counters.ForEach(c => c.Date = dobuledCounter.Date);
+                lshetsChars.AddRange(counters);
+                counterStatuses.Add(counters.First());
+            }
+
+            var lshetList = new List<DbCounter>();
+            foreach (var lshet in lshetsChars)
+            {
+                int value = (int)fb.ExecuteScalar(
+$@"select coalesce(SIGNIFICANCE, 0)
+from (
+    select first 1 la.SIGNIFICANCE
+    from LCHARSABONENTLIST la
+    where la.LSHET = '{lshet.Lshet}'
+        and la.KODLCHARSLIST = {lshet.LcharId}
+        and la.ABONENTLCHARDATE <= '{lshet.Date.ToString("dd.MM.yyyy")}'
+    order by la.ABONENTLCHARDATE desc
+)");
+                if (value == 0) lshetList.Add(lshet);
+            }
+
+            var sql = new StringBuilder();
+            sql.AppendLine("execute procedure createdocument('Импорт задвоенных статусов счетчиков');");
+            foreach (var counter in counterStatuses)
+            {
+                sql.AppendLine($"UPDATE OR INSERT INTO EQSTATUSES(EQUIPMENTID, STATUSDATE, STATUSCD, DOCUMENTCD) VALUES({counter.CounterId}, '{counter.Date.ToString("dd.MM.yyyy")}', 1, gen_id(documents_gen, 0)) MATCHING(EQUIPMENTID, STATUSDATE);");
+            }
+            foreach (var lshet in lshetList)
+            {
+                sql.AppendLine($"UPDATE OR INSERT INTO LCHARSABONENTLIST(LSHET, KODLCHARSLIST, ABONENTLCHARDATE, DOCUMENTCD, SIGNIFICANCE) VALUES('{lshet.Lshet}', {lshet.LcharId}, '{lshet.Date.ToString("dd.MM.yyyy")}', gen_id(documents_gen, 0), 1) MATCHING(LSHET, KODLCHARSLIST, ABONENTLCHARDATE);");
+            }
+
+            Clipboard.SetText(sql.ToString());
+
+            string lshets = String.Join("\r\n", lshetList.Select(s => s.Lshet).Distinct());
+        }
+
+        private class DbCounter
+        {
+            public long ImportTag;
+            public string CounterId;
+            public string Lshet;
+            public bool GroupCounter;
+            
+            public DateTime Date;
+
+            public int LcharId => GroupCounter ? 22 : 21;
+
+            public DbCounter(DataRow dr)
+            {
+                ImportTag = Convert.ToInt64(dr["IMPORTTAG"].ToString());
+                CounterId = dr["EQUIPMENTID"].ToString();
+                Lshet = dr["LSHET"].ToString();
+                GroupCounter = dr["service"].ToString() != "9";
+            }
+        }
+
+        private class DobuledCounter
+        {
+            public DateTime Date;
+            public string CounterId;
+
+            public DobuledCounter(string date, string counterId)
+            {
+                Date = Convert.ToDateTime(date);
+                CounterId = counterId;
+            }
+        }
+
+        private static readonly DobuledCounter[] DobuledCounters = 
+        {
+            new DobuledCounter("2010-02-19", "c201f124-78e9-480f-a606-48557ed3ae0e"),
+new DobuledCounter("2010-05-25", "ab7c2b85-f231-4acf-b621-2c877fc07051"),
+new DobuledCounter("2010-06-03", "4f8e736a-4f0e-4518-a3ea-66590ec88934"),
+new DobuledCounter("2010-06-22", "2650f43a-d46c-4405-ad11-49ea803b74c9"),
+new DobuledCounter("2010-07-01", "183e145a-77f9-40ff-b32a-4f28ede22245"),
+new DobuledCounter("2010-07-01", "9b2e77f9-bf19-43b7-87a6-7ccf41154a4b"),
+new DobuledCounter("2010-07-01", "ec2d8239-81e4-4888-a8b7-4dc841c4332c"),
+new DobuledCounter("2010-07-02", "61dad263-0bcb-4291-adc9-c198850ec056"),
+new DobuledCounter("2010-07-02", "ce0f7cff-8ad4-471c-ba9a-43645489c7e1"),
+new DobuledCounter("2010-07-03", "322fa913-daa9-4b9c-ba70-f0e86319f288"),
+new DobuledCounter("2010-07-03", "323643a0-999d-4c4c-8417-bf2bca4b5c51"),
+new DobuledCounter("2010-07-03", "3751adb2-f8f5-4936-8321-32b42211fa3f"),
+new DobuledCounter("2010-07-03", "511d773b-dde9-476a-84b8-958483e842c2"),
+new DobuledCounter("2010-07-03", "53e77c58-1151-4692-a665-df847d0078ad"),
+new DobuledCounter("2010-07-03", "556d49db-3771-48d7-adc4-7462d3c0c849"),
+new DobuledCounter("2010-07-03", "574b8229-0f85-4445-8527-e7643a8098cc"),
+new DobuledCounter("2010-07-03", "67c2bed9-17c1-40d5-bfba-abc341696c78"),
+new DobuledCounter("2010-07-03", "8194b622-1429-48e8-945c-a862ec541ec0"),
+new DobuledCounter("2010-07-03", "88c13dca-f306-4b57-b27f-3830d416c0f2"),
+new DobuledCounter("2010-07-03", "8a678d70-adfe-4e12-bfed-9a43a4489ff7"),
+new DobuledCounter("2010-07-03", "a7e21a61-d66d-48d7-8421-50b34ea43719"),
+new DobuledCounter("2010-07-03", "c93a5dca-b42f-49b0-9e00-0e0eaddf2613"),
+new DobuledCounter("2010-07-03", "cdb45b21-35f2-4f9a-beef-c18530050fd2"),
+new DobuledCounter("2010-07-03", "d071cd0b-4bd1-4680-9ab7-d4e571b0b829"),
+new DobuledCounter("2010-07-03", "f57f72b9-c424-4b83-8355-e815769a1281"),
+new DobuledCounter("2010-07-05", "02e0e234-90f7-4803-b5bb-18ad05882025"),
+new DobuledCounter("2010-07-05", "0a593ac5-8b72-47a0-ad7a-ee9e82e22718"),
+new DobuledCounter("2010-07-05", "0b4fd1b3-153a-4e75-b511-ba5b91d4c9e6"),
+new DobuledCounter("2010-07-05", "210e27e0-75ac-484f-ba2a-f196c00984cd"),
+new DobuledCounter("2010-07-05", "21d45e9e-d7cc-4d7e-abd3-498673a3fde6"),
+new DobuledCounter("2010-07-05", "3af96dbc-1108-49ba-94ff-41593ac522fd"),
+new DobuledCounter("2010-07-05", "40f8919f-92b4-4e1d-8761-d71616d5c8cd"),
+new DobuledCounter("2010-07-05", "451f2eb9-e689-4102-926b-eb86f8ffc23b"),
+new DobuledCounter("2010-07-05", "4c181fe1-d04c-4fec-8fbf-b365809aa69a"),
+new DobuledCounter("2010-07-05", "62a7422d-5288-4fbb-acf9-8c4ada584706"),
+new DobuledCounter("2010-07-05", "6fe8c403-4065-4ddd-80a6-b8e8afebfe91"),
+new DobuledCounter("2010-07-05", "73fe24d1-bd54-476e-8037-e46061d534c5"),
+new DobuledCounter("2010-07-05", "7c05cdec-84fe-4da1-8f1f-6cfef204ebe1"),
+new DobuledCounter("2010-07-05", "7d2ed6ac-1fff-42fc-9369-1ba57e9c2933"),
+new DobuledCounter("2010-07-05", "7ef9a6b0-41b3-4ee2-81da-35908fe3de4b"),
+new DobuledCounter("2010-07-05", "884d1f09-d0d3-4a76-8cc0-bc90e797b1fa"),
+new DobuledCounter("2010-07-05", "90bc9811-ad9e-4d02-86b7-25dfd21eea41"),
+new DobuledCounter("2010-07-05", "97413916-9830-4994-b6d9-ec73c66021a4"),
+new DobuledCounter("2010-07-05", "b53cea87-a374-452b-8f5b-be5d244606c4"),
+new DobuledCounter("2010-07-05", "b67dd1bb-4a61-4de8-85c7-69aebd87e34e"),
+new DobuledCounter("2010-07-05", "b843a364-8e9f-477f-a0d4-81c28038acb8"),
+new DobuledCounter("2010-07-05", "bffd5f11-7875-4317-b850-d8fb79bc1301"),
+new DobuledCounter("2010-07-05", "c530604f-601f-4cd7-9b27-299b190f1465"),
+new DobuledCounter("2010-07-05", "c58b57de-a798-4779-b604-0c5afd660ca0"),
+new DobuledCounter("2010-07-05", "ca529cd4-c6ee-443b-87e6-bdf9d4c6a47e"),
+new DobuledCounter("2010-07-05", "daa78397-1441-4bed-8665-2c5d3d727e36"),
+new DobuledCounter("2010-07-05", "e4bf99b1-0bae-4da1-93dc-dd6155c9f541"),
+new DobuledCounter("2010-07-05", "ebbe06ad-d04b-47f3-a6de-15e4719ff477"),
+new DobuledCounter("2010-07-05", "ec72b9ea-f3d3-42ab-91ef-d84bed4722a7"),
+new DobuledCounter("2010-07-05", "ed782c86-f31d-4608-97d1-b7ab1801e881"),
+new DobuledCounter("2010-07-05", "f04a5803-6792-41ac-a9d2-ea5672c0ea07"),
+new DobuledCounter("2010-07-06", "0d8dac25-a013-417c-b7e1-163043465206"),
+new DobuledCounter("2010-07-06", "109e7f82-bd2d-4d6c-be22-ebd2df1e7150"),
+new DobuledCounter("2010-07-06", "13c2c00c-421c-46a3-98bd-10d5056117df"),
+new DobuledCounter("2010-07-06", "218123d5-1cfe-408a-b4d2-55468d92ed00"),
+new DobuledCounter("2010-07-06", "24c054c5-ffd6-4838-8aee-a59c634317f5"),
+new DobuledCounter("2010-07-06", "2abf7334-11ac-4ea4-9d55-42d7adfe835c"),
+new DobuledCounter("2010-07-06", "2bc66418-660d-4245-b414-eef5649b09c4"),
+new DobuledCounter("2010-07-06", "355d0d0a-6556-4758-bcbe-6b4b9f1a1a31"),
+new DobuledCounter("2010-07-06", "3cb44516-fab7-4692-b099-bd6d7190d252"),
+new DobuledCounter("2010-07-06", "8b604918-c217-4292-9b81-3ef8077df364"),
+new DobuledCounter("2010-07-06", "8bcadb8f-254c-4b34-b579-2b27a5038dda"),
+new DobuledCounter("2010-07-06", "8c8ded95-9eb3-44ac-ae86-f6eb9559c4e1"),
+new DobuledCounter("2010-07-06", "9f50df07-ccec-4b10-b87b-8730ae408f94"),
+new DobuledCounter("2010-07-06", "a0be0b03-b67a-422e-8915-01e326976d6e"),
+new DobuledCounter("2010-07-06", "a22dd566-af41-4a89-a6c5-f4971fc6b992"),
+new DobuledCounter("2010-07-06", "a2989c42-f745-422c-9a47-284dd087f829"),
+new DobuledCounter("2010-07-06", "a7e16279-598c-4496-9ea1-14ed92057c1a"),
+new DobuledCounter("2010-07-06", "b1a14438-f850-42b9-b924-4c565ca2f739"),
+new DobuledCounter("2010-07-06", "b5dca9b6-a5f9-4b24-8e82-5fb36606a69f"),
+new DobuledCounter("2010-07-06", "bcdb4e8b-f1d9-4aec-bd65-160f1cca8fa7"),
+new DobuledCounter("2010-07-06", "d72dedd6-788d-466f-b6d7-d4a88fa8f6d7"),
+new DobuledCounter("2010-07-06", "e1480b45-badd-4415-adcb-8333afe542bc"),
+new DobuledCounter("2010-07-06", "e32c1ab6-d077-4a5e-a91b-d7f679482a65"),
+new DobuledCounter("2010-07-06", "e8f15ddb-954c-49d6-9329-77c89d630dd9"),
+new DobuledCounter("2010-07-06", "f8d59de4-d6eb-4c1d-abc4-5ffc2f73cecd"),
+new DobuledCounter("2010-07-06", "fd0f1678-d778-4738-acc8-bc14d07fc502"),
+new DobuledCounter("2010-07-07", "128932a1-a947-4a83-ba80-2768c48686f4"),
+new DobuledCounter("2010-07-07", "2d6b49f8-21eb-4959-a5a5-966bf08b1183"),
+new DobuledCounter("2010-07-07", "34316a5f-e9e3-43c8-a748-e0a90a869bba"),
+new DobuledCounter("2010-07-07", "6e9cfb3b-84ad-42b5-ab3d-fec82c8d944d"),
+new DobuledCounter("2010-07-07", "cbbcc1b5-04c5-4aef-9b01-1ce345d9efe1"),
+new DobuledCounter("2010-07-07", "cc4d22cc-1bed-43ec-bddc-d85b0d1a0c38"),
+new DobuledCounter("2010-07-07", "dd520736-a81f-4770-80d4-2cd807e07b69"),
+new DobuledCounter("2010-07-08", "0f574bdc-e169-41e3-8cbc-4c80d60202a4"),
+new DobuledCounter("2010-07-08", "3f5b12a5-89be-4fa9-a7d1-924a2764dafe"),
+new DobuledCounter("2010-07-08", "74cb88db-8fae-4c4b-a7b8-a755659a23a7"),
+new DobuledCounter("2010-07-08", "8499d7cb-cf42-444a-8589-4f5ac6c7991c"),
+new DobuledCounter("2010-07-09", "464e3a6c-f078-41f6-b9df-3906f1f4ca2f"),
+new DobuledCounter("2010-07-12", "1afb7b12-c1aa-4e88-932a-f8a6071e3b4b"),
+new DobuledCounter("2010-07-19", "0f2fc940-694b-466f-82fd-81da5078597c"),
+new DobuledCounter("2010-07-19", "264a5309-b831-4301-9252-203fd42201cf"),
+new DobuledCounter("2010-07-19", "856fcbf9-50c9-45b2-bfba-e8958ea65447"),
+new DobuledCounter("2010-07-19", "d9584d53-364e-47e4-a1a5-23bcab7e6473"),
+new DobuledCounter("2010-07-19", "fb06e700-44d8-463a-8d97-1723618b426f"),
+new DobuledCounter("2010-07-19", "fd9c5efc-8da0-4300-92b7-8cd83dfd07ea"),
+new DobuledCounter("2010-07-20", "0747c4e7-e978-4808-89d6-38c8924a0c9d"),
+new DobuledCounter("2010-07-20", "75decedc-e516-4e1a-9ed3-54890747ba23"),
+new DobuledCounter("2010-07-26", "a3d67400-9a60-42b7-b858-051f5e19f53a"),
+new DobuledCounter("2010-07-28", "eb77cba1-3f18-42fb-a7ef-f16854b8f2e3"),
+new DobuledCounter("2010-08-19", "63c95c64-fa8e-4176-934b-a9d84abeb32f"),
+new DobuledCounter("2010-08-19", "ddd20e98-602f-4892-8288-e79da27694cc"),
+new DobuledCounter("2010-08-20", "1613a523-75a6-4a0e-bbcb-928d3cdc98a1"),
+new DobuledCounter("2010-08-20", "1be32300-7085-4f33-9062-e30e66251290"),
+new DobuledCounter("2010-08-20", "33f0e26f-6e28-4abf-8b35-bbebed6406d6"),
+new DobuledCounter("2010-08-20", "526860c0-6a17-4681-85b9-18cf31e87eee"),
+new DobuledCounter("2010-08-20", "566c0cb2-ff05-4f8a-812c-9a1704908e3f"),
+new DobuledCounter("2010-08-20", "5c09d8e4-7fd2-4b18-8c40-6d3c8256c975"),
+new DobuledCounter("2010-08-20", "5f5cfe0d-da68-40a8-8393-630c0aadc3e6"),
+new DobuledCounter("2010-08-20", "5fb606f0-32e5-4d28-af5f-ac19e4d1bb4d"),
+new DobuledCounter("2010-08-20", "70601f69-1dad-4ae8-90d3-ac5d6065be7d"),
+new DobuledCounter("2010-08-20", "97981296-652f-4133-97cf-6061e7a0f9bf"),
+new DobuledCounter("2010-08-20", "ac1e7243-2c0c-44dd-a678-5b5bee5f057b"),
+new DobuledCounter("2010-08-20", "b8751801-547b-49e5-b53a-4ab944632087"),
+new DobuledCounter("2010-08-20", "bb68e8b0-780e-4d4e-9761-be06fe644ee3"),
+new DobuledCounter("2010-08-20", "bf006511-eb94-44e5-9d4a-06b296109f26"),
+new DobuledCounter("2010-08-20", "c5969cbe-949d-4d8a-a9f5-1184ba9e5a75"),
+new DobuledCounter("2010-08-20", "c9206c81-415d-4d05-a12e-4b41dbc18d3d"),
+new DobuledCounter("2010-08-20", "d30db71b-7832-43aa-8fe6-8512f0887342"),
+new DobuledCounter("2010-08-20", "d4b0d75c-13e4-46c4-beeb-02cfc25fb5f0"),
+new DobuledCounter("2010-08-20", "d71aec9a-1c52-40f0-86c8-f4d295218081"),
+new DobuledCounter("2010-08-20", "da2a616d-431d-49f5-af67-e2954e1372a9"),
+new DobuledCounter("2010-08-20", "dd11a9d5-d7ce-47c5-9b14-0e88a9498491"),
+new DobuledCounter("2010-08-24", "45286661-a733-4711-a8c6-f250b7d6b47c"),
+new DobuledCounter("2010-09-08", "34a65a9d-a6b7-4c98-8a63-c159568437bd"),
+new DobuledCounter("2010-09-08", "abc3684c-3830-4f11-b790-6f29a7e5c131"),
+new DobuledCounter("2010-09-14", "de3d2d8f-4586-472f-a08a-f7d9716a2fed"),
+new DobuledCounter("2010-09-17", "56ddf9ac-e53b-4c97-8478-0c0cfa1070a4"),
+new DobuledCounter("2010-10-04", "fbcb8de2-a079-11df-b9eb-001e8c71f1cd"),
+new DobuledCounter("2010-10-06", "44ffea79-70cf-49ee-a088-76d02a287bd6"),
+new DobuledCounter("2010-11-03", "6129ea3a-99bb-48fd-8494-e017a0eab61b"),
+new DobuledCounter("2010-11-18", "5c2bfbd7-44bb-434c-9949-7bd6fe8de908"),
+new DobuledCounter("2010-12-02", "da28b1e0-7a33-4f6d-a7c1-3d0b15e6a7a3"),
+new DobuledCounter("2010-12-16", "7e05c4e1-605c-47ed-ab56-8c4571b09377"),
+new DobuledCounter("2011-01-20", "1de07161-23c6-11e0-848a-e0cb4e5a973c"),
+new DobuledCounter("2011-02-16", "b27db495-5562-11e0-b7c0-001e8c71f1cd"),
+new DobuledCounter("2011-02-22", "51f18797-4bbb-4590-a8ac-1777ece4267d"),
+new DobuledCounter("2011-02-22", "610c2e91-5560-11e0-b7c0-001e8c71f1cd"),
+new DobuledCounter("2011-03-12", "fc2c5206-2c83-41e4-97e8-4e849cb058ca"),
+new DobuledCounter("2011-03-23", "d4477d00-fd8a-4c45-8290-6efcbb199f76"),
+new DobuledCounter("2011-04-21", "02102265-aab1-49b9-a2e7-788205240fa5"),
+new DobuledCounter("2011-05-12", "1f05780b-e210-47ce-9f4f-f67a17ee99ed"),
+new DobuledCounter("2011-06-10", "d2edb857-b697-11e0-829c-001e8c71f1cd"),
+new DobuledCounter("2011-07-12", "332c959b-f792-11df-b495-e0cb4e5a973c"),
+new DobuledCounter("2011-07-23", "5c1539cd-218d-4e22-88f9-081543406245"),
+new DobuledCounter("2012-08-01", "1898241f-d4c5-4071-adb8-d3ee4d5fc341"),
+new DobuledCounter("2013-10-01", "5bd4c8e9-ada8-11e2-8fe7-001e8c71f1cd"),
+new DobuledCounter("2013-10-01", "5bd4c8ef-ada8-11e2-8fe7-001e8c71f1cd"),
+new DobuledCounter("2014-04-01", "0b63e19d-8342-11e3-bdb9-001e8c71f1cd"),
+new DobuledCounter("2014-04-01", "b101f5fd-b58b-11e3-9bb1-001e8c71f1cd"),
+new DobuledCounter("2014-04-01", "b101f603-b58b-11e3-9bb1-001e8c71f1cd"),
+new DobuledCounter("2014-05-01", "72d2008c-8831-11e3-9db8-001e8c71f1cd"),
+new DobuledCounter("2014-05-01", "e2b434fa-8321-11e3-bdb9-001e8c71f1cd"),
+new DobuledCounter("2015-03-01", "32667f35-889f-11e3-9db8-001e8c71f1cd"),
+new DobuledCounter("2015-11-01", "cc746ac3-2d26-11e1-9579-001e8c71f1cd"),
+new DobuledCounter("2016-01-25", "d6b928ca-947d-492c-a460-65f37ec98ee7"),
+new DobuledCounter("2016-02-01", "0cee06d6-2d1c-11e4-ac3f-001e8c71f1cc"),
+new DobuledCounter("2016-02-01", "1fc80308-133d-11e5-bf81-001e8c71f1cc"),
+new DobuledCounter("2016-02-01", "759f7dba-c50f-11e5-8076-002590c76e1b"),
+new DobuledCounter("2016-02-01", "fd46468a-026e-11e4-a519-001e8c71f1cd"),
+new DobuledCounter("2016-03-21", "17c6191d-eb93-47a3-8ef6-bbdfbb3e4279"),
+new DobuledCounter("2016-04-21", "db79b842-a5a1-11e1-80a1-001e8c71f1cd"),
+new DobuledCounter("2016-06-01", "2764787c-3f21-11e4-903c-001e8c71f1cc"),
+new DobuledCounter("2016-08-01", "0a66e8ec-ad3d-11e5-b7f4-002590c76e1b"),
+new DobuledCounter("2016-08-01", "0a66e8f2-ad3d-11e5-b7f4-002590c76e1b"),
+new DobuledCounter("2016-08-02", "b941800b-6ce4-11e6-ba53-002590c76e1b"),
+new DobuledCounter("2016-08-02", "b9418011-6ce4-11e6-ba53-002590c76e1b"),
+new DobuledCounter("2016-08-02", "b9418017-6ce4-11e6-ba53-002590c76e1b"),
+new DobuledCounter("2016-08-02", "b941801d-6ce4-11e6-ba53-002590c76e1b"),
+new DobuledCounter("2016-08-02", "b9418023-6ce4-11e6-ba53-002590c76e1b"),
+new DobuledCounter("2016-08-02", "b9418029-6ce4-11e6-ba53-002590c76e1b"),
+new DobuledCounter("2017-06-15", "947e71b5-26c0-11e5-bf81-001e8c71f1cc"),
+        };
     }
 
     public class ConvertAbonent : DbfConvertCase
@@ -3021,7 +3321,7 @@ order by c.setupdate desc"))
                         INDTYPE = 1,
                         CASETYPE = cr.Indtype.Trim() == "Расчетное" ? 3 : (int?) null,
                         OLDIND = cr.Predind,
-                        OB_EM = cr.Rashod,
+                        OB_EM = cr.Rashod
                     };
 
                     if (IsNorFromKvc(c.COUNTERID) || isGroupCounter || isCommunalCounter)
@@ -3422,7 +3722,7 @@ order by c.setupdate desc"))
 
             var convertDate = new DateTime(CurrentYear, CurrentMonth, 1).AddDays(-1);
 
-            using (var dt = aConverterClassLibrary.Utils.ReadExcelFile(ActSaldoFileName, null))
+            /*using (var dt = aConverterClassLibrary.Utils.ReadExcelFile(ActSaldoFileName, null))
             {
                 StepStart(dt.Rows.Count);
                 foreach (DataRow dr in dt.Rows)
@@ -3485,7 +3785,7 @@ order by c.setupdate desc"))
                     Iterate();
                 }
                 StepFinish();
-            }
+            }*/
 
             /*
             StepStart(lsNotFromKvc.Count);
@@ -3519,7 +3819,8 @@ order by c.setupdate desc"))
             */
 
             var odnDate = new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1);
-            using (var dt = Tmsource.ExecuteQuery(SelectSaldoOdnSql))
+            //using (var dt = Tmsource.ExecuteQuery(SelectSaldoOdnSql))
+            using (var dt = Tmsource.GetDataTable("SALDO_ODN"))
             {
                 StepStart(dt.Rows.Count);
                 foreach (DataRow dr in dt.Rows)
@@ -4252,7 +4553,6 @@ begin
         from (
             select s.LSHET, s.BALANCE_KOD, min(s.NYEAR * 12 + s.NMONTH) as sdate
             from saldo s
-            where s.BALANCE_KOD = 9
             group by s.LSHET, s.BALANCE_KOD
         ) d
         inner join saldo s on s.LSHET = d.lshet
