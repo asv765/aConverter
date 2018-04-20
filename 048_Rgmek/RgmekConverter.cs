@@ -3908,7 +3908,7 @@ where (s.servicenm = 'Общедовые нужды' or s.servicenm = 'Обще�
             var convertDate = new DateTime(CurrentYear, CurrentMonth, 1).AddMonths(-1);
             var peniDate = convertDate.AddDays(-1);
 
-            using (var dt = Tmsource.ExecuteQuery(SelectPeniSaldoSql))
+            /*using (var dt = Tmsource.ExecuteQuery(SelectPeniSaldoSql))
             {
                 StepStart(dt.Rows.Count);
                 foreach (DataRow dr in dt.Rows)
@@ -3943,6 +3943,43 @@ where (s.servicenm = 'Общедовые нужды' or s.servicenm = 'Обще�
                                 });
                                 convertedAbonentServices.Add(key);
                             }
+                        }
+                    }
+                    Iterate();
+                }
+                StepFinish();
+            }*/
+
+            using (var dt = Tmsource.GetDataTable("sPeni"))
+            {
+                StepStart(dt.Rows.Count);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    var saldoRecord = new SpeniRecord();
+                    saldoRecord.ReadDataRow(dr);
+                    long lshet = FindLsRecode(saldoRecord.Account, lsrecode);
+                    if (lshet != 0)
+                    {
+                        int service;
+                        if (saldoRecord.Kind.Contains("Элек")) service = 9;
+                        else if (saldoRecord.Kind.Contains("ОДН")) service = 29;
+                        else service = 0;
+                        if (service != 0)
+                        {
+                            lp.Add(new CNV_PENISUMMA
+                            {
+                                LSHET = lshet.ToString(),
+                                SERVICECD = service,
+                                FDATE = saldoRecord.Date,
+                                FDAY = saldoRecord.Date.Day,
+                                FMONTH = saldoRecord.Date.Month,
+                                FYEAR = saldoRecord.Date.Year,
+                                ABONENTSALDO = 0,
+                                PENINACHISLSUMMA = saldoRecord.Debt,
+                                NDATE = saldoRecord.Date,
+                                ISCONTROLPOINT = 0,
+                                IZMEN = 1
+                            });
                         }
                     }
                     Iterate();

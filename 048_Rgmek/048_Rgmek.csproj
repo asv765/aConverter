@@ -91,6 +91,7 @@
     <Compile Include="Records\ExtSaldo.cs" />
     <Compile Include="Records\SaldoRecord.cs" />
     <Compile Include="Records\Saldo_pnRecord.cs" />
+    <Compile Include="Records\SPeniRecord.cs" />
     <Compile Include="Records\SummsRecord.cs" />
     <Compile Include="Records\TarifRecord.cs" />
     <Compile Include="Records\Tp_actRecord.cs" />
